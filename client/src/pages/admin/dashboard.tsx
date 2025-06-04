@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, User, Briefcase, Stethoscope, Activity, Clock, Calendar, AlertTriangle } from "lucide-react";
+import { Users, User as UserIcon, Briefcase, Stethoscope, Activity, Clock, Calendar, AlertTriangle } from "lucide-react";
 import AdminLayout from "@/components/layouts/admin-layout";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Claim, User, Appointment } from '@/shared/types';
@@ -73,7 +73,7 @@ const AdminDashboard: React.FC = () => {
   // Placeholder cards para estatísticas
   const statsCards: StatsCard[] = [
     { title: "Total de Usuários", icon: <Users className="h-8 w-8 text-blue-500" />, value: stats.totalUsers, bg: "bg-blue-50" },
-    { title: "Pacientes", icon: <User className="h-8 w-8 text-green-500" />, value: stats.totalPatients, bg: "bg-green-50" },
+    { title: "Pacientes", icon: <UserIcon className="h-8 w-8 text-green-500" />, value: stats.totalPatients, bg: "bg-green-50" },
     { title: "Médicos", icon: <Stethoscope className="h-8 w-8 text-purple-500" />, value: stats.totalDoctors, bg: "bg-purple-50" },
     { title: "Parceiros", icon: <Briefcase className="h-8 w-8 text-orange-500" />, value: stats.totalPartners, bg: "bg-orange-50" },
   ];
@@ -146,7 +146,7 @@ const AdminDashboard: React.FC = () => {
                       recentUsers.map((user) => (
                         <div key={user.id} className="flex items-center p-3 border rounded-md">
                           <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 mr-3">
-                            <User size={20} />
+                            <UserIcon size={20} />
                           </div>
                           <div className="flex-1">
                             <p className="font-medium">{user.fullName}</p>
