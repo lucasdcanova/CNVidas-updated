@@ -20,6 +20,26 @@ declare global {
       username: string;
       fullName: string;
       emailVerified: boolean;
+    }
+  }
+  namespace Express {
+    interface User {
+      id: number;
+      email: string;
+      role: string;
+      username: string;
+      fullName: string;
+      emailVerified: boolean;
+    }
+  }
+  namespace Express {
+    interface User {
+      id: number;
+      email: string;
+      role: string;
+      username: string;
+      fullName: string;
+      emailVerified: boolean;
       password: string;
       createdAt: Date;
       updatedAt: Date;
