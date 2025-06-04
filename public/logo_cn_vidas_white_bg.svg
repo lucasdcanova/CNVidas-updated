@@ -1,0 +1,7 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="white"/>
+  <g transform="translate(150, 140)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="90" font-weight="bold" fill="#3b5cb8">CN</text>
+    <text x="0" y="80" font-family="Arial, sans-serif" font-size="60" font-weight="bold" fill="#4CAF50">VIDAS</text>
+  </g>
+</svg>

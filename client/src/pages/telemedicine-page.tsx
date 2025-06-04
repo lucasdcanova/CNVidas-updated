@@ -1,0 +1,788 @@
+import { useState, useEffect } from 'react';
+import { useLocation } from 'wouter';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Calendar } from '@/components/ui/calendar';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/use-auth';
+import { Textarea } from '@/components/ui/textarea';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { 
+  Loader2, Clock, Calendar as CalendarIcon, Search, Filter, 
+  Heart, User, Star, ArrowRight, Clock3, CheckCircle, AlertCircle
+} from 'lucide-react';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
+import DashboardLayout from '@/components/layouts/dashboard-layout';
+import useSubscriptionError from '@/hooks/use-subscription-error';
+
+// Tipos
+type Doctor = {
+  id: number;
+  userId: number;
+  specialization: string;
+  licenseNumber: string;
+  biography?: string;
+  education?: string;
+  experienceYears?: number;
+  availableForEmergency: boolean;
+  consultationFee?: number;
+  profileImage?: string;
+  avatarUrl?: string;  // Mantido para compatibilidade com código existente
+  status?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  // Campos que podem ser necessários se implementarmos o join com usuários
+  name?: string;
+  username?: string;
+  email?: string;
+};
+
+type Appointment = {
+  id: number;
+  userId: number;
+  doctorId: number;
+  doctorName: string;
+  specialization: string;
+  date: string;
+  duration: number;
+  status: string;
+  notes?: string;
+};
+
+// Esquema de validação para o formulário de agendamento
+const appointmentSchema = z.object({
+  doctorId: z.number({
+    required_error: "Selecione um médico",
+  }),
+  date: z.date({
+    required_error: "Selecione uma data para a consulta",
+  }),
+  time: z.string({
+    required_error: "Selecione um horário para a consulta",
+  }),
+  specialization: z.string().optional(),
+  notes: z.string().optional(),
+});
+
+type AppointmentFormValues = z.infer<typeof appointmentSchema>;
+
+export default function TelemedicinePage() {
+  const [location, navigate] = useLocation();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const { handleApiError } = useSubscriptionError();
+  
+  // Estados
+  const [activeTab, setActiveTab] = useState<string>('emergencies');
+  const [isBookingDialogOpen, setIsBookingDialogOpen] = useState<boolean>(false);
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [isStartingEmergency, setIsStartingEmergency] = useState<boolean>(false);
+  const [availableTimes, setAvailableTimes] = useState<string[]>([]);
+  const [schedulingAppointment, setSchedulingAppointment] = useState<boolean>(false);
+  const [selectedSpecialty, setSelectedSpecialty] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  
+  // Formulário de agendamento
+  const form = useForm<AppointmentFormValues>({
+    resolver: zodResolver(appointmentSchema),
+    defaultValues: {
+      notes: '',
+    },
+  });
+  
+  // Consultas usando React Query
+  const { data: allDoctors = [], isLoading: isLoadingDoctors } = useQuery<Doctor[]>({
+    queryKey: ['/api/doctors'],
+    queryFn: async (): Promise<Doctor[]> => {
+      try {
+        const response = await apiRequest('GET', '/api/doctors');
+        return await response.json();
+      } catch (error) {
+        handleApiError(error);
+        return [];
+      }
+    },
+  });
+  
+  const { data: emergencyDoctors = [] } = useQuery<Doctor[]>({
+    queryKey: ['/api/doctors/available'],
+    queryFn: async (): Promise<Doctor[]> => {
+      try {
+        const response = await apiRequest('GET', '/api/doctors/available');
+        return await response.json();
+      } catch (error) {
+        handleApiError(error);
+        return [];
+      }
+    },
+  });
+  
+  const { data: upcomingAppointments = [], isLoading: isLoadingAppointments } = useQuery<Appointment[]>({
+    queryKey: ['/api/appointments/upcoming'],
+    queryFn: async (): Promise<Appointment[]> => {
+      try {
+        const response = await apiRequest('GET', '/api/appointments/upcoming');
+        return await response.json();
+      } catch (error) {
+        handleApiError(error);
+        return [];
+      }
+    },
+  });
+  
+  // Mutation para criar nova consulta
+  const createAppointmentMutation = useMutation<unknown, Error, AppointmentFormValues>({
+    mutationFn: async (data: AppointmentFormValues): Promise<unknown> => {
+      const { doctorId, date, time, notes } = data;
+      
+      // Combinar data e hora em um único formato ISO
+      const [hours, minutes] = time.split(':');
+      const appointmentDate = new Date(date);
+      appointmentDate.setHours(parseInt(hours), parseInt(minutes));
+      
+      const appointmentData = {
+        doctorId,
+        date: appointmentDate.toISOString(),
+        duration: 30, // Duração padrão: 30 minutos
+        notes: notes || '',
+        type: 'telemedicine',
+      };
+      
+      const response = await apiRequest('POST', '/api/appointments', appointmentData);
+      return await response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/appointments/upcoming'] });
+      setIsBookingDialogOpen(false);
+      form.reset();
+      toast({
+        title: 'Consulta agendada com sucesso',
+        description: 'Você receberá uma notificação quando for confirmada pelo médico.',
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Erro ao agendar consulta',
+        description: error.message || 'Ocorreu um erro ao agendar sua consulta. Tente novamente.',
+        variant: 'destructive',
+      });
+    },
+  });
+  
+  // Mutation para iniciar consulta de emergência
+  const startEmergencyConsultationMutation = useMutation<unknown, Error, number>({
+    mutationFn: async (doctorId: number): Promise<unknown> => {
+      const response = await apiRequest('POST', '/api/telemedicine/emergency', { doctorId });
+      return await response.json();
+    },
+    onSuccess: (data: any) => {
+      setIsStartingEmergency(false);
+      // Redirecionar para a nova sala de emergência v4 com Agora.io
+      navigate(`/telemedicine-emergency-v4/${data.appointmentId}`);
+    },
+    onError: (error: Error) => {
+      setIsStartingEmergency(false);
+      toast({
+        title: 'Erro ao iniciar consulta de emergência',
+        description: error.message || 'Não foi possível iniciar a consulta. Tente novamente.',
+        variant: 'destructive',
+      });
+    },
+  });
+  
+  // Efeito para atualizar horários disponíveis quando a data mudar
+  useEffect(() => {
+    const date = form.watch('date');
+    const doctorId = form.watch('doctorId');
+    
+    if (date && doctorId) {
+      fetchAvailableTimes(doctorId, date);
+    }
+  }, [form.watch('date'), form.watch('doctorId')]);
+  
+  // Função para buscar horários disponíveis
+  const fetchAvailableTimes = async (doctorId: number, date: Date): Promise<void> => {
+    try {
+      setSchedulingAppointment(true);
+      const formattedDate = format(date, 'yyyy-MM-dd');
+      const response = await apiRequest('GET', `/api/doctors/${doctorId}/availability?date=${formattedDate}`);
+      const data = await response.json();
+      setAvailableTimes(data.availableTimes || []);
+    } catch (error: unknown) {
+      console.error('Erro ao buscar horários disponíveis:', error);
+      toast({
+        title: 'Erro ao buscar horários',
+        description: 'Não foi possível obter os horários disponíveis.',
+        variant: 'destructive',
+      });
+    } finally {
+      setSchedulingAppointment(false);
+    }
+  };
+  
+  // Handler para iniciar consulta de emergência
+  const handleStartEmergencyConsultation = (doctor: Doctor): void => {
+    if (isStartingEmergency) return;
+    setIsStartingEmergency(true);
+    startEmergencyConsultationMutation.mutate(doctor.id);
+  };
+  
+  // Handler para abrir diálogo de agendamento
+  const handleOpenBookingDialog = (doctor: Doctor): void => {
+    setSelectedDoctor(doctor);
+    form.setValue('doctorId', doctor.id);
+    form.setValue('specialization', doctor.specialization);
+    setIsBookingDialogOpen(true);
+  };
+  
+  // Handler para submeter formulário de agendamento
+  const onSubmitAppointmentForm = (data: AppointmentFormValues): void => {
+    createAppointmentMutation.mutate(data);
+  };
+  
+  // Helper para determinar o status visual de uma consulta
+  const getAppointmentStatusClass = (status: string) => {
+    switch (status) {
+      case 'scheduled':
+        return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'confirmed':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'completed':
+        return 'bg-purple-100 text-purple-800 border-purple-200';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800 border-red-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+  
+  // Renderizar status da consulta
+  const renderAppointmentStatus = (status: string) => {
+    switch (status) {
+      case 'scheduled':
+        return 'Agendada';
+      case 'confirmed':
+        return 'Confirmada';
+      case 'cancelled':
+        return 'Cancelada';
+      case 'completed':
+        return 'Concluída';
+      default:
+        return status;
+    }
+  };
+  
+  // Verificar se o usuário pode iniciar consulta de emergência
+  const canUseEmergencyConsultation = () => {
+    if (user?.subscriptionPlan === 'premium') return true;
+    if (user?.subscriptionPlan === 'basic' && user?.emergencyConsultationsLeft && user.emergencyConsultationsLeft > 0) return true;
+    return false;
+  };
+  
+  // Função para obter texto do plano e preço da consulta para emergências
+  const getEmergencyConsultationPriceInfo = (doctor: Doctor) => {
+    if (user?.subscriptionPlan === 'premium') {
+      return {
+        text: "Incluso no plano Premium",
+        color: "text-blue-600",
+        badge: <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">Gratuito</Badge>
+      };
+    } else if (user?.subscriptionPlan === 'basic' && user?.emergencyConsultationsLeft && user.emergencyConsultationsLeft > 0) {
+      return {
+        text: `${user.emergencyConsultationsLeft} consultas disponíveis`,
+        color: "text-green-600",
+        badge: <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Gratuito</Badge>
+      };
+    } else {
+      if (!doctor.consultationFee) {
+        return {
+          text: "O médico ainda não definiu o preço da consulta",
+          color: "text-amber-600",
+          badge: <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">Preço não definido</Badge>
+        };
+      }
+      const price = doctor.consultationFee;
+      return {
+        text: `Valor: R$ ${price.toFixed(2)}`,
+        color: "text-gray-700",
+        badge: <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">R$ {price.toFixed(2)}</Badge>
+      };
+    }
+  };
+  
+  // Função para obter texto do plano e preço para consultas agendadas
+  const getScheduledConsultationPriceInfo = (doctor: Doctor) => {
+    // Se o médico não definiu o preço da consulta
+    if (!doctor.consultationFee) {
+      return {
+        basePrice: null,
+        finalPrice: null,
+        discountText: "",
+        discountAmount: 0,
+        message: "O médico ainda não definiu o preço da consulta"
+      };
+    }
+    
+    const basePrice = doctor.consultationFee;
+    let finalPrice = basePrice;
+    let discountText = "";
+    let discountAmount = 0;
+    
+    if (user?.subscriptionPlan === 'premium') {
+      finalPrice = basePrice * 0.5; // 50% de desconto
+      discountText = "50% de desconto";
+      discountAmount = basePrice - finalPrice;
+    } else if (user?.subscriptionPlan === 'basic') {
+      finalPrice = basePrice * 0.7; // 30% de desconto
+      discountText = "30% de desconto";
+      discountAmount = basePrice - finalPrice;
+    }
+    
+    return {
+      text: user?.subscriptionPlan !== 'free' 
+        ? `${discountText} (Plano ${user?.subscriptionPlan === 'premium' ? 'Premium' : 'Basic'})`
+        : "Valor integral",
+      color: user?.subscriptionPlan === 'premium' 
+        ? "text-blue-600" 
+        : user?.subscriptionPlan === 'basic' 
+          ? "text-green-600" 
+          : "text-gray-700",
+      badge: <Badge variant="outline" className={
+        user?.subscriptionPlan === 'premium'
+          ? "bg-blue-50 text-blue-700 border-blue-200"
+          : user?.subscriptionPlan === 'basic'
+            ? "bg-green-50 text-green-700 border-green-200"
+            : "bg-amber-50 text-amber-700 border-amber-200"
+      }>
+        {user?.subscriptionPlan !== 'free' ? (
+          <>
+            <span className="line-through text-gray-500 mr-1.5">R$ {basePrice.toFixed(2)}</span>
+            <span>R$ {finalPrice.toFixed(2)}</span>
+            <span className="ml-1.5 text-xs font-medium">(-{discountAmount.toFixed(2)})</span>
+          </>
+        ) : (
+          <span>R$ {finalPrice.toFixed(2)}</span>
+        )}
+      </Badge>
+    };
+  };
+  
+  // Função para obter todas as especialidades únicas dos médicos
+  const getUniqueSpecialties = () => {
+    const specialtiesArray = allDoctors.map((doctor: Doctor) => doctor.specialization || '');
+    // Filtra especialidades vazias e ordena alfabeticamente
+    const uniqueSpecialties = Array.from(new Set(specialtiesArray))
+      .filter((spec: string) => spec !== '')
+      .sort((a: string, b: string) => a.localeCompare(b));
+    return ['all', ...uniqueSpecialties];
+  };
+
+  // Função para formatar o nome do médico
+  const formatDoctorName = (name?: string): string => {
+    if (!name) return '';
+    
+    // Garantir que o nome esteja com todas as letras minúsculas, exceto a primeira de cada palavra
+    // Isso ajuda quando o nome vem todo em maiúsculas
+    name = name.toLowerCase();
+    
+    // Dividir o nome completo em palavras
+    const nameParts = name.trim().split(' ');
+    
+    // Lista de nomes tipicamente femininos em português
+    const femaleNames = [
+      'ana', 'maria', 'sandra', 'carla', 'fernanda', 'beatriz', 'julia', 'joana', 
+      'camila', 'mariana', 'patricia', 'luciana', 'bruna', 'renata', 'cintia', 
+      'silvia', 'larissa', 'adriana', 'vanessa', 'leticia', 'debora', 'cristina'
+    ];
+    
+    // Verificar se o primeiro nome está na lista de nomes femininos
+    // ou se o último nome termina com 'a' (comum em nomes femininos brasileiros)
+    const isFemale = 
+      femaleNames.includes(nameParts[0]) || 
+      nameParts[0].endsWith('a') ||
+      (nameParts.length > 1 && femaleNames.some(fname => nameParts.includes(fname)));
+    
+    // Formatar cada parte do nome com a primeira letra maiúscula e o resto minúsculo
+    const formattedNameParts = nameParts.map(part => {
+      if (part.length > 0) {
+        return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+      }
+      return part;
+    });
+    
+    // Juntar as partes formatadas e adicionar o prefixo
+    const prefix = isFemale ? "Dra. " : "Dr. ";
+    return prefix + formattedNameParts.join(' ');
+  };
+  
+  // Função para filtrar médicos por especialidade e termo de busca
+  const filterDoctors = (doctors: Doctor[]) => {
+    return doctors.filter((doctor: Doctor) => {
+      const matchesSpecialty = selectedSpecialty === 'all' || doctor.specialization === selectedSpecialty;
+      const matchesSearch = searchTerm === '' || 
+        (doctor.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+        (doctor.specialization?.toLowerCase() || '').includes(searchTerm.toLowerCase());
+      
+      return matchesSpecialty && matchesSearch;
+    });
+  };
+
+  const filteredAllDoctors = filterDoctors(allDoctors);
+  const filteredEmergencyDoctors = filterDoctors(emergencyDoctors);
+  const specialties = getUniqueSpecialties();
+
+  return (
+    <DashboardLayout title="Telemedicina">
+      <div className="max-w-6xl mx-auto">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <div className="flex flex-col sm:flex-row items-center justify-between mb-6 space-y-4 sm:space-y-0">
+            <TabsList className="bg-muted/30 rounded-full">
+              <TabsTrigger value="emergencies" className="text-sm rounded-full">Atendimento de Emergência</TabsTrigger>
+              <TabsTrigger value="doctors" className="text-sm rounded-full">Agendar Consulta</TabsTrigger>
+            </TabsList>
+            
+            <div className="flex w-full sm:w-auto gap-2">
+              <div className="relative w-full sm:w-auto">
+                <i className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground">
+                  <Search size={16} />
+                </i>
+                <input
+                  type="text"
+                  placeholder="Buscar médicos..."
+                  className="h-9 w-full sm:w-[200px] rounded-full bg-background pl-8 pr-4 text-sm ring-1 ring-border focus:outline-none focus:ring-2 focus:ring-primary"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              
+              <Select value={selectedSpecialty} onValueChange={setSelectedSpecialty}>
+                <SelectTrigger className="h-9 w-full sm:w-[150px] rounded-full bg-background text-sm">
+                  <i className="mr-2">
+                    <Filter size={14} />
+                  </i>
+                  <SelectValue placeholder="Especialidade" />
+                </SelectTrigger>
+                <SelectContent>
+                  {specialties.map((specialty: string) => (
+                    <SelectItem key={specialty} value={specialty}>
+                      {specialty === 'all' ? 'Todas especialidades' : specialty}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          
+          <TabsContent value="doctors" className="space-y-6">
+            {isLoadingDoctors ? (
+              <div className="flex justify-center items-center min-h-[200px]">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : filteredAllDoctors.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredAllDoctors?.map((doctor: Doctor) => {
+                    const priceInfo = getScheduledConsultationPriceInfo(doctor);
+                    return (
+                      <Card key={doctor.id} className="overflow-hidden hover:shadow-lg transition-shadow group border border-border/60 rounded-xl">
+                        <CardContent className="p-0">
+                          <div className="relative pb-3">
+                            <div className="bg-gradient-to-r from-blue-50 to-blue-100 h-24 w-full"></div>
+                            <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2">
+                              <Avatar className="h-20 w-20 border-4 border-white shadow-sm">
+                                <AvatarImage src={doctor.profileImage} alt={doctor.name} />
+                                <AvatarFallback className="bg-gradient-to-br from-primary/80 to-primary text-white text-lg">
+                                  {doctor.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'MD'}
+                                </AvatarFallback>
+                              </Avatar>
+                            </div>
+                          </div>
+                          
+                          <div className="flex flex-col items-center text-center px-4 pt-12 pb-5">
+                            <h3 className="font-semibold text-lg text-gray-900 mb-1">{formatDoctorName(doctor.name)}</h3>
+                            <Badge variant="outline" className="bg-blue-50 text-blue-700 rounded-full mb-3">
+                              {doctor.specialization}
+                            </Badge>
+                            
+                            <div className="mt-1 mb-4 min-h-[44px]">
+                              {priceInfo.badge}
+                              <div className="mt-1">
+                                <span className={`text-xs ${priceInfo.color} font-medium`}>{priceInfo.text}</span>
+                              </div>
+                            </div>
+                            
+                            <Button 
+                              onClick={() => handleOpenBookingDialog(doctor)}
+                              className="w-full rounded-full transition-all group-hover:bg-primary/90"
+                            >
+                              Agendar Consulta
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                  );
+                })}
+              </div>
+              
+              {filteredAllDoctors.length === 0 && searchTerm !== '' && (
+                <div className="text-center py-10">
+                  <h3 className="text-lg font-medium text-gray-700">Nenhum médico encontrado</h3>
+                  <p className="text-gray-500 mt-2">Tente ajustar os filtros de busca ou especialidade</p>
+                </div>
+              )}
+            </>
+            ) : (
+              <Card className="border-dashed">
+                <CardContent className="p-10 text-center">
+                  <p className="text-gray-500 mb-2">Nenhum médico disponível no momento.</p>
+                  <p className="text-xs text-gray-400">Tente novamente mais tarde ou ajuste os critérios de busca.</p>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+          
+          <TabsContent value="emergencies" className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Médicos de emergência - coluna principal */}
+              <div className="lg:col-span-2 space-y-4">
+                {emergencyDoctors.length > 0 ? (
+                  emergencyDoctors?.map((doctor: Doctor) => {
+                    const priceInfo = getEmergencyConsultationPriceInfo(doctor);
+                    return (
+                      <Card key={doctor.id} className="overflow-hidden hover:shadow-md transition-shadow border-l-4 border-l-green-500">
+                        <CardContent className="p-0">
+                          <div className="flex items-start p-5">
+                            <div className="mr-4">
+                              <Avatar className="h-16 w-16 border-2 border-primary/10">
+                                <AvatarImage src={doctor.profileImage} alt={doctor.name} />
+                                <AvatarFallback className="bg-primary/5 text-primary">
+                                  {doctor.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'MD'}
+                                </AvatarFallback>
+                              </Avatar>
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between">
+                                <h3 className="font-medium text-lg text-gray-900">{formatDoctorName(doctor.name)}</h3>
+                                {priceInfo.badge}
+                              </div>
+                              <p className="text-sm text-primary/80 font-medium mt-0.5">{doctor.specialization}</p>
+                              <div className="flex items-center mt-2">
+                                <Badge className="mr-2 bg-green-100 text-green-800 border-green-200">
+                                  Online Agora
+                                </Badge>
+                                <span className={`text-xs ${priceInfo.color} font-medium`}>{priceInfo.text}</span>
+                              </div>
+                              <div className="mt-4">
+                                <Button 
+                                  onClick={() => handleOpenBookingDialog(doctor)}
+                                  className="w-full justify-center relative overflow-hidden group"
+                                >
+                                  Agendar Consulta
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })
+                ) : (
+                  <Card>
+                    <CardContent className="p-6 text-center">
+                      <p className="text-gray-500">Nenhum médico disponível para emergências no momento.</p>
+                      <p className="text-gray-400 text-sm mt-1">Tente novamente mais tarde ou agende uma consulta regular.</p>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+              
+              {/* Coluna lateral */}
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base">Consultas Agendadas</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-0">
+                    {isLoadingAppointments ? (
+                      <div className="flex justify-center items-center min-h-[100px]">
+                        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                      </div>
+                    ) : upcomingAppointments.length > 0 ? (
+                      <ul className="divide-y divide-gray-100">
+                        {upcomingAppointments.map((appointment: Appointment) => (
+                          <li key={appointment.id} className="p-4 hover:bg-gray-50">
+                            <div className="flex items-center justify-between">
+                              <div className="min-w-0 flex-1">
+                                <p className="font-medium text-sm text-gray-900">{formatDoctorName(appointment.doctorName)}</p>
+                                <div className="mt-1 flex items-center text-xs text-gray-500">
+                                  <CalendarIcon className="mr-1.5 h-3.5 w-3.5 flex-shrink-0 text-gray-400" aria-hidden="true" />
+                                  <p>
+                                    {format(new Date(appointment.date), "dd 'de' MMMM 'às' HH:mm", { locale: ptBR })}
+                                  </p>
+                                </div>
+                              </div>
+                              <Button 
+                                size="sm" 
+                                variant="default"
+                                className="text-xs"
+                                onClick={() => navigate(`/telemedicine/${appointment.id}`)}
+                              >
+                                Entrar
+                              </Button>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div className="p-4 text-center">
+                        <p className="text-gray-500 text-sm">Nenhuma consulta agendada</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+      
+      {/* Diálogo de Agendamento */}
+      <Dialog open={isBookingDialogOpen} onOpenChange={setIsBookingDialogOpen}>
+        <DialogContent className="sm:max-w-[520px]">
+          <DialogHeader>
+            <DialogTitle>Agendar Consulta</DialogTitle>
+            <DialogDescription>
+              {selectedDoctor?.name && (
+                <>Agende sua consulta com <span className="font-medium">{selectedDoctor.name}</span></>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmitAppointmentForm)} className="space-y-6">
+              <div className="grid grid-cols-1 gap-6">
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="date"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Data da Consulta</FormLabel>
+                        <FormControl>
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) => {
+                              const today = new Date();
+                              today.setHours(0, 0, 0, 0);
+                              return date < today;
+                            }}
+                            className="border rounded-md p-3"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="time"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Horário</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          disabled={schedulingAppointment || !form.watch('date')}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione um horário" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {schedulingAppointment ? (
+                              <div className="flex items-center justify-center p-2">
+                                <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                              </div>
+                            ) : availableTimes.length > 0 ? (
+                              availableTimes.map((time) => (
+                                <SelectItem key={time} value={time}>
+                                  {time}
+                                </SelectItem>
+                              ))
+                            ) : (
+                              <div className="p-2 text-sm text-gray-500 text-center">
+                                {form.watch('date') 
+                                  ? 'Não há horários disponíveis nesta data' 
+                                  : 'Selecione uma data primeiro'}
+                              </div>
+                            )}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="notes"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Observações (opcional)</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Descreva brevemente o motivo da consulta ou sintomas"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+              
+              <div className="flex justify-end space-x-3 pt-2">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => setIsBookingDialogOpen(false)}
+                >
+                  Cancelar
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={createAppointmentMutation.isPending}
+                >
+                  {createAppointmentMutation.isPending ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Agendando...
+                    </>
+                  ) : (
+                    'Confirmar Agendamento'
+                  )}
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+    </DashboardLayout>
+  );
+}

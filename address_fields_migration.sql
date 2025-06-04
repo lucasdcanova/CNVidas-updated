@@ -1,0 +1,19 @@
+-- Adicionar os novos campos de endereço à tabela users
+ALTER TABLE users
+ADD COLUMN IF NOT EXISTS zipcode TEXT,
+ADD COLUMN IF NOT EXISTS street TEXT,
+ADD COLUMN IF NOT EXISTS number TEXT,
+ADD COLUMN IF NOT EXISTS complement TEXT,
+ADD COLUMN IF NOT EXISTS neighborhood TEXT,
+ADD COLUMN IF NOT EXISTS city TEXT,
+ADD COLUMN IF NOT EXISTS state TEXT;
+
+-- Adicionar os novos campos de endereço à tabela partners
+ALTER TABLE partners
+ADD COLUMN IF NOT EXISTS zipcode TEXT,
+ADD COLUMN IF NOT EXISTS street TEXT,
+ADD COLUMN IF NOT EXISTS number TEXT,
+ADD COLUMN IF NOT EXISTS complement TEXT,
+ADD COLUMN IF NOT EXISTS neighborhood TEXT,
+ADD COLUMN IF NOT EXISTS city TEXT,
+ADD COLUMN IF NOT EXISTS state TEXT;

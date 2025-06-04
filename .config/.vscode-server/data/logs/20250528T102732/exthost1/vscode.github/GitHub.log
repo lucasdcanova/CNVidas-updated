@@ -1,0 +1,4 @@
+2025-05-28 10:27:39.662 [info] Log level: Info
+2025-05-28 10:27:40.298 [warning] [GitHubBranchProtectionProvider][updateRepositoryBranchProtection] Failed to update repository branch protection: No GitHub authentication session available.
+2025-05-28 10:28:14.538 [warning] [GitHubSourceControlHistoryItemDetailsProvider][_getCommitAuthor] Failed to get commit author for lucasdcanova/CNVidas/a16eca924855954c34ab298e519c571dc62ac82c: TypeError: Cannot read properties of null (reading 'author')
+2025-05-28 10:28:14.557 [warning] [GitHubSourceControlHistoryItemDetailsProvider][_getCommitAuthor] Failed to get commit author for lucasdcanova/CNVidas/b9ef0431ac27901a4ad3018aadb483450316240a: TypeError: Cannot read properties of null (reading 'author')

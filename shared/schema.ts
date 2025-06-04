@@ -1,0 +1,463 @@
+import { pgTable, text, serial, integer, boolean, timestamp, pgEnum, json, date, varchar, decimal } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
+import { z } from "zod";
+import { relations } from "drizzle-orm";
+import { InferModel } from 'drizzle-orm';
+
+// 1. Enfileirar todas as declarações de enum, depois tabelas, depois relations, depois schemas, depois tipos.
+// 2. Garantir que nenhuma tabela seja referenciada antes de ser declarada.
+// 3. Exportar tipos apenas no final.
+
+export const userRoleEnum = pgEnum('user_role', ['patient', 'partner', 'admin', 'doctor']);
+export const subscriptionPlanEnum = pgEnum('subscription_plan', ['free', 'basic', 'premium', 'ultra', 'basic_family', 'premium_family', 'ultra_family']);
+
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  username: varchar("username", { length: 255 }).notNull().unique(),
+  password: varchar("password", { length: 255 }).notNull(),
+  fullName: varchar("full_name", { length: 255 }).notNull(),
+  role: userRoleEnum("role").notNull().default('patient'),
+  cpf: varchar("cpf", { length: 11 }),
+  phone: varchar("phone", { length: 20 }),
+  address: varchar("address", { length: 255 }),
+  city: varchar("city", { length: 100 }),
+  state: varchar("state", { length: 2 }),
+  zipCode: varchar("zip_code", { length: 8 }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  lastLogin: timestamp("last_login"),
+  isActive: boolean("is_active").default(true).notNull(),
+  subscriptionStatus: varchar("subscription_status", { length: 50 }).default('inactive'),
+  subscriptionPlanId: integer("subscription_plan_id").references(() => subscriptionPlans.id),
+  subscriptionStartDate: timestamp("subscription_start_date"),
+  subscriptionEndDate: timestamp("subscription_end_date"),
+  lastSubscriptionCancellation: timestamp("last_subscription_cancellation"),
+  sellerId: varchar("seller_id", { length: 255 }),
+  sellerName: varchar("seller_name", { length: 255 }),
+  stripeCustomerId: text("stripe_customer_id"),
+  stripeSubscriptionId: text("stripe_subscription_id"),
+  subscriptionPlan: subscriptionPlanEnum("subscription_plan").default('free'),
+  subscriptionChangedAt: timestamp("subscription_changed_at"), // Data da última mudança de plano
+  emailVerified: boolean("email_verified").default(false).notNull(),
+  profileImage: text("profile_image"),
+  emergencyConsultationsLeft: integer("emergency_consultations_left").default(0),
+  birthDate: date("birth_date"),
+});
+
+export const partners = pgTable("partners", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  businessName: text("business_name").notNull(),
+  businessType: text("business_type").notNull(),
+  description: text("description"),
+  website: text("website"),
+  address: text("address"),
+  zipcode: text("zipcode"),
+  street: text("street"),
+  number: text("number"),
+  complement: text("complement"),
+  neighborhood: text("neighborhood"),
+  city: text("city"),
+  state: text("state"),
+  phone: text("phone"),
+  cnpj: text("cnpj"),
+  status: text("status").default('pending').notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const doctors = pgTable("doctors", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  specialization: text("specialization").notNull(),
+  licenseNumber: text("license_number").notNull().unique(),
+  biography: text("biography"),
+  education: text("education"),
+  experienceYears: integer("experience_years"),
+  availableForEmergency: boolean("available_for_emergency").default(false),
+  consultationFee: integer("consultation_fee"),
+  profileImage: text("profile_image"),
+  status: text("status").default('pending').notNull(),
+  welcomeCompleted: boolean("welcome_completed").default(false).notNull(),
+  pixKeyType: text("pix_key_type"),
+  pixKey: text("pix_key"),
+  bankName: text("bank_name"),
+  accountType: text("account_type"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const partnerServices = pgTable("partner_services", {
+  id: serial("id").primaryKey(),
+  partnerId: integer("partner_id").references(() => partners.id, { onDelete: "cascade" }).notNull(),
+  name: text("name").notNull(),
+  description: text("description"),
+  category: text("category").notNull(),
+  regularPrice: integer("regular_price").notNull(),
+  discountPrice: integer("discount_price").notNull(),
+  discountPercentage: integer("discount_percentage"),
+  isFeatured: boolean("is_featured").default(false),
+  duration: integer("duration"),
+  isActive: boolean("is_active").default(true),
+  serviceImage: text("service_image"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const appointments = pgTable("appointments", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  serviceId: integer("service_id").references(() => partnerServices.id, { onDelete: "set null" }),
+  partnerId: integer("partner_id").references(() => partners.id, { onDelete: "set null" }),
+  doctorId: integer("doctor_id").references(() => doctors.id, { onDelete: "set null" }),
+  type: text("type").notNull(),
+  date: timestamp("date").notNull(),
+  duration: integer("duration").notNull(),
+  status: text("status").default('scheduled').notNull(),
+  notes: text("notes"),
+  doctorName: text("doctor_name"),
+  specialization: text("specialization"),
+  telemedProvider: text("telemed_provider"),
+  telemedLink: text("telemed_link"),
+  telemedRoomName: text("telemed_room_name"),
+  isEmergency: boolean("is_emergency").default(false),
+  paymentIntentId: text("payment_intent_id"),
+  paymentStatus: text("payment_status").default('pending'),
+  paymentAmount: integer("payment_amount"),
+  paymentFee: integer("payment_fee"),
+  paymentCapturedAt: timestamp("payment_captured_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const claims = pgTable("claims", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  type: text("type").notNull(),
+  occurrenceDate: date("occurrence_date").notNull(),
+  description: text("description").notNull(),
+  documents: json("documents").$type<string[]>(),
+  status: text("status").default('pending').notNull(),
+  reviewNotes: text("review_notes"),
+  reviewedBy: integer("reviewed_by").references(() => users.id),
+  reviewedAt: timestamp("reviewed_at"),
+  amountRequested: integer("amount_requested"),
+  amountApproved: integer("amount_approved"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const notifications = pgTable("notifications", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  title: text("title").notNull(),
+  message: text("message").notNull(),
+  type: text("type").notNull(),
+  isRead: boolean("is_read").default(false),
+  relatedId: integer("related_id"),
+  link: text("link"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const dependents = pgTable("dependents", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  name: text("name").notNull(),
+  cpf: varchar("cpf", { length: 11 }),
+  birthDate: date("birth_date"),
+  relationship: text("relationship").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const doctorPayments = pgTable("doctor_payments", {
+  id: serial("id").primaryKey(),
+  doctorId: integer("doctor_id").references(() => doctors.id, { onDelete: "cascade" }).notNull(),
+  appointmentId: integer("appointment_id").references(() => appointments.id, { onDelete: "set null" }),
+  amount: integer("amount").notNull(),
+  status: text("status").default('pending').notNull(),
+  description: text("description").notNull(),
+  paidAt: timestamp("paid_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const qrTokens = pgTable("qr_tokens", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  token: text("token").notNull().unique(),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  used: boolean("used").default(false),
+});
+
+export const auditLogs = pgTable("audit_logs", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  action: text("action").notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  details: json("details").default({}),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const emailVerifications = pgTable("email_verifications", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  token: text("token").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const passwordResets = pgTable("password_resets", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  token: text("token").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const availabilitySlots = pgTable("availability_slots", {
+  id: serial("id").primaryKey(),
+  doctorId: integer("doctor_id").notNull().references(() => doctors.id, { onDelete: 'cascade' }),
+  dayOfWeek: integer("day_of_week").notNull(),
+  startTime: text("start_time").notNull(),
+  endTime: text("end_time").notNull(),
+  isAvailable: boolean("is_available").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const subscriptionPlans = pgTable("subscription_plans", {
+  id: serial("id").primaryKey(),
+  name: subscriptionPlanEnum("name").notNull(),
+  displayName: text("display_name").notNull(),
+  price: integer("price").notNull(),
+  emergencyConsultations: text("emergency_consultations").notNull(),
+  specialistDiscount: integer("specialist_discount").notNull(),
+  insuranceCoverage: boolean("insurance_coverage").notNull(),
+  features: text("features").array(),
+  isDefault: boolean("is_default").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const qrAuthLogs = pgTable("qr_auth_logs", {
+  id: serial("id").primaryKey(),
+  qrTokenId: integer("qr_token_id").references(() => qrTokens.id, { onDelete: "set null" }),
+  scannerUserId: integer("scanner_user_id").references(() => users.id, { onDelete: "set null" }).notNull(),
+  tokenUserId: integer("token_user_id").references(() => users.id, { onDelete: "set null" }).notNull(),
+  scannedAt: timestamp("scanned_at").defaultNow().notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  success: boolean("success").default(true),
+});
+
+export const userSettings = pgTable("user_settings", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id, { onDelete: 'cascade' }).notNull().unique(),
+  notifications: json("notifications").default({
+    emailNotifications: true,
+    smsNotifications: false,
+    pushNotifications: true,
+    notificationFrequency: 'immediate',
+    appointmentReminders: true,
+    marketingEmails: false,
+  }),
+  privacy: json("privacy").default({
+    shareWithDoctors: true,
+    shareWithPartners: false,
+    shareFullMedicalHistory: false,
+    allowAnonymizedDataUse: true,
+    profileVisibility: 'contacts',
+  }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const usersRelations = relations(users, ({ many }) => ({
+  partners: many(partners),
+  doctors: many(doctors),
+  appointments: many(appointments),
+  claims: many(claims),
+  partnerServices: many(partnerServices),
+  dependents: many(dependents),
+}));
+
+export const dependentsRelations = relations(dependents, ({ one }) => ({
+  user: one(users, {
+    fields: [dependents.userId],
+    references: [users.id],
+  }),
+}));
+
+export const partnersRelations = relations(partners, ({ one, many }) => ({
+  user: one(users, { fields: [partners.userId], references: [users.id] }),
+  services: many(partnerServices),
+}));
+
+export const doctorsRelations = relations(doctors, ({ one, many }) => ({
+  user: one(users, { fields: [doctors.userId], references: [users.id] }),
+  appointments: many(appointments),
+  payments: many(doctorPayments),
+}));
+
+export const doctorPaymentsRelations = relations(doctorPayments, ({ one }) => ({
+  doctor: one(doctors, { 
+    fields: [doctorPayments.doctorId], 
+    references: [doctors.id] 
+  }),
+  appointment: one(appointments, { 
+    fields: [doctorPayments.appointmentId], 
+    references: [appointments.id] 
+  }),
+}));
+
+export const partnerServicesRelations = relations(partnerServices, ({ one, many }) => ({
+  partner: one(partners, { fields: [partnerServices.partnerId], references: [partners.id] }),
+  appointments: many(appointments),
+}));
+
+export const appointmentsRelations = relations(appointments, ({ one }) => ({
+  user: one(users, { fields: [appointments.userId], references: [users.id] }),
+  service: one(partnerServices, { fields: [appointments.serviceId], references: [partnerServices.id] }),
+  partner: one(partners, { fields: [appointments.partnerId], references: [partners.id] }),
+  doctor: one(doctors, { fields: [appointments.doctorId], references: [doctors.id] }),
+}));
+
+export const claimsRelations = relations(claims, ({ one }) => ({
+  user: one(users, { fields: [claims.userId], references: [users.id] }),
+  reviewer: one(users, { fields: [claims.reviewedBy], references: [users.id] }),
+}));
+
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+  user: one(users, { fields: [notifications.userId], references: [users.id] }),
+}));
+
+export const availabilitySlotsRelations = relations(availabilitySlots, ({ one }) => ({
+  doctor: one(doctors, {
+    fields: [availabilitySlots.doctorId],
+    references: [doctors.id],
+  }),
+}));
+
+export const subscriptionPlansRelations = relations(subscriptionPlans, ({ many }) => ({
+  users: many(users),
+}));
+
+export const qrAuthLogsRelations = relations(qrAuthLogs, ({ one }) => ({
+  qrToken: one(qrTokens, {
+    fields: [qrAuthLogs.qrTokenId],
+    references: [qrTokens.id],
+  }),
+  scannerUser: one(users, {
+    fields: [qrAuthLogs.scannerUserId],
+    references: [users.id],
+  }),
+  tokenUser: one(users, {
+    fields: [qrAuthLogs.tokenUserId],
+    references: [users.id],
+  }),
+}));
+
+export const userSettingsRelations = relations(userSettings, ({ one }) => ({
+  user: one(users, {
+    fields: [userSettings.userId],
+    references: [users.id],
+  }),
+}));
+
+export const userSchema = z.object({
+  email: z.string().email(),
+  username: z.string().min(3),
+  fullName: z.string().min(3),
+  password: z.string().min(6),
+  role: z.enum(['patient', 'partner', 'admin', 'doctor']),
+  subscriptionPlan: z.enum(['free', 'basic', 'premium', 'ultra', 'basic_family', 'premium_family', 'ultra_family']),
+  subscriptionStatus: z.string()
+});
+
+export const appointmentSchema = z.object({
+  userId: z.number(),
+  serviceId: z.number(),
+  partnerId: z.number(),
+  doctorId: z.number(),
+  type: z.string(),
+  date: z.date(),
+  duration: z.number(),
+  status: z.string(),
+  notes: z.string().optional(),
+  doctorName: z.string().optional(),
+  specialization: z.string().optional(),
+  telemedProvider: z.string().optional(),
+  telemedLink: z.string().optional(),
+  telemedRoomName: z.string().optional(),
+  isEmergency: z.boolean(),
+  paymentStatus: z.string(),
+  paymentAmount: z.number()
+});
+
+export const claimSchema = z.object({
+  userId: z.number(),
+  type: z.string(),
+  occurrenceDate: z.string(),
+  description: z.string(),
+  documents: z.array(z.string()).optional(),
+  status: z.string(),
+  reviewNotes: z.string().optional(),
+  amountRequested: z.number().optional(),
+  amountApproved: z.number().optional()
+});
+
+export const notificationSchema = z.object({
+  userId: z.number(),
+  title: z.string(),
+  message: z.string(),
+  type: z.string(),
+  isRead: z.boolean(),
+  relatedId: z.number().optional(),
+  link: z.string().optional()
+});
+
+// Tipos inferidos
+export type User = InferModel<typeof users>;
+export type Dependent = InferModel<typeof dependents>;
+export type Partner = InferModel<typeof partners>;
+export type Doctor = InferModel<typeof doctors>;
+export type PartnerService = InferModel<typeof partnerServices>;
+export type Appointment = InferModel<typeof appointments>;
+export type Claim = InferModel<typeof claims>;
+export type Notification = InferModel<typeof notifications>;
+export type DoctorPayment = InferModel<typeof doctorPayments>;
+export type AuditLog = InferModel<typeof auditLogs>;
+export type QrToken = InferModel<typeof qrTokens>;
+export type SubscriptionPlan = InferModel<typeof subscriptionPlans>;
+export type UserSettings = InferModel<typeof userSettings>;
+export type EmailVerification = InferModel<typeof emailVerifications>;
+export type PasswordReset = InferModel<typeof passwordResets>;
+export type AvailabilitySlot = InferModel<typeof availabilitySlots>;
+export type QrAuthLog = InferModel<typeof qrAuthLogs>;
+export type UserSchema = z.infer<typeof userSchema>;
+export type AppointmentSchema = z.infer<typeof appointmentSchema>;
+export type ClaimSchema = z.infer<typeof claimSchema>;
+export type NotificationSchema = z.infer<typeof notificationSchema>;
+
+// Tipos para inserção
+export type InsertUser = InferModel<typeof users, 'insert'>;
+export type InsertDependent = InferModel<typeof dependents, 'insert'>;
+export type InsertPartner = InferModel<typeof partners, 'insert'>;
+export type InsertDoctor = InferModel<typeof doctors, 'insert'>;
+export type InsertPartnerService = InferModel<typeof partnerServices, 'insert'>;
+export type InsertAppointment = InferModel<typeof appointments, 'insert'>;
+export type InsertClaim = InferModel<typeof claims, 'insert'>;
+export type InsertNotification = InferModel<typeof notifications, 'insert'>;
+export type InsertDoctorPayment = InferModel<typeof doctorPayments, 'insert'>;
+export type InsertAuditLog = InferModel<typeof auditLogs, 'insert'>;
+export type InsertQrToken = InferModel<typeof qrTokens, 'insert'>;
+export type InsertSubscriptionPlan = InferModel<typeof subscriptionPlans, 'insert'>;
+export type InsertUserSettings = InferModel<typeof userSettings, 'insert'>;
+export type InsertEmailVerification = InferModel<typeof emailVerifications, 'insert'>;
+export type InsertPasswordReset = InferModel<typeof passwordResets, 'insert'>;
+export type InsertAvailabilitySlot = InferModel<typeof availabilitySlots, 'insert'>;
+export type InsertQrAuthLog = InferModel<typeof qrAuthLogs, 'insert'>;

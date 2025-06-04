@@ -1,0 +1,198 @@
+import React, { useState, useEffect } from "react";
+import SidebarNavigation from "@/components/shared/sidebar-navigation";
+import MobileNavigation from "@/components/shared/mobile-navigation";
+import UserProfile from "@/components/shared/user-profile";
+import { useAuth } from "@/hooks/use-auth";
+import { Bell, HelpCircle, Settings, Menu, X, MessageSquareText } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { getUnreadNotificationsCount, markAllNotificationsAsRead, getDoctorByUserId } from "@/lib/api";
+import { PlanIndicator, getPlanColor } from "@/components/shared/plan-indicator";
+import { Link } from "wouter";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
+
+interface DashboardLayoutProps {
+  children: React.ReactNode;
+  title?: string;
+}
+
+export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
+  children,
+  title = "Dashboard",
+}) => {
+  const { user } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [doctorProfile, setDoctorProfile] = useState<any>(null);
+  const [userWithProfileImage, setUserWithProfileImage] = useState(user);
+  
+  // Buscar o perfil de médico se o usuário for um médico
+  const { data: doctorData } = useQuery({
+    queryKey: ["/api/doctors/user", user?.id],
+    queryFn: () => getDoctorByUserId(user?.id || 0),
+    enabled: !!user?.id && user?.role === "doctor"
+  });
+  
+  // Atualizar o objeto do usuário com a imagem de perfil do médico, se disponível
+  useEffect(() => {
+    if (user && user.role === "doctor" && doctorData?.profileImage) {
+      setUserWithProfileImage({
+        ...user,
+        profileImage: doctorData.profileImage
+      });
+    } else {
+      setUserWithProfileImage(user);
+    }
+  }, [user, doctorData]);
+  
+  const { data: notificationsData } = useQuery({
+    queryKey: ["/api/notifications/unread-count"],
+    queryFn: getUnreadNotificationsCount,
+  });
+  
+  const unreadCount = notificationsData?.count || 0;
+
+  return (
+    <div className="flex h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-slate-50 bg-subtle-grid">
+      {/* Decorative background elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute -top-32 -left-32 w-64 h-64 bg-blue-400 opacity-5 rounded-full filter blur-3xl"></div>
+        <div className="absolute top-1/3 -right-32 w-80 h-80 bg-green-400 opacity-5 rounded-full filter blur-3xl"></div>
+        <div className="absolute -bottom-32 left-1/3 w-64 h-64 bg-purple-400 opacity-5 rounded-full filter blur-3xl"></div>
+      </div>
+
+      {/* Overlay when sidebar is open on mobile */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden transition-opacity duration-300 backdrop-blur-sm"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+      
+      {/* Sidebar for desktop */}
+      <aside className={`fixed inset-y-0 left-0 z-50 md:relative md:flex md:flex-col md:w-64 glass-sidebar shadow-lg transition-transform transform ${
+        sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+      }`}>
+        <div className="p-5 border-b border-gray-100/50">
+          <div className="flex items-center space-x-2">
+            {/* Logo */}
+            <img 
+              src="/assets/cnvidas-logo-transparent.png" 
+              alt="CN Vidas" 
+              className="h-9 w-auto" 
+            />
+            
+            {/* Plano do usuário */}
+            {user?.subscriptionPlan && user.subscriptionPlan !== "free" && (
+              <PlanIndicator plan={user.subscriptionPlan} size="sm" variant="badge" />
+            )}
+            
+            {/* Close button on mobile */}
+            <button 
+              className="ml-auto md:hidden text-gray-500 hover:text-gray-700 transition-colors" 
+              onClick={() => setSidebarOpen(false)}
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+        
+        <SidebarNavigation userRole={user?.role} />
+        
+        <div className="mt-auto p-4 border-t border-gray-100/50">
+          <UserProfile user={userWithProfileImage} />
+        </div>
+      </aside>
+
+      {/* Main content */}
+      <div className="flex flex-col flex-1 overflow-hidden relative z-10">
+        {/* Top navbar */}
+        <header className="glass-nav sticky top-0 z-10 shadow-sm">
+          <div className="md:hidden flex items-center justify-between p-4">
+            <div className="flex items-center">
+              <button 
+                type="button" 
+                className="text-gray-600 hover:text-gray-800 focus:outline-none transition-colors"
+                onClick={() => setSidebarOpen(true)}
+              >
+                <Menu className="h-5 w-5" />
+              </button>
+              <div className="ml-3 flex items-center space-x-2">
+                <img 
+                  src="/assets/cnvidas-logo-transparent.png" 
+                  alt="CN Vidas" 
+                  className="h-8 w-auto" 
+                />
+                {user?.subscriptionPlan && user.subscriptionPlan !== "free" && (
+                  <PlanIndicator plan={user.subscriptionPlan} size="sm" variant="badge" />
+                )}
+              </div>
+            </div>
+            <div className="flex items-center">
+              <UserProfile user={user} compact />
+            </div>
+          </div>
+          
+          <div className="hidden md:flex items-center justify-between px-6 py-4">
+            <div className="flex-1 flex items-center gap-3">
+              <h1 className="text-2xl font-semibold text-gray-800">{title}</h1>
+              {user?.subscriptionPlan && user.subscriptionPlan !== "free" && (
+                <div className="flex items-center">
+                  <div className={`h-2 w-2 rounded-full mr-1.5 ${getPlanColor(user.subscriptionPlan).bg}`}></div>
+                  <PlanIndicator plan={user.subscriptionPlan} size="sm" variant="text" className="text-sm" />
+                </div>
+              )}
+            </div>
+            <div className="flex items-center ml-4 space-x-2">
+              {/* Exibir ícones apenas para não-médicos */}
+              {user?.role !== "doctor" && (
+                <>
+                  {/* Link para Ajuda disponível apenas para pacientes */}
+                  {user?.role === "patient" && (
+                    <Link to="/help">
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="rounded-full glass-card-subtle hover:bg-white/80 transition-all duration-200"
+                      >
+                        <HelpCircle className="h-5 w-5 text-gray-700" />
+                      </Button>
+                    </Link>
+                  )}
+                  
+                  <Link to="/settings">
+                    <Button variant="ghost" size="icon" className="rounded-full glass-card-subtle hover:bg-white/80 transition-all duration-200">
+                      <Settings className="h-5 w-5 text-gray-700" />
+                    </Button>
+                  </Link>
+                  
+                  <div className="ml-4 h-8 w-px bg-gray-200"></div>
+                </>
+              )}
+              
+              <div className={user?.role === "doctor" ? "" : "ml-4"}>
+                <UserProfile user={userWithProfileImage} compact />
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Main content area */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-6">
+          <div className="max-w-7xl mx-auto">
+            {children}
+          </div>
+        </main>
+
+        {/* Mobile bottom navigation */}
+        <MobileNavigation userRole={user?.role} />
+      </div>
+    </div>
+  );
+};
+
+export default DashboardLayout;

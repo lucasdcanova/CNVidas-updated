@@ -1,0 +1,56 @@
+Você atuará como um desenvolvedor full-stack sênior especializado na criação de plataformas SaaS escaláveis. Sua missão é construir toda a estrutura inicial do sistema CN Vidas – uma plataforma de saúde digital com múltiplos módulos – com base nas especificações funcionais abaixo **e replicando o design visual que será enviado como anexo**.
+
+**Atenção: utilize como base o layout/design enviado nos anexos desta solicitação. Todo o front-end da plataforma deverá seguir fielmente esse modelo visual, respeitando cores, fontes, estrutura e responsividade.**
+
+---
+
+### Funcionalidades obrigatórias:
+
+1. **Módulo de Autenticação**
+   - Cadastro e login de **pacientes, parceiros e administradores** com autenticação segura.
+   - Suporte a autenticação via e-mail/senha, com possibilidade futura de OAuth2.
+   - Recuperação de senha por e-mail e verificação de e-mail.
+
+2. **Painel do Paciente**
+   - Dashboard com status da assinatura e benefícios ativos.
+   - Acesso às **consultas de telemedicina via API externa** (app terceirizado integrado).
+   - Preenchimento e envio do **formulário de sinistro** (com campos dinâmicos, upload de laudos e documentos, assinatura digital e status de solicitação).
+   - Histórico de uso e notificações.
+
+3. **Painel do Parceiro**
+   - Cadastro dos serviços oferecidos com valores cheios e com desconto CN Vidas.
+   - Visualização de agendamentos e estatísticas de atendimento.
+   - Relatórios de desempenho e feedback dos usuários.
+   - Opção de criar campanhas promocionais direcionadas.
+
+4. **Painel Administrativo**
+   - Gestão de usuários, parceiros e solicitações de sinistro.
+   - Controle de assinaturas e integrações com a seguradora.
+   - Painel de KPIs: CAC, LTV, churn, adesão a telemedicina e NPS.
+   - Visualização em tempo real da performance da rede.
+
+5. **Integrações**
+   - **API de Telemedicina**: integração com app white-label (ex: Amplimed, Conexa, Docway).
+   - **Gateway de Pagamento**: Stripe, Gerencianet ou outro compatível com Pix, boleto e cartão.
+   - **Seguradora**: endpoint para envio e atualização de status dos sinistros.
+   - **Mensageria**: sistema de notificação por e-mail e push (Firebase ou OneSignal).
+
+---
+
+### Tecnologias recomendadas:
+- **Front-end**: React.js, TypeScript, TailwindCSS, React Query, Framer Motion.
+- **Back-end**: Node.js, Express, Prisma ORM, PostgreSQL.
+- **Autenticação**: Auth.js (ex-NextAuth) ou Firebase Auth.
+- **Armazenamento**: AWS S3 ou Cloudinary para upload de documentos de sinistro.
+- **Hospedagem**: Railway, Vercel ou Render.
+- **CI/CD**: GitHub Actions com lint, test e deploy automatizado.
+
+---
+
+### Instruções finais:
+- **Replique o design exato dos arquivos anexados**: utilize o layout como base de UI para todas as páginas.
+- **Organize a estrutura em pastas modulares** separando domínio, lógica de negócios, serviços, rotas e views.
+- **Documente as APIs** com Swagger ou Postman Collection.
+- **Use boas práticas de segurança, responsividade e escalabilidade.**
+
+Gere o projeto com base nessas instruções e prepare os arquivos iniciais para desenvolvimento iterativo.

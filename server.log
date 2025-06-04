@@ -1,0 +1,15 @@
+
+> rest-express@1.0.0 dev
+> tsx watch server/index.ts
+
+/home/runner/workspace/server/routes/telemedicine-daily-v2.ts:12
+import { isAuthenticated } from '../middleware/auth.js';
+         ^
+
+SyntaxError: The requested module '../middleware/auth.js' does not provide an export named 'isAuthenticated'
+    at ModuleJob._instantiate (node:internal/modules/esm/module_job:146:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:229:5)
+    at async ModuleLoader.import (node:internal/modules/esm/loader:473:24)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:122:5)
+
+Node.js v20.18.1

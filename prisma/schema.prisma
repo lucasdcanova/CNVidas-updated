@@ -1,0 +1,310 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+  engineType      = "wasm"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model appointments {
+  id                     Int               @id @default(autoincrement())
+  user_id                Int
+  service_id             Int?
+  partner_id             Int?
+  doctor_id              Int?
+  type                   String
+  date                   DateTime          @db.Timestamptz(6)
+  duration               Int
+  status                 String            @default("scheduled")
+  notes                  String?
+  doctor_name            String?
+  specialization         String?
+  telemed_provider       String?
+  telemed_link           String?
+  telemed_room_name      String?
+  is_emergency           Boolean?          @default(false)
+  created_at             DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime          @default(now()) @db.Timestamptz(6)
+  base_price             Int?
+  final_price            Int?
+  discount_percentage    Int?
+  subscription_plan_used String?
+  payment_intent_id      String?
+  payment_status         String?           @default("pending")
+  payment_amount         Int?
+  payment_fee            Int?
+  payment_captured_at    DateTime?         @db.Timestamp(6)
+  doctors                doctors?          @relation(fields: [doctor_id], references: [id], onUpdate: NoAction)
+  partners               partners?         @relation(fields: [partner_id], references: [id], onUpdate: NoAction)
+  partner_services       partner_services? @relation(fields: [service_id], references: [id], onUpdate: NoAction)
+  users                  users             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([payment_intent_id])
+  @@index([payment_status])
+}
+
+model availability_slots {
+  id           Int      @id @default(autoincrement())
+  doctor_id    Int
+  day_of_week  Int
+  start_time   String
+  end_time     String
+  is_available Boolean  @default(true)
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime @default(now()) @db.Timestamptz(6)
+  doctors      doctors  @relation(fields: [doctor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model claims {
+  id                              Int       @id @default(autoincrement())
+  user_id                         Int
+  type                            String
+  occurrence_date                 DateTime  @db.Date
+  description                     String
+  documents                       Json?
+  status                          String    @default("pending")
+  review_notes                    String?
+  reviewed_by                     Int?
+  reviewed_at                     DateTime? @db.Timestamptz(6)
+  amount_requested                Int?
+  amount_approved                 Int?
+  created_at                      DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at                      DateTime  @default(now()) @db.Timestamptz(6)
+  users_claims_reviewed_byTousers users?    @relation("claims_reviewed_byTousers", fields: [reviewed_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users_claims_user_idTousers     users     @relation("claims_user_idTousers", fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model dependents {
+  id           Int       @id @default(autoincrement())
+  user_id      Int
+  full_name    String
+  cpf          String    @unique
+  relationship String?
+  birth_date   DateTime? @db.Date
+  created_at   DateTime  @default(now()) @db.Timestamp(6)
+  updated_at   DateTime  @default(now()) @db.Timestamp(6)
+  users        users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model doctors {
+  id                      Int                  @id @default(autoincrement())
+  user_id                 Int
+  specialization          String
+  license_number          String               @unique
+  biography               String?
+  education               String?
+  experience_years        Int?
+  available_for_emergency Boolean?             @default(false)
+  consultation_fee        Int?
+  profile_image           String?
+  status                  String               @default("pending")
+  created_at              DateTime             @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime             @default(now()) @db.Timestamptz(6)
+  welcome_completed       Boolean              @default(false)
+  pix_key_type            String?
+  pix_key                 String?
+  bank_name               String?
+  account_type            String?
+  appointments            appointments[]
+  availability_slots      availability_slots[]
+  users                   users                @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model email_verifications {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  token      String
+  expires_at DateTime @db.Timestamp(6)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([token], map: "idx_email_verifications_token")
+  @@index([user_id], map: "idx_email_verifications_user_id")
+}
+
+model notifications {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  title      String
+  message    String
+  type       String
+  is_read    Boolean? @default(false)
+  related_id Int?
+  link       String?
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model partner_services {
+  id                  Int            @id @default(autoincrement())
+  partner_id          Int
+  name                String
+  description         String?
+  category            String
+  regular_price       Int
+  discount_price      Int
+  discount_percentage Int?
+  is_featured         Boolean?       @default(false)
+  duration            Int?
+  is_active           Boolean?       @default(true)
+  created_at          DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime       @default(now()) @db.Timestamptz(6)
+  service_image       String?
+  appointments        appointments[]
+  partners            partners       @relation(fields: [partner_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model partners {
+  id               Int                @id @default(autoincrement())
+  user_id          Int
+  business_name    String
+  business_type    String
+  description      String?
+  website          String?
+  address          String?
+  phone            String?
+  status           String             @default("pending")
+  created_at       DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime           @default(now()) @db.Timestamptz(6)
+  zipcode          String?
+  street           String?
+  number           String?
+  complement       String?
+  neighborhood     String?
+  city             String?
+  state            String?
+  cnpj             String?            @db.VarChar(18)
+  appointments     appointments[]
+  partner_services partner_services[]
+  users            users              @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model password_resets {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  token      String
+  expires_at DateTime @db.Timestamp(6)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([token], map: "idx_password_resets_token")
+  @@index([user_id], map: "idx_password_resets_user_id")
+}
+
+model qr_auth_logs {
+  id                                        Int        @id @default(autoincrement())
+  qr_token_id                               Int?
+  scanner_user_id                           Int
+  token_user_id                             Int
+  scanned_at                                DateTime   @default(now()) @db.Timestamp(6)
+  ip_address                                String?
+  user_agent                                String?
+  success                                   Boolean?   @default(true)
+  qr_tokens                                 qr_tokens? @relation(fields: [qr_token_id], references: [id], onUpdate: NoAction)
+  users_qr_auth_logs_scanner_user_idTousers users      @relation("qr_auth_logs_scanner_user_idTousers", fields: [scanner_user_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  users_qr_auth_logs_token_user_idTousers   users      @relation("qr_auth_logs_token_user_idTousers", fields: [token_user_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+}
+
+model qr_tokens {
+  id           Int            @id @default(autoincrement())
+  user_id      Int
+  token        String         @unique
+  expires_at   DateTime       @db.Timestamptz(6)
+  created_at   DateTime       @default(now()) @db.Timestamptz(6)
+  used         Boolean?       @default(false)
+  qr_auth_logs qr_auth_logs[]
+  users        users          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model session {
+  sid    String   @id @db.VarChar
+  sess   Json     @db.Json
+  expire DateTime @db.Timestamp(6)
+
+  @@index([expire], map: "IDX_session_expire")
+}
+
+model subscription_plans {
+  id                        Int       @id @default(autoincrement())
+  name                      String    @db.VarChar(255)
+  price                     Decimal   @db.Decimal(10, 2)
+  description               String?
+  features                  Json?
+  created_at                DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at                DateTime? @default(now()) @db.Timestamptz(6)
+  display_name              String?   @db.VarChar(255)
+  discount_percentage       Int?
+  is_default                Boolean?  @default(false)
+  interval                  String?   @db.VarChar(50)
+  emergency_consultations   String?
+  specialist_discount       Int?
+  insurance_coverage        Boolean?
+  is_family                 Boolean?  @default(false)
+  max_dependents            Int?      @default(0)
+  priority_level            Int?      @default(0)
+  insurance_coverage_amount Int?      @default(0)
+}
+
+model users {
+  id                                               Int                   @id @default(autoincrement())
+  email                                            String                @unique
+  username                                         String                @unique
+  password                                         String
+  full_name                                        String
+  role                                             user_role             @default(patient)
+  phone                                            String?
+  address                                          String?
+  birth_date                                       DateTime?             @db.Date
+  created_at                                       DateTime              @default(now()) @db.Timestamptz(6)
+  updated_at                                       DateTime              @default(now()) @db.Timestamptz(6)
+  stripe_customer_id                               String?
+  stripe_subscription_id                           String?
+  subscription_status                              String?               @default("inactive")
+  subscription_plan                                subscription_plan?    @default(free)
+  email_verified                                   Boolean?              @default(false)
+  profile_image                                    String?
+  emergency_consultations_left                     Int?                  @default(0)
+  cpf                                              String?               @unique(map: "unique_cpf")
+  last_subscription_cancellation                   DateTime?             @db.Timestamp(6)
+  zipcode                                          String?
+  street                                           String?
+  number                                           String?
+  complement                                       String?
+  neighborhood                                     String?
+  city                                             String?
+  state                                            String?
+  subscription_changed_at                          DateTime?             @db.Timestamp(6)
+  seller_name                                      String?
+  appointments                                     appointments[]
+  claims_claims_reviewed_byTousers                 claims[]              @relation("claims_reviewed_byTousers")
+  claims_claims_user_idTousers                     claims[]              @relation("claims_user_idTousers")
+  dependents                                       dependents[]
+  doctors                                          doctors[]
+  email_verifications                              email_verifications[]
+  notifications                                    notifications[]
+  partners                                         partners[]
+  password_resets                                  password_resets[]
+  qr_auth_logs_qr_auth_logs_scanner_user_idTousers qr_auth_logs[]        @relation("qr_auth_logs_scanner_user_idTousers")
+  qr_auth_logs_qr_auth_logs_token_user_idTousers   qr_auth_logs[]        @relation("qr_auth_logs_token_user_idTousers")
+  qr_tokens                                        qr_tokens[]
+}
+
+enum subscription_plan {
+  free
+  basic
+  premium
+  ultra
+  basic_family
+  premium_family
+  ultra_family
+}
+
+enum user_role {
+  patient
+  partner
+  admin
+  doctor
+}
