@@ -1,7 +1,3 @@
-<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
-  <rect width="100%" height="100%" fill="white"/>
-  <g transform="translate(150, 140)">
-    <text x="0" y="0" font-family="Arial, sans-serif" font-size="90" font-weight="bold" fill="#3b5cb8">CN</text>
-    <text x="0" y="80" font-family="Arial, sans-serif" font-size="60" font-weight="bold" fill="#4CAF50">VIDAS</text>
-  </g>
-</svg>
+version https://git-lfs.github.com/spec/v1
+oid sha256:df2bf0b2e51041c90ac21cf2a6b9cbb3e3cbf56bedb75fe2ec18e6e22fa7d7fa
+size 397
