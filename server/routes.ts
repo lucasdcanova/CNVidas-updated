@@ -42,6 +42,7 @@ import { telemedicineRouter } from './routes/telemedicine-routes';
 import diagnosticsRouter from './telemedicine-diagnostics';
 import { User } from '../shared/schema';
 import { insertAppointmentSchema, insertClaimSchema } from './schemas';
+import { pool } from './db';
 
 const router = Router();
 
@@ -93,8 +94,8 @@ if (!process.env.STRIPE_SECRET_KEY) {
 
 // Middleware de autenticação
 const requireAuth = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ error: 'Não autorizado' });
+  if (!req.user) {
+    throw new AppError('Usuário não autenticado', 401);
   }
   next();
 };
@@ -150,40 +151,40 @@ router.use('/api/chat', chatRouter);
 
 // Corrigir o middleware de autenticação
 const isAuthenticated = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ error: 'Não autorizado' });
+  if (!req.user) {
+    throw new AppError('Usuário não autenticado', 401);
   }
   next();
 };
 
 // Corrigir o middleware de admin
 const isAdmin = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated() || !req.user || req.user.role !== 'admin') {
-    return res.status(401).json({ error: 'Não autorizado' });
+  if (!req.user || !req.user.role !== 'admin') {
+    throw new AppError('Não autorizado', 401);
   }
   next();
 };
 
 // Corrigir o middleware de partner
 const isPartner = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated() || !req.user || req.user.role !== 'partner') {
-    return res.status(401).json({ error: 'Não autorizado' });
+  if (!req.user || !req.user.role !== 'partner') {
+    throw new AppError('Não autorizado', 401);
   }
   next();
 };
 
 // Corrigir o middleware de doctor
 const isDoctor = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated() || !req.user || req.user.role !== 'doctor') {
-    return res.status(401).json({ error: 'Não autorizado' });
+  if (!req.user || !req.user.role !== 'doctor') {
+    throw new AppError('Não autorizado', 401);
   }
   next();
 };
 
 // Corrigir o middleware de patient
 const isPatient = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated() || !req.user || req.user.role !== 'patient') {
-    return res.status(401).json({ error: 'Não autorizado' });
+  if (!req.user || !req.user.role !== 'patient') {
+    throw new AppError('Não autorizado', 401);
   }
   next();
 };
@@ -191,8 +192,8 @@ const isPatient = (req: AuthenticatedRequest, res: Response, next: NextFunction)
 // Função auxiliar para verificar roles
 const requireRole = (roles: User['role'][]) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    if (!req.isAuthenticated() || !req.user || !roles.includes(req.user.role)) {
-      return res.status(401).json({ error: 'Não autorizado' });
+    if (!req.user || !roles.includes(req.user.role)) {
+      throw new AppError('Não autorizado', 401);
     }
     next();
   };
@@ -217,25 +218,22 @@ router.get("/api/users", requireRole(['admin']), async (req: AuthenticatedReques
   }
 });
 
-router.get("/api/users/profile", requireAuth, (req: AuthenticatedRequest, res: Response) => {
-  if (!req.user) {
-    return res.status(401).json({ error: 'Usuário não autenticado' });
+router.get("/api/users/profile", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      throw new AppError('Usuário não autenticado', 401);
+    }
+    const user = await storage.getUser(req.user.id);
+    return res.json(user);
+  } catch (error) {
+    console.error('Erro ao buscar perfil:', error);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
   }
-
-  const user = normalizeNull(req.user, [
-    'phone', 'address', 'zipCode', 'street', 'number', 'complement', 
-    'neighborhood', 'city', 'state', 'birthDate', 'stripeCustomerId', 
-    'stripeSubscriptionId', 'subscriptionStatus', 'subscriptionPlan', 
-    'subscriptionChangedAt', 'profileImage', 'emergencyConsultationsLeft', 
-    'lastSubscriptionCancellation'
-  ]);
-  
-  res.json(user);
 });
 
 router.put("/api/users/seller", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   if (!req.user) {
-    return res.status(401).json({ error: 'Usuário não autenticado' });
+    throw new AppError('Usuário não autenticado', 401);
   }
 
   try {

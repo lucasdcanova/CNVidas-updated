@@ -63,7 +63,7 @@ export interface IStorage {
   getUserBySessionId(sessionId: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: number, data: Partial<InsertUser>): Promise<User>;
-  deleteUser(id: number | string): Promise<boolean>;
+  deleteUser(id: number): Promise<boolean>;
   getUsersByRole(role: "patient" | "partner" | "admin" | "doctor"): Promise<User[]>;
   updateUserPassword(id: number, password: string): Promise<User>;
   
@@ -78,14 +78,14 @@ export interface IStorage {
   verifyUserEmail(userId: number): Promise<void>;
   createEmailVerification(verification: { userId: number, token: string, expiresAt: Date }): Promise<void>;
   getEmailVerificationByToken(token: string): Promise<EmailVerification | undefined>;
-  deleteEmailVerification(id: number | string): Promise<void>;
-  deleteEmailVerificationsByUserId(userId: number | string): Promise<void>;
+  deleteEmailVerification(id: number): Promise<void>;
+  deleteEmailVerificationsByUserId(userId: number): Promise<void>;
   
   // Password reset
   createPasswordReset(reset: { userId: number, token: string, expiresAt: Date }): Promise<void>;
   getPasswordResetByToken(token: string): Promise<PasswordReset | undefined>;
-  deletePasswordReset(id: number | string): Promise<void>;
-  deletePasswordResetsByUserId(userId: number | string): Promise<void>;
+  deletePasswordReset(id: number): Promise<void>;
+  deletePasswordResetsByUserId(userId: number): Promise<void>;
   
   // QR Code authentication
   generateQrToken(userId: number): Promise<{ token: string, expiresAt: Date }>;
@@ -347,10 +347,9 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async deleteUser(id: number | string): Promise<boolean> {
-    const numericId = Number(id);
+  async deleteUser(id: number): Promise<boolean> {
     const [user] = await this.db.delete(users)
-      .where(eq(users.id, numericId))
+      .where(eq(users.id, id))
       .returning();
     return !!user;
   }
@@ -380,14 +379,12 @@ export class DatabaseStorage implements IStorage {
     return reset;
   }
 
-  async deletePasswordReset(id: number | string): Promise<void> {
-    const numericId = Number(id);
-    await this.db.delete(passwordResets).where(eq(passwordResets.id, numericId));
+  async deletePasswordReset(id: number): Promise<void> {
+    await this.db.delete(passwordResets).where(eq(passwordResets.id, id));
   }
 
-  async deletePasswordResetsByUserId(userId: number | string): Promise<void> {
-    const numericId = Number(userId);
-    await this.db.delete(passwordResets).where(eq(passwordResets.userId, numericId));
+  async deletePasswordResetsByUserId(userId: number): Promise<void> {
+    await this.db.delete(passwordResets).where(eq(passwordResets.userId, userId));
   }
 
   async savePasswordResetToken(userId: number, token: string, expiresAt: Date): Promise<void> {
@@ -416,14 +413,12 @@ export class DatabaseStorage implements IStorage {
     return verification;
   }
 
-  async deleteEmailVerification(id: number | string): Promise<void> {
-    const numericId = Number(id);
-    await this.db.delete(emailVerifications).where(eq(emailVerifications.id, numericId));
+  async deleteEmailVerification(id: number): Promise<void> {
+    await this.db.delete(emailVerifications).where(eq(emailVerifications.id, id));
   }
 
-  async deleteEmailVerificationsByUserId(userId: number | string): Promise<void> {
-    const numericId = Number(userId);
-    await this.db.delete(emailVerifications).where(eq(emailVerifications.userId, numericId));
+  async deleteEmailVerificationsByUserId(userId: number): Promise<void> {
+    await this.db.delete(emailVerifications).where(eq(emailVerifications.userId, userId));
   }
 
   async saveVerificationToken(userId: number, token: string): Promise<void> {
@@ -1019,11 +1014,37 @@ export class DatabaseStorage implements IStorage {
         .select()
         .from(auditLogs)
         .where(eq(auditLogs.userId, userId))
-        .orderBy(desc(auditLogs.timestamp))
+        .orderBy(desc(auditLogs.createdAt))
         .limit(limit)
         .offset(offset);
     } catch (error) {
       console.error('Erro ao buscar logs de auditoria:', error);
+      throw error;
+    }
+  }
+
+  async getPartnerById(id: number): Promise<any> {
+    try {
+      return await this.db
+        .select()
+        .from(partners)
+        .where(eq(partners.id, id))
+        .limit(1);
+    } catch (error) {
+      console.error('Erro ao buscar parceiro:', error);
+      throw error;
+    }
+  }
+
+  async getPartnerByUserId(userId: number): Promise<any> {
+    try {
+      return await this.db
+        .select()
+        .from(partners)
+        .where(eq(partners.userId, userId))
+        .limit(1);
+    } catch (error) {
+      console.error('Erro ao buscar parceiro:', error);
       throw error;
     }
   }

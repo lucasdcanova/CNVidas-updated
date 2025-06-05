@@ -4,57 +4,67 @@ import { User } from '@shared/types';
 import { AppError } from '../utils/app-error';
 import { storage } from '../storage';
 import { DatabaseStorage } from '../storage';
+import { AuthenticatedRequest } from '../types/authenticated-request';
 
-export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
+export const requireAuth = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
-    throw new AppError('Não autorizado', 401);
+    throw new AppError('Usuário não autenticado', 401);
   }
   next();
 };
 
-export function requireRole(roles: User['role'][]) {
+export const requireRole = (roles: string[]) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Usuário não autenticado' });
+    if (!req.user) {
+      throw new AppError('Usuário não autenticado', 401);
     }
     if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ error: 'Não autorizado' });
+      throw new AppError('Não autorizado', 403);
     }
     next();
   };
-}
+};
 
 export function optionalAuth(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   next();
 }
 
-export const requireAdmin = async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user || req.user.role !== 'admin') {
-    throw new AppError('Acesso permitido apenas para administradores', 403);
+export const requireAdmin = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    throw new AppError('Usuário não autenticado', 401);
+  }
+  if (req.user.role !== 'admin') {
+    throw new AppError('Não autorizado', 403);
   }
   next();
 };
 
-export const requireDoctor = async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user || req.user.role !== 'doctor') {
-    throw new AppError('Acesso permitido apenas para médicos', 403);
+export const requireDoctor = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    throw new AppError('Usuário não autenticado', 401);
+  }
+  if (req.user.role !== 'doctor') {
+    throw new AppError('Não autorizado', 403);
   }
   next();
 };
 
-export const requirePatient = async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user || req.user.role !== 'patient') {
-    throw new AppError('Acesso permitido apenas para pacientes', 403);
+export const requirePatient = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    throw new AppError('Usuário não autenticado', 401);
+  }
+  if (req.user.role !== 'patient') {
+    throw new AppError('Não autorizado', 403);
   }
   next();
 };
 
 export function requirePartner(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ error: 'Usuário não autenticado' });
+  if (!req.user) {
+    throw new AppError('Usuário não autenticado', 401);
   }
   if (req.user.role !== 'partner') {
-    return res.status(403).json({ error: 'Acesso restrito a parceiros' });
+    throw new AppError('Não autorizado', 403);
   }
   next();
 }
