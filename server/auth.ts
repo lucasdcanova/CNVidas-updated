@@ -20,29 +20,26 @@ declare global {
       username: string;
       fullName: string;
       emailVerified: boolean;
-    }
-  }
-  namespace Express {
-    interface User {
-      id: number;
-      email: string;
-      role: string;
-      username: string;
-      fullName: string;
-      emailVerified: boolean;
-    }
-  }
-  namespace Express {
-    interface User {
-      id: number;
-      email: string;
-      role: string;
-      username: string;
-      fullName: string;
-      emailVerified: boolean;
       password: string;
       createdAt: Date;
       updatedAt: Date;
+      lastLogin?: Date;
+      isActive: boolean;
+      subscriptionStatus?: string;
+      subscriptionPlan?: string;
+      subscriptionChangedAt?: Date;
+      emergencyConsultationsLeft?: number;
+      sellerName?: string;
+      profileImage?: string | null;
+      phone?: string | null;
+      cpf?: string | null;
+      address?: string | null;
+      number?: string | null;
+      complement?: string | null;
+      neighborhood?: string | null;
+      city?: string | null;
+      state?: string | null;
+      zipCode?: string | null;
     }
   }
 }

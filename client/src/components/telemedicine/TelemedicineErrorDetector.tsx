@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { WifiOff, AlertCircle, HelpCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import TroubleshootingDialog from './TroubleshootingDialog';
+import React from 'react';
 
 interface TelemedicineErrorDetectorProps {
   appointmentId?: number;
@@ -26,6 +27,7 @@ const TelemedicineErrorDetector: React.FC<TelemedicineErrorDetectorProps> = ({
 }) => {
   const [hasNetworkIssues, setHasNetworkIssues] = useState(false);
   const [isCheckingConnection, setIsCheckingConnection] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
   // Verifica a conexão com a internet
@@ -135,7 +137,7 @@ const TelemedicineErrorDetector: React.FC<TelemedicineErrorDetectorProps> = ({
           variant="destructive" 
           size="sm"
           className="gap-2 animate-pulse"
-          onClick={checkConnection}
+          onClick={() => setIsDialogOpen(true)}
         >
           <WifiOff className="h-4 w-4" />
           Problemas de conexão detectados
@@ -143,8 +145,8 @@ const TelemedicineErrorDetector: React.FC<TelemedicineErrorDetectorProps> = ({
       )}
       
       <TroubleshootingDialog 
-        appointmentId={appointmentId}
-        onDiagnosticComplete={handleResult}
+        isOpen={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
       />
     </div>
   );

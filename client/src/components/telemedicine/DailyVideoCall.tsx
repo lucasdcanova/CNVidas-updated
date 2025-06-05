@@ -5,12 +5,14 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
 interface DailyCallFrame {
-  join: (options: { url: string; token?: string }) => Promise<void>;
+  join: (options: { url: string; token?: string; startVideoOff?: boolean }) => Promise<void>;
   leave: () => void;
   destroy: () => void;
   setLocalAudio: (enabled: boolean) => void;
   setLocalVideo: (enabled: boolean) => void;
   on: (event: string, callback: (event: any) => void) => void;
+  getNetworkStats?: () => Promise<any>;
+  participants: () => any;
 }
 
 interface ConnectionIssue {
@@ -196,7 +198,8 @@ export default function DailyVideoCall({
           height: '100%',
           border: 'none',
           borderRadius: '10px'
-        }
+        },
+        startVideoOff: false
       };
       
       // Etapa 6: Criar o frame
@@ -352,8 +355,8 @@ export default function DailyVideoCall({
         .on('participant-joined', (event: any) => {
           try {
             const participant = event.participant;
-            if (participant && callFrame.current && 
-                participant.session_id !== callFrame.current.participants().local.session_id) {
+            if (participant && callFrameRef.current && 
+                participant.session_id !== callFrameRef.current.participants().local.session_id) {
               console.log('Participante entrou:', participant);
               toast({
                 title: 'Participante conectado',
@@ -433,7 +436,12 @@ export default function DailyVideoCall({
         if (!callFrameRef.current) return;
         
         // Obter estatísticas de rede do Daily.co
-        const stats = await callFrameRef.current.getNetworkStats();
+        let stats = null;
+        if (typeof callFrameRef.current.getNetworkStats === 'function') {
+          stats = await callFrameRef.current.getNetworkStats();
+        } else {
+          console.warn('getNetworkStats não está disponível nesta versão do Daily.co');
+        }
         
         if (stats && stats.stats) {
           // Dados de latência e perda de pacotes

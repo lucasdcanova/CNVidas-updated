@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Script para desabilitar o modal de erro do Vite que está causando problemas no login
 // Este script é injetado através do index.html
 
@@ -16,6 +17,10 @@ if (window) {
 
   // Capturar erros de WebSocket que possam estar causando o problema
   const originalWebSocket = window.WebSocket;
+  /**
+   * @param {string} url
+   * @param {string | string[]=} protocols
+   */
   window.WebSocket = function(url, protocols) {
     const socket = new originalWebSocket(url, protocols);
     

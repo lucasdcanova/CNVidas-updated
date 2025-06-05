@@ -214,7 +214,7 @@ export default function DoctorEmergencyRoom() {
                     />
                     
                     {/* CSS personalizado para esconder elementos */}
-                    <style jsx>{`
+                    <style>{`
                       iframe {
                         pointer-events: auto;
                       }

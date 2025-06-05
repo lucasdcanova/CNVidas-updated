@@ -194,9 +194,9 @@ export function SimpleVideoCall({ url, token, userName, onLeave }: SimpleVideoCa
             } else {
               throw new Error('O createFrame retornou valor nulo');
             }
-          } catch (innerErr) {
+          } catch (innerErr: unknown) {
             console.error('Erro específico ao criar frame:', innerErr);
-            throw new Error(`Criação do frame falhou: ${innerErr.message || 'Erro desconhecido'}`);
+            throw new Error(`Criação do frame falhou: ${innerErr instanceof Error ? innerErr.message : 'Erro desconhecido'}`);
           }
           
           // Configurar listeners de eventos com monitoramento de estado

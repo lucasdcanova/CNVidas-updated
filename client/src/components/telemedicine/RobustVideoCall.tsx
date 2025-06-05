@@ -103,6 +103,9 @@ export function RobustVideoCall({ url, token, userName, onLeave }: RobustVideoCa
 
         while (retryCount < maxRetries) {
           try {
+            if (!containerRef.current) {
+              throw new Error('Container do vídeo não está disponível. Tente recarregar a página.');
+            }
             frame = DailyIframe.createFrame(containerRef.current, {
               iframeStyle: {
                 width: '100%',
@@ -125,6 +128,10 @@ export function RobustVideoCall({ url, token, userName, onLeave }: RobustVideoCa
         }
 
         // Configurar listeners com tratamento de erro melhorado
+        if (!frame) {
+          throw new Error('Frame não inicializado corretamente');
+        }
+
         frame
           .on('joining-meeting', () => {
             console.log('Entrando na reunião...');

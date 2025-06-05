@@ -58,10 +58,15 @@ export const PatientDashboard: React.FC = () => {
     queryFn: getUpcomingAppointments,
   });
   
-  const { data: claims = [] } = useQuery({
+  const { data: claimsRaw = [] } = useQuery({
     queryKey: ["/api/claims"],
     queryFn: getClaims,
   });
+  const claims: Claim[] = Array.isArray(claimsRaw)
+    ? claimsRaw
+    : (claimsRaw && typeof claimsRaw === 'object' && 'data' in claimsRaw && Array.isArray(claimsRaw.data))
+      ? claimsRaw.data
+      : [];
   
   const { data: featuredServices = [] } = useQuery({
     queryKey: ["/api/services"],

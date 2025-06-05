@@ -286,9 +286,10 @@ export function TelemedicineEmergencyPage() {
         <div className="bg-white shadow-sm border rounded-lg overflow-hidden" style={{ height: 'calc(100vh - 200px)', minHeight: '600px' }}>
           <RobustDailyVideoCall 
             appointmentId={appointmentId || undefined}
-            roomName={roomName || undefined}
-            userName={user?.fullName || user?.username || 'Paciente'}
-            onLeave={handleLeaveCall}
+            roomName={roomName ?? ''}
+            roomUrl={`https://videocall.cnvidas.com/${roomName ?? ''}`}
+            userName={user?.fullName ?? user?.username ?? 'Paciente'}
+            onLeaveCall={handleLeaveCall}
           />
         </div>
       </div>

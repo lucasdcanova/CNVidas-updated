@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import DataTable from "@/components/ui/data-table";
 import { useAuth } from "@/hooks/use-auth";
 import { List, DollarSign } from "lucide-react";
+import { Column, Action } from "@/components/ui/data-table";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export const PartnerDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -66,8 +69,64 @@ export const PartnerDashboard: React.FC = () => {
     },
   ];
   
+  // Recent consultations columns
+  const recentConsultationsColumns: Column<Consultation>[] = [
+    {
+      id: "id",
+      header: "ID",
+      accessorKey: "id",
+    },
+    {
+      id: "patientName",
+      header: "Paciente",
+      accessorKey: "patientName",
+    },
+    {
+      id: "doctorName",
+      header: "Médico",
+      accessorKey: "doctorName",
+    },
+    {
+      id: "status",
+      header: "Status",
+      accessorKey: "status",
+      cell: (row: Consultation) => {
+        let colors;
+        let label;
+        switch (row.status) {
+          case "scheduled":
+            colors = "bg-blue-100 text-blue-800";
+            label = "Agendada";
+            break;
+          case "in_progress":
+            colors = "bg-yellow-100 text-yellow-800";
+            label = "Em andamento";
+            break;
+          case "completed":
+            colors = "bg-green-100 text-green-800";
+            label = "Concluída";
+            break;
+          case "cancelled":
+            colors = "bg-red-100 text-red-800";
+            label = "Cancelada";
+            break;
+          default:
+            colors = "bg-gray-100 text-gray-800";
+            label = row.status;
+        }
+        return <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${colors}`}>{label}</span>;
+      },
+    },
+    {
+      id: "scheduledAt",
+      header: "Data/Hora",
+      accessorKey: "scheduledAt",
+      cell: (row: Consultation) => <span>{format(new Date(row.scheduledAt), "dd/MM/yyyy HH:mm", { locale: ptBR })}</span>,
+    },
+  ];
+  
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="space-y-6">
       {/* Welcome card */}
       <div className="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
         <div className="md:flex items-center justify-between">
@@ -128,6 +187,25 @@ export const PartnerDashboard: React.FC = () => {
               </Link>
             </div>
           )}
+        </CardContent>
+      </Card>
+
+      {/* Recent consultations */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Consultas Recentes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <DataTable<Consultation>
+            columns={recentConsultationsColumns}
+            data={recentConsultations}
+            actions={[
+              {
+                label: "Ver detalhes",
+                onClick: (row) => handleViewConsultation(row),
+              },
+            ]}
+          />
         </CardContent>
       </Card>
     </div>

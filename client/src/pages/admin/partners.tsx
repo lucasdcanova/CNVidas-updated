@@ -41,6 +41,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { Partner } from "@/shared/types";
+import { Column, Action } from "@/components/ui/data-table";
 
 const AdminPartners: React.FC = () => {
   const { toast } = useToast();
@@ -141,49 +142,53 @@ const AdminPartners: React.FC = () => {
   });
 
   // Partner columns for data table
-  const partnerColumns = [
+  const partnerColumns: Column<Partner>[] = [
+    {
+      id: "id",
+      header: "ID",
+      accessorKey: "id",
+    },
     {
       id: "businessName",
-      header: "Nome do Parceiro",
+      header: "Nome da Empresa",
       accessorKey: "businessName",
     },
     {
       id: "businessType",
-      header: "Tipo",
+      header: "Tipo de Negócio",
       accessorKey: "businessType",
-    },
-    {
-      id: "contact",
-      header: "Contato",
-      accessorKey: "phone",
     },
     {
       id: "status",
       header: "Status",
       accessorKey: "status",
-      cell: (row: any) => (
-        <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-          row.status === "active" ? "bg-green-100 text-green-800" :
-          row.status === "pending" ? "bg-yellow-100 text-yellow-800" :
-          "bg-red-100 text-red-800"
-        }`}>
-          {row.status === "active" ? "Ativo" :
-           row.status === "pending" ? "Pendente" :
-           "Inativo"}
-        </span>
-      ),
-    },
-    {
-      id: "createdAt",
-      header: "Data de Cadastro",
-      accessorKey: "createdAt",
-      cell: (row: any) => format(new Date(row.createdAt), "dd/MM/yyyy", { locale: ptBR }),
+      cell: (row: Partner) => {
+        let colors;
+        let label;
+        switch (row.status) {
+          case "active":
+            colors = "bg-green-100 text-green-800";
+            label = "Ativo";
+            break;
+          case "inactive":
+            colors = "bg-red-100 text-red-800";
+            label = "Inativo";
+            break;
+          case "pending":
+            colors = "bg-yellow-100 text-yellow-800";
+            label = "Pendente";
+            break;
+          default:
+            colors = "bg-gray-100 text-gray-800";
+            label = row.status;
+        }
+        return <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${colors}`}>{label}</span>;
+      },
     },
   ];
   
   // Handle view partner details
-  const handleViewPartner = (partnerId: number) => {
-    const partner = partners.find((p: Partner) => p.id === partnerId);
+  const handleViewPartner = (partner: Partner) => {
     setSelectedPartner(partner || null);
     toast({
       title: "Visualizar parceiro",
@@ -192,15 +197,13 @@ const AdminPartners: React.FC = () => {
   };
   
   // Handle edit partner
-  const handleEditPartner = (partnerId: number) => {
-    const partner = partners.find((p: Partner) => p.id === partnerId);
+  const handleEditPartner = (partner: Partner) => {
     setSelectedPartner(partner || null);
     setEditDialogOpen(true);
   };
   
   // Handle approve partner
-  const handleApprovePartner = (partnerId: number) => {
-    const partner = partners.find((p: Partner) => p.id === partnerId);
+  const handleApprovePartner = (partner: Partner) => {
     if (partner) {
       updatePartnerMutation.mutate({
         id: partner.id,
@@ -210,8 +213,7 @@ const AdminPartners: React.FC = () => {
   };
   
   // Handle reject partner
-  const handleRejectPartner = (partnerId: number) => {
-    const partner = partners.find((p: Partner) => p.id === partnerId);
+  const handleRejectPartner = (partner: Partner) => {
     if (partner) {
       updatePartnerMutation.mutate({
         id: partner.id,
@@ -564,50 +566,46 @@ const AdminPartners: React.FC = () => {
           
           {/* Tab contents */}
           <TabsContent value="all">
-            <PartnerList 
+            <PartnersList 
               partners={getCurrentTabPartners("all")} 
               columns={partnerColumns}
-              onView={handleViewPartner}
-              onEdit={handleEditPartner}
-              onApprove={handleApprovePartner}
-              onReject={handleRejectPartner}
-              showApproveReject={false}
+              onViewPartner={handleViewPartner}
+              onEditPartner={handleEditPartner}
+              onDeletePartner={handleRejectPartner}
+              showActions={false}
             />
           </TabsContent>
           
           <TabsContent value="active">
-            <PartnerList 
+            <PartnersList 
               partners={getCurrentTabPartners("active")} 
               columns={partnerColumns}
-              onView={handleViewPartner}
-              onEdit={handleEditPartner}
-              onApprove={handleApprovePartner}
-              onReject={handleRejectPartner}
-              showApproveReject={false}
+              onViewPartner={handleViewPartner}
+              onEditPartner={handleEditPartner}
+              onDeletePartner={handleRejectPartner}
+              showActions={false}
             />
           </TabsContent>
           
           <TabsContent value="pending">
-            <PartnerList 
+            <PartnersList 
               partners={getCurrentTabPartners("pending")} 
               columns={partnerColumns}
-              onView={handleViewPartner}
-              onEdit={handleEditPartner}
-              onApprove={handleApprovePartner}
-              onReject={handleRejectPartner}
-              showApproveReject={true}
+              onViewPartner={handleViewPartner}
+              onEditPartner={handleEditPartner}
+              onDeletePartner={handleRejectPartner}
+              showActions={true}
             />
           </TabsContent>
           
           <TabsContent value="inactive">
-            <PartnerList 
+            <PartnersList 
               partners={getCurrentTabPartners("inactive")} 
               columns={partnerColumns}
-              onView={handleViewPartner}
-              onEdit={handleEditPartner}
-              onApprove={handleApprovePartner}
-              onReject={handleRejectPartner}
-              showApproveReject={false}
+              onViewPartner={handleViewPartner}
+              onEditPartner={handleEditPartner}
+              onDeletePartner={handleRejectPartner}
+              showActions={false}
             />
           </TabsContent>
         </Tabs>
@@ -617,25 +615,45 @@ const AdminPartners: React.FC = () => {
 };
 
 // Partner list component
-interface PartnerListProps {
+interface PartnersListProps {
   partners: Partner[];
-  columns: any[];
-  onView: (id: number) => void;
-  onEdit: (id: number) => void;
-  onApprove: (id: number) => void;
-  onReject: (id: number) => void;
-  showApproveReject: boolean;
+  columns: Column<Partner>[];
+  onViewPartner: (partner: Partner) => void;
+  onEditPartner: (partner: Partner) => void;
+  onDeletePartner: (partner: Partner) => void;
+  showActions: boolean;
 }
 
-const PartnerList: React.FC<PartnerListProps> = ({ 
+const PartnersList: React.FC<PartnersListProps> = ({ 
   partners, 
   columns, 
-  onView, 
-  onEdit,
-  onApprove,
-  onReject,
-  showApproveReject 
+  onViewPartner, 
+  onEditPartner,
+  onDeletePartner,
+  showActions 
 }) => {
+  const actions: Action<Partner>[] = showActions
+    ? [
+        {
+          label: "Ver detalhes",
+          onClick: (row) => onViewPartner(row),
+        },
+        {
+          label: "Editar",
+          onClick: (row) => onEditPartner(row),
+        },
+        {
+          label: "Excluir",
+          onClick: (row) => onDeletePartner(row),
+        },
+      ]
+    : [
+        {
+          label: "Ver detalhes",
+          onClick: (row) => onViewPartner(row),
+        },
+      ];
+
   return (
     <Card>
       <CardHeader className="pb-1">
@@ -648,53 +666,21 @@ const PartnerList: React.FC<PartnerListProps> = ({
                 <SelectValue placeholder="Filtrar por..." />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todos os tipos</SelectItem>
-                <SelectItem value="clinic">Clínica</SelectItem>
-                <SelectItem value="doctor">Médico</SelectItem>
-                <SelectItem value="hospital">Hospital</SelectItem>
-                <SelectItem value="pharmacy">Farmácia</SelectItem>
-                <SelectItem value="lab">Laboratório</SelectItem>
+                <SelectItem value="all">Todos</SelectItem>
+                <SelectItem value="active">Ativos</SelectItem>
+                <SelectItem value="inactive">Inativos</SelectItem>
+                <SelectItem value="pending">Pendentes</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
       </CardHeader>
       <CardContent>
-        {showApproveReject ? (
-          <DataTable 
-            columns={columns} 
-            data={partners} 
-            actions={[
-              {
-                label: "Visualizar",
-                onClick: (row) => onView(row.id)
-              },
-              {
-                label: "Aprovar",
-                onClick: (row) => onApprove(row.id)
-              },
-              {
-                label: "Rejeitar",
-                onClick: (row) => onReject(row.id)
-              }
-            ]}
-          />
-        ) : (
-          <DataTable 
-            columns={columns} 
-            data={partners} 
-            actions={[
-              {
-                label: "Visualizar",
-                onClick: (row) => onView(row.id)
-              },
-              {
-                label: "Editar",
-                onClick: (row) => onEdit(row.id)
-              }
-            ]}
-          />
-        )}
+        <DataTable<Partner>
+          columns={columns}
+          data={partners || []}
+          actions={actions}
+        />
       </CardContent>
     </Card>
   );

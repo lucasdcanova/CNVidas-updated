@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { z } from "zod";
 import { appointments, users, doctors, doctorPayments } from "../shared/schema";
-import { eq, sql, and, desc, gte, lte } from "drizzle-orm";
+import { eq, sql, and, desc, gte, lte, count, sum } from "drizzle-orm";
 import { db } from "./db";
 import { AuthenticatedRequest } from "./types/authenticated-request";
 
@@ -150,10 +150,10 @@ doctorFinanceRouter.get("/monthly-report", isDoctor, async (req: AuthenticatedRe
       .orderBy(desc(doctorPayments.createdAt));
     // Calcular estatísticas financeiras
     const [result] = await db.select({
-      total: sql<number>`sum(${doctorPayments.amount})`,
-      pending: sql<number>`sum(case when ${doctorPayments.status} = 'pending' then ${doctorPayments.amount} else 0 end)`,
-      paid: sql<number>`sum(case when ${doctorPayments.status} = 'paid' then ${doctorPayments.amount} else 0 end)`,
-      paymentCount: sql<number>`count(*)`
+      total: sum(doctorPayments.amount),
+      pending: sum(sql`case when ${doctorPayments.status} = 'pending' then ${doctorPayments.amount} else 0 end`),
+      paid: sum(sql`case when ${doctorPayments.status} = 'paid' then ${doctorPayments.amount} else 0 end`),
+      paymentCount: count()
     })
       .from(doctorPayments)
       .where(and(

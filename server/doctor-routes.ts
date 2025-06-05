@@ -6,7 +6,7 @@ import path from 'path';
 import fs from 'fs';
 import { AuthenticatedRequest } from './types/authenticated-request';
 import { users, doctors } from '../shared/schema';
-import { User, Doctor } from '../shared/schema';
+import type { User, Doctor } from '../shared/schema';
 
 const doctorRouter = Router();
 
@@ -84,7 +84,7 @@ doctorRouter.get('/profile', isDoctor, async (req: AuthenticatedRequest, res: Re
       return res.status(404).json({ message: "Usuário não encontrado" });
     }
 
-    const profile = {
+    const profile: Doctor & Pick<User, 'email' | 'fullName' | 'username' | 'profileImage'> = {
       ...doctorRecord,
       email: userRecord.email,
       fullName: userRecord.fullName,

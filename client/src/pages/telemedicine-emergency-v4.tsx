@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useRoute } from "wouter";
-import AgoraRTC, { IAgoraRTCClient, IAgoraRTCRemoteUser, ICameraVideoTrack, IMicrophoneAudioTrack } from "agora-rtc-sdk-ng";
+import AgoraRTC, { 
+  AgoraRTCClient,
+  IAgoraRTCRemoteUser,
+  ICameraVideoTrack,
+  IMicrophoneAudioTrack,
+  DeviceInfo
+} from "agora-rtc-sdk-ng";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
@@ -35,7 +41,7 @@ const TelemedicineEmergencyV4: React.FC<EmergencyRoomProps> = ({ patientMode, do
   const [_, navigate] = useLocation();
   const localVideoRef = useRef<HTMLDivElement>(null);
   const remoteVideoRef = useRef<HTMLDivElement>(null);
-  const [client, setClient] = useState<IAgoraRTCClient | null>(null);
+  const [client, setClient] = useState<AgoraRTCClient | null>(null);
   const [localTracks, setLocalTracks] = useState<[IMicrophoneAudioTrack, ICameraVideoTrack] | null>(null);
   const [remoteUser, setRemoteUser] = useState<IAgoraRTCRemoteUser | null>(null);
   const [isMuted, setIsMuted] = useState(false);
@@ -184,8 +190,8 @@ const TelemedicineEmergencyV4: React.FC<EmergencyRoomProps> = ({ patientMode, do
       // Verificar permissões de mídia
       console.log('Verificando dispositivos de mídia...');
       const devices = await navigator.mediaDevices.enumerateDevices();
-      const hasAudioDevice = devices.some((device: MediaDeviceInfo) => device.kind === 'audioinput');
-      const hasVideoDevice = devices.some((device: MediaDeviceInfo) => device.kind === 'videoinput');
+      const hasAudioDevice = devices.some((device: DeviceInfo) => device.kind === 'audioinput');
+      const hasVideoDevice = devices.some((device: DeviceInfo) => device.kind === 'videoinput');
       
       console.log('Dispositivos disponíveis:', {
         audio: hasAudioDevice ? 'Sim' : 'Não',

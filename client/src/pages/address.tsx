@@ -56,7 +56,7 @@ export default function AddressPage() {
       toast({
         title: 'Endereço atualizado',
         description: 'Seu endereço foi atualizado com sucesso.',
-        variant: 'success',
+        variant: 'default',
       });
       
       // Atualizar os dados do usuário

@@ -120,6 +120,7 @@ export const doctorSchema = z.object({
   profileImage: z.string().nullable(),
   status: z.string(),
   welcomeCompleted: z.boolean(),
+  fullName: z.string(),
 });
 
 export type Doctor = z.infer<typeof doctorSchema>;

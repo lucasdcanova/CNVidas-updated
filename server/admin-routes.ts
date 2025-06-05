@@ -6,7 +6,7 @@ import { chatRouter } from './chat-routes';
 import { eq, desc, sql, count, and, isNotNull, ne } from 'drizzle-orm';
 import { users, subscriptionPlans, auditLogs, dependents, claims, notifications, appointments, doctorPayments, doctors, partners } from '../shared/schema';
 import { AuthenticatedRequest } from './types/authenticated-request';
-import { Dependent } from '@shared/schema';
+import { Dependent, User } from '@shared/schema';
 import { AppError } from './utils/app-error';
 
 // Middleware para verificar se o usuário é admin
@@ -32,14 +32,14 @@ adminRouter.use(isAdmin);
 adminRouter.get('/stats', async (req: AuthenticatedRequest, res: Response) => {
   try {
     // Contagem de usuários por papel
-    const [totalUsers] = await db.select({ count: sql`count(*)`.as('count') }).from(users);
-    const [totalPatients] = await db.select({ count: sql`count(*)`.as('count') }).from(users).where(eq(users.role, 'patient'));
-    const [totalDoctors] = await db.select({ count: sql`count(*)`.as('count') }).from(users).where(eq(users.role, 'doctor'));
-    const [totalPartners] = await db.select({ count: sql`count(*)`.as('count') }).from(users).where(eq(users.role, 'partner'));
+    const [totalUsers] = await db.select({ count: count() }).from(users);
+    const [totalPatients] = await db.select({ count: count() }).from(users).where(eq(users.role, 'patient'));
+    const [totalDoctors] = await db.select({ count: count() }).from(users).where(eq(users.role, 'doctor'));
+    const [totalPartners] = await db.select({ count: count() }).from(users).where(eq(users.role, 'partner'));
     
     // Estatísticas adicionais
-    const [totalAppointments] = await db.select({ count: sql`count(*)`.as('count') }).from(appointments);
-    const [pendingClaims] = await db.select({ count: sql`count(*)`.as('count') }).from(claims).where(eq(claims.status, 'pending'));
+    const [totalAppointments] = await db.select({ count: count() }).from(appointments);
+    const [pendingClaims] = await db.select({ count: count() }).from(claims).where(eq(claims.status, 'pending'));
     
     // Conversão explícita para number
     const totalUsersCount = Number(totalUsers.count);
@@ -70,7 +70,7 @@ adminRouter.get('/sellers', async (req: AuthenticatedRequest, res: Response) => 
     const sellers = await db
       .select({
         sellerName: users.sellerName,
-        count: sql`count(*)`,
+        count: count()
       })
       .from(users)
       .where(
@@ -90,7 +90,7 @@ adminRouter.get('/sellers', async (req: AuthenticatedRequest, res: Response) => 
       const plansByType = await db
         .select({
           plan: users.subscriptionPlan,
-          count: sql`count(*)`
+          count: count()
         })
         .from(users)
         .where(eq(users.sellerName, seller.sellerName))

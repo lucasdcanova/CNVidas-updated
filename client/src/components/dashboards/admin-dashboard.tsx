@@ -10,6 +10,7 @@ import DataTable from "@/components/ui/data-table";
 import { useAuth } from "@/hooks/use-auth";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { Column, Action } from "@/components/ui/data-table";
 
 interface ChartProps {
   type: 'bar' | 'line' | 'pie';
@@ -22,6 +23,39 @@ interface ChartProps {
 interface Patient {
   id: number;
   name: string;
+}
+
+interface Claim {
+  id: number;
+  type: string;
+  status: string;
+  description: string;
+  occurrenceDate: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: number;
+  amountRequested?: number;
+  amountApproved?: number;
+  reviewedAt?: string;
+  reviewedBy?: number;
+  reviewNotes?: string;
+  documents?: string[];
+}
+
+interface Consultation {
+  id: number;
+  patientName: string;
+  doctorName: string;
+  status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
+  date: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: number;
+  doctorId: number;
+  type: string;
+  notes?: string;
+  prescription?: string;
+  diagnosis?: string;
 }
 
 interface PendingClaim {
@@ -95,7 +129,7 @@ export const AdminDashboard: React.FC = () => {
     { name: 'Jun', total: 25000 },
   ];
   
-  const pendingClaimsColumns = [
+  const pendingClaimsColumns: Column<PendingClaim>[] = [
     {
       id: "id",
       header: "ID",
@@ -110,13 +144,13 @@ export const AdminDashboard: React.FC = () => {
       id: "occurrenceDate",
       header: "Data da Ocorrência",
       accessorKey: "occurrenceDate",
-      cell: (row: any) => format(new Date(row.occurrenceDate), "dd/MM/yyyy", { locale: ptBR }),
+      cell: (row: PendingClaim) => <span>{format(new Date(row.occurrenceDate), "dd/MM/yyyy", { locale: ptBR })}</span>,
     },
     {
       id: "status",
       header: "Status",
       accessorKey: "status",
-      cell: (row: any) => (
+      cell: (row: PendingClaim) => (
         <span className="px-2 py-1 inline-flex text-xs leading-4 font-medium rounded-full bg-yellow-100 text-yellow-800">
           Em análise
         </span>
@@ -126,11 +160,11 @@ export const AdminDashboard: React.FC = () => {
       id: "createdAt",
       header: "Data de Envio",
       accessorKey: "createdAt",
-      cell: (row: any) => format(new Date(row.createdAt), "dd/MM/yyyy", { locale: ptBR }),
+      cell: (row: PendingClaim) => <span>{format(new Date(row.createdAt), "dd/MM/yyyy", { locale: ptBR })}</span>,
     },
   ];
   
-  const recentPartnersColumns = [
+  const recentPartnersColumns: Column<Partner>[] = [
     {
       id: "businessName",
       header: "Nome Comercial",
@@ -145,7 +179,7 @@ export const AdminDashboard: React.FC = () => {
       id: "status",
       header: "Status",
       accessorKey: "status",
-      cell: (row: any) => (
+      cell: (row: Partner) => (
         <span className={`px-2 py-1 inline-flex text-xs leading-4 font-medium rounded-full ${
           row.status === "active" ? "bg-green-100 text-green-800" :
           row.status === "pending" ? "bg-yellow-100 text-yellow-800" :
@@ -161,7 +195,110 @@ export const AdminDashboard: React.FC = () => {
       id: "createdAt",
       header: "Data de Cadastro",
       accessorKey: "createdAt",
-      cell: (row: any) => format(new Date(row.createdAt), "dd/MM/yyyy", { locale: ptBR }),
+      cell: (row: Partner) => <span>{format(new Date(row.createdAt), "dd/MM/yyyy", { locale: ptBR })}</span>,
+    },
+  ];
+  
+  // Recent consultations columns
+  const recentConsultationsColumns: Column<Consultation>[] = [
+    {
+      id: "id",
+      header: "ID",
+      accessorKey: "id",
+    },
+    {
+      id: "patientName",
+      header: "Paciente",
+      accessorKey: "patientName",
+    },
+    {
+      id: "doctorName",
+      header: "Médico",
+      accessorKey: "doctorName",
+    },
+    {
+      id: "status",
+      header: "Status",
+      accessorKey: "status",
+      cell: (row: Consultation) => {
+        let colors;
+        let label;
+        switch (row.status) {
+          case "scheduled":
+            colors = "bg-blue-100 text-blue-800";
+            label = "Agendada";
+            break;
+          case "in_progress":
+            colors = "bg-yellow-100 text-yellow-800";
+            label = "Em andamento";
+            break;
+          case "completed":
+            colors = "bg-green-100 text-green-800";
+            label = "Concluída";
+            break;
+          case "cancelled":
+            colors = "bg-red-100 text-red-800";
+            label = "Cancelada";
+            break;
+          default:
+            colors = "bg-gray-100 text-gray-800";
+            label = row.status;
+        }
+        return <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${colors}`}>{label}</span>;
+      },
+    },
+    {
+      id: "scheduledAt",
+      header: "Data/Hora",
+      accessorKey: "scheduledAt",
+      cell: (row: Consultation) => <span>{format(new Date(row.scheduledAt), "dd/MM/yyyy HH:mm", { locale: ptBR })}</span>,
+    },
+  ];
+  
+  // Recent claims columns
+  const recentClaimsColumns: Column<Claim>[] = [
+    {
+      id: "id",
+      header: "ID",
+      accessorKey: "id",
+    },
+    {
+      id: "type",
+      header: "Tipo",
+      accessorKey: "type",
+    },
+    {
+      id: "status",
+      header: "Status",
+      accessorKey: "status",
+      cell: (row: Claim) => {
+        let colors;
+        let label;
+        switch (row.status) {
+          case "pending":
+            colors = "bg-yellow-100 text-yellow-800";
+            label = "Em análise";
+            break;
+          case "approved":
+            colors = "bg-green-100 text-green-800";
+            label = "Aprovado";
+            break;
+          case "rejected":
+            colors = "bg-red-100 text-red-800";
+            label = "Rejeitado";
+            break;
+          default:
+            colors = "bg-gray-100 text-gray-800";
+            label = row.status;
+        }
+        return <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${colors}`}>{label}</span>;
+      },
+    },
+    {
+      id: "createdAt",
+      header: "Data de Envio",
+      accessorKey: "createdAt",
+      cell: (row: Claim) => <span>{format(new Date(row.createdAt), "dd/MM/yyyy", { locale: ptBR })}</span>,
     },
   ];
   
@@ -308,9 +445,9 @@ export const AdminDashboard: React.FC = () => {
           </Link>
         </CardHeader>
         <CardContent>
-          <DataTable 
-            columns={pendingClaimsColumns} 
-            data={pendingClaims.slice(0, 5)} 
+          <DataTable<PendingClaim>
+            columns={pendingClaimsColumns}
+            data={pendingClaims.slice(0, 5)}
             pageSize={5}
             actions={[
               {
@@ -331,15 +468,53 @@ export const AdminDashboard: React.FC = () => {
           </Link>
         </CardHeader>
         <CardContent>
-          <DataTable 
-            columns={recentPartnersColumns} 
-            data={partners.slice(0, 5)} 
+          <DataTable<Partner>
+            columns={recentPartnersColumns}
+            data={partners.slice(0, 5)}
             pageSize={5}
             actions={[
               {
                 label: "Visualizar",
                 onClick: (row: Partner) => console.log("Visualizar parceiro", row.id)
               }
+            ]}
+          />
+        </CardContent>
+      </Card>
+
+      {/* Recent consultations */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Consultas Recentes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <DataTable<Consultation>
+            columns={recentConsultationsColumns}
+            data={recentConsultations}
+            actions={[
+              {
+                label: "Ver detalhes",
+                onClick: (row) => handleViewConsultation(row),
+              },
+            ]}
+          />
+        </CardContent>
+      </Card>
+      
+      {/* Recent claims */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Sinistros Recentes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <DataTable<Claim>
+            columns={recentClaimsColumns}
+            data={recentClaims}
+            actions={[
+              {
+                label: "Ver detalhes",
+                onClick: (row) => handleViewClaim(row),
+              },
             ]}
           />
         </CardContent>

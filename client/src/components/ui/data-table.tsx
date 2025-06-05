@@ -16,31 +16,33 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-interface Column {
+export interface Column<T = any> {
   id: string;
   header: string;
-  accessorKey: string;
-  cell?: (info: any) => React.ReactNode;
+  accessorKey: keyof T;
+  cell?: (row: T) => React.ReactNode;
 }
 
-interface DataTableProps {
-  columns: Column[];
-  data: any[];
+export interface Action<T = any> {
+  label: string;
+  onClick: (row: T) => void;
+}
+
+export interface DataTableProps<T = any> {
+  columns: Column<T>[];
+  data: T[];
   pageSize?: number;
-  onRowClick?: (row: any) => void;
-  actions?: {
-    label: string;
-    onClick: (row: any) => void;
-  }[];
+  onRowClick?: (row: T) => void;
+  actions?: Action<T>[];
 }
 
-export const DataTable: React.FC<DataTableProps> = ({
+export function DataTable<T extends Record<string, any>>({
   columns,
   data,
   pageSize = 10,
   onRowClick,
   actions = [],
-}) => {
+}: DataTableProps<T>) {
   const [page, setPage] = React.useState(0);
   
   const totalPages = Math.ceil(data.length / pageSize);
@@ -154,6 +156,6 @@ export const DataTable: React.FC<DataTableProps> = ({
       )}
     </div>
   );
-};
+}
 
 export default DataTable;

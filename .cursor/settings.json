@@ -1,0 +1,10 @@
+{
+  "git.commitMessageHook": {
+    "enabled": true,
+    "script": ".git/hooks/prepare-commit-msg"
+  },
+  "git.autoCommit": {
+    "enabled": true,
+    "useHook": true
+  }
+} 
