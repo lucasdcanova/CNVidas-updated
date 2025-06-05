@@ -1,7 +1,7 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { storage } from '../storage.js';
 import { createConsultationPaymentIntent, captureConsultationPayment, cancelConsultationPayment } from '../utils/stripe-payment.js';
-import { AuthenticatedRequest } from '../types/authenticated-request';
 import { User } from '@shared/schema';
 import { AppError } from '../utils/app-error';
 import { isAuthenticated } from '../middleware/auth.js';
@@ -12,8 +12,7 @@ const consultationPaymentRouter = Router();
  * Middleware de autenticação compatível com Express
  */
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
-  const authReq = req as AuthenticatedRequest;
-  if (!authReq.isAuthenticated()) {
+  if (!req.isAuthenticated()) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
@@ -36,7 +35,6 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
  * POST /api/consultations/create-payment-intent
  */
 consultationPaymentRouter.post('/create-payment-intent', requireAuth, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
     const { amount, doctorId, doctorName, date, isEmergency } = req.body;
     
@@ -45,16 +43,16 @@ consultationPaymentRouter.post('/create-payment-intent', requireAuth, async (req
     }
     
     // Verificar se o usuário tem um customerId no Stripe
-    if (!authReq.user.stripeCustomerId) {
+    if (!req.user?.stripeCustomerId) {
       throw new AppError(400, "Você precisa ter um método de pagamento cadastrado para realizar consultas");
     }
     
     // Criar intenção de pagamento com pré-autorização
     const paymentIntent = await createConsultationPaymentIntent(
       amount,
-      authReq.user.stripeCustomerId,
+      req.user.stripeCustomerId,
       {
-        userId: authReq.user.id.toString(),
+        userId: req.user.id.toString(),
         doctorId: doctorId.toString(),
         doctorName: doctorName || "Médico",
         appointmentDate: new Date(date).toISOString(),
@@ -82,12 +80,11 @@ consultationPaymentRouter.post('/create-payment-intent', requireAuth, async (req
  * POST /api/consultations/capture-payment/:appointmentId
  */
 consultationPaymentRouter.post('/capture-payment/:appointmentId', requireAuth, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
     const { appointmentId } = req.params;
     
     // Apenas administradores e médicos podem capturar pagamentos
-    if (authReq.user.role !== 'admin' && authReq.user.role !== 'doctor') {
+    if (req.user?.role !== 'admin' && req.user?.role !== 'doctor') {
       throw new AppError(403, "Você não tem permissão para capturar pagamentos");
     }
     
@@ -142,7 +139,6 @@ consultationPaymentRouter.post('/capture-payment/:appointmentId', requireAuth, a
  * POST /api/consultations/cancel-payment/:appointmentId
  */
 consultationPaymentRouter.post('/cancel-payment/:appointmentId', requireAuth, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
     const { appointmentId } = req.params;
     const { reason } = req.body;
@@ -157,9 +153,9 @@ consultationPaymentRouter.post('/cancel-payment/:appointmentId', requireAuth, as
     // Verificar se o usuário tem permissão para cancelar
     // Apenas o próprio paciente, o médico ou um admin podem cancelar
     if (
-      authReq.user!.id !== appointment.userId && 
-      authReq.user!.role !== 'admin' && 
-      (authReq.user!.role !== 'doctor' || authReq.user!.id !== appointment.doctorId)
+      req.user?.id !== appointment.userId && 
+      req.user?.role !== 'admin' && 
+      (req.user?.role !== 'doctor' || req.user?.id !== appointment.doctorId)
     ) {
       return res.status(403).json({ message: "Você não tem permissão para cancelar esta consulta" });
     }

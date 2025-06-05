@@ -1,9 +1,10 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import axios, { AxiosError } from 'axios';
 import { User } from '@shared/schema';
 import { isAuthenticated } from '../middleware/auth.js';
-import { AuthenticatedRequest } from '../types/authenticated-request';
 import { AppError } from '../utils/app-error';
+import { DatabaseStorage } from '../storage';
 
 // Interface para resposta da API do Daily.co
 interface DailyRoomResponse {
@@ -42,7 +43,7 @@ interface RoomCreateResponse {
 const dailyDirectRouter = Router();
 
 // Middleware de autenticação
-const requireAuth = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+const requireAuth = (req: Request, res: Response, next: NextFunction) => {
   if (!req.isAuthenticated()) {
     throw new AppError(401, 'Não autorizado');
   }
@@ -64,9 +65,8 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
  * GET /api/daily-direct/room-exists
  */
 dailyDirectRouter.get('/room-exists', isAuthenticated, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
-    const { roomName } = authReq.query;
+    const { roomName } = req.query;
     if (!roomName || typeof roomName !== 'string') {
       throw new AppError(400, 'Nome da sala é obrigatório');
     }
@@ -128,9 +128,8 @@ dailyDirectRouter.get('/room-exists', isAuthenticated, async (req: Request, res:
  * POST /api/daily-direct/create-room
  */
 dailyDirectRouter.post('/create-room', isAuthenticated, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
-    const { roomName, forceCreate = false, expiryHours = 24 } = authReq.body;
+    const { roomName, forceCreate = false, expiryHours = 24 } = req.body;
     
     if (!roomName || typeof roomName !== 'string') {
       throw new AppError(400, 'Nome da sala é obrigatório');
@@ -198,7 +197,6 @@ dailyDirectRouter.post('/create-room', isAuthenticated, async (req: Request, res
         room: createResponse.data,
         created: true
       } as RoomCreateResponse);
-      
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error(`Erro ao criar sala ${sanitizedRoomName}:`, error.response?.data);
@@ -207,7 +205,6 @@ dailyDirectRouter.post('/create-room', isAuthenticated, async (req: Request, res
       throw error;
     }
   } catch (error) {
-    console.error('Erro ao criar sala:', error);
     if (error instanceof AppError) {
       res.status(error.statusCode).json({ error: error.message });
     } else {

@@ -1,14 +1,15 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { z } from "zod";
 import { appointments, users, doctors, doctorPayments } from "../shared/schema";
 import { eq, sql, and, desc, gte, lte, count, sum } from "drizzle-orm";
 import { db } from "./db";
-import { AuthenticatedRequest } from "./types/authenticated-request";
+import { DatabaseStorage } from './storage';
 
 export const doctorFinanceRouter = Router();
 
 // Middleware para verificar se o usuário é um médico
-const isDoctor = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+const isDoctor = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     return res.status(401).json({ message: "Não autorizado" });
   }
@@ -19,7 +20,7 @@ const isDoctor = async (req: AuthenticatedRequest, res: Response, next: NextFunc
 };
 
 // Atualizar informações de pagamento (PIX) do médico
-doctorFinanceRouter.put("/payment-info", isDoctor, async (req: AuthenticatedRequest, res: Response) => {
+doctorFinanceRouter.put("/payment-info", isDoctor, async (req: Request, res: Response) => {
   try {
     const schema = z.object({
       pixKeyType: z.string().min(1, "Tipo de chave PIX obrigatório"),
@@ -57,7 +58,7 @@ doctorFinanceRouter.put("/payment-info", isDoctor, async (req: AuthenticatedRequ
 });
 
 // Buscar o extrato de pagamentos do médico
-doctorFinanceRouter.get("/payments", isDoctor, async (req: AuthenticatedRequest, res: Response) => {
+doctorFinanceRouter.get("/payments", isDoctor, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     if (!userId) return res.status(401).json({ message: "Não autorizado" });
@@ -76,7 +77,7 @@ doctorFinanceRouter.get("/payments", isDoctor, async (req: AuthenticatedRequest,
 });
 
 // Calcular os valores devidos pelas consultas realizadas
-doctorFinanceRouter.get("/calculate-earnings", isDoctor, async (req: AuthenticatedRequest, res: Response) => {
+doctorFinanceRouter.get("/calculate-earnings", isDoctor, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     if (!userId) return res.status(401).json({ message: "Não autorizado" });
@@ -124,7 +125,7 @@ doctorFinanceRouter.get("/calculate-earnings", isDoctor, async (req: Authenticat
 });
 
 // Gerar relatório financeiro mensal
-doctorFinanceRouter.get("/monthly-report", isDoctor, async (req: AuthenticatedRequest, res: Response) => {
+doctorFinanceRouter.get("/monthly-report", isDoctor, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     if (!userId) return res.status(401).json({ message: "Não autorizado" });

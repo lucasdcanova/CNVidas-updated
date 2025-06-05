@@ -63,7 +63,7 @@ export interface IStorage {
   getUserBySessionId(sessionId: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: number, data: Partial<InsertUser>): Promise<User>;
-  deleteUser(id: number): Promise<boolean>;
+  deleteUser(id: number | string): Promise<boolean>;
   getUsersByRole(role: "patient" | "partner" | "admin" | "doctor"): Promise<User[]>;
   updateUserPassword(id: number, password: string): Promise<User>;
   
@@ -78,14 +78,14 @@ export interface IStorage {
   verifyUserEmail(userId: number): Promise<void>;
   createEmailVerification(verification: { userId: number, token: string, expiresAt: Date }): Promise<void>;
   getEmailVerificationByToken(token: string): Promise<EmailVerification | undefined>;
-  deleteEmailVerification(id: number): Promise<void>;
-  deleteEmailVerificationsByUserId(userId: number): Promise<void>;
+  deleteEmailVerification(id: number | string): Promise<void>;
+  deleteEmailVerificationsByUserId(userId: number | string): Promise<void>;
   
   // Password reset
   createPasswordReset(reset: { userId: number, token: string, expiresAt: Date }): Promise<void>;
   getPasswordResetByToken(token: string): Promise<PasswordReset | undefined>;
-  deletePasswordReset(id: number): Promise<void>;
-  deletePasswordResetsByUserId(userId: number): Promise<void>;
+  deletePasswordReset(id: number | string): Promise<void>;
+  deletePasswordResetsByUserId(userId: number | string): Promise<void>;
   
   // QR Code authentication
   generateQrToken(userId: number): Promise<{ token: string, expiresAt: Date }>;
@@ -208,7 +208,19 @@ export interface IStorage {
 
   getUserByToken(token: string): Promise<ExpressUser | null>;
   getCurrentSubscription(userId: number): Promise<any>;
-  createAuditLog(log: any): Promise<void>;
+  createAuditLog(entry: {
+    userId?: number;
+    action: string;
+    ip: string;
+    userAgent: string;
+    details: Record<string, any>;
+    timestamp: Date;
+  }): Promise<void>;
+  getUserAuditLogs(
+    userId: number,
+    limit: number = 100,
+    offset: number = 0
+  ): Promise<any[]>;
 }
 
 // Implement the storage interface with a database storage
@@ -335,9 +347,10 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async deleteUser(id: number): Promise<boolean> {
+  async deleteUser(id: number | string): Promise<boolean> {
+    const numericId = Number(id);
     const [user] = await this.db.delete(users)
-      .where(eq(users.id, id))
+      .where(eq(users.id, numericId))
       .returning();
     return !!user;
   }
@@ -367,12 +380,14 @@ export class DatabaseStorage implements IStorage {
     return reset;
   }
 
-  async deletePasswordReset(id: number): Promise<void> {
-    await this.db.delete(passwordResets).where(eq(passwordResets.id, id));
+  async deletePasswordReset(id: number | string): Promise<void> {
+    const numericId = Number(id);
+    await this.db.delete(passwordResets).where(eq(passwordResets.id, numericId));
   }
 
-  async deletePasswordResetsByUserId(userId: number): Promise<void> {
-    await this.db.delete(passwordResets).where(eq(passwordResets.userId, userId));
+  async deletePasswordResetsByUserId(userId: number | string): Promise<void> {
+    const numericId = Number(userId);
+    await this.db.delete(passwordResets).where(eq(passwordResets.userId, numericId));
   }
 
   async savePasswordResetToken(userId: number, token: string, expiresAt: Date): Promise<void> {
@@ -401,12 +416,14 @@ export class DatabaseStorage implements IStorage {
     return verification;
   }
 
-  async deleteEmailVerification(id: number): Promise<void> {
-    await this.db.delete(emailVerifications).where(eq(emailVerifications.id, id));
+  async deleteEmailVerification(id: number | string): Promise<void> {
+    const numericId = Number(id);
+    await this.db.delete(emailVerifications).where(eq(emailVerifications.id, numericId));
   }
 
-  async deleteEmailVerificationsByUserId(userId: number): Promise<void> {
-    await this.db.delete(emailVerifications).where(eq(emailVerifications.userId, userId));
+  async deleteEmailVerificationsByUserId(userId: number | string): Promise<void> {
+    const numericId = Number(userId);
+    await this.db.delete(emailVerifications).where(eq(emailVerifications.userId, numericId));
   }
 
   async saveVerificationToken(userId: number, token: string): Promise<void> {
@@ -969,14 +986,44 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async createAuditLog(log: any): Promise<void> {
+  async createAuditLog(entry: {
+    userId?: number;
+    action: string;
+    ip: string;
+    userAgent: string;
+    details: Record<string, any>;
+    timestamp: Date;
+  }): Promise<void> {
     try {
-      await this.db.query(
-        'INSERT INTO audit_logs (user_id, action, details) VALUES ($1, $2, $3)',
-        [log.userId, log.action, log.details]
-      );
+      await this.db.insert(auditLogs).values({
+        userId: entry.userId,
+        action: entry.action,
+        ip: entry.ip,
+        userAgent: entry.userAgent,
+        details: entry.details,
+        timestamp: entry.timestamp
+      });
     } catch (error) {
       console.error('Erro ao criar log de auditoria:', error);
+      throw error;
+    }
+  }
+
+  async getUserAuditLogs(
+    userId: number,
+    limit: number = 100,
+    offset: number = 0
+  ): Promise<any[]> {
+    try {
+      return await this.db
+        .select()
+        .from(auditLogs)
+        .where(eq(auditLogs.userId, userId))
+        .orderBy(desc(auditLogs.timestamp))
+        .limit(limit)
+        .offset(offset);
+    } catch (error) {
+      console.error('Erro ao buscar logs de auditoria:', error);
       throw error;
     }
   }
@@ -984,51 +1031,3 @@ export class DatabaseStorage implements IStorage {
 
 // Export a singleton instance
 export const storage = new DatabaseStorage();
-
-/**
- * Cria um novo log de auditoria
- */
-export async function createAuditLog(entry: {
-  userId?: number;
-  action: string;
-  ip: string;
-  userAgent: string;
-  details: Record<string, any>;
-  timestamp: Date;
-}): Promise<void> {
-  try {
-    await this.db.insert(auditLogs).values({
-      userId: entry.userId,
-      action: entry.action,
-      ip: entry.ip,
-      userAgent: entry.userAgent,
-      details: entry.details,
-      timestamp: entry.timestamp
-    });
-  } catch (error) {
-    console.error('Erro ao criar log de auditoria:', error);
-    throw error;
-  }
-}
-
-/**
- * Busca logs de auditoria de um usuário
- */
-export async function getUserAuditLogs(
-  userId: number,
-  limit: number = 100,
-  offset: number = 0
-): Promise<any[]> {
-  try {
-    return await this.db
-      .select()
-      .from(auditLogs)
-      .where(eq(auditLogs.userId, userId))
-      .orderBy(desc(auditLogs.timestamp))
-      .limit(limit)
-      .offset(offset);
-  } catch (error) {
-    console.error('Erro ao buscar logs de auditoria:', error);
-    throw error;
-  }
-}

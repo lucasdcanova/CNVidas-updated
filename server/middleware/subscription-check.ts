@@ -6,6 +6,7 @@ import { AuthenticatedRequest } from '../types/authenticated-request';
 import { ExpressUser } from '../../shared/types';
 import { storage } from '../storage';
 import { AppError } from '../utils/app-error';
+import { DatabaseStorage } from '../storage';
 
 // Estender a interface Request para incluir a propriedade emergencyConsultationToDecrement
 declare global {

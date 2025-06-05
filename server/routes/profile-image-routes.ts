@@ -1,11 +1,12 @@
-import { Request, Response, Router, NextFunction } from 'express';
+import { Router } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { db } from '../db';
 import { eq } from 'drizzle-orm';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { users, doctors } from '../../shared/schema';
-import { AuthenticatedRequest } from '../types/authenticated-request';
+import { DatabaseStorage } from '../storage';
 
 // Configuração do upload com Multer
 const uploadDir = path.join(process.cwd(), 'public', 'uploads');
@@ -32,7 +33,7 @@ const upload = multer({
 const profileImageRouter = Router();
 
 // Middleware para verificar autenticação
-const isAuthenticated = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+const isAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     return res.status(401).json({ message: "Não autorizado" });
   }
@@ -40,7 +41,7 @@ const isAuthenticated = async (req: AuthenticatedRequest, res: Response, next: N
 };
 
 // Rota para upload de imagem de perfil
-profileImageRouter.post('/doctor-profile-image', isAuthenticated, upload.single('profileImage'), async (req: AuthenticatedRequest, res: Response) => {
+profileImageRouter.post('/doctor-profile-image', isAuthenticated, upload.single('profileImage'), async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     

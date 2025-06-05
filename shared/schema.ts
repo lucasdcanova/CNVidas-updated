@@ -243,6 +243,19 @@ export const subscriptionPlans = pgTable("subscription_plans", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+export const userSubscriptions = pgTable("user_subscriptions", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  planId: integer("plan_id").references(() => subscriptionPlans.id).notNull(),
+  status: text("status").notNull(),
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date").notNull(),
+  paymentMethod: text("payment_method"),
+  price: integer("price").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 export const qrAuthLogs = pgTable("qr_auth_logs", {
   id: serial("id").primaryKey(),
   qrTokenId: integer("qr_token_id").references(() => qrTokens.id, { onDelete: "set null" }),
@@ -368,6 +381,11 @@ export const userSettingsRelations = relations(userSettings, ({ one }) => ({
   }),
 }));
 
+export const userSubscriptionsRelations = relations(userSubscriptions, ({ one }) => ({
+  user: one(users, { fields: [userSubscriptions.userId], references: [users.id] }),
+  plan: one(subscriptionPlans, { fields: [userSubscriptions.planId], references: [subscriptionPlans.id] }),
+}));
+
 export const userSchema = z.object({
   email: z.string().email(),
   username: z.string().min(3),
@@ -438,6 +456,7 @@ export type EmailVerification = InferModel<typeof emailVerifications>;
 export type PasswordReset = InferModel<typeof passwordResets>;
 export type AvailabilitySlot = InferModel<typeof availabilitySlots>;
 export type QrAuthLog = InferModel<typeof qrAuthLogs>;
+export type UserSubscription = InferModel<typeof userSubscriptions>;
 export type UserSchema = z.infer<typeof userSchema>;
 export type AppointmentSchema = z.infer<typeof appointmentSchema>;
 export type ClaimSchema = z.infer<typeof claimSchema>;
@@ -461,3 +480,4 @@ export type InsertEmailVerification = InferModel<typeof emailVerifications, 'ins
 export type InsertPasswordReset = InferModel<typeof passwordResets, 'insert'>;
 export type InsertAvailabilitySlot = InferModel<typeof availabilitySlots, 'insert'>;
 export type InsertQrAuthLog = InferModel<typeof qrAuthLogs, 'insert'>;
+export type InsertUserSubscription = InferModel<typeof userSubscriptions, 'insert'>;

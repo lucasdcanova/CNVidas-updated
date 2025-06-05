@@ -99,7 +99,7 @@ export const AdminDashboard: React.FC = () => {
   
   const { data: consultations = [] } = useQuery({
     queryKey: ["/api/consultations"],
-    queryFn: getAllConsultations,
+    queryFn: () => getAllConsultations(0),
   });
   
   // KPI data

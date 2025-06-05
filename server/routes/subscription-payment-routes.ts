@@ -1,4 +1,5 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { db } from '../db.js';
@@ -7,15 +8,14 @@ import { storage } from '../storage.js';
 import { createSubscriptionPaymentSession } from '../utils/stripe-payment.js';
 import stripe from '../utils/stripe-instance.js';
 import { isAuthenticated } from '../middleware/auth.js';
-import { AuthenticatedRequest } from '../types/authenticated-request';
 import { AppError } from '../utils/app-error';
+import { DatabaseStorage } from '../storage';
 
 const subscriptionPaymentRouter = Router();
 
 // Middleware de autenticação compatível com Express
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
-  const authReq = req as AuthenticatedRequest;
-  if (!authReq.isAuthenticated()) {
+  if (!req.isAuthenticated()) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
@@ -33,7 +33,6 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
 
 // Rota para criar uma sessão de pagamento para assinatura com métodos brasileiros
 subscriptionPaymentRouter.post("/create-session", requireAuth, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
     const schema = z.object({
       planId: z.string().min(1, "ID do plano é obrigatório"),
@@ -49,7 +48,7 @@ subscriptionPaymentRouter.post("/create-session", requireAuth, async (req: Reque
     }
 
     const { planId, paymentMethod } = validationResult.data;
-    const user = authReq.user!;
+    const user = req.user!;
     
     // Buscar o plano de assinatura pelo ID
     const [plan] = await db.select().from(subscriptionPlans).where(eq(subscriptionPlans.id, parseInt(planId)));
@@ -129,7 +128,6 @@ subscriptionPaymentRouter.post("/create-session", requireAuth, async (req: Reque
 
 // Rota para verificar e confirmar pagamento de assinatura
 subscriptionPaymentRouter.post("/confirm-payment", requireAuth, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
     const schema = z.object({
       paymentIntentId: z.string().min(1, "ID da intenção de pagamento é obrigatório")
@@ -144,7 +142,7 @@ subscriptionPaymentRouter.post("/confirm-payment", requireAuth, async (req: Requ
     }
 
     const { paymentIntentId } = validationResult.data;
-    const user = authReq.user!;
+    const user = req.user!;
     
     // Verificar o status do pagamento no Stripe
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
@@ -210,7 +208,6 @@ subscriptionPaymentRouter.post("/confirm-payment", requireAuth, async (req: Requ
 
 // Rota para atualizar o método de pagamento padrão do usuário
 subscriptionPaymentRouter.post("/update-payment-method", requireAuth, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
     const schema = z.object({
       paymentMethodId: z.string().min(1, "ID do método de pagamento é obrigatório")
@@ -225,7 +222,7 @@ subscriptionPaymentRouter.post("/update-payment-method", requireAuth, async (req
     }
 
     const { paymentMethodId } = validationResult.data;
-    const user = authReq.user!;
+    const user = req.user!;
 
     if (!user.stripeCustomerId) {
       return res.status(400).json({ 
@@ -263,13 +260,12 @@ subscriptionPaymentRouter.post("/update-payment-method", requireAuth, async (req
 
 // Rota para listar os métodos de pagamento do usuário
 subscriptionPaymentRouter.get("/payment-methods", requireAuth, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
-    if (!authReq.user) {
+    if (!req.user) {
       return res.status(401).json({ message: "Usuário não autenticado" });
     }
 
-    const user = authReq.user!;
+    const user = req.user!;
 
     if (!user.stripeCustomerId) {
       return res.status(400).json({ 
@@ -299,14 +295,13 @@ subscriptionPaymentRouter.get("/payment-methods", requireAuth, async (req: Reque
 
 // Rota para remover um método de pagamento
 subscriptionPaymentRouter.delete("/payment-methods/:id", requireAuth, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
-    if (!authReq.user) {
+    if (!req.user) {
       return res.status(401).json({ message: "Usuário não autenticado" });
     }
 
     const { id } = req.params;
-    const user = authReq.user!;
+    const user = req.user!;
 
     if (!user.stripeCustomerId) {
       return res.status(400).json({ 
@@ -341,13 +336,12 @@ subscriptionPaymentRouter.delete("/payment-methods/:id", requireAuth, async (req
 
 // Rota para criar uma intenção de configuração do Stripe
 subscriptionPaymentRouter.post("/create-setup-intent", requireAuth, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
-    if (!authReq.user) {
+    if (!req.user) {
       return res.status(401).json({ message: "Usuário não autenticado" });
     }
 
-    const user = authReq.user!;
+    const user = req.user!;
 
     if (!user.stripeCustomerId) {
       return res.status(400).json({ 

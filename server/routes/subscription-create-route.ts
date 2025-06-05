@@ -2,16 +2,14 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { db } from '../db.js';
-import { users, subscriptionPlans } from '../../shared/schema';
+import { users, subscriptionPlans, userSubscriptions } from '../../shared/schema';
 import stripe from '../utils/stripe-instance.js';
-import { AuthenticatedRequest } from '../types/authenticated-request';
-import { User } from '../../shared/schema';
 import { AppError } from '../utils/app-error';
 
-const subscriptionCreateRouter = Router();
+const router = Router();
 
 // Middleware para verificar autenticação (compatível com tokens e sessões)
-const isAuthenticated = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+const isAuthenticated = async (req: Request & { user?: any }, res: Response, next: NextFunction) => {
   console.log("Verificando autenticação na rota de assinatura...");
   
   // Verificar se o usuário está autenticado por sessão
@@ -60,7 +58,7 @@ const isAuthenticated = async (req: AuthenticatedRequest, res: Response, next: N
 };
 
 // Rota para criar uma sessão de checkout simples
-subscriptionCreateRouter.post("/create-session", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+router.post("/create-session", isAuthenticated, async (req: Express.Request, res: Express.Response) => {
   try {
     // Validar a entrada
     const schema = z.object({
@@ -316,7 +314,7 @@ subscriptionCreateRouter.post("/create-session", isAuthenticated, async (req: Au
 });
 
 // Endpoint para confirmar pagamento
-subscriptionCreateRouter.post("/confirm-payment", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+router.post("/confirm-payment", isAuthenticated, async (req: Express.Request, res: Express.Response) => {
   try {
     // Validar a entrada
     const schema = z.object({
@@ -363,6 +361,17 @@ subscriptionCreateRouter.post("/confirm-payment", isAuthenticated, async (req: A
       }
       
       // Atualizar assinatura para ativa
+      await db.insert(userSubscriptions).values({
+        userId: user.id,
+        planId: plan.id,
+        status: 'active',
+        startDate: new Date(),
+        endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 dias
+        paymentMethod: 'stripe',
+        price: plan.price
+      });
+
+      // Atualizar usuário
       await db.update(users)
         .set({
           subscriptionPlan: plan.name,
@@ -396,7 +405,7 @@ subscriptionCreateRouter.post("/confirm-payment", isAuthenticated, async (req: A
 });
 
 // Criar nova subscrição
-subscriptionCreateRouter.post('/create', isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+router.post('/create', isAuthenticated, async (req: Express.Request, res: Express.Response) => {
   try {
     const { planId, paymentMethod } = req.body;
     
@@ -448,7 +457,7 @@ subscriptionCreateRouter.post('/create', isAuthenticated, async (req: Authentica
 });
 
 // Atualizar subscrição
-subscriptionCreateRouter.put('/update/:id', isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+router.put('/update/:id', isAuthenticated, async (req: Express.Request, res: Express.Response) => {
   try {
     const { id } = req.params;
     const { planId, status } = req.body;
@@ -459,7 +468,7 @@ subscriptionCreateRouter.put('/update/:id', isAuthenticated, async (req: Authent
 
     // Buscar subscrição
     const subscription = await db.query.subscriptionPlans.findFirst({
-      where: eq(subscriptionPlans.id, parseInt(id))
+      where: eq(subscriptionPlans.id, parseInt(id, 10))
     });
 
     if (!subscription) {
@@ -496,7 +505,7 @@ subscriptionCreateRouter.put('/update/:id', isAuthenticated, async (req: Authent
 });
 
 // Cancelar subscrição
-subscriptionCreateRouter.delete('/cancel/:id', isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+router.delete('/cancel/:id', isAuthenticated, async (req: Express.Request, res: Express.Response) => {
   try {
     const { id } = req.params;
 
@@ -541,4 +550,4 @@ subscriptionCreateRouter.delete('/cancel/:id', isAuthenticated, async (req: Auth
   }
 });
 
-export default subscriptionCreateRouter;
+export default router;

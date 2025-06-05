@@ -1,17 +1,18 @@
-import { Request, Response, Router, NextFunction } from 'express';
+import { Router } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { db } from './db';
 import { eq, and } from 'drizzle-orm';
 import { upload } from './middleware/upload';
 import path from 'path';
 import fs from 'fs';
-import { AuthenticatedRequest } from './types/authenticated-request';
 import { users, doctors } from '../shared/schema';
 import type { User, Doctor } from '../shared/schema';
+import { DatabaseStorage } from './storage';
 
 const doctorRouter = Router();
 
 // Middleware para verificar se o usuário é um médico
-const isDoctor = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+const isDoctor = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     return res.status(401).json({ message: "Não autorizado" });
   }
@@ -24,7 +25,7 @@ const isDoctor = async (req: AuthenticatedRequest, res: Response, next: NextFunc
 };
 
 // Rota para verificar se o médico já completou a página de boas-vindas
-doctorRouter.get('/welcome-status', isDoctor, async (req: AuthenticatedRequest, res: Response) => {
+doctorRouter.get('/welcome-status', isDoctor, async (req: Request, res: Response) => {
   if (!req.user) {
     return res.status(401).json({ message: "Não autorizado" });
   }
@@ -44,7 +45,7 @@ doctorRouter.get('/welcome-status', isDoctor, async (req: AuthenticatedRequest, 
 });
 
 // Rota para marcar a página de boas-vindas como concluída
-doctorRouter.post('/complete-welcome', isDoctor, async (req: AuthenticatedRequest, res: Response) => {
+doctorRouter.post('/complete-welcome', isDoctor, async (req: Request, res: Response) => {
   if (!req.user) {
     return res.status(401).json({ message: "Não autorizado" });
   }
@@ -69,7 +70,7 @@ doctorRouter.post('/complete-welcome', isDoctor, async (req: AuthenticatedReques
 });
 
 // Rota para obter o perfil do médico
-doctorRouter.get('/profile', isDoctor, async (req: AuthenticatedRequest, res: Response) => {
+doctorRouter.get('/profile', isDoctor, async (req: Request, res: Response) => {
   if (!req.user) {
     return res.status(401).json({ message: "Não autorizado" });
   }
@@ -103,7 +104,7 @@ doctorRouter.get('/profile', isDoctor, async (req: AuthenticatedRequest, res: Re
 });
 
 // Rota para upload de imagem de perfil do médico
-doctorRouter.post('/profile-image', isDoctor, upload.single('profileImage'), async (req: AuthenticatedRequest, res: Response) => {
+doctorRouter.post('/profile-image', isDoctor, upload.single('profileImage'), async (req: Request, res: Response) => {
   if (!req.user) {
     return res.status(401).json({ message: "Não autorizado" });
   }

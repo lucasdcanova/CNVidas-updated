@@ -1,17 +1,17 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { isAuthenticated } from '../middleware/auth.js';
-import { AuthenticatedRequest } from '../types/authenticated-request';
 import { AppError } from '../utils/app-error';
 import { dependents } from '@shared/schema';
 import { db } from '../db';
 import { eq, and } from 'drizzle-orm';
+import { DatabaseStorage } from '../storage';
 
 const dependentsRouter = Router();
 
 // Middleware de autenticação compatível com Express
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
-  const authReq = req as AuthenticatedRequest;
-  if (!authReq.isAuthenticated()) {
+  if (!req.isAuthenticated()) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
@@ -32,14 +32,13 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
  * GET /api/dependents
  */
 dependentsRouter.get('/', requireAuth, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
-    if (!authReq.user) {
+    if (!req.user) {
       throw new AppError(401, 'Usuário não autenticado');
     }
     const userDependents = await db.select()
       .from(dependents)
-      .where(eq(dependents.userId, authReq.user.id));
+      .where(eq(dependents.userId, req.user.id));
     res.json(userDependents);
   } catch (error) {
     if (error instanceof AppError) {
@@ -55,9 +54,8 @@ dependentsRouter.get('/', requireAuth, async (req: Request, res: Response) => {
  * POST /api/dependents
  */
 dependentsRouter.post('/', requireAuth, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
-    if (!authReq.user) {
+    if (!req.user) {
       throw new AppError(401, 'Usuário não autenticado');
     }
     const { name, birthDate, relationship } = req.body;
@@ -66,7 +64,7 @@ dependentsRouter.post('/', requireAuth, async (req: Request, res: Response) => {
     }
     const newDependent = await db.insert(dependents)
       .values({
-        userId: authReq.user.id,
+        userId: req.user.id,
         name,
         birthDate: String(birthDate), // Drizzle espera string
         relationship
@@ -87,9 +85,8 @@ dependentsRouter.post('/', requireAuth, async (req: Request, res: Response) => {
  * PUT /api/dependents/:id
  */
 dependentsRouter.put('/:id', requireAuth, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
-    if (!authReq.user) {
+    if (!req.user) {
       throw new AppError(401, 'Usuário não autenticado');
     }
     const id = Number(req.params.id);
@@ -105,7 +102,7 @@ dependentsRouter.put('/:id', requireAuth, async (req: Request, res: Response) =>
       })
       .where(and(
         eq(dependents.id, id),
-        eq(dependents.userId, authReq.user.id)
+        eq(dependents.userId, req.user.id)
       ))
       .returning();
     if (!updatedDependent[0]) {
@@ -126,16 +123,15 @@ dependentsRouter.put('/:id', requireAuth, async (req: Request, res: Response) =>
  * DELETE /api/dependents/:id
  */
 dependentsRouter.delete('/:id', requireAuth, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
-    if (!authReq.user) {
+    if (!req.user) {
       throw new AppError(401, 'Usuário não autenticado');
     }
     const id = Number(req.params.id);
     const deletedDependent = await db.delete(dependents)
       .where(and(
         eq(dependents.id, id),
-        eq(dependents.userId, authReq.user.id)
+        eq(dependents.userId, req.user.id)
       ))
       .returning();
     if (!deletedDependent[0]) {

@@ -28,9 +28,12 @@ interface Appointment {
   type: string;
 }
 
+// Tipo auxiliar para garantir que profileImage existe
+export type PartnerWithProfileImage = Partner & { profileImage?: string | null };
+
 // Tipo auxiliar para serviços que podem vir com parceiro embutido
 interface ServiceWithPartner extends Service {
-  partner?: Partner;
+  partner?: PartnerWithProfileImage;
 }
 
 // Função para obter a imagem do serviço com sistema de fallback

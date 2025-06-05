@@ -1,6 +1,6 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { isAuthenticated } from '../middleware/auth.js';
-import { AuthenticatedRequest } from '../types/authenticated-request';
 import { AppError } from '../utils/app-error';
 import { users } from '@shared/schema';
 import { db } from '../db';
@@ -17,7 +17,7 @@ import passport from 'passport';
 const authRouter = Router();
 
 // Middleware de autenticação
-const requireAuth = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+const requireAuth = (req: Request, res: Response, next: NextFunction) => {
   if (!req.isAuthenticated()) {
     throw new AppError(401, 'Não autorizado');
   }
@@ -87,7 +87,6 @@ authRouter.post('/login', async (req: Request, res: Response) => {
  * POST /api/auth/logout
  */
 authRouter.post('/logout', isAuthenticated, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
     // TODO: Implementar lógica de logout
     
@@ -142,10 +141,9 @@ authRouter.get('/verify', async (req: Request, res: Response) => {
  * GET /api/auth/me
  */
 authRouter.get('/me', isAuthenticated, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
-    if (authReq.isAuthenticated()) {
-      res.json({ user: authReq.user });
+    if (req.isAuthenticated()) {
+      res.json({ user: req.user });
     } else {
       res.status(401).json({ message: 'Não autenticado' });
     }

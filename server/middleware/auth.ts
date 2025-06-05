@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { AuthenticatedRequest } from '../types/authenticated-request';
 import { User } from '@shared/types';
 import { AppError } from '../utils/app-error';
 import { storage } from '../storage';
+import { DatabaseStorage } from '../storage';
 
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {

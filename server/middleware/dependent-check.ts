@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../utils/app-error';
-import { storage } from '../storage';
+import { DatabaseStorage } from '../storage';
 
 export const requireDependent = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {

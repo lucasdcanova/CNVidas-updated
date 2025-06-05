@@ -180,7 +180,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   <SelectContent>
                     {services.map((service: Service) => (
                       <SelectItem key={service.id} value={service.id.toString()}>
-                        {service.name} - R$ {(service.discountPrice / 100).toFixed(2).replace('.', ',')}
+                        {service.name} - R$ {((service.discountPrice || service.regularPrice) / 100).toFixed(2).replace('.', ',')}
                       </SelectItem>
                     ))}
                   </SelectContent>

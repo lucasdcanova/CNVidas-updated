@@ -18,6 +18,7 @@ export interface Partner {
   state: string;
   country: string;
   logo?: string;
+  profileImage?: string;
   website?: string;
   socialMedia?: {
     facebook?: string;

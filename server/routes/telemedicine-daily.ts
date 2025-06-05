@@ -13,7 +13,8 @@ import { sanitizeRoomName } from '../utils/sanitize.js';
 import Daily from '@daily-co/daily-js';
 import { AppError } from '../utils/app-error.js';
 import { User } from '@shared/schema';
-import { AuthenticatedRequest } from '../types/authenticated-request';
+import { Router } from 'express';
+import { DatabaseStorage } from '../storage';
 
 // Interface para resposta da API do Daily.co
 interface DailyRoomResponse {

@@ -10,7 +10,8 @@ import { ensureDailyJsonResponse } from '../middleware/json-response';
 import { User } from '@shared/schema';
 import { prisma } from '../lib/prisma.js';
 import { AppError } from '../utils/app-error';
-import { AuthenticatedRequest } from '../types/authenticated-request';
+import { Router } from 'express';
+import { DatabaseStorage } from '../storage';
 
 // Interface para resposta da API do Daily.co
 interface DailyRoomResponse {

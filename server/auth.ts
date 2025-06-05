@@ -8,12 +8,16 @@ import { eq } from "drizzle-orm";
 import { users } from '../shared/schema';
 import { rateLimiter, loginRateLimit, recordLoginAttempt } from "./security/rate-limiter";
 import { auditLogger } from "./security/audit-logger";
-import { AuthenticatedRequest } from './types/authenticated-request';
 import { AppError } from './utils/app-error';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { User } from '@shared/schema';
+import { DatabaseStorage } from './storage';
+import { z } from 'zod';
+import { sign } from 'jsonwebtoken';
+import { v4 as uuidv4 } from 'uuid';
 
 declare global {
   namespace Express {
@@ -137,7 +141,7 @@ export function setupAuth(app: express.Express) {
         usernameField: 'email',
         passReqToCallback: true 
       },
-      async (req: AuthenticatedRequest, email, password, done) => {
+      async (req: Request, email, password, done) => {
         try {
           // Validar parâmetros
           if (!email || !password) {

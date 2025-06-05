@@ -3,6 +3,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 import { getPlanColor } from "./plan-indicator";
 import { useLocation } from "wouter";
+import type { SubscriptionPlan } from "@/shared/types";
 
 interface StatusCardProps {
   icon: string;
@@ -17,7 +18,7 @@ interface StatusCardProps {
   footer?: string;
   linkText?: string;
   linkUrl?: string;
-  planType?: string;
+  planType?: SubscriptionPlan;
 }
 
 export const StatusCard: React.FC<StatusCardProps> = ({
