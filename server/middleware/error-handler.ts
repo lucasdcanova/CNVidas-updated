@@ -1,16 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
-import { AuthenticatedRequest } from '../types/authenticated-request';
-
-export class AppError extends Error {
-  statusCode: number;
-
-  constructor(statusCode: number, message: string) {
-    super(message);
-    this.statusCode = statusCode;
-    this.name = 'AppError';
-  }
-}
+import { AppError } from '../utils/app-error';
 
 export const errorHandler = (
   err: Error,

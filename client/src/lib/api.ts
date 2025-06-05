@@ -323,3 +323,29 @@ export const updateSubscription = async (planId: number) => {
   queryClient.invalidateQueries({ queryKey: ["/api/subscription/current"] });
   return await res.json();
 };
+
+// Interface para consultas
+interface Consultation {
+  id: number;
+  patientName: string;
+  doctorName: string;
+  status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
+  date: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: number;
+  doctorId: number;
+  type: string;
+  notes?: string;
+  prescription?: string;
+  diagnosis?: string;
+}
+
+// Busca todas as consultas de um parceiro
+export const getAllConsultations = async (partnerId: number): Promise<Consultation[]> => {
+  const response = await fetch(`/api/consultations/partner/${partnerId}`);
+  if (!response.ok) {
+    throw new Error('Erro ao buscar consultas');
+  }
+  return response.json();
+};

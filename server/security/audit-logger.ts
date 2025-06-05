@@ -1,6 +1,5 @@
 import { Request } from 'express';
 import { storage } from '../storage';
-import { AuthenticatedRequest } from '../types/authenticated-request';
 
 export enum AuditAction {
   LOGIN_SUCCESS = 'LOGIN_SUCCESS',
@@ -31,9 +30,8 @@ class AuditLogger {
     details: Record<string, any> = {}
   ): Promise<void> {
     try {
-      const authReq = req as AuthenticatedRequest;
       const entry: AuditLogEntry = {
-        userId: authReq.user?.id,
+        userId: req.user?.id,
         action,
         ip: req.ip || 'unknown',
         userAgent: req.headers['user-agent'] || 'unknown',

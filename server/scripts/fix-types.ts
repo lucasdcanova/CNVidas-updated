@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
-import { AuthenticatedRequest } from '../types/authenticated-request';
 
 interface TypeFix {
   file: string;
@@ -36,8 +35,7 @@ const typeFixes: TypeFix[] = [
     fixes: [
       {
         search: 'import { Router, Request, Response } from \'express\';',
-        replace: `import { Router, Request, Response } from 'express';
-import { AuthenticatedRequest } from '../types';`
+        replace: `import { Router, Request, Response } from 'express';`
       }
     ]
   }

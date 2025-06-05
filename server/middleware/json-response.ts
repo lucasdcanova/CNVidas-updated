@@ -3,7 +3,6 @@
  * Este middleware deve ser aplicado a rotas de API para prevenir respostas HTML
  */
 import { Request, Response, NextFunction } from 'express';
-import { AuthenticatedRequest } from '../types/authenticated-request';
 
 export function ensureJsonResponse(req: Request, res: Response, next: NextFunction) {
   // Captura o método original res.send
@@ -98,6 +97,9 @@ export function ensureDailyJsonResponse(req: Request, res: Response, next: NextF
 }
 
 export const jsonResponse = (req: Request, res: Response, next: NextFunction) => {
-  res.setHeader('Content-Type', 'application/json');
+  res.json = (body: any) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(body));
+  };
   next();
 };

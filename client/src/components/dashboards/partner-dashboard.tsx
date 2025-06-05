@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { getPartnerByUserId, getPartnerServicesByPartnerId } from "@/lib/api";
+import { getPartnerByUserId, getPartnerServicesByPartnerId, getAllConsultations } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import DataTable from "@/components/ui/data-table";
@@ -10,6 +10,23 @@ import { List, DollarSign } from "lucide-react";
 import { Column, Action } from "@/components/ui/data-table";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+
+// Interface Consultation igual ao admin-dashboard
+interface Consultation {
+  id: number;
+  patientName: string;
+  doctorName: string;
+  status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
+  date: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: number;
+  doctorId: number;
+  type: string;
+  notes?: string;
+  prescription?: string;
+  diagnosis?: string;
+}
 
 export const PartnerDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -25,6 +42,21 @@ export const PartnerDashboard: React.FC = () => {
     queryFn: () => getPartnerServicesByPartnerId(partnerInfo?.id || 0),
     enabled: !!partnerInfo?.id,
   });
+
+  // Busca as consultas do parceiro
+  const { data: consultations = [] } = useQuery({
+    queryKey: ["/api/consultations/partner", partnerInfo?.id],
+    queryFn: () => getAllConsultations(partnerInfo?.id || 0),
+    enabled: !!partnerInfo?.id,
+  });
+  
+  // Adiciona a lista de consultas recentes
+  const recentConsultations = consultations ? consultations.slice(0, 5) : [];
+
+  // Função para visualizar detalhes da consulta
+  const handleViewConsultation = (row: Consultation) => {
+    console.log("Ver detalhes da consulta", row.id);
+  };
   
   const serviceColumns = [
     {
@@ -118,10 +150,10 @@ export const PartnerDashboard: React.FC = () => {
       },
     },
     {
-      id: "scheduledAt",
+      id: "date",
       header: "Data/Hora",
-      accessorKey: "scheduledAt",
-      cell: (row: Consultation) => <span>{format(new Date(row.scheduledAt), "dd/MM/yyyy HH:mm", { locale: ptBR })}</span>,
+      accessorKey: "date",
+      cell: (row: Consultation) => <span>{format(new Date(row.date), "dd/MM/yyyy HH:mm", { locale: ptBR })}</span>,
     },
   ];
   

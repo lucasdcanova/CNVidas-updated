@@ -1,32 +1,21 @@
-import { Response, NextFunction } from 'express';
-import { AuthenticatedRequest } from '../types/authenticated-request';
-import { storage } from '../storage';
+import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../utils/app-error';
+import { storage } from '../storage';
 
-export const checkDependent = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  try {
-    if (!req.isAuthenticated()) {
-      throw new AppError(401, 'Usuário não autenticado');
-    }
-
-    const dependentId = Number(req.params.dependentId);
-    if (!dependentId) {
-      throw new AppError(400, 'ID do dependente não fornecido ou inválido');
-    }
-
-    const dependent = await storage.getDependent(dependentId);
-    if (!dependent) {
-      throw new AppError(404, 'Dependente não encontrado');
-    }
-
-    if (dependent.userId !== req.user.id) {
-      throw new AppError(403, 'Acesso não autorizado a este dependente');
-    }
-
-    // Adiciona o dependente à requisição
-    (req as AuthenticatedRequest & { dependent: typeof dependent }).dependent = dependent;
-    next();
-  } catch (error) {
-    next(error);
+export const requireDependent = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    throw new AppError('Não autorizado', 401);
   }
+
+  const dependentId = parseInt(req.params.dependentId);
+  if (isNaN(dependentId)) {
+    throw new AppError('ID do dependente inválido', 400);
+  }
+
+  const dependent = await storage.getDependent(dependentId);
+  if (!dependent || dependent.userId !== req.user.id) {
+    throw new AppError('Dependente não encontrado ou não autorizado', 404);
+  }
+
+  next();
 }; 

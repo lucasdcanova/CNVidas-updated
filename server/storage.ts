@@ -9,7 +9,6 @@ import { randomBytes } from "crypto";
 import { normalizeObjectKeys } from './utils/normalize';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
-import { SessionStore } from 'express-session';
 import { ExpressUser } from '../shared/types';
 import { PrismaClient } from '@prisma/client';
 import { sign } from 'jsonwebtoken';

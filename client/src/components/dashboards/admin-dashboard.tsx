@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { getUsersByRole, getAllPartners, getAllClaims, getPendingClaims } from "@/lib/api";
+import { getUsersByRole, getAllPartners, getAllClaims, getPendingClaims, getAllConsultations } from "@/lib/api";
 import { Chart } from "@/components/ui/chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -95,6 +95,11 @@ export const AdminDashboard: React.FC = () => {
   const { data: pendingClaims = [] } = useQuery({
     queryKey: ["/api/claims/pending"],
     queryFn: getPendingClaims,
+  });
+  
+  const { data: consultations = [] } = useQuery({
+    queryKey: ["/api/consultations"],
+    queryFn: getAllConsultations,
   });
   
   // KPI data
@@ -248,10 +253,10 @@ export const AdminDashboard: React.FC = () => {
       },
     },
     {
-      id: "scheduledAt",
+      id: "date",
       header: "Data/Hora",
-      accessorKey: "scheduledAt",
-      cell: (row: Consultation) => <span>{format(new Date(row.scheduledAt), "dd/MM/yyyy HH:mm", { locale: ptBR })}</span>,
+      accessorKey: "date",
+      cell: (row: Consultation) => <span>{format(new Date(row.date), "dd/MM/yyyy HH:mm", { locale: ptBR })}</span>,
     },
   ];
   
@@ -301,6 +306,22 @@ export const AdminDashboard: React.FC = () => {
       cell: (row: Claim) => <span>{format(new Date(row.createdAt), "dd/MM/yyyy", { locale: ptBR })}</span>,
     },
   ];
+  
+  // Adiciona a lista de consultas recentes
+  const recentConsultations = consultations ? consultations.slice(0, 5) : [];
+  
+  // Adiciona a lista de sinistros recentes
+  const recentClaims = claims ? claims.slice(0, 5) : [];
+  
+  // Função para visualizar detalhes da consulta
+  const handleViewConsultation = (row: Consultation) => {
+    console.log("Ver detalhes da consulta", row.id);
+  };
+  
+  // Função para visualizar detalhes do sinistro
+  const handleViewClaim = (row: Claim) => {
+    console.log("Ver detalhes do sinistro", row.id);
+  };
   
   return (
     <div className="max-w-7xl mx-auto">

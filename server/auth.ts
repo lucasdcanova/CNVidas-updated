@@ -10,6 +10,10 @@ import { rateLimiter, loginRateLimit, recordLoginAttempt } from "./security/rate
 import { auditLogger } from "./security/audit-logger";
 import { AuthenticatedRequest } from './types/authenticated-request';
 import { AppError } from './utils/app-error';
+import { Request, Response } from 'express';
+import { Router } from 'express';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 declare global {
   namespace Express {
@@ -192,3 +196,5 @@ export function setupAuth(app: express.Express) {
     }
   });
 }
+
+const authRouter = Router();

@@ -81,7 +81,7 @@ class BuildChecker {
     } catch (error) {
       this.errors.push({
         type: 'dependency',
-        message: 'Erro ao verificar dependências: ' + error.message
+        message: 'Erro ao verificar dependências: ' + (error instanceof Error ? error.message : 'Erro desconhecido')
       });
     }
   }
@@ -90,7 +90,9 @@ class BuildChecker {
     try {
       execSync('tsc --noEmit', { stdio: 'pipe' });
     } catch (error) {
-      const output = error.stdout.toString() + error.stderr.toString();
+      const output = (error instanceof Error && 'stdout' in error && 'stderr' in error)
+        ? (error.stdout?.toString() ?? '') + (error.stderr?.toString() ?? '')
+        : '';
       const lines = output.split('\n');
       
       for (const line of lines) {
@@ -182,7 +184,9 @@ PORT=3000`;
 
     for (const error of errorsToFix) {
       try {
-        await error.fix();
+        if (error.fix) {
+          await error.fix();
+        }
       } catch (fixError) {
         console.error(`Erro ao corrigir: ${error.message}`, fixError);
         this.errors.push(error);

@@ -212,3 +212,16 @@ export const checkSubscription = async (req: AuthenticatedRequest, res: Response
     next(error);
   }
 };
+
+export const requireActiveSubscription = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    throw new AppError('Não autorizado', 401);
+  }
+
+  const subscription = await storage.getActiveSubscription(req.user.id);
+  if (!subscription) {
+    throw new AppError('Assinatura inativa ou inexistente', 403);
+  }
+
+  next();
+};

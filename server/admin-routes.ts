@@ -1,16 +1,18 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import express from 'express';
+import { Request, Response } from 'express';
+import { Router } from 'express';
 import { storage } from './storage';
 import { hashPassword } from './auth';
 import { db } from './db';
 import { chatRouter } from './chat-routes';
 import { eq, desc, sql, count, and, isNotNull, ne } from 'drizzle-orm';
 import { users, subscriptionPlans, auditLogs, dependents, claims, notifications, appointments, doctorPayments, doctors, partners } from '../shared/schema';
-import { AuthenticatedRequest } from './types/authenticated-request';
+import { requireAuth, requireAdmin } from './middleware/auth';
 import { Dependent, User } from '@shared/schema';
 import { AppError } from './utils/app-error';
 
 // Middleware para verificar se o usuário é admin
-export const isAdmin = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const isAdmin = async (req: Request, res: Response, next: express.NextFunction) => {
   if (!req.user) {
     return res.status(401).json({ message: "Não autorizado" });
   }
@@ -29,7 +31,7 @@ export const adminRouter = Router();
 adminRouter.use(isAdmin);
 
 // Rota para obter estatísticas da plataforma
-adminRouter.get('/stats', async (req: AuthenticatedRequest, res: Response) => {
+adminRouter.get('/stats', async (req: Request, res: Response) => {
   try {
     // Contagem de usuários por papel
     const [totalUsers] = await db.select({ count: count() }).from(users);
@@ -64,7 +66,7 @@ adminRouter.get('/stats', async (req: AuthenticatedRequest, res: Response) => {
 });
 
 // Rota para obter estatísticas de vendedores
-adminRouter.get('/sellers', async (req: AuthenticatedRequest, res: Response) => {
+adminRouter.get('/sellers', async (req: Request, res: Response) => {
   try {
     // Obter todos os usuários com nome de vendedor registrado
     const sellers = await db
@@ -111,7 +113,7 @@ adminRouter.get('/sellers', async (req: AuthenticatedRequest, res: Response) => 
 });
 
 // Obter lista de usuários recentes
-adminRouter.get('/recent-users', async (req: AuthenticatedRequest, res: Response) => {
+adminRouter.get('/recent-users', async (req: Request, res: Response) => {
   try {
     const recentUsers = await db
       .select()
@@ -127,7 +129,7 @@ adminRouter.get('/recent-users', async (req: AuthenticatedRequest, res: Response
 });
 
 // Obter lista de consultas recentes
-adminRouter.get('/recent-appointments', async (req: AuthenticatedRequest, res: Response) => {
+adminRouter.get('/recent-appointments', async (req: Request, res: Response) => {
   try {
     const recentAppointments = await db
       .select()
@@ -143,7 +145,7 @@ adminRouter.get('/recent-appointments', async (req: AuthenticatedRequest, res: R
 });
 
 // Obter lista de sinistros pendentes
-adminRouter.get('/pending-claims', async (req: AuthenticatedRequest, res: Response) => {
+adminRouter.get('/pending-claims', async (req: Request, res: Response) => {
   try {
     const pendingClaims = await db
       .select()
@@ -159,7 +161,7 @@ adminRouter.get('/pending-claims', async (req: AuthenticatedRequest, res: Respon
 });
 
 // Rota para obter todos os sinistros
-adminRouter.get('/claims', async (req: AuthenticatedRequest, res: Response) => {
+adminRouter.get('/claims', async (req: Request, res: Response) => {
   try {
     const claims = await db
       .select()
@@ -174,7 +176,7 @@ adminRouter.get('/claims', async (req: AuthenticatedRequest, res: Response) => {
 });
 
 // Rota para obter um sinistro específico
-adminRouter.get('/claims/:id', async (req: AuthenticatedRequest, res: Response) => {
+adminRouter.get('/claims/:id', async (req: Request, res: Response) => {
   try {
     const claimId = parseInt(req.params.id);
     if (isNaN(claimId)) {
@@ -202,7 +204,7 @@ adminRouter.get('/claims/:id', async (req: AuthenticatedRequest, res: Response) 
 });
 
 // Rota para atualizar o status de um sinistro
-adminRouter.patch('/claims/:id', async (req: AuthenticatedRequest, res: Response) => {
+adminRouter.patch('/claims/:id', async (req: Request, res: Response) => {
   try {
     if (!req.user) {
       throw new AppError('Não autorizado', 401);
@@ -268,7 +270,7 @@ adminRouter.patch('/claims/:id', async (req: AuthenticatedRequest, res: Response
 });
 
 // Listar todos os usuários
-adminRouter.get('/users', async (req: AuthenticatedRequest, res: Response) => {
+adminRouter.get('/users', async (req: Request, res: Response) => {
   try {
     const allUsers = await db
       .select()

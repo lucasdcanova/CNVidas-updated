@@ -10,7 +10,7 @@ import NotFound from "@/pages/not-found";
 import AuthPage from "@/pages/auth-page";
 import Dashboard from "@/pages/dashboard";
 import Telemedicine from "@/pages/telemedicine";
-import TelemedicinePage from "@/pages/telemedicine-page-new";
+import TelemedicinePage from "@/pages/telemedicine-page";
 
 import DailyTelemedicine from "@/pages/daily-telemedicine";
 import TelemedicineEmergencyPage from "@/pages/telemedicine-emergency";

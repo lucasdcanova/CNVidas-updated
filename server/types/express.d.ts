@@ -10,7 +10,4 @@ declare global {
   }
 }
 
-export interface AuthenticatedRequest extends Request {
-  user: User;
-  isUserAuthenticated: () => boolean;
-} 
+// Removida a interface AuthenticatedRequest duplicada daqui 

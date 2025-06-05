@@ -5,12 +5,12 @@ import { User } from '@shared/types';
 import { AppError } from '../utils/app-error';
 import { storage } from '../storage';
 
-export function requireAuth(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ error: 'Usuário não autenticado' });
+export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    throw new AppError('Não autorizado', 401);
   }
   next();
-}
+};
 
 export function requireRole(roles: User['role'][]) {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
@@ -28,35 +28,26 @@ export function optionalAuth(req: AuthenticatedRequest, res: Response, next: Nex
   next();
 }
 
-export function requireAdmin(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ error: 'Usuário não autenticado' });
-  }
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({ error: 'Acesso restrito a administradores' });
+export const requireAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user || req.user.role !== 'admin') {
+    throw new AppError('Acesso permitido apenas para administradores', 403);
   }
   next();
-}
+};
 
-export function requireDoctor(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ error: 'Usuário não autenticado' });
-  }
-  if (req.user.role !== 'doctor') {
-    return res.status(403).json({ error: 'Acesso restrito a médicos' });
+export const requireDoctor = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user || req.user.role !== 'doctor') {
+    throw new AppError('Acesso permitido apenas para médicos', 403);
   }
   next();
-}
+};
 
-export function requirePatient(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ error: 'Usuário não autenticado' });
-  }
-  if (req.user.role !== 'patient') {
-    return res.status(403).json({ error: 'Acesso restrito a pacientes' });
+export const requirePatient = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user || req.user.role !== 'patient') {
+    throw new AppError('Acesso permitido apenas para pacientes', 403);
   }
   next();
-}
+};
 
 export function requirePartner(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   if (!req.isAuthenticated()) {

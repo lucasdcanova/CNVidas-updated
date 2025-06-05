@@ -9,13 +9,6 @@ declare global {
   }
 }
 
-export interface AuthenticatedRequest extends Request {
-  user?: Express.User;
-  isAuthenticated(): this is AuthenticatedRequest & { user: Express.User };
-  login(user: Express.User, callback: (err: any) => void): void;
-  login(user: Express.User, options: { session: boolean }, callback: (err: any) => void): void;
-}
-
 export interface EmailVerification {
   id: number;
   userId: number;
