@@ -1,10 +1,20 @@
 import { Request } from 'express';
 import { User as SchemaUser, Partner, Doctor } from '../shared/schema';
 
+// Garantir que o id seja sempre number
+export interface User extends Omit<SchemaUser, 'emailVerified' | 'id'> {
+  id: number;
+  emailVerified: boolean;
+}
+
+// Tipo auxiliar para lidar com a conversão de id
+export type UserId = number;
+
 declare global {
   namespace Express {
     interface User extends Omit<SchemaUser, 'emailVerified'> {
       emailVerified: boolean;
+      id: UserId;
     }
   }
 }

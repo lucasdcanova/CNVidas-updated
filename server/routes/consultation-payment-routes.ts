@@ -1,10 +1,12 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
 import { Request, Response, NextFunction } from 'express';
+import { AuthenticatedRequest } from '../types/authenticated-request';
 import { storage } from '../storage.js';
 import { createConsultationPaymentIntent, captureConsultationPayment, cancelConsultationPayment } from '../utils/stripe-payment.js';
 import { User } from '@shared/schema';
 import { AppError } from '../utils/app-error';
 import { isAuthenticated } from '../middleware/auth.js';
+import { checkSubscriptionFeature } from '../middleware/subscription-check.js';
 
 const consultationPaymentRouter = Router();
 

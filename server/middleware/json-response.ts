@@ -9,7 +9,7 @@ export function ensureJsonResponse(req: Request, res: Response, next: NextFuncti
   const originalSend = res.send;
   
   // Sobrescreve o método send
-  res.send = function(body: any) {
+  res.send = function(body: any): Response {
     // Somente para rotas de API
     if (req.originalUrl.startsWith('/api/')) {
       // Se o conteúdo for HTML (começa com <!DOCTYPE ou <html>)
@@ -48,7 +48,7 @@ export function ensureDailyJsonResponse(req: Request, res: Response, next: NextF
   const originalStatus = res.status;
   
   // Modifica o método send
-  res.send = function(body: any) {
+  res.send = function(body: any): Response {
     // Se o conteúdo for HTML, converte em objeto JSON
     if (typeof body === 'string' && 
         (body.trim().startsWith('<!DOCTYPE') || 
@@ -97,9 +97,9 @@ export function ensureDailyJsonResponse(req: Request, res: Response, next: NextF
 }
 
 export const jsonResponse = (req: Request, res: Response, next: NextFunction) => {
-  res.json = (body: any) => {
+  res.json = (body: any): Response => {
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify(body));
+    return res.send(JSON.stringify(body));
   };
   next();
 };

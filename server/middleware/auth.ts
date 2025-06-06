@@ -4,9 +4,8 @@ import { User } from '@shared/types';
 import { AppError } from '../utils/app-error';
 import { storage } from '../storage';
 import { DatabaseStorage } from '../storage';
-import { AuthenticatedRequest } from '../types/authenticated-request';
 
-export const requireAuth = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const requireAuth = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new AppError('Usuário não autenticado', 401);
   }
@@ -14,7 +13,7 @@ export const requireAuth = (req: AuthenticatedRequest, res: Response, next: Next
 };
 
 export const requireRole = (roles: string[]) => {
-  return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) {
       throw new AppError('Usuário não autenticado', 401);
     }
@@ -25,11 +24,11 @@ export const requireRole = (roles: string[]) => {
   };
 };
 
-export function optionalAuth(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export function optionalAuth(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
-export const requireAdmin = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const requireAdmin = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new AppError('Usuário não autenticado', 401);
   }
@@ -39,7 +38,7 @@ export const requireAdmin = (req: AuthenticatedRequest, res: Response, next: Nex
   next();
 };
 
-export const requireDoctor = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const requireDoctor = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new AppError('Usuário não autenticado', 401);
   }
@@ -49,7 +48,7 @@ export const requireDoctor = (req: AuthenticatedRequest, res: Response, next: Ne
   next();
 };
 
-export const requirePatient = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const requirePatient = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new AppError('Usuário não autenticado', 401);
   }
@@ -59,7 +58,7 @@ export const requirePatient = (req: AuthenticatedRequest, res: Response, next: N
   next();
 };
 
-export function requirePartner(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export function requirePartner(req: Request, res: Response, next: NextFunction) {
   if (!req.user) {
     throw new AppError('Usuário não autenticado', 401);
   }
@@ -85,28 +84,28 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
       return res.status(401).json({ error: 'Usuário não encontrado' });
     }
 
-    (req as AuthenticatedRequest).user = user;
+    req.user = user as User;
     next();
   } catch (error) {
     return res.status(401).json({ error: 'Token inválido' });
   }
 };
 
-export const isAdmin = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user?.role || req.user.role !== 'admin') {
     return res.status(403).json({ message: 'Acesso negado' });
   }
   next();
 };
 
-export const isDoctor = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const isDoctor = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user?.role || req.user.role !== 'doctor') {
     return res.status(403).json({ message: 'Acesso negado' });
   }
   next();
 };
 
-export const isPatient = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const isPatient = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user?.role || req.user.role !== 'patient') {
     return res.status(403).json({ message: 'Acesso negado' });
   }
@@ -114,8 +113,7 @@ export const isPatient = (req: AuthenticatedRequest, res: Response, next: NextFu
 };
 
 export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
-  const authReq = req as AuthenticatedRequest;
-  if (!authReq.user) {
+  if (!req.user) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
@@ -123,21 +121,20 @@ export const isAuthenticated = (req: Request, res: Response, next: NextFunction)
 
 export const isPartner = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const authReq = req as AuthenticatedRequest;
-    if (!authReq.user) {
-      throw new AppError(401, 'Não autorizado');
+    if (!req.user) {
+      throw new AppError('Não autorizado', 401);
     }
 
-    if (authReq.user.role !== 'partner') {
-      throw new AppError(403, 'Acesso negado. Esta rota é apenas para parceiros.');
+    if (req.user.role !== 'partner') {
+      throw new AppError('Acesso negado. Esta rota é apenas para parceiros.', 403);
     }
 
-    const partner = await storage.getPartnerByUserId(authReq.user.id);
+    const partner = await storage.getPartnerByUserId(Number(req.user.id));
     
     if (!partner) {
       await storage.createPartner({
-        userId: authReq.user.id,
-        businessName: authReq.user.fullName || 'Parceiro CN Vidas',
+        userId: Number(req.user.id),
+        businessName: req.user.fullName || 'Parceiro CN Vidas',
         businessType: 'Prestador de Serviços',
         status: 'approved',
         description: 'Parceiro CN Vidas'

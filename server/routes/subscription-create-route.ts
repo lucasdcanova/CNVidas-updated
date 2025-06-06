@@ -10,8 +10,19 @@ import { storage } from '../storage';
 
 const router = Router();
 
+// Schema de validação para parâmetros de rota
+const routeParamsSchema = z.object({
+  id: z.string().transform((val) => parseInt(val, 10))
+});
+
+// Schema de validação para criação de sessão
+const createSessionSchema = z.object({
+  planId: z.number(),
+  paymentMethod: z.enum(['card', 'pix', 'boleto'])
+});
+
 // Middleware para verificar autenticação (compatível com tokens e sessões)
-const isAuthenticated = async (req: Request & { user?: any }, res: Response, next: NextFunction) => {
+const isAuthenticated = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   console.log("Verificando autenticação na rota de assinatura...");
   
   // Verificar se o usuário está autenticado por sessão
@@ -60,18 +71,14 @@ const isAuthenticated = async (req: Request & { user?: any }, res: Response, nex
 };
 
 // Rota para criar uma sessão de checkout simples
-router.post("/create-session", isAuthenticated, async (req: Express.Request, res: Express.Response) => {
+router.post("/create-session", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
   try {
     // Validar a entrada
-    const schema = z.object({
-      planId: z.number(),
-      paymentMethod: z.enum(['card', 'pix', 'boleto'])
-    });
-
-    const validationResult = schema.safeParse({
+    const validationResult = createSessionSchema.safeParse({
       ...req.body,
       planId: Number(req.body.planId)
     });
+
     if (!validationResult.success) {
       return res.status(400).json({ 
         message: "Parâmetros inválidos", 
@@ -199,101 +206,15 @@ router.post("/create-session", isAuthenticated, async (req: Express.Request, res
           message: "O método PIX não está disponível. Foi selecionado cartão de crédito como alternativa."
         });
       }
-    } else if (paymentMethod === 'boleto') {
-      try {
-        // Configurações específicas para o Boleto brasileiro
-        console.log("Criando pagamento com Boleto...");
-        
-        // Criar um método de pagamento para Boleto primeiro
-        const paymentMethod = await stripe.paymentMethods.create({
-          type: 'boleto',
-          billing_details: {
-            name: user.fullName || user.username,
-            email: user.email,
-            address: {
-              country: 'BR',
-            }
-          },
-          boleto: {
-            tax_id: user.cpf?.replace(/[^\d]/g, '') || '00000000000'
-          }
-        });
-        
-        console.log("Método de pagamento Boleto criado:", paymentMethod.id);
-        
-        // Criar o Payment Intent com o método de pagamento específico
-        paymentIntent = await stripe.paymentIntents.create({
-          ...baseOptions,
-          payment_method: paymentMethod.id,
-          payment_method_types: ['boleto'],
-          description: `Assinatura plano ${plan.name} via Boleto`,
-          payment_method_options: {
-            boleto: {
-              expires_after_days: 3
-            }
-          },
-          confirm: true // Confirmar automaticamente para gerar o boleto
-        });
-        
-        console.log("Payment Intent com Boleto criado e confirmado:", paymentIntent.id);
-        
-        // Boleto expira em 3 dias
-        expiresAt.setDate(expiresAt.getDate() + 3);
-        
-        // Atualizar o status de assinatura como pendente
-        await db.update(users)
-          .set({
-            subscriptionPlan: plan.name,
-            subscriptionStatus: 'pending'
-          })
-          .where(eq(users.id, user.id));
-        
-        // Recuperar informações do boleto gerado
-        const boletoDetails = paymentIntent.payment_method_details?.boleto;
-        
-        return res.json({
-          paymentIntentId: paymentIntent.id,
-          clientSecret: paymentIntent.client_secret,
-          paymentMethod: 'boleto',
-          boletoUrl: boletoDetails?.hosted_voucher_url,
-          boletoPdf: boletoDetails?.pdf,
-          boletoBarcode: boletoDetails?.barcode,
-          expiresAt: expiresAt.toISOString(),
-          message: "Boleto gerado com sucesso"
-        });
-      } catch (boletoError) {
-        console.error("Erro ao criar pagamento com Boleto:", boletoError);
-        
-        // Tentar com cartão como método alternativo
-        paymentIntent = await stripe.paymentIntents.create({
-          ...baseOptions,
-          payment_method_types: ['card'],
-          description: `Assinatura plano ${plan.name} (fallback de Boleto)`
-        });
-        
-        // Atualizar status no banco
-        await db.update(users)
-          .set({
-            subscriptionPlan: plan.name,
-            subscriptionStatus: 'pending'
-          })
-          .where(eq(users.id, user.id));
-        
-        return res.json({
-          clientSecret: paymentIntent.client_secret,
-          paymentMethod: 'card',
-          message: "O método Boleto não está disponível. Foi selecionado cartão de crédito como alternativa."
-        });
-      }
     } else {
-      // Pagamento com cartão
+      // Para cartão e boleto
       paymentIntent = await stripe.paymentIntents.create({
         ...baseOptions,
-        payment_method_types: ['card'],
+        payment_method_types: [paymentMethod],
         description: `Assinatura plano ${plan.name}`
       });
       
-      // Atualizar o status de assinatura como pendente
+      // Atualizar status no banco
       await db.update(users)
         .set({
           subscriptionPlan: plan.name,
@@ -303,105 +224,199 @@ router.post("/create-session", isAuthenticated, async (req: Express.Request, res
       
       return res.json({
         clientSecret: paymentIntent.client_secret,
-        paymentMethod: 'card'
+        paymentMethod,
+        message: "Sessão de pagamento criada com sucesso"
       });
     }
   } catch (error) {
     console.error("Erro ao criar sessão de pagamento:", error);
-    res.status(500).json({ 
+    return res.status(500).json({ 
       message: "Erro ao processar pagamento",
       error: error instanceof Error ? error.message : "Erro desconhecido"
     });
   }
 });
 
-// Endpoint para confirmar pagamento
-router.post("/confirm-payment", isAuthenticated, async (req: Express.Request, res: Express.Response) => {
+// Rota para confirmar pagamento
+router.post("/confirm-payment", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    // Validar a entrada
-    const schema = z.object({
-      paymentIntentId: z.string().min(1, "ID da intenção de pagamento é obrigatório")
-    });
-
-    const validationResult = schema.safeParse(req.body);
-    if (!validationResult.success) {
-      return res.status(400).json({ 
-        message: "Parâmetros inválidos", 
-        errors: validationResult.error.format() 
-      });
-    }
-
-    const { paymentIntentId } = validationResult.data;
+    const { paymentIntentId } = req.body;
     const user = req.user;
-    
+
     if (!user) {
       return res.status(401).json({ message: "Usuário não autenticado" });
     }
-    
-    // Verificar status do pagamento
-    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-    
-    if (paymentIntent.status === 'succeeded') {
-      // Obter o plano da assinatura dos metadados
-      const planId = paymentIntent.metadata?.planId;
-      if (!planId) {
-        return res.status(400).json({ message: "ID do plano não encontrado nos metadados do pagamento" });
-      }
-      
-      // Buscar o plano no banco de dados
-      const planIdNum = parseInt(planId, 10);
-      if (isNaN(planIdNum)) return res.status(400).json({ message: "ID do plano inválido" });
-      const [plan] = await db.select().from(subscriptionPlans).where(eq(subscriptionPlans.id, planIdNum));
-      if (!plan) {
-        return res.status(404).json({ message: "Plano não encontrado" });
-      }
-      
-      // Definir o número de consultas de emergência
-      let emergencyConsultations = null;
-      if (plan.emergencyConsultations !== 'unlimited') {
-        emergencyConsultations = parseInt(plan.emergencyConsultations);
-      }
-      
-      // Atualizar assinatura para ativa
-      await db.insert(userSubscriptions).values({
-        userId: user.id,
-        planId: plan.id,
-        status: 'active',
-        startDate: new Date(),
-        endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 dias
-        paymentMethod: 'stripe',
-        price: plan.price
-      });
 
-      // Atualizar usuário
+    if (!paymentIntentId) {
+      return res.status(400).json({ message: "ID do pagamento não fornecido" });
+    }
+
+    // Recuperar o Payment Intent do Stripe
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+
+    // Verificar se o pagamento foi bem sucedido
+    if (paymentIntent.status === 'succeeded') {
+      // Atualizar o status da assinatura
       await db.update(users)
         .set({
-          subscriptionPlan: plan.name,
           subscriptionStatus: 'active',
-          emergencyConsultationsLeft: emergencyConsultations
+          emergencyConsultationsLeft: 3 // Número padrão de consultas de emergência
         })
         .where(eq(users.id, user.id));
-      
+
       return res.json({
-        success: true,
-        message: "Assinatura ativada com sucesso",
-        subscription: {
-          planId: plan.id,
-          planType: plan.name,
-          status: 'active'
-        }
+        message: "Pagamento confirmado com sucesso",
+        status: 'active'
       });
     } else {
-      return res.json({
-        success: false,
-        message: "Pagamento ainda não confirmado",
+      return res.status(400).json({
+        message: "Pagamento ainda não foi confirmado",
         status: paymentIntent.status
       });
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error("Erro ao confirmar pagamento:", error);
-    return res.status(500).json({ 
-      message: `Erro ao confirmar pagamento: ${error.message}`
+    return res.status(500).json({
+      message: "Erro ao confirmar pagamento",
+      error: error instanceof Error ? error.message : "Erro desconhecido"
+    });
+  }
+});
+
+// Rota para cancelar assinatura
+router.post("/cancel", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const user = req.user;
+
+    if (!user) {
+      return res.status(401).json({ message: "Usuário não autenticado" });
+    }
+
+    // Atualizar o status da assinatura para cancelado
+    await db.update(users)
+      .set({
+        subscriptionStatus: 'cancelled',
+        subscriptionPlan: 'free'
+      })
+      .where(eq(users.id, user.id));
+
+    return res.json({
+      message: "Assinatura cancelada com sucesso",
+      status: 'cancelled'
+    });
+  } catch (error) {
+    console.error("Erro ao cancelar assinatura:", error);
+    return res.status(500).json({
+      message: "Erro ao cancelar assinatura",
+      error: error instanceof Error ? error.message : "Erro desconhecido"
+    });
+  }
+});
+
+// Rota para atualizar assinatura
+router.put("/:id", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const user = req.user;
+
+    if (!user) {
+      return res.status(401).json({ message: "Usuário não autenticado" });
+    }
+
+    // Validar o ID da assinatura
+    const validationResult = routeParamsSchema.safeParse(req.params);
+    if (!validationResult.success) {
+      return res.status(400).json({
+        message: "ID de assinatura inválido",
+        errors: validationResult.error.format()
+      });
+    }
+
+    const subscriptionId = validationResult.data.id;
+
+    // Buscar a assinatura
+    const [subscription] = await db.select()
+      .from(userSubscriptions)
+      .where(eq(userSubscriptions.id, subscriptionId));
+
+    if (!subscription) {
+      return res.status(404).json({ message: "Assinatura não encontrada" });
+    }
+
+    // Verificar se a assinatura pertence ao usuário
+    if (subscription.userId !== user.id) {
+      return res.status(403).json({ message: "Não autorizado a atualizar esta assinatura" });
+    }
+
+    // Atualizar a assinatura
+    await db.update(userSubscriptions)
+      .set({
+        status: 'cancelled',
+        updatedAt: new Date()
+      })
+      .where(eq(userSubscriptions.id, subscriptionId));
+
+    return res.json({
+      message: "Assinatura atualizada com sucesso",
+      status: 'cancelled'
+    });
+  } catch (error) {
+    console.error("Erro ao atualizar assinatura:", error);
+    return res.status(500).json({
+      message: "Erro ao atualizar assinatura",
+      error: error instanceof Error ? error.message : "Erro desconhecido"
+    });
+  }
+});
+
+// Rota para obter detalhes da assinatura
+router.get("/:id", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const user = req.user;
+
+    if (!user) {
+      return res.status(401).json({ message: "Usuário não autenticado" });
+    }
+
+    // Validar o ID da assinatura
+    const validationResult = routeParamsSchema.safeParse(req.params);
+    if (!validationResult.success) {
+      return res.status(400).json({
+        message: "ID de assinatura inválido",
+        errors: validationResult.error.format()
+      });
+    }
+
+    const subscriptionId = validationResult.data.id;
+
+    // Buscar a assinatura com detalhes do plano
+    const [subscription] = await db.select({
+      subscription: userSubscriptions,
+      plan: subscriptionPlans
+    })
+    .from(userSubscriptions)
+    .leftJoin(subscriptionPlans, eq(userSubscriptions.planId, subscriptionPlans.id))
+    .where(eq(userSubscriptions.id, subscriptionId));
+
+    if (!subscription) {
+      return res.status(404).json({ message: "Assinatura não encontrada" });
+    }
+
+    // Verificar se a assinatura pertence ao usuário
+    if (subscription.subscription.userId !== user.id) {
+      return res.status(403).json({ message: "Não autorizado a visualizar esta assinatura" });
+    }
+
+    return res.json({
+      subscription: {
+        ...subscription.subscription,
+        plan: subscription.plan
+      }
+    });
+  } catch (error) {
+    console.error("Erro ao obter detalhes da assinatura:", error);
+    return res.status(500).json({
+      message: "Erro ao obter detalhes da assinatura",
+      error: error instanceof Error ? error.message : "Erro desconhecido"
     });
   }
 });

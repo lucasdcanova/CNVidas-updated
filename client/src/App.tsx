@@ -16,9 +16,6 @@ import DailyTelemedicine from "@/pages/daily-telemedicine";
 import TelemedicineEmergencyPage from "@/pages/telemedicine-emergency";
 import TelemedicineEmergencyV2 from "@/pages/telemedicine-emergency-v2";
 import TelemedicineEmergencyV3 from "@/pages/telemedicine-emergency-v3";
-import TelemedicineEmergencyV4 from "@/pages/telemedicine-emergency-v4";
-import TelemedicineEmergencyV4New from "@/pages/telemedicine-emergency-v4-new";
-import TelemedicineEmergencyV5 from "@/pages/telemedicine-emergency-v5";
 import TelemedicineEmergencyRoomV4 from "@/pages/telemedicine-emergency-room-v4";
 import UnifiedEmergencyRoom from "@/pages/unified-emergency-room";
 import TelemedicineConsultation from "@/pages/telemedicine-consultation";
@@ -83,8 +80,6 @@ function Router() {
       <ProtectedRoute path="/telemedicine-emergency" component={TelemedicineEmergencyPage} allowedRoles={["patient"]} />
       <ProtectedRoute path="/emergency-v2" component={TelemedicineEmergencyV2} allowedRoles={["patient"]} />
       <ProtectedRoute path="/emergency-v3" component={TelemedicineEmergencyV3} allowedRoles={["patient"]} />
-      <ProtectedRoute path="/telemedicine-emergency-v4/:id" component={TelemedicineEmergencyV4New} allowedRoles={["patient", "doctor"]} />
-      <ProtectedRoute path="/telemedicine-emergency-v5/:id" component={TelemedicineEmergencyV5} allowedRoles={["patient", "doctor"]} />
       <ProtectedRoute path="/unified-emergency-room" component={UnifiedEmergencyRoom} allowedRoles={["doctor", "patient"]} />
       <ProtectedRoute path="/emergency-room-v4" component={TelemedicineEmergencyRoomV4} allowedRoles={["doctor", "patient"]} />
       <ProtectedRoute path="/emergency-room-v4/:id" component={TelemedicineEmergencyRoomV4} allowedRoles={["doctor", "patient"]} />

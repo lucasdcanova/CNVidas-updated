@@ -110,6 +110,7 @@ export interface IStorage {
   createPartner(partner: InsertPartner): Promise<Partner>;
   updatePartner(id: number, data: Partial<InsertPartner>): Promise<Partner>;
   getAllPartners(): Promise<Partner[]>;
+  deletePartner(id: number): Promise<void>;
   
   // Doctor methods
   getDoctor(id: number): Promise<Doctor | undefined>;
@@ -218,8 +219,8 @@ export interface IStorage {
   }): Promise<void>;
   getUserAuditLogs(
     userId: number,
-    limit: number = 100,
-    offset: number = 0
+    limit?: number,
+    offset?: number
   ): Promise<any[]>;
 }
 
@@ -330,7 +331,8 @@ export class DatabaseStorage implements IStorage {
   async getUserBySessionId(sessionId: string): Promise<User | undefined> {
     const session = await this.sessionStore.get(sessionId);
     if (!session || !session.userId) return undefined;
-    return this.getUser(session.userId);
+    const user = await this.getUser(Number(session.userId));
+    return user;
   }
 
   async createUser(userData: InsertUser): Promise<User> {
@@ -481,6 +483,10 @@ export class DatabaseStorage implements IStorage {
       .where(eq(partners.id, id))
       .returning();
     return partner as Partner;
+  }
+
+  async deletePartner(id: number): Promise<void> {
+    await this.db.delete(partners).where(eq(partners.id, id));
   }
 
   async getAllPartners(): Promise<Partner[]> {
@@ -960,8 +966,8 @@ export class DatabaseStorage implements IStorage {
   async getUserByToken(token: string): Promise<ExpressUser | null> {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET || '') as { id: number };
-      const user = await this.db.query('SELECT * FROM users WHERE id = $1', [decoded.id]);
-      return user.rows[0] || null;
+      const [user] = await this.db.select().from(users).where(eq(users.id, decoded.id));
+      return user || null;
     } catch (error) {
       console.error('Erro ao buscar usuário por token:', error);
       return null;
@@ -970,11 +976,17 @@ export class DatabaseStorage implements IStorage {
 
   async getCurrentSubscription(userId: number): Promise<any> {
     try {
-      const result = await this.db.query(
-        'SELECT * FROM subscriptions WHERE user_id = $1 AND status = $2 ORDER BY created_at DESC LIMIT 1',
-        [userId, 'active']
-      );
-      return result.rows[0] || null;
+      const [subscription] = await this.db.select()
+        .from(subscriptionPlans)
+        .where(
+          and(
+            eq(subscriptionPlans.userId, userId),
+            eq(subscriptionPlans.status, 'active')
+          )
+        )
+        .orderBy(desc(subscriptionPlans.createdAt))
+        .limit(1);
+      return subscription || null;
     } catch (error) {
       console.error('Erro ao buscar assinatura atual:', error);
       return null;
@@ -1000,52 +1012,25 @@ export class DatabaseStorage implements IStorage {
       });
     } catch (error) {
       console.error('Erro ao criar log de auditoria:', error);
-      throw error;
     }
   }
 
   async getUserAuditLogs(
     userId: number,
-    limit: number = 100,
-    offset: number = 0
+    limit?: number,
+    offset?: number
   ): Promise<any[]> {
     try {
-      return await this.db
-        .select()
+      const logs = await this.db.select()
         .from(auditLogs)
         .where(eq(auditLogs.userId, userId))
-        .orderBy(desc(auditLogs.createdAt))
-        .limit(limit)
-        .offset(offset);
+        .orderBy(desc(auditLogs.timestamp))
+        .limit(limit || 50)
+        .offset(offset || 0);
+      return logs;
     } catch (error) {
       console.error('Erro ao buscar logs de auditoria:', error);
-      throw error;
-    }
-  }
-
-  async getPartnerById(id: number): Promise<any> {
-    try {
-      return await this.db
-        .select()
-        .from(partners)
-        .where(eq(partners.id, id))
-        .limit(1);
-    } catch (error) {
-      console.error('Erro ao buscar parceiro:', error);
-      throw error;
-    }
-  }
-
-  async getPartnerByUserId(userId: number): Promise<any> {
-    try {
-      return await this.db
-        .select()
-        .from(partners)
-        .where(eq(partners.userId, userId))
-        .limit(1);
-    } catch (error) {
-      console.error('Erro ao buscar parceiro:', error);
-      throw error;
+      return [];
     }
   }
 }

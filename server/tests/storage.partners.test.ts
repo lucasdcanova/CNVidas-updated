@@ -1,18 +1,18 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { storage } from '../storage';
-import { Partner } from '@shared/schema';
+import { InsertPartner } from '@shared/schema';
 
 describe('Storage Partners', () => {
-  let testPartner: Partial<Partner>;
+  let testPartner: InsertPartner;
 
   beforeEach(() => {
     testPartner = {
       userId: 1,
       businessName: 'Parceiro Teste',
+      businessType: 'Clínica',
       cnpj: '12345678901234',
       address: 'Endereço Teste',
       phone: '11999999999',
-      email: 'teste@teste.com',
       status: 'active'
     };
   });

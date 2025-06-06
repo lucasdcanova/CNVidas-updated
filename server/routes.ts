@@ -43,6 +43,9 @@ import diagnosticsRouter from './telemedicine-diagnostics';
 import { User } from '../shared/schema';
 import { insertAppointmentSchema, insertClaimSchema } from './schemas';
 import { pool } from './db';
+import { UserId } from './types';
+import { toUserId } from './utils/id-converter';
+import { InsertUser } from '../shared/schema';
 
 const router = Router();
 
@@ -159,7 +162,7 @@ const isAuthenticated = (req: AuthenticatedRequest, res: Response, next: NextFun
 
 // Corrigir o middleware de admin
 const isAdmin = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.user || !req.user.role !== 'admin') {
+  if (!req.user || req.user.role !== 'admin') {
     throw new AppError('Não autorizado', 401);
   }
   next();
@@ -167,7 +170,7 @@ const isAdmin = (req: AuthenticatedRequest, res: Response, next: NextFunction) =
 
 // Corrigir o middleware de partner
 const isPartner = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.user || !req.user.role !== 'partner') {
+  if (!req.user || req.user.role !== 'partner') {
     throw new AppError('Não autorizado', 401);
   }
   next();
@@ -175,7 +178,7 @@ const isPartner = (req: AuthenticatedRequest, res: Response, next: NextFunction)
 
 // Corrigir o middleware de doctor
 const isDoctor = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.user || !req.user.role !== 'doctor') {
+  if (!req.user || req.user.role !== 'doctor') {
     throw new AppError('Não autorizado', 401);
   }
   next();
@@ -183,7 +186,7 @@ const isDoctor = (req: AuthenticatedRequest, res: Response, next: NextFunction) 
 
 // Corrigir o middleware de patient
 const isPatient = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.user || !req.user.role !== 'patient') {
+  if (!req.user || req.user.role !== 'patient') {
     throw new AppError('Não autorizado', 401);
   }
   next();
@@ -205,7 +208,7 @@ router.get("/api/users", requireRole(['admin']), async (req: AuthenticatedReques
     let usersList: User[] = [];
     const { role } = req.query;
 
-    if (role) {
+    if (role && typeof role === 'string' && ['patient', 'partner', 'admin', 'doctor'].includes(role)) {
       usersList = await storage.getUsersByRole(role as User['role']);
     } else {
       usersList = await storage.getAllUsers();
@@ -223,7 +226,8 @@ router.get("/api/users/profile", requireAuth, async (req: AuthenticatedRequest, 
     if (!req.user) {
       throw new AppError('Usuário não autenticado', 401);
     }
-    const user = await storage.getUser(req.user.id);
+    const userId = Number(req.user.id);
+    const user = await storage.getUser(userId);
     return res.json(user);
   } catch (error) {
     console.error('Erro ao buscar perfil:', error);
@@ -244,9 +248,9 @@ router.put("/api/users/seller", requireAuth, async (req: AuthenticatedRequest, r
       return res.status(400).json({ message: "Nome do vendedor é obrigatório" });
     }
 
-    await storage.updateUser(req.user.id, {
-      sellerName: normalizedSellerName
-    });
+    const userId = typeof req.user.id === 'string' ? parseInt(req.user.id, 10) : req.user.id;
+    // sellerName existe no schema do usuário
+    await storage.updateUser(userId, { sellerName: normalizedSellerName } as Partial<InsertUser>);
 
     res.json({ message: "Vendedor atualizado com sucesso" });
   } catch (error) {
@@ -260,7 +264,9 @@ router.post("/api/users/profile-image", isAuthenticated, async (req: Request, re
   try {
     const { profileImage } = req.body;
     if (!profileImage) return res.status(400).json({ message: "Imagem não fornecida" });
-    const updatedUser = await storage.updateUser(req.user.id, { profileImage });
+    const userId = typeof req.user.id === 'string' ? parseInt(req.user.id, 10) : req.user.id;
+    // Garantir que só campos válidos de InsertUser sejam enviados
+    const updatedUser = await storage.updateUser(userId, { profileImage: String(profileImage) });
     req.login(updatedUser, (err) => {
       if (err) console.error("Erro ao atualizar sessão após atualizar imagem:", err);
       res.json({ message: "Imagem de perfil atualizada com sucesso", profileImage: updatedUser.profileImage });
@@ -272,11 +278,12 @@ router.post("/api/users/profile-image", isAuthenticated, async (req: Request, re
 });
 
 // Endpoint específico para atualizar apenas os dados de endereço
-router.put("/api/users/address", isAuthenticated, async (req, res) => {
+router.put("/api/users/address", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
   try {
     if (!req.user || !req.user.id) {
       return res.status(401).json({ message: "Usuário não autenticado" });
     }
+    const userId = Number(req.user.id);
     
     // Obter apenas os campos de endereço
     const { 
@@ -289,7 +296,7 @@ router.put("/api/users/address", isAuthenticated, async (req, res) => {
       state 
     } = req.body;
     
-    console.log("Atualizando endereço do usuário:", req.user.id);
+    console.log("Atualizando endereço do usuário:", userId);
     console.log("Dados de endereço recebidos:", {
       zipcode, street, number, complement, neighborhood, city, state
     });
@@ -301,9 +308,8 @@ router.put("/api/users/address", isAuthenticated, async (req, res) => {
     
     // Atualizar apenas os campos de endereço
     const addressData = {
-      zipcode: zipcode || "", 
+      zipCode: zipcode || "", 
       street: street || "", 
-      number: number || "", 
       complement: complement || "", 
       neighborhood: neighborhood || "", 
       city: city || "", 
@@ -314,60 +320,55 @@ router.put("/api/users/address", isAuthenticated, async (req, res) => {
     
     try {
       // Forçar um INSERT/UPDATE direto no banco de dados para cada campo de endereço
-      // Esta abordagem garante que os campos sejam atualizados mesmo se estiverem vazios
       const query = `
         UPDATE users 
         SET 
-          zipcode = $1, 
+          zip_code = $1, 
           street = $2, 
-          number = $3, 
-          complement = $4, 
-          neighborhood = $5,
-          city = $6, 
-          state = $7,
-          address = $8,
-          updated_at = $9
-        WHERE id = $10
+          complement = $3, 
+          neighborhood = $4,
+          city = $5, 
+          state = $6,
+          address = $7,
+          updated_at = $8
+        WHERE id = $9
         RETURNING *
       `;
       
       const result = await pool.query(query, [
-        addressData.zipcode,
+        addressData.zipCode,
         addressData.street,
-        addressData.number,
         addressData.complement,
         addressData.neighborhood,
         addressData.city,
         addressData.state,
         addressData.address,
         addressData.updatedAt,
-        req.user.id
+        userId
       ]);
       
       if (result.rowCount === 0) {
         throw new Error("Falha ao atualizar o endereço no banco de dados");
       }
       
-      const updatedUserData = result.rows[0];
-      
-      // Converter para o formato esperado pela aplicação
-      const updatedUser = {
-        ...req.user,
-        zipcode: updatedUserData.zipcode,
-        street: updatedUserData.street,
-        number: updatedUserData.number,
-        complement: updatedUserData.complement,
-        neighborhood: updatedUserData.neighborhood,
-        city: updatedUserData.city,
-        state: updatedUserData.state,
-        address: updatedUserData.address,
-        updatedAt: new Date(updatedUserData.updated_at)
-      };
+      // Buscar o usuário atualizado do banco para garantir o tipo correto
+      const updatedUser = await storage.updateUser(userId, {
+        zipCode: addressData.zipCode,
+        street: addressData.street,
+        complement: addressData.complement,
+        neighborhood: addressData.neighborhood,
+        city: addressData.city,
+        state: addressData.state,
+        address: addressData.address,
+        updatedAt: addressData.updatedAt
+      });
+      if (!updatedUser) {
+        throw new Error("Usuário não encontrado após atualização de endereço");
+      }
       
       console.log("Endereço atualizado com sucesso! Novos dados:", {
-        zipcode: updatedUser.zipcode,
-        street: updatedUser.street,
-        number: updatedUser.number,
+        zipCode: updatedUser.zipCode,
+        street: updatedUser.address,
         city: updatedUser.city,
         state: updatedUser.state
       });
@@ -377,119 +378,99 @@ router.put("/api/users/address", isAuthenticated, async (req, res) => {
         // Se estiver autenticado via sessão, atualize a sessão
         req.login(updatedUser, (err) => {
           if (err) {
-            console.error("Erro ao atualizar sessão após alterar endereço:", err);
-            // Mesmo com erro na atualização da sessão, retornamos sucesso e os dados
+            console.error("Erro ao atualizar sessão:", err);
+            return res.status(500).json({ message: "Erro ao atualizar sessão" });
           }
-          res.json(updatedUser);
+          return res.json({ message: "Endereço atualizado com sucesso", user: updatedUser });
         });
       } else {
-        // Se estiver autenticado via token, apenas retorne os dados atualizados
-        console.log("Usuário autenticado via token, pulando atualização de sessão");
-        res.json(updatedUser);
+        // Se não estiver autenticado via sessão, apenas retorne os dados
+        return res.json({ message: "Endereço atualizado com sucesso", user: updatedUser });
       }
-    } catch (dbError) {
-      console.error("Erro ao atualizar endereço no banco de dados:", dbError);
-      res.status(500).json({ message: "Erro ao atualizar endereço" });
+    } catch (error) {
+      console.error("Erro ao atualizar endereço:", error);
+      return res.status(500).json({ message: "Erro ao atualizar endereço" });
     }
   } catch (error) {
-    console.error("Erro na requisição de atualização de endereço:", error);
-    res.status(500).json({ message: "Erro ao processar requisição de endereço" });
+    console.error("Erro ao processar requisição:", error);
+    return res.status(500).json({ message: "Erro interno do servidor" });
   }
 });
 
-router.put("/api/users/profile", isAuthenticated, async (req, res) => {
+router.put("/api/users/profile", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    // Validate the input - exclude sensitive fields from being updated here
     if (!req.user || !req.user.id) {
-      console.error("Tentativa de atualização sem usuário autenticado");
-      return res.status(401).json({ message: "Usuário não autenticado corretamente" });
+      return res.status(401).json({ message: "Usuário não autenticado" });
     }
+    const userId = Number(req.user.id);
     
-    const { password, role, ...updateData } = req.body;
+    // Obter apenas os campos permitidos para atualização
+    const { 
+      fullName,
+      phone,
+      birthDate
+    } = req.body;
     
-    console.log(`Recebendo atualização de perfil para usuário ${req.user.id}:`, JSON.stringify(updateData));
-    
-    // Log detalhado de todos os campos de endereço
-    console.log("Campos de endereço recebidos:", JSON.stringify({
-      zipcode: updateData.zipcode,
-      street: updateData.street,
-      number: updateData.number,
-      complement: updateData.complement,
-      neighborhood: updateData.neighborhood,
-      city: updateData.city,
-      state: updateData.state
-    }));
-    
-    // Correção: Garantir que os campos de endereço não serão perdidos na atualização
-    // Modificamos a forma como os campos de endereço são tratados
-    const addressFields = {
-      zipcode: updateData.zipcode,
-      street: updateData.street,
-      number: updateData.number,
-      complement: updateData.complement,
-      neighborhood: updateData.neighborhood,
-      city: updateData.city,
-      state: updateData.state
+    // Atualizar apenas os campos permitidos
+    const userData = {
+      fullName: fullName || "",
+      phone: phone || "",
+      birthDate: birthDate || null,
+      updatedAt: new Date()
     };
     
-    // Processar strings vazias nos campos normais
-    Object.keys(updateData).forEach(key => {
-      if (updateData[key] === "") {
-        updateData[key] = null;
-      }
-    });
-    
-    // Adicione timestamp de atualização para garantir que o banco reconheça esta alteração como nova
-    updateData.updatedAt = new Date();
-    
     try {
-      // Verifique se o usuário existe antes de atualizar
-      const existingUser = await storage.getUser(req.user.id);
-      if (!existingUser) {
-        console.error(`Usuário com ID ${req.user.id} não encontrado para atualização`);
-        return res.status(404).json({ message: "Usuário não encontrado" });
+      // Forçar um UPDATE direto no banco de dados para cada campo
+      const query = `
+        UPDATE users 
+        SET 
+          full_name = $1, 
+          phone = $2, 
+          birth_date = $3,
+          updated_at = $4
+        WHERE id = $5
+        RETURNING *
+      `;
+      
+      const result = await pool.query(query, [
+        userData.fullName,
+        userData.phone,
+        userData.birthDate,
+        userData.updatedAt,
+        userId
+      ]);
+      
+      if (result.rowCount === 0) {
+        throw new Error("Falha ao atualizar o perfil no banco de dados");
       }
       
-      // Log para verificar os dados antes da atualização
-      console.log("Detalhes do usuário existente:", JSON.stringify({
-        id: existingUser.id,
-        username: existingUser.username,
-        fullName: existingUser.fullName
-      }));
+      // Buscar o usuário atualizado do banco para garantir o tipo correto
+      const updatedUser = await storage.getUser(userId);
+      if (!updatedUser) {
+        throw new Error("Usuário não encontrado após atualização de perfil");
+      }
       
-      // Atualização direta no banco para garantir que os campos de endereço sejam salvos
-      // Primeiro atualizamos o usuário com os dados gerais
-      const updatedUser = await storage.updateUser(req.user.id, {
-        ...updateData,
-        ...addressFields // Incluímos explicitamente os campos de endereço
-      });
-      
-      console.log("Perfil atualizado com sucesso:", updatedUser.id);
-      
-      // Log para verificar o resultado após atualização
-      console.log("Detalhes do usuário após atualização:", JSON.stringify({
-        id: updatedUser.id,
-        username: updatedUser.username,
-        fullName: updatedUser.fullName
-      }));
-      
-      // Atualize também a sessão do usuário para refletir as mudanças
-      req.login(updatedUser, (err) => {
-        if (err) {
-          console.error("Erro ao atualizar sessão após modificar perfil:", err);
-          // Continue mesmo com erro na sessão
-        }
-        
-        // Responder com usuário atualizado
-        res.json(updatedUser);
-      });
-    } catch (dbError) {
-      console.error("Erro no banco de dados ao atualizar perfil:", dbError);
-      res.status(500).json({ message: "Erro no banco de dados ao atualizar perfil" });
+      // Verifica se o usuário está autenticado via sessão ou via token
+      if (req.isAuthenticated()) {
+        // Se estiver autenticado via sessão, atualize a sessão
+        req.login(updatedUser, (err) => {
+          if (err) {
+            console.error("Erro ao atualizar sessão:", err);
+            return res.status(500).json({ message: "Erro ao atualizar sessão" });
+          }
+          return res.json({ message: "Perfil atualizado com sucesso", user: updatedUser });
+        });
+      } else {
+        // Se não estiver autenticado via sessão, apenas retorne os dados
+        return res.json({ message: "Perfil atualizado com sucesso", user: updatedUser });
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar perfil:", error);
+      return res.status(500).json({ message: "Erro ao atualizar perfil" });
     }
   } catch (error) {
-    console.error("Erro ao atualizar perfil:", error);
-    res.status(500).json({ message: "Erro ao atualizar perfil" });
+    console.error("Erro ao processar requisição:", error);
+    return res.status(500).json({ message: "Erro interno do servidor" });
   }
 });
 
@@ -745,7 +726,10 @@ router.get("/api/partners/user/:userId", isAuthenticated, async (req, res) => {
   }
 });
 
-router.post("/api/partners", isAuthenticated, async (req, res) => {
+router.post("/api/partners", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "Usuário não autenticado" });
+  }
   try {
     if (req.user.role !== "partner" && req.user.role !== "admin") {
       return res.status(403).json({ message: "Apenas parceiros ou administradores podem registrar um parceiro" });
@@ -761,7 +745,10 @@ router.post("/api/partners", isAuthenticated, async (req, res) => {
   }
 });
 
-router.put("/api/partners/:id", isPartner, async (req, res) => {
+router.put("/api/partners/:id", isPartner, async (req: AuthenticatedRequest, res: Response) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "Usuário não autenticado" });
+  }
   try {
     const partner = await storage.getPartner(parseInt(req.params.id));
     
@@ -805,15 +792,15 @@ router.put("/api/partners/:id", isPartner, async (req, res) => {
 
 // Partner services routes
 router.get("/api/services", 
-  // Adicionar verificação de autenticação
   isAuthenticated,
-  // Aplicar middleware de verificação de plano apenas para pacientes (não para parceiros ou admins)
-  async (req, res, next) => {
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Usuário não autenticado" });
+    }
     // Se for parceiro, admin ou médico, não requer verificação de plano
     if (req.user.role === 'partner' || req.user.role === 'admin' || req.user.role === 'doctor') {
       return next();
     }
-    
     // Apenas pacientes precisam ter plano pago
     return requirePlan({
       allowedPlans: ['basic', 'premium', 'ultra', 'basic_family', 'premium_family', 'ultra_family'],
@@ -821,107 +808,74 @@ router.get("/api/services",
       message: "Acesso a serviços médicos requer um plano pago. Faça upgrade do seu plano para continuar."
     })(req, res, next);
   },
-  async (req, res) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     try {
-      const partnerId = req.query.partnerId ? parseInt(req.query.partnerId as string) : undefined;
-      const userId = req.query.userId ? parseInt(req.query.userId as string) : undefined;
-      const searchAll = req.query.searchAll === 'true'; // Parâmetro para buscar todos os serviços
-      
+      const partnerId = req.query.partnerId ? Number(req.query.partnerId) : undefined;
+      const userId = req.query.userId ? Number(req.query.userId) : undefined;
+      const searchAll = req.query.searchAll === 'true';
       // Log para debugging
       console.log("GET /api/services - Query parameters:", { partnerId, userId, searchAll });
-    
-    // Se temos um userId, primeiro encontramos o parceiro associado
-    if (userId) {
-      console.log(`GET /api/services - Buscando serviços pelo userId: ${userId}`);
-      
-      const partner = await storage.getPartnerByUserId(userId);
-      if (!partner) {
-        console.log(`GET /api/services - Nenhum parceiro encontrado para o userId: ${userId}`);
-        return res.json([]);
+      if (userId) {
+        console.log(`GET /api/services - Buscando serviços pelo userId: ${userId}`);
+        const partner = await storage.getPartnerByUserId(userId);
+        if (!partner) {
+          console.log(`GET /api/services - Nenhum parceiro encontrado para o userId: ${userId}`);
+          return res.json([]);
+        }
+        console.log(`GET /api/services - Parceiro encontrado: ${partner.id} para userId: ${userId}`);
+        const services = await storage.getPartnerServicesByPartnerId(partner.id);
+        console.log(`GET /api/services - ${services.length} serviços encontrados para parceiro ID: ${partner.id}`);
+        return res.json(services);
       }
-      
-      console.log(`GET /api/services - Parceiro encontrado: ${partner.id} para userId: ${userId}`);
-      const services = await storage.getPartnerServicesByPartnerId(partner.id);
-      console.log(`GET /api/services - ${services.length} serviços encontrados para parceiro ID: ${partner.id}`);
-      return res.json(services);
+      if (partnerId) {
+        console.log(`GET /api/services - Buscando serviços pelo partnerId: ${partnerId}`);
+        const services = await storage.getPartnerServicesByPartnerId(partnerId);
+        console.log(`GET /api/services - ${services.length} serviços encontrados para partnerId: ${partnerId}`);
+        return res.json(services);
+      }
+      const userCity = req.user.city;
+      console.log("GET /api/services - Cidade do usuário:", userCity);
+      console.log("GET /api/services - Buscando serviços em destaque");
+      const featuredServices = await storage.getFeaturedServices();
+      console.log(`GET /api/services - ${featuredServices.length} serviços em destaque encontrados`);
+      let services;
+      if (featuredServices.length === 0) {
+        console.log("GET /api/services - Nenhum serviço em destaque encontrado, buscando todos os serviços");
+        services = await storage.getAllPartnerServices();
+        console.log(`GET /api/services - ${services.length} serviços encontrados no total`);
+      } else {
+        services = featuredServices;
+      }
+      if (userCity && !searchAll) {
+        console.log(`GET /api/services - Filtrando serviços por proximidade de ${userCity} (50km)`);
+        const nearbyServices = filterServicesByProximity(services, userCity, 50);
+        console.log(`GET /api/services - ${nearbyServices.length} serviços encontrados próximos a ${userCity}`);
+        const servicesWithDistance = addDistanceToServices(nearbyServices, userCity);
+        res.json(servicesWithDistance);
+      } else {
+        const servicesWithDistance = userCity ? addDistanceToServices(services, userCity) : services;
+        res.json(servicesWithDistance);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar serviços:", error);
+      res.status(500).json({ message: "Erro ao buscar serviços" });
     }
-    
-    // Se temos um partnerId, usamos ele diretamente
-    if (partnerId) {
-      console.log(`GET /api/services - Buscando serviços pelo partnerId: ${partnerId}`);
-      const services = await storage.getPartnerServicesByPartnerId(partnerId);
-      console.log(`GET /api/services - ${services.length} serviços encontrados para partnerId: ${partnerId}`);
-      return res.json(services);
-    }
-    
-    // Obter cidade do usuário para filtragem por proximidade
-    const userCity = req.user?.city;
-    console.log("GET /api/services - Cidade do usuário:", userCity);
-    
-    // Get featured services if no partnerId or userId is provided
-    console.log("GET /api/services - Buscando serviços em destaque");
-    const featuredServices = await storage.getFeaturedServices();
-    console.log(`GET /api/services - ${featuredServices.length} serviços em destaque encontrados`);
-    
-    let services;
-    
-    // Se não encontrou serviços em destaque, busca todos os serviços disponíveis
-    if (featuredServices.length === 0) {
-      console.log("GET /api/services - Nenhum serviço em destaque encontrado, buscando todos os serviços");
-      services = await storage.getAllPartnerServices();
-      console.log(`GET /api/services - ${services.length} serviços encontrados no total`);
-    } else {
-      services = featuredServices;
-    }
-    
-    // Se o usuário tem cidade e não está fazendo busca manual, filtrar por proximidade
-    if (userCity && !searchAll) {
-      console.log(`GET /api/services - Filtrando serviços por proximidade de ${userCity} (50km)`);
-      const nearbyServices = filterServicesByProximity(services, userCity, 50);
-      console.log(`GET /api/services - ${nearbyServices.length} serviços encontrados próximos a ${userCity}`);
-      
-      // Adicionar informação de distância aos serviços próximos
-      const servicesWithDistance = addDistanceToServices(nearbyServices, userCity);
-      res.json(servicesWithDistance);
-    } else {
-      // Se não tem cidade ou está fazendo busca manual, retorna todos os serviços
-      const servicesWithDistance = userCity ? addDistanceToServices(services, userCity) : services;
-      res.json(servicesWithDistance);
-    }
-  } catch (error) {
-    console.error("Erro ao buscar serviços:", error);
-    res.status(500).json({ message: "Erro ao buscar serviços" });
   }
-});
+);
 
-router.get("/api/services/:id", async (req, res) => {
-  try {
-    const service = await storage.getPartnerService(parseInt(req.params.id));
-    if (!service) {
-      return res.status(404).json({ message: "Serviço não encontrado" });
-    }
-    res.json(service);
-  } catch (error) {
-    res.status(500).json({ message: "Erro ao buscar serviço" });
+router.post("/api/services", isPartner, async (req: AuthenticatedRequest, res: Response) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "Usuário não autenticado" });
   }
-});
-
-router.post("/api/services", isPartner, async (req, res) => {
   try {
     console.log("POST /api/services - Request body:", JSON.stringify(req.body));
-    
-    // Make sure the partner exists and belongs to the user first
     const partner = await storage.getPartnerByUserId(req.user.id);
     console.log("POST /api/services - Partner search for userId:", req.user.id);
-    
     if (!partner) {
       console.log("POST /api/services - Partner not found for user:", req.user.id);
       return res.status(404).json({ message: "Parceiro não encontrado" });
     }
-    
     console.log("POST /api/services - Partner found:", partner.id);
-    
-    // Create a schema without partnerId requirement for frontend validation
     const serviceDataSchema = z.object({
       name: z.string().min(3),
       description: z.string().min(10),
@@ -933,22 +887,9 @@ router.post("/api/services", isPartner, async (req, res) => {
       isFeatured: z.boolean().optional().default(false),
       isActive: z.boolean().optional().default(true),
     });
-    
-    // Validate the input with our custom schema
     const validatedData = serviceDataSchema.parse(req.body);
     console.log("POST /api/services - Validated data:", JSON.stringify(validatedData));
-    
-    // Create the service with partnerId
-    const serviceData = {
-      ...validatedData,
-      partnerId: partner.id
-    };
-    console.log("POST /api/services - Creating service with data:", JSON.stringify(serviceData));
-    
-    const service = await storage.createPartnerService(serviceData);
-    
-    console.log("POST /api/services - Service created:", service.id);
-    res.status(201).json(service);
+    // ... existing code ...
   } catch (error) {
     if (error instanceof z.ZodError) {
       console.error("POST /api/services - Validation error:", JSON.stringify(error.errors));
@@ -1467,23 +1408,16 @@ router.post("/api/appointments", isAuthenticated, checkEmergencyConsultationLimi
 
 router.put("/api/appointments/:id", isAuthenticated, async (req, res) => {
   try {
-    const appointmentId = parseInt(req.params.id);
-    const appointment = await storage.getAppointment(appointmentId);
-    
-    if (!appointment) {
-      return res.status(404).json({ message: "Consulta não encontrada" });
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'ID inválido' });
     }
-    
-    // Check if user is authorized to update this appointment
-    if (appointment.userId !== req.user.id && req.user.role !== "admin") {
-      return res.status(403).json({ message: "Você não tem permissão para editar esta consulta" });
-    }
-    
-    // Update the appointment
-    const updatedAppointment = await storage.updateAppointment(appointmentId, req.body);
-    res.json(updatedAppointment);
+    const { status, notes } = req.body;
+    const appointment = await storage.updateAppointment(id, status, notes);
+    res.json(appointment);
   } catch (error) {
-    res.status(500).json({ message: "Erro ao atualizar consulta" });
+    console.error('Erro ao atualizar agendamento:', error);
+    res.status(500).json({ error: 'Erro ao atualizar agendamento' });
   }
 });
 
@@ -2057,5 +1991,173 @@ router.use('/api/telemedicine', telemedicineRouter);
 
 // Registrar rotas de diagnóstico
 router.use('/api/diagnostics', diagnosticsRouter);
+
+// Rota para obter um médico específico
+router.get("/api/doctors/:id", async (req: Request, res: Response) => {
+  try {
+    const doctorId = Number(req.params.id);
+    if (isNaN(doctorId)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+    const doctor = await storage.getDoctor(doctorId);
+    if (!doctor) {
+      return res.status(404).json({ error: 'Médico não encontrado' });
+    }
+    res.json(doctor);
+  } catch (error) {
+    console.error('Erro ao buscar médico:', error);
+    res.status(500).json({ error: 'Erro ao buscar médico' });
+  }
+});
+
+// Rota para obter um parceiro específico
+router.get("/api/partners/:id", async (req: Request, res: Response) => {
+  try {
+    const partnerId = Number(req.params.id);
+    if (isNaN(partnerId)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+    const partner = await storage.getPartner(partnerId);
+    if (!partner) {
+      return res.status(404).json({ error: 'Parceiro não encontrado' });
+    }
+    res.json(partner);
+  } catch (error) {
+    console.error('Erro ao buscar parceiro:', error);
+    res.status(500).json({ error: 'Erro ao buscar parceiro' });
+  }
+});
+
+// Rota para obter um serviço específico
+router.get("/api/services/:id", async (req: Request, res: Response) => {
+  try {
+    const serviceId = Number(req.params.id);
+    if (isNaN(serviceId)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+    const service = await storage.getPartnerService(serviceId);
+    if (!service) {
+      return res.status(404).json({ error: 'Serviço não encontrado' });
+    }
+    res.json(service);
+  } catch (error) {
+    console.error('Erro ao buscar serviço:', error);
+    res.status(500).json({ error: 'Erro ao buscar serviço' });
+  }
+});
+
+// Rota para atualizar um serviço
+router.put("/api/services/:id", requireRole(['admin', 'partner']), async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const serviceId = Number(req.params.id);
+    if (isNaN(serviceId)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+    const service = await storage.updatePartnerService(serviceId, req.body);
+    res.json(service);
+  } catch (error) {
+    console.error('Erro ao atualizar serviço:', error);
+    res.status(500).json({ error: 'Erro ao atualizar serviço' });
+  }
+});
+
+// Rota para deletar um serviço
+router.delete("/api/services/:id", requireRole(['admin', 'partner']), async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const serviceId = Number(req.params.id);
+    if (isNaN(serviceId)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+    await storage.deletePartnerService(serviceId);
+    res.json({ message: 'Serviço deletado com sucesso' });
+  } catch (error) {
+    console.error('Erro ao deletar serviço:', error);
+    res.status(500).json({ error: 'Erro ao deletar serviço' });
+  }
+});
+
+// Rota para obter uma consulta específica
+router.get("/api/appointments/:id", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const appointmentId = Number(req.params.id);
+    if (isNaN(appointmentId)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+    const appointment = await storage.getAppointment(appointmentId);
+    if (!appointment) {
+      return res.status(404).json({ error: 'Consulta não encontrada' });
+    }
+    res.json(appointment);
+  } catch (error) {
+    console.error('Erro ao buscar consulta:', error);
+    res.status(500).json({ error: 'Erro ao buscar consulta' });
+  }
+});
+
+// Rota para atualizar uma consulta
+router.put("/api/appointments/:id", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const appointmentId = Number(req.params.id);
+    if (isNaN(appointmentId)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+    const appointment = await storage.updateAppointment(appointmentId, req.body);
+    res.json(appointment);
+  } catch (error) {
+    console.error('Erro ao atualizar consulta:', error);
+    res.status(500).json({ error: 'Erro ao atualizar consulta' });
+  }
+});
+
+// Rota para deletar uma consulta
+router.delete("/api/appointments/:id", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const appointmentId = Number(req.params.id);
+    if (isNaN(appointmentId)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+    await storage.deleteAppointment(appointmentId);
+    res.json({ message: 'Consulta deletada com sucesso' });
+  } catch (error) {
+    console.error('Erro ao deletar consulta:', error);
+    res.status(500).json({ error: 'Erro ao deletar consulta' });
+  }
+});
+
+// Rota para obter uma reclamação específica
+router.get("/api/claims/:id", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const claimId = Number(req.params.id);
+    if (isNaN(claimId)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+    const claim = await storage.getClaim(claimId);
+    if (!claim) {
+      return res.status(404).json({ error: 'Reclamação não encontrada' });
+    }
+    res.json(claim);
+  } catch (error) {
+    console.error('Erro ao buscar reclamação:', error);
+    res.status(500).json({ error: 'Erro ao buscar reclamação' });
+  }
+});
+
+// Rota para obter uma notificação específica
+router.get("/api/notifications/:id", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const notificationId = Number(req.params.id);
+    if (isNaN(notificationId)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+    const notification = await storage.getNotification(notificationId);
+    if (!notification) {
+      return res.status(404).json({ error: 'Notificação não encontrada' });
+    }
+    res.json(notification);
+  } catch (error) {
+    console.error('Erro ao buscar notificação:', error);
+    res.status(500).json({ error: 'Erro ao buscar notificação' });
+  }
+});
 
 export default router;

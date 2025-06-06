@@ -2,6 +2,7 @@
  * Routes para intregração com o Daily.co
  */
 import express, { Request, Response, NextFunction } from 'express';
+import { AuthenticatedRequest } from '../types/authenticated-request';
 import { storage } from '../storage.js';
 import { createRoom, createMeetingToken, createToken } from '../utils/daily.js';
 import { checkSubscriptionFeature } from '../middleware/subscription-check.js';

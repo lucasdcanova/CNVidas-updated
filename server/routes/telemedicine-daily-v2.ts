@@ -3,6 +3,7 @@
  * Implementação alternativa com acesso direto à API
  */
 import express, { Request, Response, NextFunction } from 'express';
+import { AuthenticatedRequest } from '../types/authenticated-request';
 import { storage } from '../storage';
 import { checkSubscriptionFeature } from '../middleware/subscription-check';
 import axios, { AxiosError } from 'axios';
