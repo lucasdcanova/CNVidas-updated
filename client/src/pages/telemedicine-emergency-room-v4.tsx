@@ -9,7 +9,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Spinner } from "@/components/ui/spinner";
-import TelemedicineEmergencyV4 from "./telemedicine-emergency-v4";
 import { BookOpen, Info, AlertCircle, Phone } from "lucide-react";
 
 interface User {
@@ -33,14 +32,33 @@ const TelemedicineEmergencyRoomV4 = () => {
     queryKey: ["/api/user"],
   });
 
-  // Se houver um ID de emergência na URL, mostrar a sala de videochamada
+  // Se houver um ID de emergência na URL ou tentativa de iniciar consulta, mostrar mensagem
   if (emergencyId || startConsultation) {
     return (
-      <TelemedicineEmergencyV4 
-        patientMode={user?.role === "patient"}
-        doctorMode={user?.role === "doctor"}
-        appointmentId={emergencyId || undefined}
-      />
+      <div className="container py-10 max-w-6xl">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold">Plataforma Temporariamente Indisponível</CardTitle>
+            <CardDescription>
+              A nova plataforma de videochamadas está em manutenção
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center p-4 bg-amber-50 text-amber-800 rounded-md mb-6">
+              <AlertCircle className="h-5 w-5 mr-2 flex-shrink-0" />
+              <p className="text-sm">
+                A integração com Agora.io foi descontinuada temporariamente. 
+                Por favor, utilize a plataforma principal de telemedicina.
+              </p>
+            </div>
+            <div className="text-center py-10">
+              <Button onClick={() => navigate("/telemedicine")}>
+                Ir para Plataforma Principal
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 

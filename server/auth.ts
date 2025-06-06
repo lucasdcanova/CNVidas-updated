@@ -19,38 +19,7 @@ import { z } from 'zod';
 import { sign } from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 
-declare global {
-  namespace Express {
-    interface User {
-      id: number;
-      email: string;
-      role: string;
-      username: string;
-      fullName: string;
-      emailVerified: boolean;
-      password: string;
-      createdAt: Date;
-      updatedAt: Date;
-      lastLogin?: Date;
-      isActive: boolean;
-      subscriptionStatus?: string;
-      subscriptionPlan?: string;
-      subscriptionChangedAt?: Date;
-      emergencyConsultationsLeft?: number;
-      sellerName?: string;
-      profileImage?: string | null;
-      phone?: string | null;
-      cpf?: string | null;
-      address?: string | null;
-      number?: string | null;
-      complement?: string | null;
-      neighborhood?: string | null;
-      city?: string | null;
-      state?: string | null;
-      zipCode?: string | null;
-    }
-  }
-}
+// A declaração global de Express.User agora está em server/types/express.d.ts
 
 const scryptAsync = promisify(scrypt);
 
@@ -130,6 +99,15 @@ export function validatePasswordStrength(password: string): { isValid: boolean; 
   return { isValid: true };
 }
 
+// Função helper para mapear User do Drizzle para Express.User
+function mapToExpressUser(user: User): Express.User {
+  return {
+    ...user,
+    // Garanta que campos opcionais ou nulos sejam tratados, se necessário.
+    // O spread operator (...) já faz um bom trabalho aqui.
+  };
+}
+
 export function setupAuth(app: express.Express) {
   // Adicionar middlewares de rate limiting
   app.use('/api/login', loginRateLimit);
@@ -194,7 +172,7 @@ export function setupAuth(app: express.Express) {
         return done(null, false);
       }
       
-      done(null, user as Express.User);
+      done(null, user);
     } catch (error) {
       done(error);
     }

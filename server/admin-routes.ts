@@ -1,23 +1,25 @@
 import express from 'express';
-import { Request, Response } from 'express';
+import { Response, NextFunction, RequestHandler } from 'express';
 import { Router } from 'express';
 import { storage } from './storage';
 import { hashPassword } from './auth';
 import { db } from './db';
 import { chatRouter } from './chat-routes';
-import { eq, desc, sql, count, and, isNotNull, ne } from 'drizzle-orm';
 import { users, subscriptionPlans, auditLogs, dependents, claims, notifications, appointments, doctorPayments, doctors, partners } from '../shared/schema';
 import { requireAuth, requireAdmin } from './middleware/auth';
 import { Dependent, User } from '@shared/schema';
 import { AppError } from './utils/app-error';
+import { AuthenticatedRequest } from './types';
+import { eq, desc, and, isNotNull, ne } from 'drizzle-orm';
 
 // Middleware para verificar se o usuário é admin
-export const isAdmin = async (req: Request, res: Response, next: express.NextFunction) => {
-  if (!req.user) {
-    return res.status(401).json({ message: "Não autorizado" });
+export const isAdmin: RequestHandler = async (req, res, next) => {
+  const authReq = req as AuthenticatedRequest;
+  if (!authReq.user) {
+    return res.status(401).json({ message: "Não autenticado" });
   }
 
-  if (req.user.role !== 'admin') {
+  if (authReq.user.role !== 'admin') {
     return res.status(403).json({ message: "Acesso negado. Somente administradores podem acessar este recurso." });
   }
 
@@ -27,29 +29,21 @@ export const isAdmin = async (req: Request, res: Response, next: express.NextFun
 // Criar router administrativo
 export const adminRouter = Router();
 
-// Proteger todas as rotas administrativas
+// Aplicar proteção admin global
 adminRouter.use(isAdmin);
 
 // Rota para obter estatísticas da plataforma
-adminRouter.get('/stats', async (req: Request, res: Response) => {
+adminRouter.get('/stats', async (req, res) => {
   try {
     // Contagem de usuários por papel
-    const [totalUsers] = await db.select({ count: count() }).from(users);
-    const [totalPatients] = await db.select({ count: count() }).from(users).where(eq(users.role, 'patient'));
-    const [totalDoctors] = await db.select({ count: count() }).from(users).where(eq(users.role, 'doctor'));
-    const [totalPartners] = await db.select({ count: count() }).from(users).where(eq(users.role, 'partner'));
+    const totalUsersCount = (await db.query.users.findMany()).length;
+    const totalPatientsCount = (await db.query.users.findMany({ where: eq(users.role, 'patient') })).length;
+    const totalDoctorsCount = (await db.query.users.findMany({ where: eq(users.role, 'doctor') })).length;
+    const totalPartnersCount = (await db.query.users.findMany({ where: eq(users.role, 'partner') })).length;
     
     // Estatísticas adicionais
-    const [totalAppointments] = await db.select({ count: count() }).from(appointments);
-    const [pendingClaims] = await db.select({ count: count() }).from(claims).where(eq(claims.status, 'pending'));
-    
-    // Conversão explícita para number
-    const totalUsersCount = Number(totalUsers.count);
-    const totalPatientsCount = Number(totalPatients.count);
-    const totalDoctorsCount = Number(totalDoctors.count);
-    const totalPartnersCount = Number(totalPartners.count);
-    const totalAppointmentsCount = Number(totalAppointments.count);
-    const pendingClaimsCount = Number(pendingClaims.count);
+    const totalAppointmentsCount = (await db.query.appointments.findMany()).length;
+    const pendingClaimsCount = (await db.query.claims.findMany({ where: eq(claims.status, 'pending') })).length;
 
     res.json({
       totalUsers: totalUsersCount,
@@ -66,45 +60,44 @@ adminRouter.get('/stats', async (req: Request, res: Response) => {
 });
 
 // Rota para obter estatísticas de vendedores
-adminRouter.get('/sellers', async (req: Request, res: Response) => {
+adminRouter.get('/sellers', async (req, res) => {
   try {
-    // Obter todos os usuários com nome de vendedor registrado
-    const sellers = await db
-      .select({
-        sellerName: users.sellerName,
-        count: count()
-      })
-      .from(users)
-      .where(
-        and(
-          isNotNull(users.sellerName),
-          ne(users.sellerName, '')
-        )
-      )
-      .groupBy(users.sellerName)
-      .orderBy(desc(sql`count(*)`));
-      
-    // Obter detalhes de planos por vendedor
+    // Obter todos os nomes de vendedores únicos
+    const sellers = await db.query.users.findMany({
+      columns: {
+        sellerName: true,
+      },
+      where: and(isNotNull(users.sellerName), ne(users.sellerName, '')),
+      distinct: true,
+    });
+
     const sellerDetails = [];
-    
-    for (const seller of sellers) {
-      // Planos por vendedor
-      const plansByType = await db
-        .select({
-          plan: users.subscriptionPlan,
-          count: count()
-        })
-        .from(users)
-        .where(eq(users.sellerName, seller.sellerName))
-        .groupBy(users.subscriptionPlan);
-        
-      sellerDetails.push({
-        sellerName: seller.sellerName,
-        totalPlans: seller.count,
-        plansByType
+
+    for (const { sellerName } of sellers) {
+      if (!sellerName) continue;
+
+      // Obter todos os usuários daquele vendedor
+      const usersOfSeller = await db.query.users.findMany({
+        where: eq(users.sellerName, sellerName),
+        columns: {
+          subscriptionPlan: true,
+        },
       });
+
+      const totalPlans = usersOfSeller.length;
+
+      // Contar planos por tipo
+      const planMap: Record<string, number> = {};
+      for (const { subscriptionPlan } of usersOfSeller) {
+        if (subscriptionPlan) {
+          planMap[subscriptionPlan] = (planMap[subscriptionPlan] || 0) + 1;
+        }
+      }
+      const plansByType = Object.entries(planMap).map(([plan, count]) => ({ plan, count }));
+
+      sellerDetails.push({ sellerName, totalPlans, plansByType });
     }
-    
+
     res.json(sellerDetails);
   } catch (error) {
     console.error("Erro ao buscar estatísticas de vendedores:", error);
@@ -113,13 +106,12 @@ adminRouter.get('/sellers', async (req: Request, res: Response) => {
 });
 
 // Obter lista de usuários recentes
-adminRouter.get('/recent-users', async (req: Request, res: Response) => {
+adminRouter.get('/recent-users', async (req, res) => {
   try {
-    const recentUsers = await db
-      .select()
-      .from(users)
-      .orderBy(desc(users.createdAt))
-      .limit(10);
+    const recentUsers = await db.query.users.findMany({
+      limit: 10,
+      orderBy: desc(users.createdAt)
+    });
 
     res.json(recentUsers);
   } catch (error) {
@@ -129,13 +121,12 @@ adminRouter.get('/recent-users', async (req: Request, res: Response) => {
 });
 
 // Obter lista de consultas recentes
-adminRouter.get('/recent-appointments', async (req: Request, res: Response) => {
+adminRouter.get('/recent-appointments', async (req, res) => {
   try {
-    const recentAppointments = await db
-      .select()
-      .from(appointments)
-      .orderBy(desc(appointments.createdAt))
-      .limit(10);
+    const recentAppointments = await db.query.appointments.findMany({
+      limit: 10,
+      orderBy: desc(appointments.createdAt)
+    });
 
     res.json(recentAppointments);
   } catch (error) {
@@ -145,7 +136,7 @@ adminRouter.get('/recent-appointments', async (req: Request, res: Response) => {
 });
 
 // Obter lista de sinistros pendentes
-adminRouter.get('/pending-claims', async (req: Request, res: Response) => {
+adminRouter.get('/pending-claims', async (req, res) => {
   try {
     const pendingClaims = await db
       .select()
@@ -161,14 +152,14 @@ adminRouter.get('/pending-claims', async (req: Request, res: Response) => {
 });
 
 // Rota para obter todos os sinistros
-adminRouter.get('/claims', async (req: Request, res: Response) => {
+adminRouter.get('/claims', async (req, res) => {
   try {
-    const claims = await db
+    const allClaims = await db
       .select()
       .from(claims)
       .orderBy(desc(claims.createdAt));
 
-    res.json(claims);
+    res.json(allClaims);
   } catch (error) {
     console.error("Erro ao obter sinistros:", error);
     res.status(500).json({ message: "Erro ao buscar sinistros" });
@@ -176,7 +167,7 @@ adminRouter.get('/claims', async (req: Request, res: Response) => {
 });
 
 // Rota para obter um sinistro específico
-adminRouter.get('/claims/:id', async (req: Request, res: Response) => {
+adminRouter.get('/claims/:id', async (req, res) => {
   try {
     const claimId = parseInt(req.params.id);
     if (isNaN(claimId)) {
@@ -204,7 +195,7 @@ adminRouter.get('/claims/:id', async (req: Request, res: Response) => {
 });
 
 // Rota para atualizar o status de um sinistro
-adminRouter.patch('/claims/:id', async (req: Request, res: Response) => {
+adminRouter.patch('/claims/:id', async (req, res) => {
   try {
     if (!req.user) {
       throw new AppError('Não autorizado', 401);
@@ -270,12 +261,11 @@ adminRouter.patch('/claims/:id', async (req: Request, res: Response) => {
 });
 
 // Listar todos os usuários
-adminRouter.get('/users', async (req: Request, res: Response) => {
+adminRouter.get('/users', async (req, res) => {
   try {
-    const allUsers = await db
-      .select()
-      .from(users)
-      .orderBy(desc(users.createdAt));
+    const allUsers = await db.query.users.findMany({
+      orderBy: desc(users.createdAt)
+    });
     
     res.json(allUsers);
   } catch (error) {
@@ -1159,21 +1149,8 @@ adminRouter.get('/subscription-plans', async (req, res) => {
 
 adminRouter.get('/subscription-stats', async (req, res) => {
   try {
-    const premiumCount = await db
-      .select({ count: count() })
-      .from(users)
-      .where(eq(users.subscriptionPlan, 'premium'))
-      .execute()
-      .then(result => result[0]?.count || 0);
-
-    const basicCount = await db
-      .select({ count: count() })
-      .from(users)
-      .where(eq(users.subscriptionPlan, 'basic'))
-      .execute()
-      .then(result => result[0]?.count || 0);
-
-    console.log('Estatísticas de assinatura:', { premiumCount, basicCount });
+    const premiumCount = (await db.query.users.findMany({ where: eq(users.subscriptionPlan, 'premium') })).length;
+    const basicCount = (await db.query.users.findMany({ where: eq(users.subscriptionPlan, 'basic') })).length;
     res.json({ premiumCount, basicCount });
   } catch (error) {
     console.error('Erro ao buscar estatísticas:', error);

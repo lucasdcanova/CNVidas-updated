@@ -3,7 +3,7 @@ export class AppError extends Error {
   status: string;
   isOperational: boolean;
 
-  constructor(statusCode: number, message: string) {
+  constructor(message: string, statusCode: number = 400) {
     super(message);
     this.statusCode = statusCode;
     this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';

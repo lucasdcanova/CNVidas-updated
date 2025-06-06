@@ -9,12 +9,12 @@ export const toNumberOrThrow = (value: unknown): number => {
   if (value === null || value === undefined) {
     throw new AppError('Valor não pode ser nulo', 400);
   }
-  if (typeof value === 'number' && !isNaN(value)) {
+  if (typeof value === 'number' && !Number.isNaN(value)) {
     return value;
   }
   if (typeof value === 'string') {
     const parsed = parseInt(value, 10);
-    if (isNaN(parsed)) {
+    if (Number.isNaN(parsed)) {
       throw new AppError('Valor inválido', 400);
     }
     return parsed;
