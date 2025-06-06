@@ -7,6 +7,7 @@ import { User } from '@shared/schema';
 import { AppError } from '../utils/app-error';
 import { isAuthenticated } from '../middleware/auth.js';
 import { checkSubscriptionFeature } from '../middleware/subscription-check.js';
+import { toNumberOrThrow } from '../utils/id-converter';
 
 const consultationPaymentRouter = Router();
 
@@ -54,12 +55,12 @@ consultationPaymentRouter.post('/create-payment-intent', requireAuth, async (req
       amount,
       req.user.stripeCustomerId,
       {
-        userId: req.user.id.toString(),
-        doctorId: doctorId.toString(),
+        userId: toNumberOrThrow(req.user.id).toString(),
+        doctorId: toNumberOrThrow(doctorId).toString(),
         doctorName: doctorName || "Médico",
         appointmentDate: new Date(date).toISOString(),
         isEmergency: isEmergency ? 'true' : 'false',
-        appointmentId: req.body.appointmentId?.toString() || '0'
+        appointmentId: req.body.appointmentId ? toNumberOrThrow(req.body.appointmentId).toString() : '0'
       }
     );
     
@@ -84,6 +85,7 @@ consultationPaymentRouter.post('/create-payment-intent', requireAuth, async (req
 consultationPaymentRouter.post('/capture-payment/:appointmentId', requireAuth, async (req: Request, res: Response) => {
   try {
     const { appointmentId } = req.params;
+    const appointmentIdNumber = toNumberOrThrow(appointmentId);
     
     // Apenas administradores e médicos podem capturar pagamentos
     if (req.user?.role !== 'admin' && req.user?.role !== 'doctor') {
@@ -91,7 +93,7 @@ consultationPaymentRouter.post('/capture-payment/:appointmentId', requireAuth, a
     }
     
     // Buscar a consulta
-    const appointment = await storage.getAppointment(parseInt(appointmentId));
+    const appointment = await storage.getAppointment(appointmentIdNumber);
     
     if (!appointment) {
       throw new AppError(404, "Consulta não encontrada");
@@ -111,7 +113,7 @@ consultationPaymentRouter.post('/capture-payment/:appointmentId', requireAuth, a
     const paymentIntent = await captureConsultationPayment(appointment.paymentIntentId);
     
     // Atualizar o status da consulta no banco de dados
-    await storage.updateAppointment(parseInt(appointmentId), {
+    await storage.updateAppointment(appointmentIdNumber, {
       paymentStatus: 'completed',
       status: 'completed',
       paymentCapturedAt: new Date()
@@ -144,9 +146,10 @@ consultationPaymentRouter.post('/cancel-payment/:appointmentId', requireAuth, as
   try {
     const { appointmentId } = req.params;
     const { reason } = req.body;
+    const appointmentIdNumber = toNumberOrThrow(appointmentId);
     
     // Buscar a consulta
-    const appointment = await storage.getAppointment(parseInt(appointmentId));
+    const appointment = await storage.getAppointment(appointmentIdNumber);
     
     if (!appointment) {
       return res.status(404).json({ message: "Consulta não encontrada" });
@@ -176,7 +179,7 @@ consultationPaymentRouter.post('/cancel-payment/:appointmentId', requireAuth, as
     const paymentIntent = await cancelConsultationPayment(appointment.paymentIntentId);
     
     // Atualizar o status da consulta no banco de dados
-    await storage.updateAppointment(parseInt(appointmentId), {
+    await storage.updateAppointment(appointmentIdNumber, {
       paymentStatus: 'cancelled',
       status: 'cancelled',
       notes: reason ? `Cancelada: ${reason}` : 'Consulta cancelada'

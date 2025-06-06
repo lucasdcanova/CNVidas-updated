@@ -9,10 +9,11 @@ import { checkSubscriptionFeature } from '../middleware/subscription-check';
 import axios, { AxiosError } from 'axios';
 import { ensureDailyJsonResponse } from '../middleware/json-response';
 import { User } from '@shared/schema';
-import { prisma } from '../lib/prisma.js';
+import { prisma } from '../lib/prisma';
 import { AppError } from '../utils/app-error';
 import { Router } from 'express';
 import { DatabaseStorage } from '../storage';
+import { toNumberOrThrow } from '../utils/id-converter';
 
 // Interface para resposta da API do Daily.co
 interface DailyRoomResponse {
@@ -57,7 +58,7 @@ telemedicineRouter.use(ensureDailyJsonResponse);
 // Middleware de autenticação compatível com Express
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
   const authReq = req as AuthenticatedRequest;
-  if (!authReq.isAuthenticated()) {
+  if (!authReq.user) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
@@ -84,7 +85,7 @@ const sanitizeRoomName = (name: string): string => {
 
 const createDailyRoom = async (roomName: string, properties: RoomProperties = {}): Promise<DailyRoomResponse> => {
   if (!DAILY_API_KEY) {
-    throw new AppError(500, 'DAILY_API_KEY não configurada');
+    throw new AppError('DAILY_API_KEY não configurada', 500);
   }
 
   try {
@@ -107,7 +108,7 @@ const createDailyRoom = async (roomName: string, properties: RoomProperties = {}
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error('Erro ao criar sala Daily.co:', error.response?.data || error.message);
-      throw new AppError(500, `Erro ao criar sala Daily.co: ${error.response?.data?.error || error.message}`);
+      throw new AppError(`Erro ao criar sala Daily.co: ${error.response?.data?.error || error.message}`, 500);
     }
     throw error;
   }
@@ -115,7 +116,7 @@ const createDailyRoom = async (roomName: string, properties: RoomProperties = {}
 
 const createDailyToken = async (roomName: string, userName: string, isOwner: boolean = false): Promise<DailyTokenResponse> => {
   if (!DAILY_API_KEY) {
-    throw new AppError(500, 'DAILY_API_KEY não configurada');
+    throw new AppError('DAILY_API_KEY não configurada', 500);
   }
 
   try {
@@ -136,53 +137,54 @@ const createDailyToken = async (roomName: string, userName: string, isOwner: boo
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error('Erro ao gerar token Daily.co:', error.response?.data || error.message);
-      throw new AppError(500, `Erro ao gerar token Daily.co: ${error.response?.data?.error || error.message}`);
+      throw new AppError(`Erro ao gerar token Daily.co: ${error.response?.data?.error || error.message}`, 500);
     }
     throw error;
   }
 };
 
 // Rotas principais
-telemedicineRouter.post('/room', requireAuth, checkSubscriptionFeature("telemedicine"), async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
+telemedicineRouter.post('/room', requireAuth, checkSubscriptionFeature("telemedicine"), async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { appointmentId, roomName: customRoomName } = req.body;
     
     if (!appointmentId && !customRoomName) {
-      throw new AppError(400, "ID da consulta ou nome da sala é obrigatório");
+      throw new AppError('ID da consulta ou nome da sala é obrigatório', 400);
     }
 
     let roomName: string;
     let appointment: any = null;
     
     if (appointmentId) {
+      const appointmentIdNumber = toNumberOrThrow(appointmentId);
+      
       appointment = await prisma.appointment.findUnique({
-        where: { id: parseInt(appointmentId) }
+        where: { id: appointmentIdNumber }
       });
       
       if (!appointment) {
-        throw new AppError(404, "Consulta não encontrada");
+        throw new AppError('Consulta não encontrada', 404);
       }
       
       // Verificar se o usuário tem permissão para acessar esta consulta
-      if (!authReq.user || (appointment.userId !== authReq.user.id && authReq.user.role !== 'admin')) {
-        throw new AppError(403, 'Não autorizado');
+      if (!req.user || (appointment.userId !== toNumberOrThrow(req.user.id) && req.user.role !== 'admin')) {
+        throw new AppError('Não autorizado', 403);
       }
       
       roomName = appointment.telemedicineRoom || 
-                (appointment.type === 'emergency' ? `emergency-${appointment.id}` : `consultation-${appointment.id}`);
+                (appointment.type === 'emergency' ? `emergency-${appointmentIdNumber}` : `consultation-${appointmentIdNumber}`);
     } else {
       roomName = customRoomName;
     }
     
-    const sanitizedRoomName = roomName.replace(/[^a-zA-Z0-9-]/g, '-').toLowerCase();
+    const sanitizedRoomName = sanitizeRoomName(roomName);
     
     try {
       const roomData = await createDailyRoom(sanitizedRoomName);
       
       if (appointment) {
         await prisma.appointment.update({
-          where: { id: appointment.id },
+          where: { id: toNumberOrThrow(appointment.id) },
           data: {
             telemedicineRoom: sanitizedRoomName,
             type: 'telemedicine'
@@ -194,12 +196,11 @@ telemedicineRouter.post('/room', requireAuth, checkSubscriptionFeature("telemedi
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error('Erro ao criar sala:', error.response?.data || error.message);
-        throw new AppError(500, "Erro ao criar sala de videoconferência");
+        throw new AppError('Erro ao criar sala de videoconferência', 500);
       }
       throw error;
     }
   } catch (error) {
-    console.error('Erro na rota /room:', error);
     if (error instanceof AppError) {
       res.status(error.statusCode).json({ error: error.message });
     } else {

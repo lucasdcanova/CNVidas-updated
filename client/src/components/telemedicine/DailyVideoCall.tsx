@@ -217,163 +217,160 @@ export default function DailyVideoCall({
       callFrameRef.current = callFrame;
 
       // Etapa 7: Configurar eventos
-      callFrame
-        .on('joined-meeting', () => {
-          console.log('Entrou na sala de videochamada');
-          setIsConnecting(false);
-          setIsCallActive(true);
-          if (onJoinCall) onJoinCall();
-
-          toast({
-            title: 'Conectado',
-            description: isEmergency 
-              ? 'Você está em uma consulta de emergência' 
-              : 'Você está conectado à sala de consulta'
-          });
-        })
-        .on('error', (error: { error?: { type: string } }) => {
-          console.error('Erro na chamada:', error);
-          
-          // Verificar o tipo específico de erro
-          let errorTitle = 'Erro na chamada';
-          let errorMessage = 'Ocorreu um problema ao conectar à sala.';
-          let errorSeverity: 'high' | 'medium' = 'high';
-          
-          // Tratamento especial para o erro "sala não existe"
-          if (error.error && error.error.type === 'no-room') {
-            errorTitle = 'Preparando sala...';
-            errorMessage = 'Aguarde, estamos configurando a sala de consulta para você.';
-            
-            console.log('⚠️ ERRO CRÍTICO: Sala não existe, apesar do período de propagação');
-            console.log('Iniciando procedimento de recuperação para sala:', roomName);
-            
-            // Função para nova tentativa com parâmetros avançados de recuperação
-            const retryConnection = async () => {
-              try {
-                setRetryAttempts(prev => prev + 1);
-                
-                // Criar sala novamente com parâmetros de força
-                console.log(`RECUPERAÇÃO PASSO 1: Tentativa ${retryAttempts + 1} - Forçando criação da sala com tempo extendido`);
-                const response = await fetch('/api/telemedicine/daily/room', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'X-Recovery-Attempt': `${retryAttempts + 1}`
-                  },
-                  body: JSON.stringify({ 
-                    roomName,
-                    forceCreate: true,
-                    waitExtraTime: true,
-                    recoveryAttempt: retryAttempts + 1
-                  })
-                });
-                
-                if (!response.ok) {
-                  throw new Error(`Falha ao criar sala: ${response.status}`);
-                }
-                
-                // Aguardar propagação EXTENDIDA
-                console.log('RECUPERAÇÃO PASSO 2: Aguardando 8 segundos para garantir propagação total...');
-                await new Promise(resolve => setTimeout(resolve, 8000));
-                console.log('Período de propagação de emergência concluído');
-                
-                // Tentar entrar novamente com URL simplificada
-                console.log('RECUPERAÇÃO PASSO 3: Tentando entrar na sala novamente...');
-                const roomPath = roomName.replace(/^\/+/, '');
-                const finalUrl = `https://cnvidas.daily.co/${roomPath}`;
-                
-                console.log('URL final para recuperação:', finalUrl);
-                callFrame.join({ 
-                  url: finalUrl,
-                  startVideoOff: false,
-                  startAudioOff: false
-                });
-              } catch (retryError) {
-                console.error('Erro na tentativa de recuperação:', retryError);
-                toast({
-                  title: 'Erro de conexão',
-                  description: 'Não foi possível conectar após várias tentativas.',
-                  variant: 'destructive'
-                });
-                setIsConnecting(false);
-              }
-            };
-            
-            // Iniciar nova tentativa
-            retryConnection();
-            
-            // Não mostrar toast de erro para este caso
-            return;
-          }
-          
-          toast({
-            title: errorTitle,
-            description: errorMessage,
-            variant: 'destructive'
-          });
-          
-          setIsConnecting(false);
-          
-          if (onConnectionIssue) {
-            onConnectionIssue({
-              type: 'CALL_ERROR',
-              severity: errorSeverity,
-              details: error
-            });
-          }
-        })
-        .on('left-meeting', () => {
-          console.log('Saiu da sala de videochamada');
-          setIsCallActive(false);
-          if (onLeaveCall) onLeaveCall();
-        })
-        .on('network-quality-change', (event: any) => {
-          const { quality } = event;
-          console.log('Mudança na qualidade da rede:', quality);
-          
-          // quality vai de 0 (pior) a 5 (melhor)
-          if (quality < 2 && onConnectionIssue) {
-            onConnectionIssue({
-              type: 'POOR_NETWORK_QUALITY',
-              severity: quality === 0 ? 'high' : 'medium',
-              details: { quality }
-            });
-          }
-        })
-        .on('network-connection', (event: any) => {
-          const { type, event: connectionEvent } = event;
-          console.log('Evento de conexão:', type, connectionEvent);
-          
-          if (type === 'disconnected' && onConnectionIssue) {
-            onConnectionIssue({
-              type: 'NETWORK_DISCONNECTED',
-              severity: 'high',
-              details: event
-            });
-          }
-        })
-        .on('participant-joined', (event: any) => {
-          try {
-            const participant = event.participant;
-            if (participant && callFrameRef.current && 
-                participant.session_id !== callFrameRef.current.participants().local.session_id) {
-              console.log('Participante entrou:', participant);
-              toast({
-                title: 'Participante conectado',
-                description: 'Um novo participante entrou na sala'
-              });
-            }
-          } catch (err) {
-            console.error('Erro ao processar entrada de participante:', err);
-          }
-        })
-        .on('participant-left', (event: any) => {
-          console.log('Participante saiu:', event.participant);
-          toast({
-            title: 'Participante desconectado',
-            description: 'Um participante saiu da sala'
-          });
+      callFrame.on('joined-meeting', () => {
+        console.log('Entrou na sala de videochamada');
+        setIsConnecting(false);
+        setIsCallActive(true);
+        if (onJoinCall) onJoinCall();
+        toast({
+          title: 'Conectado',
+          description: isEmergency 
+            ? 'Você está em uma consulta de emergência' 
+            : 'Você está conectado à sala de consulta'
         });
+      });
+      callFrame.on('error', (error: { error?: { type: string } }) => {
+        console.error('Erro na chamada:', error);
+        
+        // Verificar o tipo específico de erro
+        let errorTitle = 'Erro na chamada';
+        let errorMessage = 'Ocorreu um problema ao conectar à sala.';
+        let errorSeverity: 'high' | 'medium' = 'high';
+        
+        // Tratamento especial para o erro "sala não existe"
+        if (error.error && error.error.type === 'no-room') {
+          errorTitle = 'Preparando sala...';
+          errorMessage = 'Aguarde, estamos configurando a sala de consulta para você.';
+          
+          console.log('⚠️ ERRO CRÍTICO: Sala não existe, apesar do período de propagação');
+          console.log('Iniciando procedimento de recuperação para sala:', roomName);
+          
+          // Função para nova tentativa com parâmetros avançados de recuperação
+          const retryConnection = async () => {
+            try {
+              setRetryAttempts(prev => prev + 1);
+              
+              // Criar sala novamente com parâmetros de força
+              console.log(`RECUPERAÇÃO PASSO 1: Tentativa ${retryAttempts + 1} - Forçando criação da sala com tempo extendido`);
+              const response = await fetch('/api/telemedicine/daily/room', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-Recovery-Attempt': `${retryAttempts + 1}`
+                },
+                body: JSON.stringify({ 
+                  roomName,
+                  forceCreate: true,
+                  waitExtraTime: true,
+                  recoveryAttempt: retryAttempts + 1
+                })
+              });
+              
+              if (!response.ok) {
+                throw new Error(`Falha ao criar sala: ${response.status}`);
+              }
+              
+              // Aguardar propagação EXTENDIDA
+              console.log('RECUPERAÇÃO PASSO 2: Aguardando 8 segundos para garantir propagação total...');
+              await new Promise(resolve => setTimeout(resolve, 8000));
+              console.log('Período de propagação de emergência concluído');
+              
+              // Tentar entrar novamente com URL simplificada
+              console.log('RECUPERAÇÃO PASSO 3: Tentando entrar na sala novamente...');
+              const roomPath = roomName.replace(/^\/+/, '');
+              const finalUrl = `https://cnvidas.daily.co/${roomPath}`;
+              
+              console.log('URL final para recuperação:', finalUrl);
+              callFrame.join({ 
+                url: finalUrl,
+                startVideoOff: false
+              });
+            } catch (retryError) {
+              console.error('Erro na tentativa de recuperação:', retryError);
+              toast({
+                title: 'Erro de conexão',
+                description: 'Não foi possível conectar após várias tentativas.',
+                variant: 'destructive'
+              });
+              setIsConnecting(false);
+            }
+          };
+          
+          // Iniciar nova tentativa
+          retryConnection();
+          
+          // Não mostrar toast de erro para este caso
+          return;
+        }
+        
+        toast({
+          title: errorTitle,
+          description: errorMessage,
+          variant: 'destructive'
+        });
+        
+        setIsConnecting(false);
+        
+        if (onConnectionIssue) {
+          onConnectionIssue({
+            type: 'CALL_ERROR',
+            severity: errorSeverity,
+            details: error
+          });
+        }
+      });
+      callFrame.on('left-meeting', () => {
+        console.log('Saiu da sala de videochamada');
+        setIsCallActive(false);
+        if (onLeaveCall) onLeaveCall();
+      });
+      callFrame.on('network-quality-change', (event: any) => {
+        const { quality } = event;
+        console.log('Mudança na qualidade da rede:', quality);
+        
+        // quality vai de 0 (pior) a 5 (melhor)
+        if (quality < 2 && onConnectionIssue) {
+          onConnectionIssue({
+            type: 'POOR_NETWORK_QUALITY',
+            severity: quality === 0 ? 'high' : 'medium',
+            details: { quality }
+          });
+        }
+      });
+      callFrame.on('network-connection', (event: any) => {
+        const { type, event: connectionEvent } = event;
+        console.log('Evento de conexão:', type, connectionEvent);
+        
+        if (type === 'disconnected' && onConnectionIssue) {
+          onConnectionIssue({
+            type: 'NETWORK_DISCONNECTED',
+            severity: 'high',
+            details: event
+          });
+        }
+      });
+      callFrame.on('participant-joined', (event: any) => {
+        try {
+          const participant = event.participant;
+          if (participant && callFrameRef.current && 
+              participant.session_id !== callFrameRef.current.participants().local.session_id) {
+            console.log('Participante entrou:', participant);
+            toast({
+              title: 'Participante conectado',
+              description: 'Um novo participante entrou na sala'
+            });
+          }
+        } catch (err) {
+          console.error('Erro ao processar entrada de participante:', err);
+        }
+      });
+      callFrame.on('participant-left', (event: any) => {
+        console.log('Participante saiu:', event.participant);
+        toast({
+          title: 'Participante desconectado',
+          description: 'Um participante saiu da sala'
+        });
+      });
 
       // Etapa 8: Entrar na sala
       try {
@@ -397,8 +394,7 @@ export default function DailyVideoCall({
         // Configurar opções de entrada - formato simplificado e mais confiável
         const joinOptions: any = { 
           url: finalUrl,
-          startVideoOff: false,
-          startAudioOff: false
+          startVideoOff: false
         };
         
         // Adicionar token apenas se for um token real do Daily.co

@@ -7,7 +7,7 @@ import stripe from '../utils/stripe-instance.js';
 import { AppError } from '../utils/app-error';
 import { AuthenticatedRequest } from '../types/authenticated-request';
 import { storage } from '../storage';
-import { toUserId } from '../utils/id-converter';
+import { toNumberOrThrow } from '../utils/id-converter';
 
 const router = Router();
 
@@ -332,7 +332,7 @@ router.put("/:id", isAuthenticated, async (req: AuthenticatedRequest, res: Respo
       });
     }
 
-    const subscriptionId = toUserId(validationResult.data.id);
+    const subscriptionId = toNumberOrThrow(validationResult.data.id);
 
     // Buscar a assinatura
     const [subscription] = await db.select()

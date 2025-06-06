@@ -4,14 +4,14 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { db } from '../db';
 import { eq, and } from 'drizzle-orm';
-import { appointments, doctors, users } from '../../shared/schema';
+import { appointments, doctors, users } from '@shared/schema';
 import { requireAuth, requireDoctor, requirePatient } from '../middleware/auth';
 import { checkEmergencyConsultationLimit } from '../middleware/subscription-check';
 import { AppError } from '../utils/app-error';
-import { AuthenticatedRequest } from '../types';
+import { AuthenticatedRequest } from '../types/authenticated-request';
 import { UserId } from '../types';
 import { storage } from '../storage';
-import { toUserId } from '../utils/id-converter';
+import { toNumberOrThrow } from '../utils/id-converter';
 
 const telemedicineRouter = Router();
 
@@ -96,10 +96,10 @@ telemedicineRouter.post('/appointments', requireAuth, async (req: AuthenticatedR
     
     const validatedData = createAppointmentSchema.parse({
       ...req.body,
-      doctorId: Number(req.body.doctorId),
-      duration: Number(req.body.duration)
+      doctorId: toNumberOrThrow(req.body.doctorId as string | number),
+      duration: toNumberOrThrow(req.body.duration as string | number)
     });
-    const userId = Number(req.user.id);
+    const userId = toNumberOrThrow(req.user.id as string | number);
 
     // Verificar se o médico existe e está disponível
     const [doctor] = await db.select().from(doctors).where(eq(doctors.id, validatedData.doctorId));
@@ -110,10 +110,10 @@ telemedicineRouter.post('/appointments', requireAuth, async (req: AuthenticatedR
 
     // Criar a consulta
     const [appointment] = await db.insert(appointments).values({
-      userId: Number(userId),
-      doctorId: Number(validatedData.doctorId),
+      userId: userId,
+      doctorId: validatedData.doctorId,
       date: new Date(validatedData.date),
-      duration: Number(validatedData.duration),
+      duration: validatedData.duration,
       notes: validatedData.notes,
       type: validatedData.type,
       status: 'scheduled'
@@ -137,7 +137,7 @@ telemedicineRouter.get('/appointments', requireAuth, async (req: AuthenticatedRe
   try {
     if (!req.user) return res.status(401).json({ error: 'Não autorizado' });
     
-    const userId = Number(req.user.id);
+    const userId = toNumberOrThrow(req.user.id as string | number);
     const userRole = req.user.role;
 
     let appointmentsList;
@@ -148,7 +148,8 @@ telemedicineRouter.get('/appointments', requireAuth, async (req: AuthenticatedRe
         throw new AppError('Médico não encontrado', 404);
       }
 
-      appointmentsList = await db.select().from(appointments).where(eq(appointments.doctorId, doctor.id));
+      const doctorId = toNumberOrThrow(doctor.id as string | number);
+      appointmentsList = await db.select().from(appointments).where(eq(appointments.doctorId, doctorId));
       // Buscar informações do usuário para cada consulta
       const appointmentsWithUser = await Promise.all(
         appointmentsList.map(async (appointment) => {
@@ -156,7 +157,7 @@ telemedicineRouter.get('/appointments', requireAuth, async (req: AuthenticatedRe
           return {
             ...appointment,
             user: user ? { 
-              id: Number(user.id),
+              id: user.id,
               name: user.fullName || user.username || '',
               email: user.email
             } : null
@@ -165,20 +166,20 @@ telemedicineRouter.get('/appointments', requireAuth, async (req: AuthenticatedRe
       );
       appointmentsList = appointmentsWithUser;
     } else {
-      appointmentsList = await db.select().from(appointments).where(eq(appointments.userId, Number(userId)));
+      appointmentsList = await db.select().from(appointments).where(eq(appointments.userId, userId));
       // Buscar informações do médico para cada consulta
       const appointmentsWithDoctor = await Promise.all(
         appointmentsList.map(async (appointment) => {
-          const [doctor] = await db.select().from(doctors).where(eq(doctors.id, Number(appointment.doctorId)));
+          const [doctor] = await db.select().from(doctors).where(eq(doctors.id, appointment.doctorId));
           if (doctor) {
-            const [doctorUser] = await db.select().from(users).where(eq(users.id, Number(doctor.userId)));
+            const [doctorUser] = await db.select().from(users).where(eq(users.id, doctor.userId));
             return {
               ...appointment,
               doctor: {
-                id: Number(doctor.id),
+                id: doctor.id,
                 specialization: doctor.specialization,
                 user: doctorUser ? { 
-                  id: Number(doctorUser.id),
+                  id: doctorUser.id,
                   name: doctorUser.fullName || doctorUser.username || '',
                   email: doctorUser.email
                 } : null
@@ -358,14 +359,15 @@ telemedicineRouter.get('/appointments/:id', requireAuth, async (req: Authenticat
     if (Number(appointment.userId) !== Number(userId)) {
       // Se não for o paciente, verificar se é o médico
       const [doctor] = await db.select().from(doctors).where(eq(doctors.userId, Number(userId)));
-      if (!doctor || Number(doctor.id) !== Number(appointment.doctorId)) {
+      if (!doctor || doctor.id !== Number(appointment.doctorId)) {
         throw new AppError('Não autorizado', 403);
       }
     }
 
     // Buscar informações adicionais
     const [doctor] = await db.select().from(doctors).where(eq(doctors.id, Number(appointment.doctorId)));
-    const [doctorUser] = await db.select().from(users).where(eq(users.id, Number(doctor.userId)));
+    const doctorUserId = doctor?.userId ? Number(doctor.userId) : null;
+    const [doctorUser] = await db.select().from(users).where(eq(users.id, doctorUserId));
     const [patientUser] = await db.select().from(users).where(eq(users.id, Number(appointment.userId)));
 
     const appointmentDetails = {
@@ -419,7 +421,7 @@ telemedicineRouter.post('/start', requireAuth, async (req: AuthenticatedRequest,
     // Verificar se o usuário é o médico ou o paciente
     const [doctor] = await db.select().from(doctors).where(eq(doctors.userId, Number(userId)));
     if (!doctor || doctor.id !== Number(appointment.doctorId)) {
-      if (appointment.userId !== Number(userId)) {
+      if (Number(appointment.userId) !== Number(userId)) {
         throw new AppError('Não autorizado', 403);
       }
     }
@@ -497,7 +499,7 @@ telemedicineRouter.get('/patient', requireAuth, async (req: AuthenticatedRequest
     }
 
     const userId = Number(req.user.id);
-    const appointmentsList = await db.select().from(appointments).where(eq(appointments.userId, Number(userId)));
+    const appointmentsList = await db.select().from(appointments).where(eq(appointments.userId, userId));
     // Buscar informações do médico para cada consulta
     const appointmentsWithDoctor = await Promise.all(
       appointmentsList.map(async (appointment) => {
@@ -537,16 +539,18 @@ telemedicineRouter.get('/doctor', requireAuth, async (req: AuthenticatedRequest,
 
     const userId = Number(req.user.id);
     // Buscar ID do médico
-    const [doctor] = await db.select().from(doctors).where(eq(doctors.userId, Number(userId)));
+    const [doctor] = await db.select().from(doctors).where(eq(doctors.userId, userId));
     if (!doctor) {
       throw new AppError('Médico não encontrado', 404);
     }
 
-    const appointmentsList = await db.select().from(appointments).where(eq(appointments.doctorId, Number(doctor.id)));
+    const doctorId = toNumberOrThrow(doctor.id as string | number);
+    const appointmentsList = await db.select().from(appointments).where(eq(appointments.doctorId, doctorId));
     // Buscar informações do paciente para cada consulta
     const appointmentsWithUser = await Promise.all(
       appointmentsList.map(async (appointment) => {
-        const [user] = await db.select().from(users).where(eq(users.id, Number(appointment.userId)));
+        const patientId = Number(appointment.userId);
+        const [user] = await db.select().from(users).where(eq(users.id, patientId));
         return {
           ...appointment,
           user: user ? { 

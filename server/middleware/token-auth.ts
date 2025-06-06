@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../utils/app-error';
 import { verifyToken } from '../utils/jwt';
+import { AuthenticatedRequest } from '../types/authenticated-request';
+import { toNumberOrThrow } from '../utils/id-converter';
 
 /**
  * Middleware para autenticação via token
@@ -16,7 +18,15 @@ export const tokenAuth = async (req: Request, res: Response, next: NextFunction)
     }
 
     const decoded = await verifyToken(token);
-    req.user = decoded;
+    if (!decoded || !decoded.id) {
+      throw new AppError('Token inválido', 401);
+    }
+
+    const authReq = req as AuthenticatedRequest;
+    authReq.user = {
+      ...decoded,
+      id: toNumberOrThrow(decoded.id as string | number)
+    };
     
     next();
   } catch (error) {

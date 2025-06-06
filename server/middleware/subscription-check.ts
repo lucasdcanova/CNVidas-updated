@@ -7,6 +7,7 @@ import { ExpressUser } from '../../shared/types';
 import { storage } from '../storage';
 import { AppError } from '../utils/app-error';
 import { DatabaseStorage } from '../storage';
+import { toNumberOrThrow } from '../utils/id-converter';
 
 // Estender a interface Request para incluir a propriedade emergencyConsultationToDecrement
 declare global {
@@ -31,7 +32,7 @@ export const checkSubscriptionFeature = (requiredFeature: string) => {
             // Formato do token: sessionId:userId:timestamp
             const parts = sessionId.split(':');
             if (parts.length === 3) {
-              const userId = parseInt(parts[1]);
+              const userId = toNumberOrThrow(parts[1] as string);
               
               // Buscar usuário pelo ID
               const [user] = await db
@@ -168,7 +169,7 @@ export const checkEmergencyConsultationLimit = async (req: Request, res: Respons
       // Decrementar o contador de consultas ao confirmar o agendamento
       try {
         // Usamos req.user.id aqui para evitar erro de undefined
-        const userId = req.user.id;
+        const userId = toNumberOrThrow(req.user.id as string | number);
         
         // Armazenar para usar no middleware após a consulta ser criada
         req.emergencyConsultationToDecrement = true;
@@ -214,15 +215,21 @@ export const checkSubscription = async (req: AuthenticatedRequest, res: Response
   }
 };
 
-export const requireActiveSubscription = async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user) {
-    throw new AppError('Não autorizado', 401);
-  }
+export const requireActiveSubscription = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  try {
+    if (!req.user) {
+      throw new AppError('Não autorizado', 401);
+    }
 
-  const subscription = await storage.getActiveSubscription(req.user.id);
-  if (!subscription) {
-    throw new AppError('Assinatura inativa ou inexistente', 403);
-  }
+    const userId = toNumberOrThrow(req.user.id as string | number);
+    const subscription = await storage.getActiveSubscription(userId);
+    
+    if (!subscription) {
+      throw new AppError('Assinatura inativa ou inexistente', 403);
+    }
 
-  next();
+    next();
+  } catch (error) {
+    next(error);
+  }
 };

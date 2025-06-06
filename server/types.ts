@@ -1,42 +1,12 @@
 import { Request } from 'express';
-import { User, Partner, Doctor } from '../shared/schema';
+import { User as SchemaUser, Partner, Doctor } from '../shared/schema';
 
 // Tipo auxiliar para lidar com a conversão de id
-export interface User {
-  id: number;
-  email: string;
-  username: string;
-  fullName: string;
-  role: 'patient' | 'doctor' | 'admin' | 'partner';
-  cpf: string | null;
-  phone: string | null;
-  address: string | null;
-  state: string | null;
-  city: string | null;
-  zipCode: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  lastLogin: Date | null;
-  isActive: boolean;
-  isVerified: boolean;
-  verificationToken: string | null;
-  resetToken: string | null;
-  resetTokenExpires: Date | null;
-  stripeCustomerId: string | null;
-  stripeSubscriptionId: string | null;
-  subscriptionStatus: string | null;
-  subscriptionPlan: string | null;
-  subscriptionChangedAt: Date | null;
-}
-
 export type UserId = number;
 
-declare global {
-  namespace Express {
-    interface User extends User {
-      id: UserId;
-    }
-  }
+// Tipo para requests autenticadas
+export interface AuthenticatedRequest extends Request {
+  user?: SchemaUser & { id: UserId };
 }
 
 export interface EmailVerification {
@@ -93,9 +63,4 @@ export interface SubscriptionPlan {
   features: string[];
   createdAt: Date;
   updatedAt: Date;
-}
-
-// Tipo para requests autenticadas
-export interface AuthenticatedRequest extends Request {
-  user?: User;
 } 

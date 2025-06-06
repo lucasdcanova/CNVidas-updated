@@ -6,6 +6,7 @@ import { dependents } from '@shared/schema';
 import { db } from '../db';
 import { eq, and } from 'drizzle-orm';
 import { DatabaseStorage } from '../storage';
+import { toNumberOrThrow } from '../utils/id-converter';
 
 const dependentsRouter = Router();
 
@@ -38,7 +39,7 @@ dependentsRouter.get('/', requireAuth, async (req: Request, res: Response) => {
     }
     const userDependents = await db.select()
       .from(dependents)
-      .where(eq(dependents.userId, req.user.id));
+      .where(eq(dependents.userId, toNumberOrThrow(req.user.id)));
     res.json(userDependents);
   } catch (error) {
     if (error instanceof AppError) {
@@ -64,7 +65,7 @@ dependentsRouter.post('/', requireAuth, async (req: Request, res: Response) => {
     }
     const newDependent = await db.insert(dependents)
       .values({
-        userId: req.user.id,
+        userId: toNumberOrThrow(req.user.id),
         name,
         birthDate: String(birthDate), // Drizzle espera string
         relationship
@@ -89,7 +90,7 @@ dependentsRouter.put('/:id', requireAuth, async (req: Request, res: Response) =>
     if (!req.user) {
       throw new AppError(401, 'Usuário não autenticado');
     }
-    const id = Number(req.params.id);
+    const id = toNumberOrThrow(req.params.id);
     const { name, birthDate, relationship } = req.body;
     if (!name || !birthDate || !relationship) {
       throw new AppError(400, 'Nome, data de nascimento e relacionamento são obrigatórios');
@@ -102,7 +103,7 @@ dependentsRouter.put('/:id', requireAuth, async (req: Request, res: Response) =>
       })
       .where(and(
         eq(dependents.id, id),
-        eq(dependents.userId, req.user.id)
+        eq(dependents.userId, toNumberOrThrow(req.user.id))
       ))
       .returning();
     if (!updatedDependent[0]) {
@@ -127,11 +128,11 @@ dependentsRouter.delete('/:id', requireAuth, async (req: Request, res: Response)
     if (!req.user) {
       throw new AppError(401, 'Usuário não autenticado');
     }
-    const id = Number(req.params.id);
+    const id = toNumberOrThrow(req.params.id);
     const deletedDependent = await db.delete(dependents)
       .where(and(
         eq(dependents.id, id),
-        eq(dependents.userId, req.user.id)
+        eq(dependents.userId, toNumberOrThrow(req.user.id))
       ))
       .returning();
     if (!deletedDependent[0]) {

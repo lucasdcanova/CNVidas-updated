@@ -979,12 +979,16 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getCurrentSubscription(userId: number): Promise<any> {
-    const [subscription] = await this.db.select()
-      .from(userSubscriptions)
-      .where(eq(userSubscriptions.userId, userId))
-      .orderBy(desc(userSubscriptions.createdAt))
-      .limit(1);
-    return subscription;
+    try {
+      const subscription = await db.query.subscription.findFirst({
+        where: eq(subscription.userId, userId),
+        orderBy: desc(subscription.createdAt)
+      });
+      return subscription;
+    } catch (error) {
+      console.error('Error getting current subscription:', error);
+      return null;
+    }
   }
 
   async createAuditLog(entry: {

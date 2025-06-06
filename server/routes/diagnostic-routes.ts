@@ -251,7 +251,7 @@ diagnosticRouter.get('/status', async (req: Request, res: Response) => {
 // Rota para verificar a conexão com o Daily.co
 diagnosticRouter.get('/daily-test', async (req: Request, res: Response) => {
   try {
-    const response = await axios.get('https://api.daily.co/v1/rooms', {
+    const response = await axios.get<{ status: number }>('https://api.daily.co/v1/rooms', {
       headers: {
         'Authorization': `Bearer ${process.env.DAILY_API_KEY}`
       }
@@ -266,7 +266,8 @@ diagnosticRouter.get('/daily-test', async (req: Request, res: Response) => {
     console.error('Erro ao testar conexão com Daily.co:', error);
     res.status(500).json({
       status: 'error',
-      message: 'Erro ao testar conexão com Daily.co'
+      message: 'Erro ao testar conexão com Daily.co',
+      error: error instanceof Error ? error.message : 'Erro desconhecido'
     });
   }
 });

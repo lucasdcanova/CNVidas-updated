@@ -4,9 +4,9 @@ import { db } from './db';
 import { eq } from 'drizzle-orm';
 import { doctors, appointments } from '../shared/schema';
 import { AppError } from './utils/app-error';
-import { AuthenticatedRequest, isAuthenticated } from './middlewares/authMiddleware';
-import { toUserId } from './utils/id-converter';
-import { AuthenticatedRequest as AuthenticatedRequestType } from './types';
+import { isAuthenticated } from './middleware/auth';
+import { toNumber } from './utils/id-converter';
+import { AuthenticatedRequest } from './types';
 
 /**
  * Sistema de diagnóstico de erros para telemedicina

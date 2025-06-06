@@ -1,25 +1,27 @@
 import { Router } from 'express';
 import { Request, Response, NextFunction } from 'express';
-import { isAuthenticated } from '../middleware/auth.js';
+import { isAuthenticated } from '../middleware/auth';
 import { AppError } from '../utils/app-error';
 import { users } from '@shared/schema';
 import { db } from '../db';
-import { ExpressUser } from '../../shared/types';
+import { User } from '@shared/schema';
 import { storage } from '../storage';
 import { eq } from 'drizzle-orm';
 import { hash, compare } from 'bcrypt';
 import { sign, verify } from 'jsonwebtoken';
 import { randomBytes } from 'crypto';
 import { emailVerifications, passwordResets } from '@shared/schema';
-import { sendVerificationEmail, sendPasswordResetEmail } from '../services/email.js';
+import { sendVerificationEmail, sendPasswordResetEmail } from '../services/email';
 import passport from 'passport';
+import { AuthenticatedRequest } from '../types/authenticated-request';
+import { toNumberOrThrow } from '../utils/id-converter';
 
 const authRouter = Router();
 
 // Middleware de autenticação
-const requireAuth = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated()) {
-    throw new AppError(401, 'Não autorizado');
+const requireAuth = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    throw new AppError('Não autorizado', 401);
   }
   next();
 };
@@ -43,7 +45,7 @@ authRouter.post('/register', async (req: Request, res: Response) => {
     const { email, password, name } = req.body;
     
     if (!email || !password || !name) {
-      throw new AppError(400, 'Email, senha e nome são obrigatórios');
+      throw new AppError('Email, senha e nome são obrigatórios', 400);
     }
 
     // TODO: Implementar lógica de registro
@@ -67,7 +69,7 @@ authRouter.post('/login', async (req: Request, res: Response) => {
     const { email, password } = req.body;
     
     if (!email || !password) {
-      throw new AppError(400, 'Email e senha são obrigatórios');
+      throw new AppError('Email e senha são obrigatórios', 400);
     }
 
     // TODO: Implementar lógica de autenticação
@@ -86,7 +88,7 @@ authRouter.post('/login', async (req: Request, res: Response) => {
  * Desautentica um usuário
  * POST /api/auth/logout
  */
-authRouter.post('/logout', isAuthenticated, async (req: Request, res: Response) => {
+authRouter.post('/logout', isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
   try {
     // TODO: Implementar lógica de logout
     
@@ -105,17 +107,19 @@ authRouter.get('/verify', async (req: Request, res: Response) => {
   const token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
-    throw new AppError(401, 'Token não fornecido');
+    throw new AppError('Token não fornecido', 401);
   }
 
   try {
-    const decoded = verify(token, process.env.JWT_SECRET || 'default-secret') as { id: number };
+    const decoded = verify(token, process.env.JWT_SECRET || 'default-secret') as { id: string | number };
+    const userId = toNumberOrThrow(decoded.id as string | number);
+    
     const result = await db.select().from(users)
-      .where(eq(users.id, decoded.id));
+      .where(eq(users.id, userId));
 
     const user = result[0];
     if (!user) {
-      throw new AppError(401, 'Token inválido');
+      throw new AppError('Token inválido', 401);
     }
 
     res.json({
@@ -140,9 +144,9 @@ authRouter.get('/verify', async (req: Request, res: Response) => {
  * Rota para obter dados do usuário logado
  * GET /api/auth/me
  */
-authRouter.get('/me', isAuthenticated, async (req: Request, res: Response) => {
+authRouter.get('/me', isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    if (req.isAuthenticated()) {
+    if (req.user) {
       res.json({ user: req.user });
     } else {
       res.status(401).json({ message: 'Não autenticado' });
@@ -163,7 +167,7 @@ authRouter.get('/verify-email', async (req: Request, res: Response) => {
     const { token } = req.query;
 
     if (!token || typeof token !== 'string') {
-      throw new AppError(400, 'Token inválido');
+      throw new AppError('Token inválido', 400);
     }
 
     // Buscar token de verificação
@@ -173,12 +177,12 @@ authRouter.get('/verify-email', async (req: Request, res: Response) => {
       .where(eq(emailVerifications.token, token));
 
     if (!verificationToken) {
-      throw new AppError(404, 'Token de verificação não encontrado');
+      throw new AppError('Token de verificação não encontrado', 404);
     }
 
     // Verificar se o token expirou
     if (new Date() > verificationToken.expiresAt) {
-      throw new AppError(400, 'Token de verificação expirado');
+      throw new AppError('Token de verificação expirado', 400);
     }
 
     // Atualizar o usuário para verificado

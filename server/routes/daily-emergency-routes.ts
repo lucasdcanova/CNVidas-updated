@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import { Router } from 'express';
+import { toNumberOrThrow } from '../utils/id-converter';
 
 interface DailyRoom {
   id: string;
@@ -28,7 +29,7 @@ export function registerDailyEmergencyRoutes(app: Express): void {
       }
 
       const user = req.user!;
-      const roomName = `emergency-${user.id}-${Date.now()}`;
+      const roomName = `emergency-${toNumberOrThrow(user.id)}-${Date.now()}`;
 
       console.log('Criando sala de emergência:', roomName);
 
