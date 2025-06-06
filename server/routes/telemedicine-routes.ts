@@ -8,8 +8,8 @@ import { appointments, doctors, users } from '../../shared/schema';
 import { requireAuth, requireDoctor, requirePatient } from '../middleware/auth';
 import { checkEmergencyConsultationLimit } from '../middleware/subscription-check';
 import { AppError } from '../utils/app-error';
-import { AuthenticatedRequest } from '../types/authenticated-request';
-import { User, UserId } from '../types';
+import { AuthenticatedRequest } from '../types';
+import { UserId } from '../types';
 import { storage } from '../storage';
 import { toUserId } from '../utils/id-converter';
 
@@ -30,11 +30,7 @@ const updateAppointmentSchema = z.object({
 });
 
 const appointmentIdSchema = z.object({
-  id: z.string().transform(val => {
-    const num = Number(val);
-    if (isNaN(num)) throw new Error('ID inválido');
-    return num;
-  })
+  id: z.number()
 });
 
 // Endpoint para testar conexão
@@ -100,10 +96,10 @@ telemedicineRouter.post('/appointments', requireAuth, async (req: AuthenticatedR
     
     const validatedData = createAppointmentSchema.parse({
       ...req.body,
-      doctorId: parseInt(req.body.doctorId),
-      duration: parseInt(req.body.duration)
+      doctorId: Number(req.body.doctorId),
+      duration: Number(req.body.duration)
     });
-    const userId = req.user.id;
+    const userId = Number(req.user.id);
 
     // Verificar se o médico existe e está disponível
     const [doctor] = await db.select().from(doctors).where(eq(doctors.id, validatedData.doctorId));
@@ -114,10 +110,10 @@ telemedicineRouter.post('/appointments', requireAuth, async (req: AuthenticatedR
 
     // Criar a consulta
     const [appointment] = await db.insert(appointments).values({
-      userId,
-      doctorId: validatedData.doctorId,
+      userId: Number(userId),
+      doctorId: Number(validatedData.doctorId),
       date: new Date(validatedData.date),
-      duration: validatedData.duration,
+      duration: Number(validatedData.duration),
       notes: validatedData.notes,
       type: validatedData.type,
       status: 'scheduled'
@@ -141,12 +137,18 @@ telemedicineRouter.get('/appointments', requireAuth, async (req: AuthenticatedRe
   try {
     if (!req.user) return res.status(401).json({ error: 'Não autorizado' });
     
-    const userId = req.user.id;
+    const userId = Number(req.user.id);
     const userRole = req.user.role;
 
     let appointmentsList;
     if (userRole === 'doctor') {
-      appointmentsList = await db.select().from(appointments).where(eq(appointments.doctorId, userId));
+      // Buscar ID do médico
+      const [doctor] = await db.select().from(doctors).where(eq(doctors.userId, userId));
+      if (!doctor) {
+        throw new AppError('Médico não encontrado', 404);
+      }
+
+      appointmentsList = await db.select().from(appointments).where(eq(appointments.doctorId, doctor.id));
       // Buscar informações do usuário para cada consulta
       const appointmentsWithUser = await Promise.all(
         appointmentsList.map(async (appointment) => {
@@ -154,7 +156,7 @@ telemedicineRouter.get('/appointments', requireAuth, async (req: AuthenticatedRe
           return {
             ...appointment,
             user: user ? { 
-              id: user.id,
+              id: Number(user.id),
               name: user.fullName || user.username || '',
               email: user.email
             } : null
@@ -163,20 +165,20 @@ telemedicineRouter.get('/appointments', requireAuth, async (req: AuthenticatedRe
       );
       appointmentsList = appointmentsWithUser;
     } else {
-      appointmentsList = await db.select().from(appointments).where(eq(appointments.userId, userId));
+      appointmentsList = await db.select().from(appointments).where(eq(appointments.userId, Number(userId)));
       // Buscar informações do médico para cada consulta
       const appointmentsWithDoctor = await Promise.all(
         appointmentsList.map(async (appointment) => {
-          const [doctor] = await db.select().from(doctors).where(eq(doctors.id, appointment.doctorId));
+          const [doctor] = await db.select().from(doctors).where(eq(doctors.id, Number(appointment.doctorId)));
           if (doctor) {
-            const [doctorUser] = await db.select().from(users).where(eq(users.id, doctor.userId));
+            const [doctorUser] = await db.select().from(users).where(eq(users.id, Number(doctor.userId)));
             return {
               ...appointment,
               doctor: {
-                id: doctor.id,
+                id: Number(doctor.id),
                 specialization: doctor.specialization,
                 user: doctorUser ? { 
-                  id: doctorUser.id,
+                  id: Number(doctorUser.id),
                   name: doctorUser.fullName || doctorUser.username || '',
                   email: doctorUser.email
                 } : null
@@ -202,16 +204,16 @@ telemedicineRouter.post('/emergency', requireAuth, checkEmergencyConsultationLim
     if (!req.user) return res.status(401).json({ error: 'Não autorizado' });
     
     const doctorId = Number(req.body.doctorId);
-    if (!doctorId || isNaN(doctorId)) {
+    if (!doctorId) {
       throw new AppError('ID do médico inválido', 400);
     }
 
-    const userId = req.user.id;
+    const userId = Number(req.user.id);
 
     // Verificar se o médico está disponível para emergência
     const [doctor] = await db.select().from(doctors).where(
       and(
-        eq(doctors.id, doctorId),
+        eq(doctors.id, Number(doctorId)),
         eq(doctors.availableForEmergency, true)
       )
     );
@@ -222,8 +224,8 @@ telemedicineRouter.post('/emergency', requireAuth, checkEmergencyConsultationLim
 
     // Criar consulta de emergência
     const [appointment] = await db.insert(appointments).values({
-      userId,
-      doctorId,
+      userId: Number(userId),
+      doctorId: Number(doctorId),
       date: new Date(),
       duration: 30,
       type: 'emergency',
@@ -246,34 +248,34 @@ telemedicineRouter.patch('/appointments/:id', requireAuth, async (req: Authentic
   try {
     if (!req.user) return res.status(401).json({ error: 'Não autorizado' });
     
-    const appointmentId = parseInt(req.params.id);
-    if (isNaN(appointmentId)) {
-      return res.status(400).json({ error: 'ID inválido' });
+    const appointmentId = Number(req.params.id);
+    if (!appointmentId) {
+      throw new AppError('ID da consulta inválido', 400);
     }
 
     const validatedData = updateAppointmentSchema.parse(req.body);
-    const userId = req.user.id;
+    const userId = Number(req.user.id);
 
     // Verificar se a consulta existe e pertence ao usuário
-    const [appointment] = await db.select().from(appointments).where(eq(appointments.id, appointmentId));
+    const [appointment] = await db.select().from(appointments).where(
+      and(
+        eq(appointments.id, Number(appointmentId)),
+        eq(appointments.userId, Number(userId))
+      )
+    );
 
     if (!appointment) {
       throw new AppError('Consulta não encontrada', 404);
     }
 
-    if (appointment.userId !== userId && appointment.doctorId !== userId) {
-      throw new AppError('Não autorizado', 403);
-    }
-
     // Atualizar a consulta
-    const [updatedAppointment] = await db
-      .update(appointments)
+    const [updatedAppointment] = await db.update(appointments)
       .set({
         status: validatedData.status,
         notes: validatedData.notes,
         updatedAt: new Date()
       })
-      .where(eq(appointments.id, appointmentId))
+      .where(eq(appointments.id, Number(appointmentId)))
       .returning();
 
     res.json(updatedAppointment);
@@ -289,104 +291,201 @@ telemedicineRouter.patch('/appointments/:id', requireAuth, async (req: Authentic
   }
 });
 
-// Iniciar consulta
-telemedicineRouter.post('/start', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+// Rota para cancelar consulta
+telemedicineRouter.delete('/appointments/:id', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const appointmentId = Number(req.body.appointmentId);
-    if (isNaN(appointmentId)) {
+    if (!req.user) return res.status(401).json({ error: 'Não autorizado' });
+    
+    const appointmentId = Number(req.params.id);
+    if (!appointmentId) {
       throw new AppError('ID da consulta inválido', 400);
     }
 
-    if (!req.user) {
-      throw new AppError('Usuário não autenticado', 401);
-    }
+    const userId = Number(req.user.id);
 
-    const userId = req.user.id;
-
-    // Buscar consulta
-    const [appointment] = await db.select().from(appointments).where(eq(appointments.id, appointmentId));
+    // Verificar se a consulta existe e pertence ao usuário
+    const [appointment] = await db.select().from(appointments).where(
+      and(
+        eq(appointments.id, Number(appointmentId)),
+        eq(appointments.userId, Number(userId))
+      )
+    );
 
     if (!appointment) {
       throw new AppError('Consulta não encontrada', 404);
     }
 
-    // Verificar se o usuário é o paciente ou médico da consulta
-    if (appointment.userId !== userId && appointment.doctorId !== userId) {
-      throw new AppError('Não autorizado', 403);
+    // Cancelar a consulta
+    const [cancelledAppointment] = await db.update(appointments)
+      .set({
+        status: 'cancelled',
+        updatedAt: new Date()
+      })
+      .where(eq(appointments.id, Number(appointmentId)))
+      .returning();
+
+    res.json(cancelledAppointment);
+  } catch (error) {
+    if (error instanceof AppError) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      console.error('Erro ao cancelar consulta:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  }
+});
+
+// Rota para obter detalhes da consulta
+telemedicineRouter.get('/appointments/:id', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    if (!req.user) return res.status(401).json({ error: 'Não autorizado' });
+    
+    const appointmentId = Number(req.params.id);
+    if (!appointmentId) {
+      throw new AppError('ID da consulta inválido', 400);
+    }
+
+    const userId = Number(req.user.id);
+
+    // Buscar a consulta
+    const [appointment] = await db.select().from(appointments).where(eq(appointments.id, Number(appointmentId)));
+
+    if (!appointment) {
+      throw new AppError('Consulta não encontrada', 404);
+    }
+
+    // Verificar se o usuário tem permissão para ver a consulta
+    if (Number(appointment.userId) !== Number(userId)) {
+      // Se não for o paciente, verificar se é o médico
+      const [doctor] = await db.select().from(doctors).where(eq(doctors.userId, Number(userId)));
+      if (!doctor || Number(doctor.id) !== Number(appointment.doctorId)) {
+        throw new AppError('Não autorizado', 403);
+      }
+    }
+
+    // Buscar informações adicionais
+    const [doctor] = await db.select().from(doctors).where(eq(doctors.id, Number(appointment.doctorId)));
+    const [doctorUser] = await db.select().from(users).where(eq(users.id, Number(doctor.userId)));
+    const [patientUser] = await db.select().from(users).where(eq(users.id, Number(appointment.userId)));
+
+    const appointmentDetails = {
+      ...appointment,
+      doctor: doctor ? {
+        id: Number(doctor.id),
+        specialization: doctor.specialization,
+        user: doctorUser ? {
+          id: Number(doctorUser.id),
+          name: doctorUser.fullName || doctorUser.username || '',
+          email: doctorUser.email
+        } : null
+      } : null,
+      patient: patientUser ? {
+        id: Number(patientUser.id),
+        name: patientUser.fullName || patientUser.username || '',
+        email: patientUser.email
+      } : null
+    };
+
+    res.json(appointmentDetails);
+  } catch (error) {
+    if (error instanceof AppError) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      console.error('Erro ao buscar detalhes da consulta:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  }
+});
+
+// Rota para iniciar consulta
+telemedicineRouter.post('/start', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    if (!req.user) return res.status(401).json({ error: 'Não autorizado' });
+    
+    const appointmentId = Number(req.body.appointmentId);
+    if (!appointmentId) {
+      throw new AppError('ID da consulta inválido', 400);
+    }
+
+    const userId = Number(req.user.id);
+
+    // Verificar se a consulta existe e se o usuário tem permissão
+    const [appointment] = await db.select().from(appointments).where(eq(appointments.id, Number(appointmentId)));
+
+    if (!appointment) {
+      throw new AppError('Consulta não encontrada', 404);
+    }
+
+    // Verificar se o usuário é o médico ou o paciente
+    const [doctor] = await db.select().from(doctors).where(eq(doctors.userId, Number(userId)));
+    if (!doctor || doctor.id !== Number(appointment.doctorId)) {
+      if (appointment.userId !== Number(userId)) {
+        throw new AppError('Não autorizado', 403);
+      }
     }
 
     // Atualizar status da consulta
-    const [updated] = await db.update(appointments)
+    const [updatedAppointment] = await db.update(appointments)
       .set({
         status: 'in_progress',
         updatedAt: new Date()
       })
-      .where(eq(appointments.id, appointmentId))
+      .where(eq(appointments.id, Number(appointmentId)))
       .returning();
 
-    res.json({
-      success: true,
-      appointment: updated
-    });
-
+    res.json(updatedAppointment);
   } catch (error) {
-    console.error('Erro ao iniciar consulta:', error);
-    res.status(error instanceof AppError ? error.statusCode : 500).json({
-      success: false,
-      message: error instanceof AppError ? error.message : 'Erro ao iniciar consulta'
-    });
+    if (error instanceof AppError) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      console.error('Erro ao iniciar consulta:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
   }
 });
 
-// Finalizar consulta
+// Rota para finalizar consulta
 telemedicineRouter.post('/end', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
+    if (!req.user) return res.status(401).json({ error: 'Não autorizado' });
+    
     const appointmentId = Number(req.body.appointmentId);
-    if (isNaN(appointmentId)) {
+    if (!appointmentId) {
       throw new AppError('ID da consulta inválido', 400);
     }
 
-    const { notes } = req.body;
+    const userId = Number(req.user.id);
 
-    if (!req.user) {
-      throw new AppError('Usuário não autenticado', 401);
-    }
-
-    const userId = req.user.id;
-
-    // Buscar consulta
-    const [appointment] = await db.select().from(appointments).where(eq(appointments.id, appointmentId));
+    // Verificar se a consulta existe e se o usuário é o médico
+    const [appointment] = await db.select().from(appointments).where(eq(appointments.id, Number(appointmentId)));
 
     if (!appointment) {
       throw new AppError('Consulta não encontrada', 404);
     }
 
-    // Verificar se o usuário é o médico da consulta
-    if (appointment.doctorId !== userId) {
+    const [doctor] = await db.select().from(doctors).where(eq(doctors.userId, Number(userId)));
+    if (!doctor || doctor.id !== Number(appointment.doctorId)) {
       throw new AppError('Apenas o médico pode finalizar a consulta', 403);
     }
 
     // Atualizar status da consulta
-    const [updated] = await db.update(appointments)
+    const [updatedAppointment] = await db.update(appointments)
       .set({
         status: 'completed',
-        notes,
+        notes: req.body.notes,
         updatedAt: new Date()
       })
-      .where(eq(appointments.id, appointmentId))
+      .where(eq(appointments.id, Number(appointmentId)))
       .returning();
 
-    res.json({
-      success: true,
-      appointment: updated
-    });
-
+    res.json(updatedAppointment);
   } catch (error) {
-    console.error('Erro ao finalizar consulta:', error);
-    res.status(error instanceof AppError ? error.statusCode : 500).json({
-      success: false,
-      message: error instanceof AppError ? error.message : 'Erro ao finalizar consulta'
-    });
+    if (error instanceof AppError) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      console.error('Erro ao finalizar consulta:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
   }
 });
 
@@ -397,21 +496,21 @@ telemedicineRouter.get('/patient', requireAuth, async (req: AuthenticatedRequest
       throw new AppError('Usuário não autenticado', 401);
     }
 
-    const userId = req.user.id;
-    const appointmentsList = await db.select().from(appointments).where(eq(appointments.userId, userId));
+    const userId = Number(req.user.id);
+    const appointmentsList = await db.select().from(appointments).where(eq(appointments.userId, Number(userId)));
     // Buscar informações do médico para cada consulta
     const appointmentsWithDoctor = await Promise.all(
       appointmentsList.map(async (appointment) => {
-        const [doctor] = await db.select().from(doctors).where(eq(doctors.id, appointment.doctorId));
+        const [doctor] = await db.select().from(doctors).where(eq(doctors.id, Number(appointment.doctorId)));
         if (doctor) {
-          const [doctorUser] = await db.select().from(users).where(eq(users.id, doctor.userId));
+          const [doctorUser] = await db.select().from(users).where(eq(users.id, Number(doctor.userId)));
           return {
             ...appointment,
             doctor: {
-              id: doctor.id,
+              id: Number(doctor.id),
               specialization: doctor.specialization,
               user: doctorUser ? { 
-                id: doctorUser.id,
+                id: Number(doctorUser.id),
                 name: doctorUser.fullName || doctorUser.username || '',
                 email: doctorUser.email
               } : null
@@ -430,7 +529,7 @@ telemedicineRouter.get('/patient', requireAuth, async (req: AuthenticatedRequest
 });
 
 // Listar consultas do médico
-telemedicineRouter.get('/doctor', requireAuth, async (req: Request, res: Response) => {
+telemedicineRouter.get('/doctor', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     if (!req.user) {
       throw new AppError('Usuário não autenticado', 401);
@@ -438,7 +537,7 @@ telemedicineRouter.get('/doctor', requireAuth, async (req: Request, res: Respons
 
     const userId = Number(req.user.id);
     // Buscar ID do médico
-    const [doctor] = await db.select().from(doctors).where(eq(doctors.userId, userId));
+    const [doctor] = await db.select().from(doctors).where(eq(doctors.userId, Number(userId)));
     if (!doctor) {
       throw new AppError('Médico não encontrado', 404);
     }
@@ -450,7 +549,11 @@ telemedicineRouter.get('/doctor', requireAuth, async (req: Request, res: Respons
         const [user] = await db.select().from(users).where(eq(users.id, Number(appointment.userId)));
         return {
           ...appointment,
-          user: user ? { ...user, name: user.fullName || user.username || '' } : null
+          user: user ? { 
+            id: Number(user.id),
+            name: user.fullName || user.username || '',
+            email: user.email
+          } : null
         };
       })
     );
@@ -478,7 +581,7 @@ telemedicineRouter.get("/api/telemedicine/:id", requireAuth, async (req: Authent
     if (isNaN(appointmentId)) {
       throw new AppError('ID da consulta inválido', 400);
     }
-    const appointment = await storage.getTelemedicineAppointment(appointmentId);
+    const appointment = await storage.getTelemedicineAppointment(Number(appointmentId));
     return res.json(appointment);
   } catch (error) {
     console.error('Erro ao buscar consulta:', error);
@@ -486,4 +589,4 @@ telemedicineRouter.get("/api/telemedicine/:id", requireAuth, async (req: Authent
   }
 });
 
-export { telemedicineRouter }; 
+export default telemedicineRouter; 

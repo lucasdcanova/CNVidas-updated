@@ -7,6 +7,7 @@ import stripe from '../utils/stripe-instance.js';
 import { AppError } from '../utils/app-error';
 import { AuthenticatedRequest } from '../types/authenticated-request';
 import { storage } from '../storage';
+import { toUserId } from '../utils/id-converter';
 
 const router = Router();
 
@@ -331,7 +332,7 @@ router.put("/:id", isAuthenticated, async (req: AuthenticatedRequest, res: Respo
       });
     }
 
-    const subscriptionId = validationResult.data.id;
+    const subscriptionId = toUserId(validationResult.data.id);
 
     // Buscar a assinatura
     const [subscription] = await db.select()
@@ -386,7 +387,7 @@ router.get("/:id", isAuthenticated, async (req: AuthenticatedRequest, res: Respo
       });
     }
 
-    const subscriptionId = validationResult.data.id;
+    const subscriptionId = Number(validationResult.data.id);
 
     // Buscar a assinatura com detalhes do plano
     const [subscription] = await db.select({
@@ -432,7 +433,7 @@ router.post('/create', isAuthenticated, async (req: Express.Request, res: Expres
 
     // Buscar usuário
     const user = await db.query.users.findFirst({
-      where: eq(users.id, req.user.id)
+      where: eq(users.id, Number(req.user.id))
     });
 
     if (!user) {
@@ -441,7 +442,7 @@ router.post('/create', isAuthenticated, async (req: Express.Request, res: Expres
 
     // Buscar plano
     const plan = await db.query.subscriptionPlans.findFirst({
-      where: eq(subscriptionPlans.id, planId)
+      where: eq(subscriptionPlans.id, Number(planId))
     });
 
     if (!plan) {
@@ -449,7 +450,7 @@ router.post('/create', isAuthenticated, async (req: Express.Request, res: Expres
     }
 
     // Criar subscrição
-    const subscription = await db.insert(subscriptionPlans).values({
+    const subscription = await db.insert(userSubscriptions).values({
       userId: user.id,
       planId: plan.id,
       status: 'active',
@@ -484,8 +485,8 @@ router.put('/update/:id', isAuthenticated, async (req: Express.Request, res: Exp
     }
 
     // Buscar subscrição
-    const subscription = await db.query.subscriptionPlans.findFirst({
-      where: eq(subscriptionPlans.id, parseInt(id, 10))
+    const subscription = await db.query.userSubscriptions.findFirst({
+      where: eq(userSubscriptions.id, Number(id))
     });
 
     if (!subscription) {
@@ -498,13 +499,13 @@ router.put('/update/:id', isAuthenticated, async (req: Express.Request, res: Exp
     }
 
     // Atualizar subscrição
-    const updated = await db.update(subscriptionPlans)
+    const updated = await db.update(userSubscriptions)
       .set({
-        planId: planId || subscription.planId,
+        planId: planId ? Number(planId) : subscription.planId,
         status: status || subscription.status,
         updatedAt: new Date()
       })
-      .where(eq(subscriptionPlans.id, parseInt(id)))
+      .where(eq(userSubscriptions.id, Number(id)))
       .returning();
 
     res.json({
@@ -531,8 +532,8 @@ router.delete('/cancel/:id', isAuthenticated, async (req: Express.Request, res: 
     }
 
     // Buscar subscrição
-    const subscription = await db.query.subscriptionPlans.findFirst({
-      where: eq(subscriptionPlans.id, parseInt(id))
+    const subscription = await db.query.userSubscriptions.findFirst({
+      where: eq(userSubscriptions.id, Number(id))
     });
 
     if (!subscription) {
@@ -545,12 +546,12 @@ router.delete('/cancel/:id', isAuthenticated, async (req: Express.Request, res: 
     }
 
     // Cancelar subscrição
-    const updated = await db.update(subscriptionPlans)
+    const updated = await db.update(userSubscriptions)
       .set({
         status: 'cancelled',
         updatedAt: new Date()
       })
-      .where(eq(subscriptionPlans.id, parseInt(id)))
+      .where(eq(userSubscriptions.id, Number(id)))
       .returning();
 
     res.json({

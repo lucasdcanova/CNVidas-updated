@@ -98,7 +98,7 @@ if (!process.env.STRIPE_SECRET_KEY) {
 // Middleware de autenticação
 const requireAuth = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
-    throw new AppError('Usuário não autenticado', 401);
+    return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
 };
@@ -155,7 +155,7 @@ router.use('/api/chat', chatRouter);
 // Corrigir o middleware de autenticação
 const isAuthenticated = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
-    throw new AppError('Usuário não autenticado', 401);
+    return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
 };
@@ -163,7 +163,7 @@ const isAuthenticated = (req: AuthenticatedRequest, res: Response, next: NextFun
 // Corrigir o middleware de admin
 const isAdmin = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   if (!req.user || req.user.role !== 'admin') {
-    throw new AppError('Não autorizado', 401);
+    return res.status(403).json({ error: 'Acesso negado' });
   }
   next();
 };
@@ -171,7 +171,7 @@ const isAdmin = (req: AuthenticatedRequest, res: Response, next: NextFunction) =
 // Corrigir o middleware de partner
 const isPartner = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   if (!req.user || req.user.role !== 'partner') {
-    throw new AppError('Não autorizado', 401);
+    return res.status(403).json({ error: 'Acesso negado' });
   }
   next();
 };
@@ -179,7 +179,7 @@ const isPartner = (req: AuthenticatedRequest, res: Response, next: NextFunction)
 // Corrigir o middleware de doctor
 const isDoctor = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   if (!req.user || req.user.role !== 'doctor') {
-    throw new AppError('Não autorizado', 401);
+    return res.status(403).json({ error: 'Acesso negado' });
   }
   next();
 };
@@ -187,7 +187,7 @@ const isDoctor = (req: AuthenticatedRequest, res: Response, next: NextFunction) 
 // Corrigir o middleware de patient
 const isPatient = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   if (!req.user || req.user.role !== 'patient') {
-    throw new AppError('Não autorizado', 401);
+    return res.status(403).json({ error: 'Acesso negado' });
   }
   next();
 };
@@ -196,7 +196,7 @@ const isPatient = (req: AuthenticatedRequest, res: Response, next: NextFunction)
 const requireRole = (roles: User['role'][]) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     if (!req.user || !roles.includes(req.user.role)) {
-      throw new AppError('Não autorizado', 401);
+      return res.status(403).json({ error: 'Acesso negado' });
     }
     next();
   };
@@ -205,6 +205,9 @@ const requireRole = (roles: User['role'][]) => {
 // User routes
 router.get("/api/users", requireRole(['admin']), async (req: AuthenticatedRequest, res: Response) => {
   try {
+    if (!req.user) {
+      throw new AppError('Usuário não autenticado', 401);
+    }
     let usersList: User[] = [];
     const { role } = req.query;
 
@@ -248,332 +251,161 @@ router.put("/api/users/seller", requireAuth, async (req: AuthenticatedRequest, r
       return res.status(400).json({ message: "Nome do vendedor é obrigatório" });
     }
 
-    const userId = typeof req.user.id === 'string' ? parseInt(req.user.id, 10) : req.user.id;
-    // sellerName existe no schema do usuário
-    await storage.updateUser(userId, { sellerName: normalizedSellerName } as Partial<InsertUser>);
-
-    res.json({ message: "Vendedor atualizado com sucesso" });
+    const userId = Number(req.user.id);
+    const updatedUser = await storage.updateUser(userId, { sellerName: normalizedSellerName });
+    return res.json(updatedUser);
   } catch (error) {
-    console.error("Erro ao atualizar vendedor:", error);
-    res.status(500).json({ message: "Erro ao atualizar vendedor" });
+    console.error('Erro ao atualizar vendedor:', error);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
 
-router.post("/api/users/profile-image", isAuthenticated, async (req: Request, res: Response) => {
-  if (!req.user || !req.user.id) return res.status(401).json({ message: "Usuário não autenticado corretamente" });
+router.put("/api/users/profile", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  if (!req.user) {
+    throw new AppError('Usuário não autenticado', 401);
+  }
+
   try {
-    const { profileImage } = req.body;
-    if (!profileImage) return res.status(400).json({ message: "Imagem não fornecida" });
-    const userId = typeof req.user.id === 'string' ? parseInt(req.user.id, 10) : req.user.id;
-    // Garantir que só campos válidos de InsertUser sejam enviados
-    const updatedUser = await storage.updateUser(userId, { profileImage: String(profileImage) });
-    req.login(updatedUser, (err) => {
-      if (err) console.error("Erro ao atualizar sessão após atualizar imagem:", err);
-      res.json({ message: "Imagem de perfil atualizada com sucesso", profileImage: updatedUser.profileImage });
-    });
+    const userId = Number(req.user.id);
+    const updatedUser = await storage.updateUser(userId, req.body);
+    return res.json(updatedUser);
   } catch (error) {
-    console.error("Erro ao atualizar imagem de perfil:", error);
-    res.status(500).json({ message: "Erro ao atualizar imagem de perfil" });
+    console.error('Erro ao atualizar perfil:', error);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+router.post("/api/users/profile-image", requireAuth, upload.single('image'), async (req: AuthenticatedRequest, res: Response) => {
+  if (!req.user) {
+    throw new AppError('Usuário não autenticado', 401);
+  }
+
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "Nenhuma imagem enviada" });
+    }
+
+    const userId = Number(req.user.id);
+    const imagePath = req.file.path;
+    const updatedUser = await storage.updateUser(userId, { profileImage: imagePath });
+    return res.json(updatedUser);
+  } catch (error) {
+    console.error('Erro ao atualizar imagem de perfil:', error);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
 
 // Endpoint específico para atualizar apenas os dados de endereço
-router.put("/api/users/address", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+router.put("/api/users/address", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({ message: "Usuário não autenticado" });
+    if (!req.user) {
+      throw new AppError('Usuário não autenticado', 401);
     }
+
     const userId = Number(req.user.id);
-    
-    // Obter apenas os campos de endereço
-    const { 
-      zipcode, 
-      street, 
-      number, 
-      complement, 
-      neighborhood, 
-      city, 
-      state 
-    } = req.body;
-    
-    console.log("Atualizando endereço do usuário:", userId);
-    console.log("Dados de endereço recebidos:", {
-      zipcode, street, number, complement, neighborhood, city, state
-    });
-    
-    // Atualizar também o campo address legado para compatibilidade
-    const fullAddress = street && number ? 
-      `${street}, ${number}${complement ? `, ${complement}` : ""} - ${neighborhood || ""} - ${city || ""}/${state || ""} - CEP: ${zipcode || ""}` : 
-      null;
-    
-    // Atualizar apenas os campos de endereço
     const addressData = {
-      zipCode: zipcode || "", 
-      street: street || "", 
-      complement: complement || "", 
-      neighborhood: neighborhood || "", 
-      city: city || "", 
-      state: state || "",
-      address: fullAddress, // Incluir também o endereço formatado completo
-      updatedAt: new Date()
+      address: `${req.body.street}, ${req.body.number}${req.body.complement ? `, ${req.body.complement}` : ''}, ${req.body.neighborhood}`,
+      city: req.body.city || null,
+      state: req.body.state || null,
+      zipCode: req.body.zipCode || null
     };
-    
-    try {
-      // Forçar um INSERT/UPDATE direto no banco de dados para cada campo de endereço
-      const query = `
-        UPDATE users 
-        SET 
-          zip_code = $1, 
-          street = $2, 
-          complement = $3, 
-          neighborhood = $4,
-          city = $5, 
-          state = $6,
-          address = $7,
-          updated_at = $8
-        WHERE id = $9
-        RETURNING *
-      `;
-      
-      const result = await pool.query(query, [
-        addressData.zipCode,
-        addressData.street,
-        addressData.complement,
-        addressData.neighborhood,
-        addressData.city,
-        addressData.state,
-        addressData.address,
-        addressData.updatedAt,
-        userId
-      ]);
-      
-      if (result.rowCount === 0) {
-        throw new Error("Falha ao atualizar o endereço no banco de dados");
-      }
-      
-      // Buscar o usuário atualizado do banco para garantir o tipo correto
-      const updatedUser = await storage.updateUser(userId, {
-        zipCode: addressData.zipCode,
-        street: addressData.street,
-        complement: addressData.complement,
-        neighborhood: addressData.neighborhood,
-        city: addressData.city,
-        state: addressData.state,
-        address: addressData.address,
-        updatedAt: addressData.updatedAt
-      });
-      if (!updatedUser) {
-        throw new Error("Usuário não encontrado após atualização de endereço");
-      }
-      
-      console.log("Endereço atualizado com sucesso! Novos dados:", {
-        zipCode: updatedUser.zipCode,
-        street: updatedUser.address,
-        city: updatedUser.city,
-        state: updatedUser.state
-      });
-      
-      // Verifica se o usuário está autenticado via sessão ou via token
-      if (req.isAuthenticated()) {
-        // Se estiver autenticado via sessão, atualize a sessão
-        req.login(updatedUser, (err) => {
-          if (err) {
-            console.error("Erro ao atualizar sessão:", err);
-            return res.status(500).json({ message: "Erro ao atualizar sessão" });
-          }
-          return res.json({ message: "Endereço atualizado com sucesso", user: updatedUser });
-        });
-      } else {
-        // Se não estiver autenticado via sessão, apenas retorne os dados
-        return res.json({ message: "Endereço atualizado com sucesso", user: updatedUser });
-      }
-    } catch (error) {
-      console.error("Erro ao atualizar endereço:", error);
-      return res.status(500).json({ message: "Erro ao atualizar endereço" });
+
+    const [updatedUser] = await db.update(users)
+      .set(addressData)
+      .where(eq(users.id, Number(userId)))
+      .returning();
+
+    if (!updatedUser) {
+      throw new AppError('Usuário não encontrado', 404);
     }
+
+    res.json(updatedUser);
   } catch (error) {
-    console.error("Erro ao processar requisição:", error);
-    return res.status(500).json({ message: "Erro interno do servidor" });
+    console.error('Erro ao atualizar endereço:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
 
-router.put("/api/users/profile", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+router.get("/api/users/address", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({ message: "Usuário não autenticado" });
+    if (!req.user) {
+      throw new AppError('Usuário não autenticado', 401);
     }
+
     const userId = Number(req.user.id);
-    
-    // Obter apenas os campos permitidos para atualização
-    const { 
-      fullName,
-      phone,
-      birthDate
-    } = req.body;
-    
-    // Atualizar apenas os campos permitidos
-    const userData = {
-      fullName: fullName || "",
-      phone: phone || "",
-      birthDate: birthDate || null,
-      updatedAt: new Date()
-    };
-    
-    try {
-      // Forçar um UPDATE direto no banco de dados para cada campo
-      const query = `
-        UPDATE users 
-        SET 
-          full_name = $1, 
-          phone = $2, 
-          birth_date = $3,
-          updated_at = $4
-        WHERE id = $5
-        RETURNING *
-      `;
-      
-      const result = await pool.query(query, [
-        userData.fullName,
-        userData.phone,
-        userData.birthDate,
-        userData.updatedAt,
-        userId
-      ]);
-      
-      if (result.rowCount === 0) {
-        throw new Error("Falha ao atualizar o perfil no banco de dados");
-      }
-      
-      // Buscar o usuário atualizado do banco para garantir o tipo correto
-      const updatedUser = await storage.getUser(userId);
-      if (!updatedUser) {
-        throw new Error("Usuário não encontrado após atualização de perfil");
-      }
-      
-      // Verifica se o usuário está autenticado via sessão ou via token
-      if (req.isAuthenticated()) {
-        // Se estiver autenticado via sessão, atualize a sessão
-        req.login(updatedUser, (err) => {
-          if (err) {
-            console.error("Erro ao atualizar sessão:", err);
-            return res.status(500).json({ message: "Erro ao atualizar sessão" });
-          }
-          return res.json({ message: "Perfil atualizado com sucesso", user: updatedUser });
-        });
-      } else {
-        // Se não estiver autenticado via sessão, apenas retorne os dados
-        return res.json({ message: "Perfil atualizado com sucesso", user: updatedUser });
-      }
-    } catch (error) {
-      console.error("Erro ao atualizar perfil:", error);
-      return res.status(500).json({ message: "Erro ao atualizar perfil" });
+    const [user] = await db.select().from(users).where(eq(users.id, Number(userId)));
+
+    if (!user) {
+      throw new AppError('Usuário não encontrado', 404);
     }
+
+    res.json({
+      address: user.address,
+      city: user.city,
+      state: user.state,
+      zipCode: user.zipCode
+    });
   } catch (error) {
-    console.error("Erro ao processar requisição:", error);
-    return res.status(500).json({ message: "Erro interno do servidor" });
+    console.error('Erro ao buscar endereço:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
 
 // QR Code Authentication
-router.post("/api/users/generate-qr", isAuthenticated, async (req, res) => {
+router.post("/api/users/generate-qr", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     if (!req.user) {
-      throw new AppError(401, 'Não autorizado');
+      throw new AppError('Usuário não autenticado', 401);
     }
-    const { token, expiresAt } = await storage.generateQrToken(req.user.id);
-    res.json({ token, expiresAt });
+
+    const userId = Number(req.user.id);
+    const qrCode = await storage.generateQrCode(userId);
+    res.json({ qrCode });
   } catch (error) {
-    console.error(error);
-    next(error);
+    console.error('Erro ao gerar QR Code:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
 
-router.post("/api/users/verify-qr", isAuthenticated, async (req, res) => {
+router.post("/api/users/verify-qr", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { token } = req.body;
-    const scannerUser = req.user;
-    
-    if (!token) {
-      return res.status(400).send({ 
-        valid: false, 
-        message: "Token não fornecido" 
-      });
+    if (!req.user) {
+      throw new AppError('Usuário não autenticado', 401);
     }
-    
-    if (!scannerUser) {
-      return res.status(401).send({
-        valid: false,
-        message: "Usuário não autenticado"
-      });
+
+    const { qrCode } = req.body;
+    if (!qrCode) {
+      throw new AppError('QR Code não fornecido', 400);
     }
-    
-    // Verificar se o usuário que está escaneando é um admin ou parceiro
-    if (scannerUser.role !== "admin" && scannerUser.role !== "partner") {
-      return res.status(403).send({
-        valid: false,
-        message: "Apenas administradores e parceiros podem verificar códigos QR"
-      });
+
+    // Verificar se o usuário que está escaneando é admin ou parceiro
+    if (!['admin', 'partner'].includes(req.user.role)) {
+      throw new AppError('Apenas administradores e parceiros podem escanear QR Codes', 403);
     }
-    
-    const tokenUser = await storage.getUserByQrToken(token);
-    let success = false;
-    
-    if (!tokenUser) {
-      // Registrar a tentativa mal sucedida
-      if (scannerUser) {
-        await storage.logQrAuthentication({
-          token,
-          scannerUserId: scannerUser.id,
-          tokenUserId: 0, // Usuário inexistente/inválido
-          success: false,
-          ipAddress: req.ip || "",
-          userAgent: req.headers["user-agent"] || ""
-        });
-      }
-      
-      return res.status(401).send({ 
-        valid: false,
-        message: "Token inválido, expirado ou já utilizado" 
-      });
+
+    const userId = await storage.verifyQrCode(qrCode);
+    if (!userId) {
+      throw new AppError('QR Code inválido ou expirado', 400);
     }
-    
-    // Verificar se o usuário do token é um paciente ou médico
-    if (tokenUser.role !== "patient" && tokenUser.role !== "doctor") {
-      return res.status(403).send({
-        valid: false,
-        message: "Apenas pacientes e médicos podem gerar códigos QR válidos"
-      });
+
+    const [user] = await db.select().from(users).where(eq(users.id, Number(userId)));
+    if (!user) {
+      throw new AppError('Usuário não encontrado', 404);
     }
-    
-    success = true;
-    
-    // Registrar a autenticação bem-sucedida
-    await storage.logQrAuthentication({
-      token,
-      scannerUserId: scannerUser.id,
-      tokenUserId: tokenUser.id,
-      success: true,
-      ipAddress: req.ip || "",
-      userAgent: req.headers["user-agent"] || ""
-    });
-    
+
     res.json({
-      valid: true,
+      success: true,
       user: {
-        id: tokenUser.id,
-        name: tokenUser.fullName,
-        email: tokenUser.email,
-        role: tokenUser.role,
-        status: tokenUser.emailVerified ? "Verificado" : "Não verificado",
-        subscriptionStatus: tokenUser.subscriptionStatus || "Inativo"
-      },
-      message: "Token válido"
+        id: Number(user.id),
+        name: user.fullName || user.username || '',
+        email: user.email
+      }
     });
   } catch (error) {
-    console.error("Erro ao verificar token QR:", error);
-    res.status(500).send({ 
-      valid: false,
-      message: "Erro ao verificar token QR" 
+    console.error('Erro ao verificar QR Code:', error);
+    res.status(error instanceof AppError ? error.statusCode : 500).json({
+      success: false,
+      error: error instanceof AppError ? error.message : 'Erro interno do servidor'
     });
   }
 });

@@ -3,7 +3,7 @@ import { AppError } from './app-error';
 
 export const toUserId = (id: string | number): UserId => {
   if (typeof id === 'string') {
-    const parsed = parseInt(id, 10) as number;
+    const parsed = Number(id);
     if (isNaN(parsed)) {
       throw new AppError('ID inválido', 400);
     }

@@ -14,6 +14,9 @@ import { PrismaClient } from '@prisma/client';
 import { sign } from 'jsonwebtoken';
 import { AppError } from './utils/app-error';
 import jwt from 'jsonwebtoken';
+import { toUserId } from './utils/id-converter';
+import { Request, Response } from 'express';
+import { AuthenticatedRequest } from './types';
 
 const PostgresSessionStore = connectPg(session);
 
@@ -331,7 +334,8 @@ export class DatabaseStorage implements IStorage {
   async getUserBySessionId(sessionId: string): Promise<User | undefined> {
     const session = await this.sessionStore.get(sessionId);
     if (!session || !session.userId) return undefined;
-    const user = await this.getUser(Number(session.userId));
+    const userId = Number(session.userId);
+    const user = await this.getUser(userId);
     return user;
   }
 
@@ -975,22 +979,12 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getCurrentSubscription(userId: number): Promise<any> {
-    try {
-      const [subscription] = await this.db.select()
-        .from(subscriptionPlans)
-        .where(
-          and(
-            eq(subscriptionPlans.userId, userId),
-            eq(subscriptionPlans.status, 'active')
-          )
-        )
-        .orderBy(desc(subscriptionPlans.createdAt))
-        .limit(1);
-      return subscription || null;
-    } catch (error) {
-      console.error('Erro ao buscar assinatura atual:', error);
-      return null;
-    }
+    const [subscription] = await this.db.select()
+      .from(userSubscriptions)
+      .where(eq(userSubscriptions.userId, userId))
+      .orderBy(desc(userSubscriptions.createdAt))
+      .limit(1);
+    return subscription;
   }
 
   async createAuditLog(entry: {
@@ -1001,18 +995,14 @@ export class DatabaseStorage implements IStorage {
     details: Record<string, any>;
     timestamp: Date;
   }): Promise<void> {
-    try {
-      await this.db.insert(auditLogs).values({
-        userId: entry.userId,
-        action: entry.action,
-        ip: entry.ip,
-        userAgent: entry.userAgent,
-        details: entry.details,
-        timestamp: entry.timestamp
-      });
-    } catch (error) {
-      console.error('Erro ao criar log de auditoria:', error);
-    }
+    await this.db.insert(auditLogs).values({
+      userId: entry.userId,
+      action: entry.action,
+      ip: entry.ip,
+      userAgent: entry.userAgent,
+      details: entry.details,
+      createdAt: entry.timestamp
+    });
   }
 
   async getUserAuditLogs(
