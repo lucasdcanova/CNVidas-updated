@@ -1,7 +1,7 @@
 import express from 'express';
 import authRouter from './auth-routes';
 import diagnosticRouter from './diagnostic-routes';
-import { dailyRouter } from './telemedicine-daily';
+import dailyRouter from './telemedicine-daily';
 import { telemedicineRouter as telemedicineDailyV2Router } from './telemedicine-daily-v2';
 import dailyDirectRouter from './daily-direct';
 import consultationPaymentRouter from './consultation-payment-routes';

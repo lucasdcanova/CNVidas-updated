@@ -1,5 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { User } from '../../shared/schema';
+import { AuthenticatedRequest } from '../types/authenticated-request';
+
+// Export AuthenticatedRequest for use in other files
+export type { AuthenticatedRequest };
 
 export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   if (typeof req.isAuthenticated !== 'function' || !req.isAuthenticated()) {

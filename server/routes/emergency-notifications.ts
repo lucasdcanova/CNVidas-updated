@@ -45,7 +45,7 @@ export function registerEmergencyNotificationRoutes(app: Express) {
         doctorId: parseInt(doctorId),
         patientId: patientId,
         patientName: patient.fullName || patient.username,
-        patientProfileImage: patient.profileImage,
+        patientProfileImage: patient.profileImage || undefined,
         timestamp: new Date().toISOString(),
         roomUrl: `https://cnvidas.daily.co/doctor-${doctorId}-emergency`
       });

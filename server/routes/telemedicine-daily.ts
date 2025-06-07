@@ -17,7 +17,6 @@ import { User } from '@shared/schema';
 import { Router } from 'express';
 import { DatabaseStorage } from '../storage';
 import { toNumberOrThrow } from '../utils/id-converter';
-import { AppError } from '../utils/app-error';
 import { db } from '../db';
 import { appointments, users } from '@shared/schema';
 import { eq, and, gte, lte } from 'drizzle-orm';

@@ -7,7 +7,7 @@ const dailyRouter = Router();
 export function registerDailyRoutes(app: Express): void {
   // Rota para criar uma sala Daily.co
   app.post('/api/daily/create-room', async (req, res) => {
-    if (!req.isAuthenticated()) {
+    if (!req.isAuthenticated || !req.isAuthenticated()) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
@@ -35,7 +35,7 @@ export function registerDailyRoutes(app: Express): void {
 
   // Rota para obter token de acesso à sala
   app.post('/api/daily/get-token', async (req, res) => {
-    if (!req.isAuthenticated() || !req.user) {
+    if (!req.isAuthenticated || !req.isAuthenticated()) {
       return res.status(401).json({ error: 'Não autorizado' });
     }
 

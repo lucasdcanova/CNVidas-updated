@@ -19,7 +19,7 @@ const paymentRouter = Router();
  * Middleware para verificar se o usuário está autenticado
  */
 const isAuthenticated = async (req: Request, res: Response, next: Function) => {
-  if (!req.isAuthenticated() || !(req as AuthenticatedRequest).user) {
+  if (!req.isAuthenticated || !req.isAuthenticated() || !(req as AuthenticatedRequest).user) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();

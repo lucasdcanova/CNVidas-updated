@@ -10,7 +10,7 @@ const emergencyPatientRouter = Router();
  */
 emergencyPatientRouter.post('/start', async (req: Request, res: Response) => {
   try {
-    if (!req.isAuthenticated() || !req.user) {
+    if (!req.isAuthenticated || !req.isAuthenticated() || !req.user) {
       return res.status(401).json({ error: 'Não autorizado' });
     }
     

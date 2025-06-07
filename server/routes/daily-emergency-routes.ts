@@ -24,7 +24,7 @@ export function registerDailyEmergencyRoutes(app: Express): void {
   // Criar sala de emergência
   app.post("/api/emergency/create-room", async (req, res) => {
     try {
-      if (!req.isAuthenticated()) {
+      if (!req.isAuthenticated || !req.isAuthenticated()) {
         return res.status(401).json({ message: "Unauthorized" });
       }
 
@@ -79,7 +79,7 @@ export function registerDailyEmergencyRoutes(app: Express): void {
   // Deletar sala de emergência após uso
   app.delete("/api/emergency/delete-room/:roomName", async (req, res) => {
     try {
-      if (!req.isAuthenticated()) {
+      if (!req.isAuthenticated || !req.isAuthenticated()) {
         return res.status(401).json({ message: "Unauthorized" });
       }
 

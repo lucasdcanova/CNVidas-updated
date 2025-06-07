@@ -1,11 +1,45 @@
-import { User } from '@shared/schema';
+import { User } from '../../shared/schema';
 import { Request } from 'express';
 
 declare global {
   namespace Express {
     interface Request {
       user?: User;
-      isUserAuthenticated?: () => boolean;
+      isAuthenticated?(): boolean;
+    }
+
+    interface User {
+      id: number;
+      email: string;
+      username: string;
+      fullName: string;
+      role: 'patient' | 'partner' | 'admin' | 'doctor';
+      cpf: string | null;
+      phone: string | null;
+      address: string | null;
+      city: string | null;
+      state: string | null;
+      zipCode: string | null;
+      createdAt: Date;
+      updatedAt: Date;
+      lastLogin: Date | null;
+      isActive: boolean;
+      subscriptionStatus: string | null;
+      subscriptionPlan: 'free' | 'basic' | 'premium' | 'ultra' | 'basic_family' | 'premium_family' | 'ultra_family' | null;
+      emailVerified: boolean;
+      profileImage: string | null;
+      emergencyConsultationsLeft: number | null;
+      birthDate: string | null;
+      stripeCustomerId: string | null;
+      stripeSubscriptionId: string | null;
+      password: string;
+      subscriptionPlanId: number | null;
+      subscriptionStartDate: Date | null;
+      subscriptionEndDate: Date | null;
+      lastSubscriptionCancellation: Date | null;
+      sellerId: string | null;
+      sellerName: string | null;
+      subscriptionChangedAt: Date | null;
     }
   }
 

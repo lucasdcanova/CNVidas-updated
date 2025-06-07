@@ -10,6 +10,7 @@ import stripe from '../utils/stripe-instance.js';
 import { isAuthenticated } from '../middleware/auth.js';
 import { AppError } from '../utils/app-error';
 import { DatabaseStorage } from '../storage';
+import { AuthenticatedRequest } from '../types/authenticated-request';
 
 const subscriptionPaymentRouter = Router();
 

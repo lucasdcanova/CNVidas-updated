@@ -7,6 +7,7 @@ import stripe from '../utils/stripe-instance.js';
 import { AppError } from '../utils/app-error';
 import { storage } from '../storage';
 import { toNumberOrThrow } from '../utils/id-converter';
+import { AuthenticatedRequest } from '../types/authenticated-request';
 
 const router = Router();
 

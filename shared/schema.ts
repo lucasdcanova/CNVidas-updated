@@ -439,14 +439,7 @@ export const notificationSchema = z.object({
 });
 
 // Tipos inferidos
-export type User = {
-  id: number;
-  stripeCustomerId: string | null;
-  email: string;
-  username: string;
-  stripeSubscriptionId: string | null;
-  // Adicione outras propriedades necessárias aqui
-} & InferModel<typeof users>;
+export type User = InferModel<typeof users>;
 export type Dependent = InferModel<typeof dependents>;
 export type Partner = InferModel<typeof partners>;
 export type Doctor = InferModel<typeof doctors>;
