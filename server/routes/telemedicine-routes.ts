@@ -90,16 +90,17 @@ async function testVideoServiceConnection() {
 }
 
 // Rota para criar uma nova consulta
-telemedicineRouter.post('/appointments', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+telemedicineRouter.post('/appointments', requireAuth, async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    if (!req.user) return res.status(401).json({ error: 'Não autorizado' });
+    if (!authReq.user) return res.status(401).json({ error: 'Não autorizado' });
     
     const validatedData = createAppointmentSchema.parse({
       ...req.body,
       doctorId: toNumberOrThrow(req.body.doctorId as string | number),
       duration: toNumberOrThrow(req.body.duration as string | number)
     });
-    const userId = toNumberOrThrow(req.user.id as string | number);
+    const userId = toNumberOrThrow(authReq.user.id as string | number);
 
     // Verificar se o médico existe e está disponível
     const [doctor] = await db.select().from(doctors).where(eq(doctors.id, validatedData.doctorId));
@@ -133,12 +134,13 @@ telemedicineRouter.post('/appointments', requireAuth, async (req: AuthenticatedR
 });
 
 // Rota para listar consultas do usuário
-telemedicineRouter.get('/appointments', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+telemedicineRouter.get('/appointments', requireAuth, async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    if (!req.user) return res.status(401).json({ error: 'Não autorizado' });
+    if (!authReq.user) return res.status(401).json({ error: 'Não autorizado' });
     
-    const userId = toNumberOrThrow(req.user.id as string | number);
-    const userRole = req.user.role;
+    const userId = toNumberOrThrow(authReq.user.id as string | number);
+    const userRole = authReq.user.role;
 
     let appointmentsList;
     if (userRole === 'doctor') {
@@ -200,16 +202,17 @@ telemedicineRouter.get('/appointments', requireAuth, async (req: AuthenticatedRe
 });
 
 // Rota para iniciar consulta de emergência
-telemedicineRouter.post('/emergency', requireAuth, checkEmergencyConsultationLimit, async (req: AuthenticatedRequest, res: Response) => {
+telemedicineRouter.post('/emergency', requireAuth, checkEmergencyConsultationLimit, async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    if (!req.user) return res.status(401).json({ error: 'Não autorizado' });
+    if (!authReq.user) return res.status(401).json({ error: 'Não autorizado' });
     
     const doctorId = Number(req.body.doctorId);
     if (!doctorId) {
       throw new AppError('ID do médico inválido', 400);
     }
 
-    const userId = Number(req.user.id);
+    const userId = Number(authReq.user.id);
 
     // Verificar se o médico está disponível para emergência
     const [doctor] = await db.select().from(doctors).where(
@@ -245,9 +248,10 @@ telemedicineRouter.post('/emergency', requireAuth, checkEmergencyConsultationLim
 });
 
 // Rota para atualizar status da consulta
-telemedicineRouter.patch('/appointments/:id', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+telemedicineRouter.patch('/appointments/:id', requireAuth, async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    if (!req.user) return res.status(401).json({ error: 'Não autorizado' });
+    if (!authReq.user) return res.status(401).json({ error: 'Não autorizado' });
     
     const appointmentId = Number(req.params.id);
     if (!appointmentId) {
@@ -255,7 +259,7 @@ telemedicineRouter.patch('/appointments/:id', requireAuth, async (req: Authentic
     }
 
     const validatedData = updateAppointmentSchema.parse(req.body);
-    const userId = Number(req.user.id);
+    const userId = Number(authReq.user.id);
 
     // Verificar se a consulta existe e pertence ao usuário
     const [appointment] = await db.select().from(appointments).where(
@@ -293,16 +297,17 @@ telemedicineRouter.patch('/appointments/:id', requireAuth, async (req: Authentic
 });
 
 // Rota para cancelar consulta
-telemedicineRouter.delete('/appointments/:id', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+telemedicineRouter.delete('/appointments/:id', requireAuth, async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    if (!req.user) return res.status(401).json({ error: 'Não autorizado' });
+    if (!authReq.user) return res.status(401).json({ error: 'Não autorizado' });
     
     const appointmentId = Number(req.params.id);
     if (!appointmentId) {
       throw new AppError('ID da consulta inválido', 400);
     }
 
-    const userId = Number(req.user.id);
+    const userId = Number(authReq.user.id);
 
     // Verificar se a consulta existe e pertence ao usuário
     const [appointment] = await db.select().from(appointments).where(
@@ -337,16 +342,17 @@ telemedicineRouter.delete('/appointments/:id', requireAuth, async (req: Authenti
 });
 
 // Rota para obter detalhes da consulta
-telemedicineRouter.get('/appointments/:id', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+telemedicineRouter.get('/appointments/:id', requireAuth, async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    if (!req.user) return res.status(401).json({ error: 'Não autorizado' });
+    if (!authReq.user) return res.status(401).json({ error: 'Não autorizado' });
     
     const appointmentId = Number(req.params.id);
     if (!appointmentId) {
       throw new AppError('ID da consulta inválido', 400);
     }
 
-    const userId = Number(req.user.id);
+    const userId = Number(authReq.user.id);
 
     // Buscar a consulta
     const [appointment] = await db.select().from(appointments).where(eq(appointments.id, Number(appointmentId)));
@@ -400,16 +406,17 @@ telemedicineRouter.get('/appointments/:id', requireAuth, async (req: Authenticat
 });
 
 // Rota para iniciar consulta
-telemedicineRouter.post('/start', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+telemedicineRouter.post('/start', requireAuth, async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    if (!req.user) return res.status(401).json({ error: 'Não autorizado' });
+    if (!authReq.user) return res.status(401).json({ error: 'Não autorizado' });
     
     const appointmentId = Number(req.body.appointmentId);
     if (!appointmentId) {
       throw new AppError('ID da consulta inválido', 400);
     }
 
-    const userId = Number(req.user.id);
+    const userId = Number(authReq.user.id);
 
     // Verificar se a consulta existe e se o usuário tem permissão
     const [appointment] = await db.select().from(appointments).where(eq(appointments.id, Number(appointmentId)));
@@ -447,16 +454,17 @@ telemedicineRouter.post('/start', requireAuth, async (req: AuthenticatedRequest,
 });
 
 // Rota para finalizar consulta
-telemedicineRouter.post('/end', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+telemedicineRouter.post('/end', requireAuth, async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    if (!req.user) return res.status(401).json({ error: 'Não autorizado' });
+    if (!authReq.user) return res.status(401).json({ error: 'Não autorizado' });
     
     const appointmentId = Number(req.body.appointmentId);
     if (!appointmentId) {
       throw new AppError('ID da consulta inválido', 400);
     }
 
-    const userId = Number(req.user.id);
+    const userId = Number(authReq.user.id);
 
     // Verificar se a consulta existe e se o usuário é o médico
     const [appointment] = await db.select().from(appointments).where(eq(appointments.id, Number(appointmentId)));
@@ -492,13 +500,14 @@ telemedicineRouter.post('/end', requireAuth, async (req: AuthenticatedRequest, r
 });
 
 // Listar consultas do paciente
-telemedicineRouter.get('/patient', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+telemedicineRouter.get('/patient', requireAuth, async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    if (!req.user) {
+    if (!authReq.user) {
       throw new AppError('Usuário não autenticado', 401);
     }
 
-    const userId = Number(req.user.id);
+    const userId = Number(authReq.user.id);
     const appointmentsList = await db.select().from(appointments).where(eq(appointments.userId, userId));
     // Buscar informações do médico para cada consulta
     const appointmentsWithDoctor = await Promise.all(
@@ -531,13 +540,14 @@ telemedicineRouter.get('/patient', requireAuth, async (req: AuthenticatedRequest
 });
 
 // Listar consultas do médico
-telemedicineRouter.get('/doctor', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+telemedicineRouter.get('/doctor', requireAuth, async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    if (!req.user) {
+    if (!authReq.user) {
       throw new AppError('Usuário não autenticado', 401);
     }
 
-    const userId = Number(req.user.id);
+    const userId = Number(authReq.user.id);
     // Buscar ID do médico
     const [doctor] = await db.select().from(doctors).where(eq(doctors.userId, userId));
     if (!doctor) {
@@ -576,9 +586,10 @@ telemedicineRouter.get('/doctor', requireAuth, async (req: AuthenticatedRequest,
   }
 });
 
-telemedicineRouter.get("/api/telemedicine/:id", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+telemedicineRouter.get("/api/telemedicine/:id", requireAuth, async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    if (!req.user) {
+    if (!authReq.user) {
       throw new AppError('Usuário não autenticado', 401);
     }
     const appointmentId = Number(req.params.id);

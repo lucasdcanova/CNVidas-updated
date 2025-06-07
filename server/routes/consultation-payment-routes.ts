@@ -39,8 +39,9 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
  * Cria uma intenção de pagamento com pré-autorização para consulta
  * POST /api/consultations/create-payment-intent
  */
-consultationPaymentRouter.post('/create-payment-intent', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+consultationPaymentRouter.post('/create-payment-intent', requireAuth, async (req: Request, res: Response) => {
   try {
+    const authReq = req as AuthenticatedRequest;
     const { amount, doctorId, doctorName, date, isEmergency } = req.body;
     
     if (!amount || !doctorId) {
@@ -48,21 +49,21 @@ consultationPaymentRouter.post('/create-payment-intent', requireAuth, async (req
     }
     
     // Verificar se o usuário tem um customerId no Stripe
-    if (!req.user?.stripeCustomerId) {
+    if (!authReq.user?.stripeCustomerId) {
       throw new AppError(400, "Você precisa ter um método de pagamento cadastrado para realizar consultas");
     }
     
     // Criar intenção de pagamento com pré-autorização
     const paymentIntent = await createConsultationPaymentIntent(
       amount,
-      req.user.stripeCustomerId,
+      authReq.user.stripeCustomerId,
       {
-        userId: toNumberOrThrow(req.user.id).toString(),
-        doctorId: toNumberOrThrow(doctorId).toString(),
+        userId: String(authReq.user.id),
+        doctorId: String(doctorId),
         doctorName: doctorName || "Médico",
         appointmentDate: new Date(date).toISOString(),
         isEmergency: isEmergency ? 'true' : 'false',
-        appointmentId: req.body.appointmentId ? toNumberOrThrow(req.body.appointmentId).toString() : '0'
+        appointmentId: req.body.appointmentId ? String(req.body.appointmentId) : '0'
       }
     );
     
@@ -84,13 +85,14 @@ consultationPaymentRouter.post('/create-payment-intent', requireAuth, async (req
  * Captura um pagamento pré-autorizado após a consulta ser realizada
  * POST /api/consultations/capture-payment/:appointmentId
  */
-consultationPaymentRouter.post('/capture-payment/:appointmentId', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+consultationPaymentRouter.post('/capture-payment/:appointmentId', requireAuth, async (req: Request, res: Response) => {
   try {
+    const authReq = req as AuthenticatedRequest;
     const { appointmentId } = req.params;
     const appointmentIdNumber = toNumberOrThrow(appointmentId);
     
     // Apenas administradores e médicos podem capturar pagamentos
-    if (req.user?.role !== 'admin' && req.user?.role !== 'doctor') {
+    if (authReq.user?.role !== 'admin' && authReq.user?.role !== 'doctor') {
       throw new AppError(403, "Você não tem permissão para capturar pagamentos");
     }
     
@@ -144,8 +146,9 @@ consultationPaymentRouter.post('/capture-payment/:appointmentId', requireAuth, a
  * Cancela um pagamento pré-autorizado caso a consulta seja cancelada
  * POST /api/consultations/cancel-payment/:appointmentId
  */
-consultationPaymentRouter.post('/cancel-payment/:appointmentId', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+consultationPaymentRouter.post('/cancel-payment/:appointmentId', requireAuth, async (req: Request, res: Response) => {
   try {
+    const authReq = req as AuthenticatedRequest;
     const { appointmentId } = req.params;
     const { reason } = req.body;
     const appointmentIdNumber = toNumberOrThrow(appointmentId);
@@ -160,9 +163,9 @@ consultationPaymentRouter.post('/cancel-payment/:appointmentId', requireAuth, as
     // Verificar se o usuário tem permissão para cancelar
     // Apenas o próprio paciente, o médico ou um admin podem cancelar
     if (
-      req.user?.id !== appointment.userId && 
-      req.user?.role !== 'admin' && 
-      (req.user?.role !== 'doctor' || req.user?.id !== appointment.doctorId)
+      Number(authReq.user?.id) !== Number(appointment.userId) && 
+      authReq.user?.role !== 'admin' && 
+      (authReq.user?.role !== 'doctor' || Number(authReq.user?.id) !== Number(appointment.doctorId))
     ) {
       return res.status(403).json({ message: "Você não tem permissão para cancelar esta consulta" });
     }

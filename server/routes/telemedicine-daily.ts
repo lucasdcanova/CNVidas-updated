@@ -142,7 +142,8 @@ const generateDailyToken = async (roomName: string, userName: string, isOwner: b
  * Rota para criar ou obter uma sala de videoconferência
  * POST /api/telemedicine/daily/room
  */
-dailyRouter.post('/room', requireAuth, checkSubscription, async (req: AuthenticatedRequest, res: Response) => {
+dailyRouter.post('/room', requireAuth, checkSubscription, async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
     const { appointmentId } = req.body;
     if (!appointmentId) {
@@ -165,7 +166,7 @@ dailyRouter.post('/room', requireAuth, checkSubscription, async (req: Authentica
     }
 
     // Verificar permissão
-    if (!req.user || (appointment.patientId !== toNumberOrThrow(req.user.id) && appointment.doctorId !== toNumberOrThrow(req.user.id))) {
+    if (!authReq.user || (appointment.user_id !== authReq.user.id && appointment.doctor_id !== authReq.user.id)) {
       throw new AppError('Sem permissão para acessar esta consulta', 403);
     }
 
@@ -210,18 +211,19 @@ dailyRouter.post('/room', requireAuth, checkSubscription, async (req: Authentica
  * Rota para gerar token de acesso à videoconferência
  * POST /api/telemedicine/daily/token
  */
-dailyRouter.post('/token', requireAuth, checkSubscription, async (req: AuthenticatedRequest, res: Response) => {
+dailyRouter.post('/token', requireAuth, checkSubscription, async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
     const { roomName } = req.body;
     if (!roomName) {
       throw new AppError('Nome da sala é obrigatório', 400);
     }
 
-    if (!req.user) {
+    if (!authReq.user) {
       throw new AppError('Usuário não autenticado', 401);
     }
 
-    const token = await generateDailyToken(roomName, req.user.fullName || req.user.username, false);
+    const token = await generateDailyToken(roomName, authReq.user.fullName || authReq.user.username, false);
     res.json(token);
   } catch (error) {
     console.error('Erro ao gerar token:', error);

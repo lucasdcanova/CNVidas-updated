@@ -19,8 +19,9 @@ import { AuthenticatedRequest } from '../types/authenticated-request';
 const authRouter = Router();
 
 // Middleware de autenticação
-const requireAuth = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.user) {
+const requireAuth = (req: Request, res: Response, next: NextFunction) => {
+  const authReq = req as AuthenticatedRequest;
+  if (!authReq.isAuthenticated || !authReq.isAuthenticated()) {
     throw new AppError('Não autorizado', 401);
   }
   next();
@@ -40,7 +41,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
  * Registra um novo usuário
  * POST /api/auth/register
  */
-authRouter.post('/register', async (req: AuthenticatedRequest, res: Response) => {
+authRouter.post('/register', async (req: Request, res: Response) => {
   try {
     const { email, password, name } = req.body;
     
@@ -64,7 +65,7 @@ authRouter.post('/register', async (req: AuthenticatedRequest, res: Response) =>
  * Autentica um usuário
  * POST /api/auth/login
  */
-authRouter.post('/login', async (req: AuthenticatedRequest, res: Response) => {
+authRouter.post('/login', async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     
@@ -88,7 +89,7 @@ authRouter.post('/login', async (req: AuthenticatedRequest, res: Response) => {
  * Desautentica um usuário
  * POST /api/auth/logout
  */
-authRouter.post('/logout', isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+authRouter.post('/logout', requireAuth, async (req: Request, res: Response) => {
   try {
     // TODO: Implementar lógica de logout
     
@@ -103,7 +104,7 @@ authRouter.post('/logout', isAuthenticated, async (req: AuthenticatedRequest, re
 });
 
 // Verificar token
-authRouter.get('/verify', async (req: AuthenticatedRequest, res: Response) => {
+authRouter.get('/verify', async (req: Request, res: Response) => {
   const token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
@@ -144,10 +145,11 @@ authRouter.get('/verify', async (req: AuthenticatedRequest, res: Response) => {
  * Rota para obter dados do usuário logado
  * GET /api/auth/me
  */
-authRouter.get('/me', isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+authRouter.get('/me', requireAuth, async (req: Request, res: Response) => {
   try {
-    if (req.user) {
-      res.json({ user: req.user });
+    const authReq = req as AuthenticatedRequest;
+    if (authReq.user) {
+      res.json({ user: authReq.user });
     } else {
       res.status(401).json({ message: 'Não autenticado' });
     }
@@ -162,7 +164,7 @@ authRouter.get('/me', isAuthenticated, async (req: AuthenticatedRequest, res: Re
 });
 
 // Rota para verificar o email
-authRouter.get('/verify-email', async (req: AuthenticatedRequest, res: Response) => {
+authRouter.get('/verify-email', async (req: Request, res: Response) => {
   try {
     const { token } = req.query;
 

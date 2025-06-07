@@ -44,7 +44,7 @@ const dailyDirectRouter = Router();
 
 // Middleware de autenticação
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated()) {
+  if (!req.isAuthenticated || !req.isAuthenticated()) {
     throw new AppError(401, 'Não autorizado');
   }
   next();
@@ -64,7 +64,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
  * Rota para verificar se uma sala existe
  * GET /api/daily-direct/room-exists
  */
-dailyDirectRouter.get('/room-exists', isAuthenticated, async (req: Request, res: Response) => {
+dailyDirectRouter.get('/room-exists', requireAuth, async (req: Request, res: Response) => {
   try {
     const { roomName } = req.query;
     if (!roomName || typeof roomName !== 'string') {
@@ -127,7 +127,7 @@ dailyDirectRouter.get('/room-exists', isAuthenticated, async (req: Request, res:
  * Rota para criar uma sala
  * POST /api/daily-direct/create-room
  */
-dailyDirectRouter.post('/create-room', isAuthenticated, async (req: Request, res: Response) => {
+dailyDirectRouter.post('/create-room', requireAuth, async (req: Request, res: Response) => {
   try {
     const { roomName, forceCreate = false, expiryHours = 24 } = req.body;
     
@@ -170,7 +170,7 @@ dailyDirectRouter.post('/create-room', isAuthenticated, async (req: Request, res
     }
     
     // Calcular expiração
-    const expirySeconds = expiryHours * 60 * 60;
+    const expirySeconds = Number(expiryHours) * 60 * 60;
     
     // Criar a sala
     try {
@@ -234,7 +234,7 @@ dailyDirectRouter.post('/token', async (req: Request, res: Response) => {
     console.log(`Gerando token para sala ${roomName} com usuário ${userName || 'anônimo'}`);
     
     // Calcular expiração
-    const expirySeconds = expiryHours * 60 * 60;
+    const expirySeconds = Number(expiryHours) * 60 * 60;
     
     // Gerar token
     const tokenResponse = await fetch('https://api.daily.co/v1/meeting-tokens', {

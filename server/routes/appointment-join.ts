@@ -9,18 +9,19 @@ const appointmentJoinRouter = Router();
  * Endpoint para médicos entrarem em consultas específicas
  * POST /api/appointments/:id/join
  */
-appointmentJoinRouter.post('/:id/join', async (req: AuthenticatedRequest, res: Response) => {
+appointmentJoinRouter.post('/:id/join', async (req: Request, res: Response) => {
   try {
+    const authReq = req as AuthenticatedRequest;
     // Verificar autenticação por vários métodos
     let userId = null;
     let userRole = null;
     let userData = null;
     
     // 1. Verificar autenticação via sessão (método padrão)
-    if (req.isAuthenticated && req.isAuthenticated() && req.user) {
-      userId = req.user.id;
-      userRole = req.user.role;
-      userData = req.user;
+    if (authReq.isAuthenticated && authReq.isAuthenticated() && authReq.user) {
+      userId = authReq.user.id;
+      userRole = authReq.user.role;
+      userData = authReq.user;
       console.log("Join consulta - Usuário autenticado via sessão:", userId, userRole);
     } 
     // 2. Verificar autenticação via cabeçalho X-Session-ID

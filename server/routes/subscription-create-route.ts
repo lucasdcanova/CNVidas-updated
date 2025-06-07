@@ -23,18 +23,19 @@ const createSessionSchema = z.object({
 });
 
 // Middleware para verificar autenticação (compatível com tokens e sessões)
-const isAuthenticated = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+const isAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
+  const authReq = req as AuthenticatedRequest;
   console.log("Verificando autenticação na rota de assinatura...");
   
   // Verificar se o usuário está autenticado por sessão
-  if (req.isAuthenticated && req.isAuthenticated()) {
-    console.log("Autenticado via sessão:", req.user?.id, req.user?.email);
+  if (authReq.isAuthenticated && authReq.isAuthenticated()) {
+    console.log("Autenticado via sessão:", authReq.user?.id, authReq.user?.email);
     return next();
   }
   
   // Se não estiver autenticado por sessão, verificar se tem o campo 'user' definido pelo middleware de token
-  if (req.user) {
-    console.log("Autenticado via token:", req.user.id, req.user.email);
+  if (authReq.user) {
+    console.log("Autenticado via token:", authReq.user.id, authReq.user.email);
     return next();
   }
   
@@ -58,7 +59,7 @@ const isAuthenticated = async (req: AuthenticatedRequest, res: Response, next: N
           console.log("Usuário recuperado via token nos headers:", user.id, user.email);
           
           // Definir o usuário na requisição
-          req.user = user;
+          authReq.user = user;
           return next();
         }
       }
@@ -72,8 +73,9 @@ const isAuthenticated = async (req: AuthenticatedRequest, res: Response, next: N
 };
 
 // Rota para criar uma sessão de checkout simples
-router.post("/create-session", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+router.post("/create-session", isAuthenticated, async (req: Request, res: Response) => {
   try {
+    const authReq = req as AuthenticatedRequest;
     // Validar a entrada
     const validationResult = createSessionSchema.safeParse({
       ...req.body,
@@ -88,7 +90,7 @@ router.post("/create-session", isAuthenticated, async (req: AuthenticatedRequest
     }
 
     const { planId, paymentMethod } = validationResult.data;
-    const user = req.user;
+    const user = authReq.user;
     
     if (!user) {
       return res.status(401).json({ message: "Usuário não autenticado" });
@@ -239,10 +241,11 @@ router.post("/create-session", isAuthenticated, async (req: AuthenticatedRequest
 });
 
 // Rota para confirmar pagamento
-router.post("/confirm-payment", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+router.post("/confirm-payment", isAuthenticated, async (req: Request, res: Response) => {
   try {
+    const authReq = req as AuthenticatedRequest;
     const { paymentIntentId } = req.body;
-    const user = req.user;
+    const user = authReq.user;
 
     if (!user) {
       return res.status(401).json({ message: "Usuário não autenticado" });
@@ -285,9 +288,10 @@ router.post("/confirm-payment", isAuthenticated, async (req: AuthenticatedReques
 });
 
 // Rota para cancelar assinatura
-router.post("/cancel", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+router.post("/cancel", isAuthenticated, async (req: Request, res: Response) => {
   try {
-    const user = req.user;
+    const authReq = req as AuthenticatedRequest;
+    const user = authReq.user;
 
     if (!user) {
       return res.status(401).json({ message: "Usuário não autenticado" });
@@ -315,9 +319,10 @@ router.post("/cancel", isAuthenticated, async (req: AuthenticatedRequest, res: R
 });
 
 // Rota para atualizar assinatura
-router.put("/:id", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+router.put("/:id", isAuthenticated, async (req: Request, res: Response) => {
   try {
-    const user = req.user;
+    const authReq = req as AuthenticatedRequest;
+    const user = authReq.user;
 
     if (!user) {
       return res.status(401).json({ message: "Usuário não autenticado" });
@@ -370,9 +375,10 @@ router.put("/:id", isAuthenticated, async (req: AuthenticatedRequest, res: Respo
 });
 
 // Rota para obter detalhes da assinatura
-router.get("/:id", isAuthenticated, async (req: AuthenticatedRequest, res: Response) => {
+router.get("/:id", isAuthenticated, async (req: Request, res: Response) => {
   try {
-    const user = req.user;
+    const authReq = req as AuthenticatedRequest;
+    const user = authReq.user;
 
     if (!user) {
       return res.status(401).json({ message: "Usuário não autenticado" });
@@ -423,17 +429,18 @@ router.get("/:id", isAuthenticated, async (req: AuthenticatedRequest, res: Respo
 });
 
 // Criar nova subscrição
-router.post('/create', isAuthenticated, async (req: Express.Request, res: Express.Response) => {
+router.post('/create', isAuthenticated, async (req: Request, res: Response) => {
   try {
+    const authReq = req as AuthenticatedRequest;
     const { planId, paymentMethod } = req.body;
     
-    if (!req.user) {
+    if (!authReq.user) {
       throw new AppError('Usuário não autenticado', 401);
     }
 
     // Buscar usuário
     const user = await db.query.users.findFirst({
-      where: eq(users.id, Number(req.user.id))
+      where: eq(users.id, Number(authReq.user.id))
     });
 
     if (!user) {
@@ -475,12 +482,13 @@ router.post('/create', isAuthenticated, async (req: Express.Request, res: Expres
 });
 
 // Atualizar subscrição
-router.put('/update/:id', isAuthenticated, async (req: Express.Request, res: Express.Response) => {
+router.put('/update/:id', isAuthenticated, async (req: Request, res: Response) => {
   try {
+    const authReq = req as AuthenticatedRequest;
     const { id } = req.params;
     const { planId, status } = req.body;
 
-    if (!req.user) {
+    if (!authReq.user) {
       throw new AppError('Usuário não autenticado', 401);
     }
 
@@ -494,7 +502,7 @@ router.put('/update/:id', isAuthenticated, async (req: Express.Request, res: Exp
     }
 
     // Verificar se o usuário é o dono da subscrição ou admin
-    if (subscription.userId !== req.user.id && req.user.role !== 'admin') {
+    if (subscription.userId !== authReq.user.id && authReq.user.role !== 'admin') {
       throw new AppError('Não autorizado', 403);
     }
 
@@ -523,11 +531,12 @@ router.put('/update/:id', isAuthenticated, async (req: Express.Request, res: Exp
 });
 
 // Cancelar subscrição
-router.delete('/cancel/:id', isAuthenticated, async (req: Express.Request, res: Express.Response) => {
+router.delete('/cancel/:id', isAuthenticated, async (req: Request, res: Response) => {
   try {
+    const authReq = req as AuthenticatedRequest;
     const { id } = req.params;
 
-    if (!req.user) {
+    if (!authReq.user) {
       throw new AppError('Usuário não autenticado', 401);
     }
 
@@ -541,7 +550,7 @@ router.delete('/cancel/:id', isAuthenticated, async (req: Express.Request, res: 
     }
 
     // Verificar se o usuário é o dono da subscrição ou admin
-    if (subscription.userId !== req.user.id && req.user.role !== 'admin') {
+    if (subscription.userId !== authReq.user.id && authReq.user.role !== 'admin') {
       throw new AppError('Não autorizado', 403);
     }
 

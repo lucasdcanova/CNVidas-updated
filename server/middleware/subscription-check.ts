@@ -98,19 +98,20 @@ export const checkSubscriptionFeature = (requiredFeature: string) => {
 
 // Verifica se o plano do usuário tem limite de consultas de emergência
 export const checkEmergencyConsultationLimit = async (req: Request, res: Response, next: NextFunction) => {
+  const authReq = req as AuthenticatedRequest;
   try {
     // Log para debug
-    console.log("Middleware checkEmergencyConsultationLimit - req.isAuthenticated:", req.isAuthenticated());
-    console.log("Middleware checkEmergencyConsultationLimit - req.user:", req.user);
-    console.log("Middleware checkEmergencyConsultationLimit - req.headers:", req.headers);
+    console.log("Middleware checkEmergencyConsultationLimit - req.isAuthenticated:", authReq.isAuthenticated());
+    console.log("Middleware checkEmergencyConsultationLimit - req.user:", authReq.user);
+    console.log("Middleware checkEmergencyConsultationLimit - req.headers:", authReq.headers);
     
-    if (!req.user) {
+    if (!authReq.user) {
       console.log("Usuário não autenticado no middleware");
       return res.status(401).json({ message: 'Usuário não autenticado' });
     }
 
-    const userPlan = req.user.subscriptionPlan || 'free';
-    const userSubscriptionStatus = req.user.subscriptionStatus || 'inactive';
+    const userPlan = authReq.user.subscriptionPlan || 'free';
+    const userSubscriptionStatus = authReq.user.subscriptionStatus || 'inactive';
 
     // Verificar se a assinatura está ativa
     if (userSubscriptionStatus !== 'active' && userPlan !== 'free') {
@@ -157,7 +158,7 @@ export const checkEmergencyConsultationLimit = async (req: Request, res: Respons
     
     // Para planos com limite de consultas (ex: basic), verificar o contador
     if (userPlan === 'basic') {
-      const emergencyConsultationsLeft = req.user.emergencyConsultationsLeft || 0;
+      const emergencyConsultationsLeft = authReq.user.emergencyConsultationsLeft || 0;
       
       if (emergencyConsultationsLeft <= 0) {
         return res.status(403).json({
@@ -169,11 +170,11 @@ export const checkEmergencyConsultationLimit = async (req: Request, res: Respons
       
       // Decrementar o contador de consultas ao confirmar o agendamento
       try {
-        // Usamos req.user.id aqui para evitar erro de undefined
-        const userId = toNumberOrThrow(String(req.user.id));
+        // Usamos authReq.user.id aqui para evitar erro de undefined
+        const userId = toNumberOrThrow(String(authReq.user.id));
         
         // Armazenar para usar no middleware após a consulta ser criada
-        req.emergencyConsultationToDecrement = true;
+        authReq.emergencyConsultationToDecrement = true;
         
         console.log(`Consulta de emergência para usuário ${userId} com plano ${userPlan}. Consultas restantes: ${emergencyConsultationsLeft-1}`);
       } catch (error) {

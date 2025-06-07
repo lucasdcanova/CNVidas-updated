@@ -12,7 +12,7 @@ const dependentsRouter = Router();
 
 // Middleware de autenticação compatível com Express
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated()) {
+  if (!req.isAuthenticated || !req.isAuthenticated()) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
@@ -39,7 +39,7 @@ dependentsRouter.get('/', requireAuth, async (req: Request, res: Response) => {
     }
     const userDependents = await db.select()
       .from(dependents)
-      .where(eq(dependents.userId, toNumberOrThrow(req.user.id)));
+      .where(eq(dependents.userId, Number(req.user.id)));
     res.json(userDependents);
   } catch (error) {
     if (error instanceof AppError) {
@@ -65,10 +65,10 @@ dependentsRouter.post('/', requireAuth, async (req: Request, res: Response) => {
     }
     const newDependent = await db.insert(dependents)
       .values({
-        userId: toNumberOrThrow(req.user.id),
-        name,
-        birthDate: String(birthDate), // Drizzle espera string
-        relationship
+        userId: Number(req.user.id),
+        name: name,
+        birthDate: new Date(birthDate).toISOString().split('T')[0], // Convert to YYYY-MM-DD format
+        relationship: relationship
       })
       .returning();
     res.status(201).json(newDependent[0]);
@@ -97,13 +97,13 @@ dependentsRouter.put('/:id', requireAuth, async (req: Request, res: Response) =>
     }
     const updatedDependent = await db.update(dependents)
       .set({
-        name,
-        birthDate: String(birthDate),
-        relationship
+        name: name,
+        birthDate: new Date(birthDate).toISOString().split('T')[0], // Convert to YYYY-MM-DD format
+        relationship: relationship
       })
       .where(and(
-        eq(dependents.id, id),
-        eq(dependents.userId, toNumberOrThrow(req.user.id))
+        eq(dependents.id, Number(id)),
+        eq(dependents.userId, Number(req.user.id))
       ))
       .returning();
     if (!updatedDependent[0]) {
@@ -131,8 +131,8 @@ dependentsRouter.delete('/:id', requireAuth, async (req: Request, res: Response)
     const id = toNumberOrThrow(req.params.id);
     const deletedDependent = await db.delete(dependents)
       .where(and(
-        eq(dependents.id, id),
-        eq(dependents.userId, toNumberOrThrow(req.user.id))
+        eq(dependents.id, Number(id)),
+        eq(dependents.userId, Number(req.user.id))
       ))
       .returning();
     if (!deletedDependent[0]) {

@@ -144,7 +144,8 @@ const createDailyToken = async (roomName: string, userName: string, isOwner: boo
 };
 
 // Rotas principais
-telemedicineRouter.post('/room', requireAuth, checkSubscriptionFeature("telemedicine"), async (req: AuthenticatedRequest, res: Response) => {
+telemedicineRouter.post('/room', requireAuth, checkSubscriptionFeature("telemedicine"), async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
     const { appointmentId, roomName: customRoomName } = req.body;
     
@@ -167,8 +168,8 @@ telemedicineRouter.post('/room', requireAuth, checkSubscriptionFeature("telemedi
       }
       
       // Verificar se o usuário tem permissão para acessar esta consulta
-      if (!req.user || (appointment.userId !== toNumberOrThrow(req.user.id) && req.user.role !== 'admin')) {
-        throw new AppError('Não autorizado', 403);
+      if (!authReq.user || (appointment.userId !== authReq.user.id && authReq.user.role !== 'admin')) {
+        return res.status(403).json({ error: 'Sem permissão para acessar esta consulta' });
       }
       
       roomName = appointment.telemedicineRoom || 
