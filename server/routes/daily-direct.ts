@@ -1,10 +1,14 @@
-import { Router } from 'express';
+import express from 'express';
 import { Request, Response, NextFunction } from 'express';
 import axios, { AxiosError } from 'axios';
 import { User } from '@shared/schema';
 import { isAuthenticated } from '../middleware/auth.js';
 import { AppError } from '../utils/app-error';
 import { DatabaseStorage } from '../storage';
+import { AuthenticatedRequest } from '../types/authenticated-request';
+import { checkSubscriptionFeature } from '../middleware/subscription-check';
+import { db } from '../db';
+import { toNumberOrThrow } from '../utils/id-converter';
 
 // Interface para resposta da API do Daily.co
 interface DailyRoomResponse {
@@ -40,12 +44,13 @@ interface RoomCreateResponse {
   error?: string;
 }
 
-const dailyDirectRouter = Router();
+const dailyDirectRouter = express.Router();
 
-// Middleware de autenticação
+// Middleware de autenticação compatível com Express
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated || !req.isAuthenticated()) {
-    throw new AppError(401, 'Não autorizado');
+  const authReq = req as AuthenticatedRequest;
+  if (!authReq.user) {
+    return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
 };
@@ -202,7 +207,9 @@ dailyDirectRouter.post('/create-room', requireAuth, async (req: Request, res: Re
         console.error(`Erro ao criar sala ${sanitizedRoomName}:`, error.response?.data);
         throw new AppError(error.response?.status || 500, `Erro ao criar sala: ${error.response?.data?.error || error.message}`);
       }
-      throw error;
+      
+      console.error(`Erro ao criar sala ${sanitizedRoomName}:`, error);
+      throw new AppError(500, 'Erro ao criar sala');
     }
   } catch (error) {
     if (error instanceof AppError) {
@@ -276,6 +283,53 @@ dailyDirectRouter.post('/token', async (req: Request, res: Response) => {
       error: 'Erro ao gerar token',
       message: error instanceof Error ? error.message : 'Erro desconhecido'
     });
+  }
+});
+
+// Rota para deletar uma sala
+dailyDirectRouter.delete('/rooms/:roomName', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const authReq = req as AuthenticatedRequest;
+    const { roomName } = req.params;
+    
+    // Verificar se o usuário tem permissão (admin ou doctor)
+    if (authReq.user.role !== 'admin' && authReq.user.role !== 'doctor') {
+      throw new AppError('Sem permissão para deletar salas', 403);
+    }
+
+    if (!process.env.DAILY_API_KEY) {
+      throw new AppError('API Key do Daily.co não configurada', 500);
+    }
+
+    const response = await fetch(`https://api.daily.co/v1/rooms/${roomName}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.DAILY_API_KEY}`
+      }
+    });
+
+    if (response.status === 404) {
+      return res.status(404).json({ error: 'Sala não encontrada' });
+    }
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new AppError(`Erro ao deletar sala: ${errorData.error || response.statusText}`, response.status);
+    }
+
+    res.json({
+      success: true,
+      message: 'Sala deletada com sucesso',
+      room_name: roomName,
+      deleted_by: String(authReq.user.id)
+    });
+  } catch (error) {
+    if (error instanceof AppError) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
   }
 });
 

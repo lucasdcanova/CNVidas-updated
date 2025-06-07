@@ -163,9 +163,9 @@ consultationPaymentRouter.post('/cancel-payment/:appointmentId', requireAuth, as
     // Verificar se o usuário tem permissão para cancelar
     // Apenas o próprio paciente, o médico ou um admin podem cancelar
     if (
-      Number(authReq.user?.id) !== Number(appointment.userId) && 
+      authReq.user?.id !== appointment.userId && 
       authReq.user?.role !== 'admin' && 
-      (authReq.user?.role !== 'doctor' || Number(authReq.user?.id) !== Number(appointment.doctorId))
+      (authReq.user?.role !== 'doctor' || authReq.user?.id !== appointment.doctorId)
     ) {
       return res.status(403).json({ message: "Você não tem permissão para cancelar esta consulta" });
     }

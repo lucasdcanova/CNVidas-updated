@@ -7,12 +7,14 @@ import { db } from '../db';
 import { eq, and } from 'drizzle-orm';
 import { DatabaseStorage } from '../storage';
 import { toNumberOrThrow } from '../utils/id-converter';
+import { AuthenticatedRequest } from '../types/authenticated-request';
 
 const dependentsRouter = Router();
 
 // Middleware de autenticação compatível com Express
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated || !req.isAuthenticated()) {
+  const authReq = req as AuthenticatedRequest;
+  if (!authReq.user) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
@@ -34,12 +36,13 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
  */
 dependentsRouter.get('/', requireAuth, async (req: Request, res: Response) => {
   try {
-    if (!req.user) {
+    const authReq = req as AuthenticatedRequest;
+    if (!authReq.user) {
       throw new AppError(401, 'Usuário não autenticado');
     }
     const userDependents = await db.select()
       .from(dependents)
-      .where(eq(dependents.userId, Number(req.user.id)));
+      .where(eq(dependents.userId, authReq.user.id));
     res.json(userDependents);
   } catch (error) {
     if (error instanceof AppError) {
@@ -56,7 +59,8 @@ dependentsRouter.get('/', requireAuth, async (req: Request, res: Response) => {
  */
 dependentsRouter.post('/', requireAuth, async (req: Request, res: Response) => {
   try {
-    if (!req.user) {
+    const authReq = req as AuthenticatedRequest;
+    if (!authReq.user) {
       throw new AppError(401, 'Usuário não autenticado');
     }
     const { name, birthDate, relationship } = req.body;
@@ -65,10 +69,10 @@ dependentsRouter.post('/', requireAuth, async (req: Request, res: Response) => {
     }
     const newDependent = await db.insert(dependents)
       .values({
-        userId: Number(req.user.id),
-        name: name,
+        userId: authReq.user.id,
+        name: String(name),
         birthDate: new Date(birthDate).toISOString().split('T')[0], // Convert to YYYY-MM-DD format
-        relationship: relationship
+        relationship: String(relationship)
       })
       .returning();
     res.status(201).json(newDependent[0]);
@@ -87,7 +91,8 @@ dependentsRouter.post('/', requireAuth, async (req: Request, res: Response) => {
  */
 dependentsRouter.put('/:id', requireAuth, async (req: Request, res: Response) => {
   try {
-    if (!req.user) {
+    const authReq = req as AuthenticatedRequest;
+    if (!authReq.user) {
       throw new AppError(401, 'Usuário não autenticado');
     }
     const id = toNumberOrThrow(req.params.id);
@@ -97,13 +102,13 @@ dependentsRouter.put('/:id', requireAuth, async (req: Request, res: Response) =>
     }
     const updatedDependent = await db.update(dependents)
       .set({
-        name: name,
+        name: String(name),
         birthDate: new Date(birthDate).toISOString().split('T')[0], // Convert to YYYY-MM-DD format
-        relationship: relationship
+        relationship: String(relationship)
       })
       .where(and(
-        eq(dependents.id, Number(id)),
-        eq(dependents.userId, Number(req.user.id))
+        eq(dependents.id, id),
+        eq(dependents.userId, authReq.user.id)
       ))
       .returning();
     if (!updatedDependent[0]) {
@@ -125,14 +130,15 @@ dependentsRouter.put('/:id', requireAuth, async (req: Request, res: Response) =>
  */
 dependentsRouter.delete('/:id', requireAuth, async (req: Request, res: Response) => {
   try {
-    if (!req.user) {
+    const authReq = req as AuthenticatedRequest;
+    if (!authReq.user) {
       throw new AppError(401, 'Usuário não autenticado');
     }
     const id = toNumberOrThrow(req.params.id);
     const deletedDependent = await db.delete(dependents)
       .where(and(
-        eq(dependents.id, Number(id)),
-        eq(dependents.userId, Number(req.user.id))
+        eq(dependents.id, id),
+        eq(dependents.userId, authReq.user.id)
       ))
       .returning();
     if (!deletedDependent[0]) {

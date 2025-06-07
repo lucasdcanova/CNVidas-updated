@@ -3,7 +3,7 @@ import { AppError } from '../utils/app-error';
 import { verifyToken } from '../utils/jwt';
 import { AuthenticatedRequest } from '../types/authenticated-request';
 import { toNumberOrThrow } from '../utils/id-converter';
-import { getUserById } from '../storage';
+import { storage } from '../storage';
 
 /**
  * Middleware para autenticação via token
@@ -24,7 +24,7 @@ export const tokenAuth = async (req: Request, res: Response, next: NextFunction)
     }
 
     const authReq = req as AuthenticatedRequest;
-    const user = await getUserById(toNumberOrThrow(decoded.id as string | number));
+    const user = await storage.getUserById(toNumberOrThrow(decoded.id as string | number));
     if (!user) {
       throw new AppError('Usuário não encontrado', 404);
     }

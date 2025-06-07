@@ -21,7 +21,7 @@ const authRouter = Router();
 // Middleware de autenticação
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
   const authReq = req as AuthenticatedRequest;
-  if (!authReq.isAuthenticated || !authReq.isAuthenticated()) {
+  if (!authReq.user) {
     throw new AppError('Não autorizado', 401);
   }
   next();
@@ -91,6 +91,7 @@ authRouter.post('/login', async (req: Request, res: Response) => {
  */
 authRouter.post('/logout', requireAuth, async (req: Request, res: Response) => {
   try {
+    const authReq = req as AuthenticatedRequest;
     // TODO: Implementar lógica de logout
     
     res.json({ message: 'Usuário desautenticado com sucesso' });
@@ -113,7 +114,7 @@ authRouter.get('/verify', async (req: Request, res: Response) => {
 
   try {
     const decoded = verify(token, process.env.JWT_SECRET || 'default-secret') as { id: string | number };
-    const userId = toNumberOrThrow(decoded.id as string | number);
+    const userId = toNumberOrThrow(decoded.id);
     
     const result = await db.select().from(users)
       .where(eq(users.id, userId));
@@ -198,10 +199,8 @@ authRouter.get('/verify-email', async (req: Request, res: Response) => {
       .delete(emailVerifications)
       .where(eq(emailVerifications.token, token));
 
-    // Redirecionar para a página de login com mensagem de sucesso
-    res.redirect('/auth?verified=true');
+    res.json({ message: 'Email verificado com sucesso' });
   } catch (error) {
-    console.error('Erro ao verificar email:', error);
     if (error instanceof AppError) {
       res.status(error.statusCode).json({ error: error.message });
     } else {

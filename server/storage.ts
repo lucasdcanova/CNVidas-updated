@@ -332,11 +332,17 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getUserBySessionId(sessionId: string): Promise<User | undefined> {
-    const session = await this.sessionStore.get(sessionId);
-    if (!session || !session.userId) return undefined;
-    const userId = Number(session.userId);
-    const user = await this.getUser(userId);
-    return user;
+    return new Promise((resolve) => {
+      this.sessionStore.get(sessionId, async (err, sessionData) => {
+        if (err || !sessionData || !(sessionData as any).userId) {
+          resolve(undefined);
+          return;
+        }
+        const userId = Number((sessionData as any).userId);
+        const user = await this.getUserById(userId);
+        resolve(user || undefined);
+      });
+    });
   }
 
   async createUser(userData: InsertUser): Promise<User> {
@@ -969,7 +975,8 @@ export class DatabaseStorage implements IStorage {
 
   async getUserByToken(token: string): Promise<ExpressUser | null> {
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || '') as { id: number };
+      const jwt = require('jsonwebtoken');
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'default-secret') as { id: number };
       const [user] = await this.db.select().from(users).where(eq(users.id, decoded.id));
       return user || null;
     } catch (error) {
@@ -979,16 +986,15 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getCurrentSubscription(userId: number): Promise<any> {
-    try {
-      const subscription = await db.query.subscription.findFirst({
-        where: eq(subscription.userId, userId),
-        orderBy: desc(subscription.createdAt)
-      });
-      return subscription;
-    } catch (error) {
-      console.error('Error getting current subscription:', error);
-      return null;
+    const user = await this.getUserById(userId);
+    if (!user) {
+      throw new AppError('Usuário não encontrado', 404);
     }
+
+    const subscription = await this.db.select().from(subscriptionPlans)
+      .where(eq(subscriptionPlans.id, user.subscriptionPlanId || 0));
+
+    return subscription[0] || null;
   }
 
   async createAuditLog(entry: {
@@ -1011,25 +1017,18 @@ export class DatabaseStorage implements IStorage {
 
   async getUserAuditLogs(
     userId: number,
-    limit?: number,
-    offset?: number
+    limit: number = 50,
+    offset: number = 0
   ): Promise<any[]> {
-    try {
-      const logs = await this.db.select()
-        .from(auditLogs)
-        .where(eq(auditLogs.userId, userId))
-        .orderBy(desc(auditLogs.timestamp))
-        .limit(limit || 50)
-        .offset(offset || 0);
-      return logs;
-    } catch (error) {
-      console.error('Erro ao buscar logs de auditoria:', error);
-      return [];
-    }
+    const result = await this.db.select()
+      .from(auditLogs)
+      .where(eq(auditLogs.userId, userId))
+      .orderBy(desc(auditLogs.createdAt))
+      .limit(limit)
+      .offset(offset);
+    return result;
   }
 }
 
 // Export a singleton instance
 export const storage = new DatabaseStorage();
-
-export { getUserById };

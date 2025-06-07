@@ -153,9 +153,9 @@ dailyRouter.post('/room', requireAuth, checkSubscription, async (req: Request, r
     const appointmentIdNumber = toNumberOrThrow(appointmentId);
     
     // Buscar consulta
-    const appointment = await prisma.appointments.findUnique({
-      where: { id: appointmentIdNumber },
-      include: {
+    const appointment = await db.query.appointments.findFirst({
+      where: eq(appointments.id, appointmentIdNumber),
+      with: {
         patient: true,
         doctor: true,
       },
@@ -166,7 +166,7 @@ dailyRouter.post('/room', requireAuth, checkSubscription, async (req: Request, r
     }
 
     // Verificar permissão
-    if (!authReq.user || (appointment.user_id !== authReq.user.id && appointment.doctor_id !== authReq.user.id)) {
+    if (!authReq.user || (appointment.userId !== authReq.user.id && appointment.doctorId !== authReq.user.id)) {
       throw new AppError('Sem permissão para acessar esta consulta', 403);
     }
 
@@ -185,24 +185,22 @@ dailyRouter.post('/room', requireAuth, checkSubscription, async (req: Request, r
     const roomData = await createDailyRoom(roomName);
 
     // Atualizar consulta com informações da sala
-    await prisma.appointments.update({
-      where: { id: appointmentIdNumber },
-      data: {
+    await db.update(appointments)
+      .set({
         telemedicineRoom: roomName,
         telemedicineUrl: roomData.url,
-      },
-    });
+      })
+      .where(eq(appointments.id, appointmentIdNumber));
 
     res.json({
       name: roomName,
       url: roomData.url,
     });
   } catch (error) {
-    console.error('Erro ao criar sala:', error);
     if (error instanceof AppError) {
       res.status(error.statusCode).json({ error: error.message });
     } else {
-      res.status(500).json({ error: 'Erro ao criar sala de videoconferência' });
+      res.status(500).json({ error: 'Erro interno do servidor' });
     }
   }
 });

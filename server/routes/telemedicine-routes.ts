@@ -97,10 +97,9 @@ telemedicineRouter.post('/appointments', requireAuth, async (req: Request, res: 
     
     const validatedData = createAppointmentSchema.parse({
       ...req.body,
-      doctorId: toNumberOrThrow(req.body.doctorId as string | number),
-      duration: toNumberOrThrow(req.body.duration as string | number)
+      doctorId: toNumberOrThrow(req.body.doctorId),
+      duration: toNumberOrThrow(req.body.duration)
     });
-    const userId = toNumberOrThrow(authReq.user.id as string | number);
 
     // Verificar se o médico existe e está disponível
     const [doctor] = await db.select().from(doctors).where(eq(doctors.id, validatedData.doctorId));
@@ -111,7 +110,7 @@ telemedicineRouter.post('/appointments', requireAuth, async (req: Request, res: 
 
     // Criar a consulta
     const [appointment] = await db.insert(appointments).values({
-      userId: userId,
+      userId: authReq.user.id,
       doctorId: validatedData.doctorId,
       date: new Date(validatedData.date),
       duration: validatedData.duration,
@@ -139,19 +138,17 @@ telemedicineRouter.get('/appointments', requireAuth, async (req: Request, res: R
   try {
     if (!authReq.user) return res.status(401).json({ error: 'Não autorizado' });
     
-    const userId = toNumberOrThrow(authReq.user.id as string | number);
     const userRole = authReq.user.role;
 
     let appointmentsList;
     if (userRole === 'doctor') {
       // Buscar ID do médico
-      const [doctor] = await db.select().from(doctors).where(eq(doctors.userId, userId));
+      const [doctor] = await db.select().from(doctors).where(eq(doctors.userId, authReq.user.id));
       if (!doctor) {
         throw new AppError('Médico não encontrado', 404);
       }
 
-      const doctorId = toNumberOrThrow(doctor.id as string | number);
-      appointmentsList = await db.select().from(appointments).where(eq(appointments.doctorId, doctorId));
+      appointmentsList = await db.select().from(appointments).where(eq(appointments.doctorId, doctor.id));
       // Buscar informações do usuário para cada consulta
       const appointmentsWithUser = await Promise.all(
         appointmentsList.map(async (appointment) => {
@@ -168,7 +165,7 @@ telemedicineRouter.get('/appointments', requireAuth, async (req: Request, res: R
       );
       appointmentsList = appointmentsWithUser;
     } else {
-      appointmentsList = await db.select().from(appointments).where(eq(appointments.userId, userId));
+      appointmentsList = await db.select().from(appointments).where(eq(appointments.userId, authReq.user.id));
       // Buscar informações do médico para cada consulta
       const appointmentsWithDoctor = await Promise.all(
         appointmentsList.map(async (appointment) => {
