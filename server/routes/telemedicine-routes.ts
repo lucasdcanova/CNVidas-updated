@@ -169,6 +169,7 @@ telemedicineRouter.get('/appointments', requireAuth, async (req: Request, res: R
       // Buscar informações do médico para cada consulta
       const appointmentsWithDoctor = await Promise.all(
         appointmentsList.map(async (appointment) => {
+          if (!appointment.doctorId) return appointment;
           const [doctor] = await db.select().from(doctors).where(eq(doctors.id, appointment.doctorId));
           if (doctor) {
             const [doctorUser] = await db.select().from(users).where(eq(users.id, doctor.userId));
@@ -368,9 +369,9 @@ telemedicineRouter.get('/appointments/:id', requireAuth, async (req: Request, re
     }
 
     // Buscar informações adicionais
-    const [doctor] = await db.select().from(doctors).where(eq(doctors.id, Number(appointment.doctorId)));
+    const [doctor] = appointment.doctorId ? await db.select().from(doctors).where(eq(doctors.id, Number(appointment.doctorId))) : [null];
     const doctorUserId = doctor?.userId ? Number(doctor.userId) : null;
-    const [doctorUser] = await db.select().from(users).where(eq(users.id, doctorUserId));
+    const [doctorUser] = doctorUserId ? await db.select().from(users).where(eq(users.id, doctorUserId)) : [null];
     const [patientUser] = await db.select().from(users).where(eq(users.id, Number(appointment.userId)));
 
     const appointmentDetails = {
@@ -593,7 +594,7 @@ telemedicineRouter.get("/api/telemedicine/:id", requireAuth, async (req: Request
     if (isNaN(appointmentId)) {
       throw new AppError('ID da consulta inválido', 400);
     }
-    const appointment = await storage.getTelemedicineAppointment(Number(appointmentId));
+    const appointment = await storage.getAppointment(Number(appointmentId));
     return res.json(appointment);
   } catch (error) {
     console.error('Erro ao buscar consulta:', error);

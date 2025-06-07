@@ -2,7 +2,17 @@
 import { Request } from 'express';
 import { User } from '@shared/schema';
 
-export interface AuthenticatedRequest extends Request {
-  user: User;
+// Estender o namespace do Express
+declare global {
+  namespace Express {
+    interface Request {
+      emergencyConsultationToDecrement?: boolean;
+    }
+  }
+}
+
+// Usar tipo ao invés de interface para evitar conflitos
+export type AuthenticatedRequest = Request & {
+  user?: User;
   isAuthenticated?: () => boolean;
-} 
+}; 

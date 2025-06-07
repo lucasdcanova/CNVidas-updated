@@ -38,7 +38,7 @@ dependentsRouter.get('/', requireAuth, async (req: Request, res: Response) => {
   try {
     const authReq = req as AuthenticatedRequest;
     if (!authReq.user) {
-      throw new AppError(401, 'Usuário não autenticado');
+      throw new AppError('Usuário não autenticado', 401);
     }
     const userDependents = await db.select()
       .from(dependents)
@@ -61,11 +61,11 @@ dependentsRouter.post('/', requireAuth, async (req: Request, res: Response) => {
   try {
     const authReq = req as AuthenticatedRequest;
     if (!authReq.user) {
-      throw new AppError(401, 'Usuário não autenticado');
+      throw new AppError('Usuário não autenticado', 401);
     }
     const { name, birthDate, relationship } = req.body;
     if (!name || !birthDate || !relationship) {
-      throw new AppError(400, 'Nome, data de nascimento e relacionamento são obrigatórios');
+      throw new AppError('Nome, data de nascimento e relacionamento são obrigatórios', 400);
     }
     const newDependent = await db.insert(dependents)
       .values({
@@ -93,12 +93,12 @@ dependentsRouter.put('/:id', requireAuth, async (req: Request, res: Response) =>
   try {
     const authReq = req as AuthenticatedRequest;
     if (!authReq.user) {
-      throw new AppError(401, 'Usuário não autenticado');
+      throw new AppError('Usuário não autenticado', 401);
     }
     const id = toNumberOrThrow(req.params.id);
     const { name, birthDate, relationship } = req.body;
     if (!name || !birthDate || !relationship) {
-      throw new AppError(400, 'Nome, data de nascimento e relacionamento são obrigatórios');
+      throw new AppError('Nome, data de nascimento e relacionamento são obrigatórios', 400);
     }
     const updatedDependent = await db.update(dependents)
       .set({
@@ -112,7 +112,7 @@ dependentsRouter.put('/:id', requireAuth, async (req: Request, res: Response) =>
       ))
       .returning();
     if (!updatedDependent[0]) {
-      throw new AppError(404, 'Dependente não encontrado');
+      throw new AppError('Dependente não encontrado', 404);
     }
     res.json(updatedDependent[0]);
   } catch (error) {
@@ -132,7 +132,7 @@ dependentsRouter.delete('/:id', requireAuth, async (req: Request, res: Response)
   try {
     const authReq = req as AuthenticatedRequest;
     if (!authReq.user) {
-      throw new AppError(401, 'Usuário não autenticado');
+      throw new AppError('Usuário não autenticado', 401);
     }
     const id = toNumberOrThrow(req.params.id);
     const deletedDependent = await db.delete(dependents)
@@ -142,7 +142,7 @@ dependentsRouter.delete('/:id', requireAuth, async (req: Request, res: Response)
       ))
       .returning();
     if (!deletedDependent[0]) {
-      throw new AppError(404, 'Dependente não encontrado');
+      throw new AppError('Dependente não encontrado', 404);
     }
     res.json({ message: 'Dependente removido com sucesso' });
   } catch (error) {

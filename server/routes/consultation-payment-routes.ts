@@ -45,12 +45,12 @@ consultationPaymentRouter.post('/create-payment-intent', requireAuth, async (req
     const { amount, doctorId, doctorName, date, isEmergency } = req.body;
     
     if (!amount || !doctorId) {
-      throw new AppError(400, "Dados insuficientes para criar intenção de pagamento");
+      throw new AppError("Dados insuficientes para criar intenção de pagamento", 400);
     }
     
     // Verificar se o usuário tem um customerId no Stripe
     if (!authReq.user?.stripeCustomerId) {
-      throw new AppError(400, "Você precisa ter um método de pagamento cadastrado para realizar consultas");
+      throw new AppError("Você precisa ter um método de pagamento cadastrado para realizar consultas", 400);
     }
     
     // Criar intenção de pagamento com pré-autorização
@@ -93,24 +93,24 @@ consultationPaymentRouter.post('/capture-payment/:appointmentId', requireAuth, a
     
     // Apenas administradores e médicos podem capturar pagamentos
     if (authReq.user?.role !== 'admin' && authReq.user?.role !== 'doctor') {
-      throw new AppError(403, "Você não tem permissão para capturar pagamentos");
+      throw new AppError("Você não tem permissão para capturar pagamentos", 403);
     }
     
     // Buscar a consulta
     const appointment = await storage.getAppointment(appointmentIdNumber);
     
     if (!appointment) {
-      throw new AppError(404, "Consulta não encontrada");
+      throw new AppError("Consulta não encontrada", 404);
     }
     
     // Verificar se a consulta tem um paymentIntentId
     if (!appointment.paymentIntentId) {
-      throw new AppError(400, "Esta consulta não possui um pagamento associado");
+      throw new AppError("Esta consulta não possui um pagamento associado", 400);
     }
     
     // Verificar se o pagamento já foi capturado
     if (appointment.paymentStatus === 'completed') {
-      throw new AppError(400, "O pagamento desta consulta já foi capturado");
+      throw new AppError("O pagamento desta consulta já foi capturado", 400);
     }
     
     // Capturar o pagamento
@@ -217,7 +217,7 @@ consultationPaymentRouter.post('/start', requireAuth, async (req: Request, res: 
     const { consultationId } = req.body;
     
     if (!consultationId) {
-      throw new AppError(400, 'ID da consulta é obrigatório');
+      throw new AppError('ID da consulta é obrigatório', 400);
     }
 
     // TODO: Implementar lógica de início de pagamento
@@ -241,7 +241,7 @@ consultationPaymentRouter.post('/confirm', requireAuth, async (req: Request, res
     const { paymentId } = req.body;
     
     if (!paymentId) {
-      throw new AppError(400, 'ID do pagamento é obrigatório');
+      throw new AppError('ID do pagamento é obrigatório', 400);
     }
 
     // TODO: Implementar lógica de confirmação de pagamento

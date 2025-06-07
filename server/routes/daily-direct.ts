@@ -73,12 +73,12 @@ dailyDirectRouter.get('/room-exists', requireAuth, async (req: Request, res: Res
   try {
     const { roomName } = req.query;
     if (!roomName || typeof roomName !== 'string') {
-      throw new AppError(400, 'Nome da sala é obrigatório');
+      throw new AppError('Nome da sala é obrigatório', 400);
     }
 
     const dailyApiKey = process.env.DAILY_API_KEY;
     if (!dailyApiKey) {
-      throw new AppError(500, 'Configuração da API Daily.co ausente');
+      throw new AppError('Configuração da API Daily.co ausente', 500);
     }
     
     try {
@@ -113,11 +113,11 @@ dailyDirectRouter.get('/room-exists', requireAuth, async (req: Request, res: Res
         
         // Outros erros
         console.error(`Erro ao verificar sala ${roomName}:`, error.response?.data);
-        throw new AppError(error.response?.status || 500, `Erro ao verificar sala: ${error.response?.data?.error || error.message}`);
+        throw new AppError(`Erro ao verificar sala: ${error.response?.data?.error || error.message}`, error.response?.status || 500);
       }
       
       console.error(`Erro ao verificar sala ${roomName}:`, error);
-      throw new AppError(500, 'Erro ao verificar sala');
+      throw new AppError('Erro ao verificar sala', 500);
     }
   } catch (error) {
     if (error instanceof AppError) {
@@ -137,12 +137,12 @@ dailyDirectRouter.post('/create-room', requireAuth, async (req: Request, res: Re
     const { roomName, forceCreate = false, expiryHours = 24 } = req.body;
     
     if (!roomName || typeof roomName !== 'string') {
-      throw new AppError(400, 'Nome da sala é obrigatório');
+      throw new AppError('Nome da sala é obrigatório', 400);
     }
     
     const dailyApiKey = process.env.DAILY_API_KEY;
     if (!dailyApiKey) {
-      throw new AppError(500, 'Configuração da API Daily.co ausente');
+      throw new AppError('Configuração da API Daily.co ausente', 500);
     }
     
     console.log(`Criando sala ${roomName} diretamente no Daily.co`);
@@ -205,11 +205,11 @@ dailyDirectRouter.post('/create-room', requireAuth, async (req: Request, res: Re
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error(`Erro ao criar sala ${sanitizedRoomName}:`, error.response?.data);
-        throw new AppError(error.response?.status || 500, `Erro ao criar sala: ${error.response?.data?.error || error.message}`);
+        throw new AppError(`Erro ao criar sala: ${error.response?.data?.error || error.message}`, error.response?.status || 500);
       }
       
       console.error(`Erro ao criar sala ${sanitizedRoomName}:`, error);
-      throw new AppError(500, 'Erro ao criar sala');
+      throw new AppError('Erro ao criar sala', 500);
     }
   } catch (error) {
     if (error instanceof AppError) {
@@ -293,6 +293,9 @@ dailyDirectRouter.delete('/rooms/:roomName', requireAuth, async (req: Request, r
     const { roomName } = req.params;
     
     // Verificar se o usuário tem permissão (admin ou doctor)
+    if (!authReq.user) {
+      throw new AppError('Usuário não autenticado', 401);
+    }
     if (authReq.user.role !== 'admin' && authReq.user.role !== 'doctor') {
       throw new AppError('Sem permissão para deletar salas', 403);
     }
@@ -322,7 +325,7 @@ dailyDirectRouter.delete('/rooms/:roomName', requireAuth, async (req: Request, r
       success: true,
       message: 'Sala deletada com sucesso',
       room_name: roomName,
-      deleted_by: String(authReq.user.id)
+      deleted_by: String(authReq.user?.id || 'unknown')
     });
   } catch (error) {
     if (error instanceof AppError) {

@@ -142,7 +142,7 @@ const generateDailyToken = async (roomName: string, userName: string, isOwner: b
  * Rota para criar ou obter uma sala de videoconferência
  * POST /api/telemedicine/daily/room
  */
-dailyRouter.post('/room', requireAuth, checkSubscription, async (req: Request, res: Response) => {
+dailyRouter.post('/room', requireAuth, checkSubscriptionFeature('telemedicine'), async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const { appointmentId } = req.body;
@@ -156,8 +156,7 @@ dailyRouter.post('/room', requireAuth, checkSubscription, async (req: Request, r
     const appointment = await db.query.appointments.findFirst({
       where: eq(appointments.id, appointmentIdNumber),
       with: {
-        patient: true,
-        doctor: true,
+        user: true,
       },
     });
 
@@ -171,10 +170,10 @@ dailyRouter.post('/room', requireAuth, checkSubscription, async (req: Request, r
     }
 
     // Verificar se já existe sala
-    if (appointment.telemedicineRoom) {
+    if (appointment.telemedRoomName) {
       return res.json({
-        name: appointment.telemedicineRoom,
-        url: `https://cnvidas.daily.co/${appointment.telemedicineRoom}`,
+        name: appointment.telemedRoomName,
+        url: `https://cnvidas.daily.co/${appointment.telemedRoomName}`,
       });
     }
 
@@ -187,8 +186,8 @@ dailyRouter.post('/room', requireAuth, checkSubscription, async (req: Request, r
     // Atualizar consulta com informações da sala
     await db.update(appointments)
       .set({
-        telemedicineRoom: roomName,
-        telemedicineUrl: roomData.url,
+        telemedRoomName: roomName,
+        telemedLink: roomData.url,
       })
       .where(eq(appointments.id, appointmentIdNumber));
 
@@ -209,7 +208,7 @@ dailyRouter.post('/room', requireAuth, checkSubscription, async (req: Request, r
  * Rota para gerar token de acesso à videoconferência
  * POST /api/telemedicine/daily/token
  */
-dailyRouter.post('/token', requireAuth, checkSubscription, async (req: Request, res: Response) => {
+dailyRouter.post('/token', requireAuth, checkSubscriptionFeature('telemedicine'), async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const { roomName } = req.body;
@@ -237,7 +236,7 @@ dailyRouter.post('/token', requireAuth, checkSubscription, async (req: Request, 
  * Rota para iniciar consulta de emergência
  * POST /api/telemedicine/daily/emergency
  */
-dailyRouter.post('/emergency', requireAuth, checkSubscription, async (req: Request, res: Response) => {
+dailyRouter.post('/emergency', requireAuth, checkSubscriptionFeature('emergency_consultation'), async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const { patientId, symptoms, priority } = req.body;
@@ -253,12 +252,12 @@ dailyRouter.post('/emergency', requireAuth, checkSubscription, async (req: Reque
       });
     }
     // Buscar médico disponível
-    const availableDoctor = await prisma.doctor.findFirst({
+    const availableDoctor = await prisma.doctors.findFirst({
       where: {
-        availableForEmergency: true,
+        available_for_emergency: true,
       },
       orderBy: {
-        createdAt: 'asc'
+        created_at: 'asc'
       },
     });
     if (!availableDoctor) {
@@ -269,13 +268,14 @@ dailyRouter.post('/emergency', requireAuth, checkSubscription, async (req: Reque
     // Criar consulta de emergência
     const appointment = await prisma.appointments.create({
       data: {
-        patientId,
-        doctorId: availableDoctor.id,
-        isEmergency: true,
+        user_id: patientId,
+        doctor_id: availableDoctor.id,
+        is_emergency: true,
         status: 'scheduled',
-        symptoms,
-        priority,
-        scheduledAt: new Date(),
+        type: 'telemedicine',
+        date: new Date(),
+        duration: 30,
+        notes: `Sintomas: ${symptoms}, Prioridade: ${priority}`
       },
     });
     // Criar sala de videoconferência
@@ -285,15 +285,15 @@ dailyRouter.post('/emergency', requireAuth, checkSubscription, async (req: Reque
     await prisma.appointments.update({
       where: { id: appointment.id },
       data: {
-        telemedicineRoom: roomName,
-        telemedicineUrl: roomData.url,
+        telemed_room_name: roomName,
+        telemed_link: roomData.url,
       },
     });
     // Atualizar último atendimento de emergência do médico
-    await prisma.doctor.update({
+    await prisma.doctors.update({
       where: { id: availableDoctor.id },
       data: {
-        updatedAt: new Date(),
+        updated_at: new Date(),
       },
     });
     res.json({

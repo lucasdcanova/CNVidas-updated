@@ -1008,7 +1008,7 @@ export class DatabaseStorage implements IStorage {
     await this.db.insert(auditLogs).values({
       userId: entry.userId,
       action: entry.action,
-      ip: entry.ip,
+      ipAddress: entry.ip,
       userAgent: entry.userAgent,
       details: entry.details,
       createdAt: entry.timestamp

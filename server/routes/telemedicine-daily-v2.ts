@@ -168,11 +168,11 @@ telemedicineRouter.post('/room', requireAuth, checkSubscriptionFeature("telemedi
       }
       
       // Verificar se o usuário tem permissão para acessar esta consulta
-      if (!authReq.user || (appointment.userId !== authReq.user.id && authReq.user.role !== 'admin')) {
+      if (!authReq.user || (appointment.user_id !== authReq.user.id && authReq.user.role !== 'admin')) {
         return res.status(403).json({ error: 'Sem permissão para acessar esta consulta' });
       }
       
-      roomName = appointment.telemedicineRoom || 
+      roomName = appointment.telemed_room_name || 
                 (appointment.type === 'emergency' ? `emergency-${appointmentIdNumber}` : `consultation-${appointmentIdNumber}`);
     } else {
       roomName = customRoomName;
@@ -187,7 +187,7 @@ telemedicineRouter.post('/room', requireAuth, checkSubscriptionFeature("telemedi
         await prisma.appointments.update({
           where: { id: toNumberOrThrow(appointment.id) },
           data: {
-            telemedicineRoom: sanitizedRoomName,
+            telemed_room_name: sanitizedRoomName,
             type: 'telemedicine'
           }
         });
