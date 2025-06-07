@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { storage } from '../storage';
 import { createEmergencyRoom, createEmergencyToken } from '../utils/emergency-utils';
+import { AuthenticatedRequest } from '../types/authenticated-request';
 
 const appointmentJoinRouter = Router();
 
@@ -8,7 +9,7 @@ const appointmentJoinRouter = Router();
  * Endpoint para médicos entrarem em consultas específicas
  * POST /api/appointments/:id/join
  */
-appointmentJoinRouter.post('/:id/join', async (req: Request, res: Response) => {
+appointmentJoinRouter.post('/:id/join', async (req: AuthenticatedRequest, res: Response) => {
   try {
     // Verificar autenticação por vários métodos
     let userId = null;

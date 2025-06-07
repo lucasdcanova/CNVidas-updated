@@ -8,8 +8,10 @@ import {
   cancelConsultationPayment,
   shouldChargeForEmergencyConsultation
 } from '../utils/stripe-payment.js';
-import { AuthenticatedRequest } from '../types/authenticated-request';
-import { User } from '@shared/schema.js';
+import { AppError } from '../utils/app-error';
+import { db } from '../db';
+import { users } from '@shared/schema';
+import { eq } from 'drizzle-orm';
 
 const paymentRouter = Router();
 

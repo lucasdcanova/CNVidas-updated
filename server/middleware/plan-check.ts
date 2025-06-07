@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
+import type { AuthenticatedRequest } from "../types/express";
 import { storage } from "../storage";
 
 interface PlanRequirement {
@@ -12,7 +13,7 @@ interface PlanRequirement {
  * @param requirements - Requisitos de plano para acessar a rota
  */
 export const requirePlan = (requirements: PlanRequirement) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
       // Verifica se o usuário está autenticado
       if (!req.user) {
@@ -47,7 +48,7 @@ export const requirePlan = (requirements: PlanRequirement) => {
 /**
  * Verifica se o usuário tem consultas de emergência disponíveis
  */
-export const checkEmergencyConsultationAvailability = async (req: Request, res: Response, next: NextFunction) => {
+export const checkEmergencyConsultationAvailability = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     if (!req.user) {
       return res.status(401).json({ message: "Usuário não autenticado" });
@@ -96,7 +97,7 @@ export const checkEmergencyConsultationAvailability = async (req: Request, res: 
 /**
  * Verifica o desconto que o usuário tem direito com base no plano
  */
-export const getSpecialistDiscount = (req: Request): number => {
+export const getSpecialistDiscount = (req: AuthenticatedRequest): number => {
   if (!req.user) return 0;
   
   const userPlan = req.user.subscriptionPlan || 'free';

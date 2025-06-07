@@ -78,20 +78,6 @@ export interface ExpressUser extends User {
   role: 'admin' | 'doctor' | 'partner' | 'patient';
 }
 
-// Interfaces para Storage
-export interface IStorage {
-  getUserById(id: number): Promise<User | null>;
-  getUserByEmail(email: string): Promise<User | null>;
-  createUser(user: InsertUser): Promise<User>;
-  updateUser(id: number, user: Partial<User>): Promise<User | null>;
-  deleteUser(id: number): Promise<boolean>;
-  getDependent(id: number): Promise<Dependent | null>;
-  getDependentsByUserId(userId: number): Promise<Dependent[]>;
-  createDependent(dependent: InsertDependent): Promise<Dependent>;
-  updateDependent(id: number, dependent: Partial<Dependent>): Promise<Dependent | null>;
-  deleteDependent(id: number): Promise<boolean>;
-}
-
 // Interfaces para autenticação
 export interface AuthConfig {
   secret: string;

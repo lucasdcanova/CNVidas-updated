@@ -1,22 +1,21 @@
 import { Request, Response, NextFunction } from 'express';
 import { User } from '../../shared/schema';
 
-export type AuthenticatedRequest = Request;
-
-export const isAuthenticated = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated()) {
+export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
+  if (typeof req.isAuthenticated !== 'function' || !req.isAuthenticated()) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
 };
 
 export const requireRole = (roles: string[]) => {
-  return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    if (!req.isAuthenticated()) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (typeof req.isAuthenticated !== 'function' || !req.isAuthenticated()) {
       return res.status(401).json({ error: 'Não autorizado' });
     }
 
-    if (!req.user || !roles.includes(req.user.role)) {
+    const authReq = req as AuthenticatedRequest;
+    if (!authReq.user || !roles.includes(authReq.user.role)) {
       return res.status(403).json({ error: 'Acesso negado' });
     }
 
@@ -24,29 +23,33 @@ export const requireRole = (roles: string[]) => {
   };
 };
 
-export const isAdmin = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated() || !req.user || req.user.role !== 'admin') {
+export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
+  const authReq = req as AuthenticatedRequest;
+  if (typeof authReq.isAuthenticated !== 'function' || !authReq.isAuthenticated() || !authReq.user || authReq.user.role !== 'admin') {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
 };
 
-export const isDoctor = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated() || !req.user || req.user.role !== 'doctor') {
+export const isDoctor = (req: Request, res: Response, next: NextFunction) => {
+  const authReq = req as AuthenticatedRequest;
+  if (typeof authReq.isAuthenticated !== 'function' || !authReq.isAuthenticated() || !authReq.user || authReq.user.role !== 'doctor') {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
 };
 
-export const isPatient = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated() || !req.user || req.user.role !== 'patient') {
+export const isPatient = (req: Request, res: Response, next: NextFunction) => {
+  const authReq = req as AuthenticatedRequest;
+  if (typeof authReq.isAuthenticated !== 'function' || !authReq.isAuthenticated() || !authReq.user || authReq.user.role !== 'patient') {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
 };
 
-export const isPartner = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated() || !req.user || req.user.role !== 'partner') {
+export const isPartner = (req: Request, res: Response, next: NextFunction) => {
+  const authReq = req as AuthenticatedRequest;
+  if (typeof authReq.isAuthenticated !== 'function' || !authReq.isAuthenticated() || !authReq.user || authReq.user.role !== 'partner') {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();

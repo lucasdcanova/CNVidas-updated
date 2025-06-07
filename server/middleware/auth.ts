@@ -7,9 +7,10 @@ import { DatabaseStorage } from '../storage';
 import { AuthenticatedRequest } from '../types/authenticated-request';
 import { validateId } from '../utils/id-converter';
 
-export const requireAuth = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.user) {
-    throw new AppError('Usuário não autenticado', 401);
+export const requireAuth = (req: Request, res: Response, next: NextFunction) => {
+  const authReq = req as AuthenticatedRequest;
+  if (!authReq.user) {
+    return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
 };

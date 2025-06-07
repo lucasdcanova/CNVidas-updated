@@ -1,7 +1,7 @@
 import 'dotenv/config'; // Garantir que as variáveis de ambiente sejam carregadas primeiro
 import express, { type Request, Response, NextFunction } from "express";
 import { createServer } from 'http';
-import setupRoutes from './routes';
+import setupRoutes from './routes/index';
 import { setupVite, serveStatic, log } from "./vite";
 import { setupSubscriptionPlans } from "./migrations/plans-setup";
 import { ensureJsonResponse } from "./middleware/json-response";
@@ -31,14 +31,11 @@ import connectPg from "connect-pg-simple";
   }));
 
   // Configuração de sessão
-  const PostgresSessionStore = connectPg(session);
-  const sessionStore = new PostgresSessionStore({
-    pool,
-    createTableIfMissing: true
-  });
-
   app.use(session({
-    store: sessionStore,
+    store: new (connectPg(session))({
+      pool,
+      createTableIfMissing: true,
+    }),
     secret: process.env.SESSION_SECRET || 'cn-vidas-secret',
     resave: false,
     saveUninitialized: false,
@@ -66,9 +63,9 @@ import connectPg from "connect-pg-simple";
 
   // Configuração do Vite em desenvolvimento
   if (process.env.NODE_ENV !== 'production') {
-    await setupVite(app);
+    await setupVite(app, server);
   } else {
-    app.use(serveStatic);
+    serveStatic(app);
   }
 
   // Verificar conexão com email

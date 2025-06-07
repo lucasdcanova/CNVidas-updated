@@ -17,6 +17,10 @@ import { User } from '@shared/schema';
 import { Router } from 'express';
 import { DatabaseStorage } from '../storage';
 import { toNumberOrThrow } from '../utils/id-converter';
+import { AppError } from '../utils/app-error';
+import { db } from '../db';
+import { appointments, users } from '@shared/schema';
+import { eq, and, gte, lte } from 'drizzle-orm';
 
 // Interface para resposta da API do Daily.co
 interface DailyRoomResponse {
@@ -44,7 +48,7 @@ interface DailyTokenResponse {
   exp: number;
 }
 
-export const dailyRouter = express.Router();
+const dailyRouter = Router();
 
 // Middleware para garantir respostas JSON
 dailyRouter.use(jsonResponse);
@@ -149,7 +153,7 @@ dailyRouter.post('/room', requireAuth, checkSubscription, async (req: Authentica
     const appointmentIdNumber = toNumberOrThrow(appointmentId);
     
     // Buscar consulta
-    const appointment = await prisma.appointment.findUnique({
+    const appointment = await prisma.appointments.findUnique({
       where: { id: appointmentIdNumber },
       include: {
         patient: true,
@@ -181,7 +185,7 @@ dailyRouter.post('/room', requireAuth, checkSubscription, async (req: Authentica
     const roomData = await createDailyRoom(roomName);
 
     // Atualizar consulta com informações da sala
-    await prisma.appointment.update({
+    await prisma.appointments.update({
       where: { id: appointmentIdNumber },
       data: {
         telemedicineRoom: roomName,
@@ -264,7 +268,7 @@ dailyRouter.post('/emergency', requireAuth, checkSubscription, async (req: Reque
       });
     }
     // Criar consulta de emergência
-    const appointment = await prisma.appointment.create({
+    const appointment = await prisma.appointments.create({
       data: {
         patientId,
         doctorId: availableDoctor.id,
@@ -279,7 +283,7 @@ dailyRouter.post('/emergency', requireAuth, checkSubscription, async (req: Reque
     const roomName = sanitizeRoomName(`emergency-${appointment.id}-${Date.now()}`);
     const roomData = await createDailyRoom(roomName);
     // Atualizar consulta com informações da sala
-    await prisma.appointment.update({
+    await prisma.appointments.update({
       where: { id: appointment.id },
       data: {
         telemedicineRoom: roomName,

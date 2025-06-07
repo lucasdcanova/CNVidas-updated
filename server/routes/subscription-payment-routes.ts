@@ -15,7 +15,8 @@ const subscriptionPaymentRouter = Router();
 
 // Middleware de autenticação compatível com Express
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated()) {
+  const authReq = req as AuthenticatedRequest;
+  if (!authReq.user) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();

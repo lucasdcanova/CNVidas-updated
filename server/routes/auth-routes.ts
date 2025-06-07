@@ -13,8 +13,8 @@ import { randomBytes } from 'crypto';
 import { emailVerifications, passwordResets } from '@shared/schema';
 import { sendVerificationEmail, sendPasswordResetEmail } from '../services/email';
 import passport from 'passport';
-import { AuthenticatedRequest } from '../types/authenticated-request';
 import { toNumberOrThrow } from '../utils/id-converter';
+import { AuthenticatedRequest } from '../types/authenticated-request';
 
 const authRouter = Router();
 
@@ -40,7 +40,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
  * Registra um novo usuário
  * POST /api/auth/register
  */
-authRouter.post('/register', async (req: Request, res: Response) => {
+authRouter.post('/register', async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { email, password, name } = req.body;
     
@@ -64,7 +64,7 @@ authRouter.post('/register', async (req: Request, res: Response) => {
  * Autentica um usuário
  * POST /api/auth/login
  */
-authRouter.post('/login', async (req: Request, res: Response) => {
+authRouter.post('/login', async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { email, password } = req.body;
     
@@ -103,7 +103,7 @@ authRouter.post('/logout', isAuthenticated, async (req: AuthenticatedRequest, re
 });
 
 // Verificar token
-authRouter.get('/verify', async (req: Request, res: Response) => {
+authRouter.get('/verify', async (req: AuthenticatedRequest, res: Response) => {
   const token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
@@ -162,7 +162,7 @@ authRouter.get('/me', isAuthenticated, async (req: AuthenticatedRequest, res: Re
 });
 
 // Rota para verificar o email
-authRouter.get('/verify-email', async (req: Request, res: Response) => {
+authRouter.get('/verify-email', async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { token } = req.query;
 

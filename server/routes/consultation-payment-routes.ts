@@ -1,6 +1,5 @@
 import express, { Router } from 'express';
 import { Request, Response, NextFunction } from 'express';
-import { AuthenticatedRequest } from '../types/authenticated-request';
 import { storage } from '../storage.js';
 import { createConsultationPaymentIntent, captureConsultationPayment, cancelConsultationPayment } from '../utils/stripe-payment.js';
 import { User } from '@shared/schema';
@@ -8,6 +7,8 @@ import { AppError } from '../utils/app-error';
 import { isAuthenticated } from '../middleware/auth.js';
 import { checkSubscriptionFeature } from '../middleware/subscription-check.js';
 import { toNumberOrThrow } from '../utils/id-converter';
+import { db } from '../db';
+import { AuthenticatedRequest } from '../types/authenticated-request';
 
 const consultationPaymentRouter = Router();
 
@@ -15,7 +16,8 @@ const consultationPaymentRouter = Router();
  * Middleware de autenticação compatível com Express
  */
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated()) {
+  const authReq = req as AuthenticatedRequest;
+  if (!authReq.user) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
@@ -37,7 +39,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
  * Cria uma intenção de pagamento com pré-autorização para consulta
  * POST /api/consultations/create-payment-intent
  */
-consultationPaymentRouter.post('/create-payment-intent', requireAuth, async (req: Request, res: Response) => {
+consultationPaymentRouter.post('/create-payment-intent', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { amount, doctorId, doctorName, date, isEmergency } = req.body;
     
@@ -82,7 +84,7 @@ consultationPaymentRouter.post('/create-payment-intent', requireAuth, async (req
  * Captura um pagamento pré-autorizado após a consulta ser realizada
  * POST /api/consultations/capture-payment/:appointmentId
  */
-consultationPaymentRouter.post('/capture-payment/:appointmentId', requireAuth, async (req: Request, res: Response) => {
+consultationPaymentRouter.post('/capture-payment/:appointmentId', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { appointmentId } = req.params;
     const appointmentIdNumber = toNumberOrThrow(appointmentId);
@@ -142,7 +144,7 @@ consultationPaymentRouter.post('/capture-payment/:appointmentId', requireAuth, a
  * Cancela um pagamento pré-autorizado caso a consulta seja cancelada
  * POST /api/consultations/cancel-payment/:appointmentId
  */
-consultationPaymentRouter.post('/cancel-payment/:appointmentId', requireAuth, async (req: Request, res: Response) => {
+consultationPaymentRouter.post('/cancel-payment/:appointmentId', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { appointmentId } = req.params;
     const { reason } = req.body;
@@ -208,7 +210,6 @@ consultationPaymentRouter.post('/cancel-payment/:appointmentId', requireAuth, as
  * POST /api/consultation-payment/start
  */
 consultationPaymentRouter.post('/start', requireAuth, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
     const { consultationId } = req.body;
     
@@ -233,7 +234,6 @@ consultationPaymentRouter.post('/start', requireAuth, async (req: Request, res: 
  * POST /api/consultation-payment/confirm
  */
 consultationPaymentRouter.post('/confirm', requireAuth, async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
   try {
     const { paymentId } = req.body;
     

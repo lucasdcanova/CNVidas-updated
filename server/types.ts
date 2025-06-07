@@ -4,10 +4,8 @@ import { User as SchemaUser, Partner, Doctor } from '../shared/schema';
 // Tipo auxiliar para lidar com a conversão de id
 export type UserId = number;
 
-// Tipo para requests autenticadas
-export interface AuthenticatedRequest extends Request {
-  user?: SchemaUser & { id: UserId };
-}
+// O tipo AuthenticatedRequest agora é global e definido em server/types/express.d.ts
+// Esta definição foi removida para evitar conflitos.
 
 export interface EmailVerification {
   id: number;

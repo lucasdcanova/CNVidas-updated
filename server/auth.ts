@@ -160,19 +160,20 @@ export function setupAuth(app: express.Express) {
     ),
   );
 
-  passport.serializeUser((user: Express.User, done) => {
-    done(null, user.id);
+  passport.serializeUser((user, done) => {
+    // O objeto 'user' aqui é o que foi retornado no 'done(null, user)' da estratégia
+    // e pode não ser diretamente compatível com Express.User se os tipos forem diferentes.
+    // Usamos um type assertion para garantir que o compilador saiba que `id` existe.
+    const id = (user as User).id;
+    done(null, id);
   });
   
   passport.deserializeUser(async (id: number, done) => {
     try {
       const [user] = await db.select().from(users).where(eq(users.id, id));
-      
-      if (!user) {
-        return done(null, false);
-      }
-      
-      done(null, user);
+      // Se o usuário for encontrado, passamos o objeto completo para o 'done'
+      // Se não, a falha (false) é indicada no segundo argumento.
+      done(null, user || false);
     } catch (error) {
       done(error);
     }

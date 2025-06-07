@@ -158,7 +158,7 @@ telemedicineRouter.post('/room', requireAuth, checkSubscriptionFeature("telemedi
     if (appointmentId) {
       const appointmentIdNumber = toNumberOrThrow(appointmentId);
       
-      appointment = await prisma.appointment.findUnique({
+      appointment = await prisma.appointments.findUnique({
         where: { id: appointmentIdNumber }
       });
       
@@ -183,7 +183,7 @@ telemedicineRouter.post('/room', requireAuth, checkSubscriptionFeature("telemedi
       const roomData = await createDailyRoom(sanitizedRoomName);
       
       if (appointment) {
-        await prisma.appointment.update({
+        await prisma.appointments.update({
           where: { id: toNumberOrThrow(appointment.id) },
           data: {
             telemedicineRoom: sanitizedRoomName,

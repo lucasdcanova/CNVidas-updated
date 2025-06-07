@@ -48,7 +48,7 @@ export interface IStorage {
   getUserByCPF(cpf: string): Promise<User | undefined>;
   getUserBySessionId(sessionId: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
-  updateUser(id: number, user: Partial<User>): Promise<User | null>;
+  updateUser(id: number, user: Partial<InsertUser>): Promise<User | null>;
   deleteUser(id: number): Promise<boolean>;
   getUsersByRole(role: "patient" | "partner" | "admin" | "doctor"): Promise<User[]>;
   updateUserPassword(id: number, password: string): Promise<User>;

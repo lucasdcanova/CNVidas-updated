@@ -5,7 +5,6 @@ import { db } from '../db.js';
 import { users, subscriptionPlans, userSubscriptions } from '../../shared/schema';
 import stripe from '../utils/stripe-instance.js';
 import { AppError } from '../utils/app-error';
-import { AuthenticatedRequest } from '../types/authenticated-request';
 import { storage } from '../storage';
 import { toNumberOrThrow } from '../utils/id-converter';
 
