@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
-import { eq } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
 import { db } from '../db.js';
 import { users, subscriptionPlans, userSubscriptions } from '../../shared/schema';
 import stripe from '../utils/stripe-instance.js';
@@ -576,5 +576,19 @@ router.delete('/cancel/:id', isAuthenticated, async (req: Request, res: Response
     });
   }
 });
+
+// Rota para buscar planos de assinatura disponíveis (pública)
+router.get('/plans', async (req: Request, res: Response) => {
+  try {
+    const plansData = await db.select().from(subscriptionPlans);
+    console.log('Retornando planos de assinatura para usuário:', plansData);
+    res.json(plansData);
+  } catch (error) {
+    console.error('Erro ao buscar planos:', error);
+    res.status(500).json({ error: 'Erro ao buscar planos de assinatura' });
+  }
+});
+
+// Rota removida - usar /api/subscription/current do public-subscription-routes.ts
 
 export default router;

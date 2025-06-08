@@ -23,7 +23,7 @@ export const users = pgTable("users", {
   address: varchar("address", { length: 255 }),
   city: varchar("city", { length: 100 }),
   state: varchar("state", { length: 2 }),
-  zipCode: varchar("zip_code", { length: 8 }),
+  zipcode: varchar("zipcode", { length: 8 }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   lastLogin: timestamp("last_login"),

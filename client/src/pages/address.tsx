@@ -23,7 +23,7 @@ export default function AddressPage() {
   useEffect(() => {
     if (user) {
       setDefaultValues({
-        zipcode: user.zipCode || '',
+        zipcode: user.zipcode || '',
         street: user.address || '',
         number: '',
         complement: '',

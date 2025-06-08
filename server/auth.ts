@@ -16,7 +16,6 @@ import jwt from 'jsonwebtoken';
 import { User } from '@shared/schema';
 import { DatabaseStorage } from './storage';
 import { z } from 'zod';
-import { sign } from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 
 // A declaração global de Express.User agora está em server/types/express.d.ts
@@ -123,7 +122,7 @@ export function setupAuth(app: express.Express) {
         try {
           // Validar parâmetros
           if (!email || !password) {
-            await auditLogger.logFailedLogin(req, email, "Parâmetros inválidos");
+            console.log("Login falhou: Parâmetros inválidos");
             return done(null, false, { message: "Email e senha são obrigatórios" });
           }
 
@@ -131,13 +130,13 @@ export function setupAuth(app: express.Express) {
           const [user] = await db.select().from(users).where(eq(users.email, email));
           
           if (!user) {
-            await auditLogger.logFailedLogin(req, email, "Usuário não encontrado");
+            console.log("Login falhou: Usuário não encontrado");
             return done(null, false, { message: "Email ou senha incorretos" });
           }
           
           // Verificar se o usuário está ativo
           if (!user.emailVerified) {
-            await auditLogger.logFailedLogin(req, email, "Email não verificado");
+            console.log("Login falhou: Email não verificado");
             return done(null, false, { message: "Por favor, verifique seu email antes de fazer login" });
           }
           
@@ -145,15 +144,15 @@ export function setupAuth(app: express.Express) {
           const isPasswordValid = await comparePasswords(password, user.password);
           
           if (!isPasswordValid) {
-            await auditLogger.logFailedLogin(req, email, "Senha incorreta");
+            console.log("Login falhou: Senha incorreta");
             return done(null, false, { message: "Email ou senha incorretos" });
           }
           
           // Login bem-sucedido
-          await auditLogger.logSuccessfulLogin(req, user.id);
-          return done(null, user);
+          console.log("Login bem-sucedido para:", user.email);
+          return done(null, mapToExpressUser(user));
         } catch (error) {
-          await auditLogger.logFailedLogin(req, email, "Erro interno");
+          console.error("Erro interno no login:", error);
           return done(error);
         }
       },
@@ -173,7 +172,7 @@ export function setupAuth(app: express.Express) {
       const [user] = await db.select().from(users).where(eq(users.id, id));
       // Se o usuário for encontrado, passamos o objeto completo para o 'done'
       // Se não, a falha (false) é indicada no segundo argumento.
-      done(null, user || false);
+      done(null, user ? mapToExpressUser(user) : false);
     } catch (error) {
       done(error);
     }

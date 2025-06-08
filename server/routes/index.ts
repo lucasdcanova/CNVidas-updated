@@ -19,10 +19,31 @@ import dailyEmergencyRouter from './daily-emergency-routes';
 import profileImageRouter from './profile-image-routes';
 import addressRouter from './address-routes';
 import appointmentJoinRouter from './appointment-join';
+import publicSubscriptionRouter from './public-subscription-routes';
 
 export default async function setupRoutes(app: express.Express) {
-  // Rotas de autenticação
+  // Rotas de autenticação (PRIMEIRO para evitar conflitos)
+  console.log('Registrando authRouter em /api/auth');
   app.use('/api/auth', authRouter);
+  
+  // Rotas de compatibilidade específicas
+  app.post('/api/login', (req, res, next) => {
+    console.log('=== ROTA /api/login INTERCEPTADA ===');
+    req.url = '/login';
+    authRouter(req, res, next);
+  });
+  
+  app.post('/api/register', (req, res, next) => {
+    console.log('=== ROTA /api/register INTERCEPTADA ===');
+    req.url = '/register';
+    authRouter(req, res, next);
+  });
+  
+  app.get('/api/user', (req, res, next) => {
+    console.log('=== ROTA /api/user INTERCEPTADA ===');
+    req.url = '/user';
+    authRouter(req, res, next);
+  });
   
   // Rotas de diagnóstico
   app.use('/api/diagnostics', diagnosticRouter);
@@ -43,6 +64,7 @@ export default async function setupRoutes(app: express.Express) {
   // Rotas de pagamento
   app.use('/api/payments', paymentRouter);
   app.use('/api/subscriptions', subscriptionCreateRouter);
+  app.use('/api/subscription', publicSubscriptionRouter); // Rotas públicas de subscription
   app.use('/api/subscriptions/payments', subscriptionPaymentRouter);
   
   // Rotas de dependentes

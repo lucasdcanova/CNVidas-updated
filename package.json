@@ -1,6 +1,8 @@
 {
   "name": "rest-express",
   "version": "1.0.0",
+  "description": "",
+  "main": "dist/server/index.js",
   "type": "module",
   "license": "MIT",
   "scripts": {
@@ -17,7 +19,7 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "postinstall": "prisma generate",
-    "copy-files": "cp -r server/static dist/server/ && cp -r server/uploads dist/server/",
+    "copy-files": "mkdir -p dist/server/static dist/server/uploads",
     "clean": "rm -rf dist",
     "lint": "eslint . --ext .ts",
     "deploy": "npm run clean && npm run build && npm start",
@@ -142,7 +144,7 @@
     "@vitejs/plugin-react": "^4.3.2",
     "autoprefixer": "^10.4.20",
     "drizzle-kit": "^0.30.4",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.25.5",
     "jest": "^29.7.0",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.17",

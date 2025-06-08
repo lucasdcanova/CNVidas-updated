@@ -239,26 +239,8 @@ const AuthPage: React.FC = () => {
         console.log("Session ID stored:", (user as any)._debug.sessionID);
       }
       
-      // Short delay to ensure session is properly established
-      setTimeout(() => {
-        // Redirect based on user role
-        if (user.role === "doctor") {
-          navigate("/doctor-telemedicine");
-        } else if (user.role === "partner") {
-          navigate("/partner/services"); // Caminho corrigido com a barra entre partner e services
-        } else if (user.role === "admin") {
-          navigate("/admin/users");
-        } else if (user.role === "patient") {
-          // Verificar se o paciente precisa escolher um plano examinando os dados
-          if (user.subscriptionStatus !== "active" || user.subscriptionPlan === "free") {
-            navigate("/first-subscription");
-          } else {
-            navigate("/dashboard");
-          }
-        } else {
-          navigate("/dashboard");
-        }
-      }, 500);
+      // O redirecionamento será feito automaticamente pelo useAuth hook
+      console.log("Login processado, aguardando redirecionamento automático...");
     } catch (error) {
       // Additional error logging
       console.error("Login error:", error);

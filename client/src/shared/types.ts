@@ -16,7 +16,7 @@ export const userSchema = z.object({
   address: z.string().nullable(),
   city: z.string().nullable(),
   state: z.string().nullable(),
-  zipCode: z.string().nullable(),
+  zipcode: z.string().nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
   lastLogin: z.date().nullable(),

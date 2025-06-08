@@ -19,7 +19,7 @@ declare global {
       address: string | null;
       city: string | null;
       state: string | null;
-      zipCode: string | null;
+      zipcode: string | null;
       createdAt: Date;
       updatedAt: Date;
       lastLogin: Date | null;

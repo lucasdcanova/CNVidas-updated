@@ -16,16 +16,17 @@ import CheckoutModal from "@/components/checkout/checkout-modal-fix";
 // Definição do tipo de plano de assinatura
 interface SubscriptionPlan {
   id: number;
-  name: string;
+  name: "free" | "basic" | "premium" | "basic_family" | "premium_family" | "ultra" | "ultra_family";
   displayName?: string;
-  description: string;
+  description?: string;
   price: number;
   features: string[];
-  planType: "free" | "basic" | "premium" | "basic_family" | "premium_family" | "ultra" | "ultra_family";
-  isFamily?: boolean;
-  maxDependents?: number;
-  insuranceCoverageAmount?: number;
-  specialistDiscount?: number;
+  emergencyConsultations: string;
+  specialistDiscount: number;
+  insuranceCoverage: boolean;
+  isDefault?: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface UserSubscription {
@@ -42,11 +43,14 @@ interface UserSubscription {
 const FirstSubscriptionPage: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const [showFamilyPlans, setShowFamilyPlans] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<{id: number, name: string, price: string} | null>(null);
   const [hasAttemptedLeave, setHasAttemptedLeave] = useState(false);
+
+  console.log("🔍 FirstSubscriptionPage - Location atual:", location);
+  console.log("🔧 TESTE: FirstSubscriptionPage carregada às", new Date().toLocaleTimeString());
 
   // Verificar se o usuário tem perfil de paciente
   useEffect(() => {
@@ -88,15 +92,18 @@ const FirstSubscriptionPage: React.FC = () => {
   const isLoading = plansLoading || subscriptionLoading;
 
   const handleSelectPlan = (plan: SubscriptionPlan) => {
-    // Se for o plano gratuito, redireciona direto para o dashboard
-    if (plan.planType === 'free' || plan.name === 'Gratuito') {
-      toast({
-        title: "Plano gratuito selecionado",
-        description: "Você será redirecionado para o dashboard.",
-      });
-      setTimeout(() => {
-        setLocation('/dashboard');
-      }, 1000);
+    console.log("🔧 handleSelectPlan chamada para:", plan.name);
+    console.log("🔧 Plano completo:", plan);
+    
+    // TESTE: Alert sempre que qualquer plano for clicado
+    alert(`CLIQUE DETECTADO: ${plan.name} - ${plan.displayName}`);
+    
+    // Se for o plano gratuito, redireciona imediatamente
+    if (plan.name === 'free') {
+      console.log("🔄 REDIRECIONAMENTO para dashboard...");
+      alert("TESTE: Redirecionando para dashboard!");
+      // Redirecionamento imediato e simples
+      window.location.href = "/dashboard";
       return;
     }
     
@@ -110,7 +117,7 @@ const FirstSubscriptionPage: React.FC = () => {
     setSelectedPlan({
       id: plan.id, 
       name: plan.displayName || plan.name,
-      price: `R$${plan.price.toFixed(2)}`
+      price: `R$ ${(plan.price / 100).toFixed(2)}`
     });
     setCheckoutOpen(true);
   };
@@ -124,7 +131,7 @@ const FirstSubscriptionPage: React.FC = () => {
     
     plans.forEach((plan: SubscriptionPlan) => {
       // Extrair o tipo base do plano (remover _family se existir)
-      const baseType = plan.planType.replace('_family', '');
+      const baseType = plan.name.replace('_family', '');
       if (!planGroups[baseType]) {
         planGroups[baseType] = [];
       }
@@ -135,7 +142,7 @@ const FirstSubscriptionPage: React.FC = () => {
     const result: SubscriptionPlan[] = [];
     Object.entries(planGroups).forEach(([type, planGroup]) => {
       if (planGroup.length > 0) {
-        const plan = planGroup.find(p => p.isFamily === showFamilyPlans) || planGroup[0];
+        const plan = planGroup.find(p => (p.name.includes('_family')) === showFamilyPlans) || planGroup[0];
         result.push(plan);
       }
     });
@@ -149,8 +156,8 @@ const FirstSubscriptionPage: React.FC = () => {
     };
     
     return result.sort((a, b) => {
-      const baseTypeA = a.planType.replace('_family', '');
-      const baseTypeB = b.planType.replace('_family', '');
+      const baseTypeA = a.name.replace('_family', '');
+      const baseTypeB = b.name.replace('_family', '');
       
       return (planOrder[baseTypeA as keyof typeof planOrder] || 99) - 
              (planOrder[baseTypeB as keyof typeof planOrder] || 99);
@@ -241,41 +248,44 @@ const FirstSubscriptionPage: React.FC = () => {
           </div>
 
           {/* Lista de planos */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {plans && getFilteredAndGroupedPlans()
-              .filter(plan => plan.planType !== 'free' && plan.name !== 'Gratuito') // Remover o plano gratuito da listagem
               .map((plan: SubscriptionPlan) => (
               <Card 
                 key={plan.id} 
                 className={`overflow-hidden transform transition-all duration-300 hover:shadow-xl ${
-                  plan.planType === 'ultra' || plan.planType === 'ultra_family' 
+                  plan.name === 'ultra' || plan.name === 'ultra_family' 
                     ? 'hover:-translate-y-2 border-violet-400 shadow-lg shadow-violet-300 relative ring-2 ring-violet-400/70 scale-105' : 
-                  plan.planType === 'premium' || plan.planType === 'premium_family' 
+                  plan.name === 'premium' || plan.name === 'premium_family' 
                     ? 'hover:-translate-y-1 border-amber-300' :
-                  plan.planType === 'basic' || plan.planType === 'basic_family' 
-                    ? 'hover:-translate-y-1 border-emerald-300' : ''
+                  plan.name === 'basic' || plan.name === 'basic_family' 
+                    ? 'hover:-translate-y-1 border-emerald-300' :
+                  plan.name === 'free'
+                    ? 'hover:-translate-y-1 border-gray-300 bg-gray-50' : ''
                 }`}
               >
                 <CardHeader className={`${
-                  plan.planType === 'ultra' || plan.planType === 'ultra_family'
+                  plan.name === 'ultra' || plan.name === 'ultra_family'
                     ? 'bg-purple-600 text-white' 
-                  : plan.planType === 'premium' || plan.planType === 'premium_family'
+                  : plan.name === 'premium' || plan.name === 'premium_family'
                     ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white' 
-                  : plan.planType === 'basic' || plan.planType === 'basic_family'
+                  : plan.name === 'basic' || plan.name === 'basic_family'
                     ? 'bg-gradient-to-r from-emerald-400 to-teal-500 text-white' 
+                  : plan.name === 'free'
+                    ? 'bg-gray-100 text-gray-800'
                   : ''
                 }`}>
                   <CardTitle className={
-                    plan.planType === 'ultra' || plan.planType === 'premium' || plan.planType === 'basic' ||
-                    plan.planType === 'ultra_family' || plan.planType === 'premium_family' || plan.planType === 'basic_family'
+                    plan.name === 'ultra' || plan.name === 'premium' || plan.name === 'basic' ||
+                    plan.name === 'ultra_family' || plan.name === 'premium_family' || plan.name === 'basic_family'
                       ? 'text-white flex items-center text-2xl' 
                       : 'flex items-center text-2xl'
                   }>
                     {plan.displayName || plan.name}
                   </CardTitle>
                   <CardDescription className={
-                    plan.planType === 'ultra' || plan.planType === 'premium' || plan.planType === 'basic' ||
-                    plan.planType === 'ultra_family' || plan.planType === 'premium_family' || plan.planType === 'basic_family'
+                    plan.name === 'ultra' || plan.name === 'premium' || plan.name === 'basic' ||
+                    plan.name === 'ultra_family' || plan.name === 'premium_family' || plan.name === 'basic_family'
                       ? 'text-white/90' 
                       : ''
                   }>
@@ -285,7 +295,7 @@ const FirstSubscriptionPage: React.FC = () => {
                 <CardContent className="pt-6">
                   <div className="mb-6">
                     <span className="text-3xl font-bold">
-                      {plan.price ? `R$ ${plan.price.toFixed(2)}` : "Gratuito"}
+                      {plan.price ? `R$ ${(plan.price / 100).toFixed(2)}` : "Gratuito"}
                     </span>
                     {plan.price > 0 && <span className="text-muted-foreground">/mês</span>}
                   </div>
@@ -302,7 +312,7 @@ const FirstSubscriptionPage: React.FC = () => {
                 <CardFooter>
                   <Button 
                     className={`w-full ${
-                      plan.planType === 'ultra' || plan.planType === 'ultra_family'
+                      plan.name === 'ultra' || plan.name === 'ultra_family'
                         ? 'bg-purple-600 hover:bg-purple-700' 
                         : ''
                     }`} 
@@ -315,40 +325,7 @@ const FirstSubscriptionPage: React.FC = () => {
             ))}
           </div>
           
-          {/* Link para continuar com plano gratuito */}
-          <div className="text-center mt-8">
-            <p className="text-gray-800 text-lg">
-              Não desejo assinar nenhum plano no momento, <a 
-                href="#" 
-                className="text-primary font-medium hover:underline"
-                onClick={(e) => {
-                  e.preventDefault();
-                  
-                  // Mostrar notificação
-                  toast({
-                    title: "Plano gratuito selecionado",
-                    description: "Você será redirecionado para o dashboard.",
-                  });
-                  
-                  // Criar uma requisição ao backend para aplicar o plano gratuito
-                  // e então redirecionar o usuário para o dashboard
-                  apiRequest("POST", "/api/subscription/select", { planId: 4 })
-                    .then(() => {
-                      console.log("Plano gratuito selecionado com sucesso, redirecionando...");
-                      // Usar window.location normalmente para evitar o erro de segurança
-                      window.location.href = "/dashboard";
-                    })
-                    .catch(error => {
-                      console.error("Erro ao selecionar plano gratuito:", error);
-                      // Em caso de erro, ainda tentar redirecionar
-                      window.location.href = "/dashboard";
-                    });
-                }}
-              >
-                continuar
-              </a> como plano gratuito.
-            </p>
-          </div>
+
 
           {/* Informação adicional */}
           <div className="mt-12 bg-white p-6 rounded-lg shadow-sm max-w-2xl mx-auto">

@@ -8,7 +8,11 @@ import { User } from '@shared/schema';
 import { storage } from '../storage';
 import { eq } from 'drizzle-orm';
 import { hash, compare } from 'bcrypt';
-import { sign, verify } from 'jsonwebtoken';
+import { scrypt, timingSafeEqual } from 'crypto';
+import { promisify } from 'util';
+
+const scryptAsync = promisify(scrypt);
+import jwt from 'jsonwebtoken';
 import { randomBytes } from 'crypto';
 import { emailVerifications, passwordResets } from '@shared/schema';
 import { sendVerificationEmail, sendPasswordResetEmail } from '../services/email';
@@ -17,6 +21,12 @@ import { toNumberOrThrow } from '../utils/id-converter';
 import { AuthenticatedRequest } from '../types/authenticated-request';
 
 const authRouter = Router();
+
+console.log('AuthRouter carregado - rotas disponíveis:');
+console.log('- POST /register');
+console.log('- POST /login');
+console.log('- POST /test');
+console.log('- GET /user (verificação de autenticação)');
 
 // Middleware de autenticação
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
@@ -43,16 +53,73 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
  */
 authRouter.post('/register', async (req: Request, res: Response) => {
   try {
-    const { email, password, name } = req.body;
+    console.log('Registro - dados recebidos:', req.body);
+    const { email, password, fullName, role = 'patient', username, cpf, cnpj } = req.body;
     
-    if (!email || !password || !name) {
-      throw new AppError('Email, senha e nome são obrigatórios', 400);
+    if (!email || !password || !fullName) {
+      throw new AppError('Email, senha e nome completo são obrigatórios', 400);
     }
 
-    // TODO: Implementar lógica de registro
+    // Usar SQL direto para verificar se usuário já existe
+    const { pool } = await import('../db');
     
-    res.json({ message: 'Usuário registrado com sucesso' });
+    const existingUserResult = await pool.query(
+      'SELECT id FROM users WHERE email = $1',
+      [email]
+    );
+    
+    if (existingUserResult.rows.length > 0) {
+      return res.status(400).json({ error: 'Este email já está cadastrado' });
+    }
+
+    // Gerar username se não foi fornecido
+    let finalUsername = username;
+    if (!finalUsername) {
+      if (role === 'patient' && cpf) {
+        finalUsername = `p${cpf.replace(/\D/g, '')}`;
+      } else if (role === 'partner' && cnpj) {
+        finalUsername = `e${cnpj.replace(/\D/g, '')}`;
+      } else {
+        finalUsername = `u_${Date.now()}`;
+      }
+    }
+
+    // Verificar se username já existe
+    const existingUsernameResult = await pool.query(
+      'SELECT id FROM users WHERE username = $1',
+      [finalUsername]
+    );
+    
+    if (existingUsernameResult.rows.length > 0) {
+      finalUsername = `${finalUsername}_${Date.now()}`;
+    }
+
+    // Hash da senha usando bcrypt
+    const hashedPassword = await hash(password, 10);
+
+    // Criar usuário usando SQL direto
+    const newUserResult = await pool.query(`
+      INSERT INTO users (email, username, password, full_name, role, email_verified, created_at, updated_at)
+      VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
+      RETURNING id, email, username, full_name, role
+    `, [email, finalUsername, hashedPassword, fullName, role, true]);
+    
+    const newUser = newUserResult.rows[0];
+
+    console.log('Usuário criado com sucesso:', { id: newUser.id, email: newUser.email });
+
+    // Retornar dados do usuário criado (sem login automático por enquanto)
+    res.status(201).json({
+      id: newUser.id,
+      email: newUser.email,
+      username: newUser.username,
+      fullName: newUser.full_name,
+      role: newUser.role,
+      message: 'Usuário registrado com sucesso'
+    });
+
   } catch (error) {
+    console.error('Erro no registro:', error);
     if (error instanceof AppError) {
       res.status(error.statusCode).json({ error: error.message });
     } else {
@@ -62,26 +129,107 @@ authRouter.post('/register', async (req: Request, res: Response) => {
 });
 
 /**
+ * Rota de teste simples
+ * POST /api/auth/test
+ */
+authRouter.post('/test', async (req: Request, res: Response) => {
+  console.log('=== ROTA TEST CHAMADA ===');
+  res.json({ message: 'Rota funcionando!', body: req.body });
+});
+
+/**
  * Autentica um usuário
  * POST /api/auth/login
  */
-authRouter.post('/login', async (req: Request, res: Response) => {
-  try {
-    const { email, password } = req.body;
-    
-    if (!email || !password) {
-      throw new AppError('Email e senha são obrigatórios', 400);
-    }
+authRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+  console.log('=== ROTA LOGIN CHAMADA ===');
+  console.log('URL:', req.url);
+  console.log('Method:', req.method);
+  console.log('Body:', req.body);
+  
+  const { email, password } = req.body;
+  
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email e senha são obrigatórios' });
+  }
 
-    // TODO: Implementar lógica de autenticação
+  // Buscar usuário diretamente no banco usando SQL
+  try {
+    console.log('Buscando usuário no banco:', email);
     
-    res.json({ message: 'Usuário autenticado com sucesso' });
-  } catch (error) {
-    if (error instanceof AppError) {
-      res.status(error.statusCode).json({ error: error.message });
-    } else {
-      res.status(500).json({ error: 'Erro interno do servidor' });
+    // Usar SQL direto para evitar problemas de schema
+    const { pool } = await import('../db');
+    const result = await pool.query(
+      'SELECT id, email, username, full_name, password, role, email_verified FROM users WHERE email = $1',
+      [email]
+    );
+    
+    const user = result.rows[0];
+    console.log('Usuário encontrado:', !!user);
+    
+    if (!user) {
+      return res.status(401).json({ error: 'Email ou senha incorretos' });
     }
+    
+    if (!user.email_verified) {
+      return res.status(401).json({ error: 'Por favor, verifique seu email antes de fazer login' });
+    }
+    
+    // Verificar a senha (suporte para scrypt e bcrypt)
+    let isPasswordValid = false;
+    
+    if (user.password.includes('.')) {
+      // Formato scrypt (hash.salt)
+      const [hashed, salt] = user.password.split(".");
+      if (hashed && salt) {
+        const hashedBuf = Buffer.from(hashed, "hex");
+        const suppliedBuf = (await scryptAsync(password, salt, 64)) as Buffer;
+        isPasswordValid = timingSafeEqual(hashedBuf, suppliedBuf);
+      }
+    } else {
+      // Formato bcrypt
+      isPasswordValid = await compare(password, user.password);
+    }
+    
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: 'Email ou senha incorretos' });
+    }
+    
+    // Login bem-sucedido - gerar JWT token
+    console.log('Login bem-sucedido para:', user.email);
+    
+    const jwtSecret = process.env.JWT_SECRET || 'cnvidas-secret-key-2024';
+    const token = jwt.sign(
+      { 
+        userId: user.id, 
+        email: user.email, 
+        role: user.role 
+      }, 
+      jwtSecret, 
+      { expiresIn: '7d' }
+    );
+    
+    // Configurar cookie httpOnly para segurança
+    res.cookie('auth_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 dias
+    });
+    
+    res.json({
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      fullName: user.full_name,
+      role: user.role,
+      message: 'Login realizado com sucesso',
+      authToken: token // Incluir token na resposta para armazenamento no localStorage se necessário
+    });
+
+  } catch (error) {
+    console.error('Erro no login:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
 
@@ -113,7 +261,7 @@ authRouter.get('/verify', async (req: Request, res: Response) => {
   }
 
   try {
-    const decoded = verify(token, process.env.JWT_SECRET || 'default-secret') as { id: string | number };
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'default-secret') as { id: string | number };
     const userId = toNumberOrThrow(decoded.id);
     
     const result = await db.select().from(users)
@@ -344,6 +492,72 @@ authRouter.post('/reset-password', async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Erro ao redefinir senha:', error);
     res.status(500).json({ message: 'Erro ao processar redefinição de senha' });
+  }
+});
+
+/**
+ * Obtém dados do usuário autenticado
+ * GET /api/auth/user
+ */
+authRouter.get('/user', async (req: Request, res: Response) => {
+  try {
+    // Verificar token JWT do cookie ou header Authorization
+    let token = null;
+    
+    // Primeiro, tentar obter do cookie
+    if (req.cookies && req.cookies.auth_token) {
+      token = req.cookies.auth_token;
+    }
+    
+    // Se não tiver no cookie, tentar do header Authorization
+    if (!token) {
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.replace('Bearer ', '');
+      }
+    }
+    
+    if (!token) {
+      return res.status(401).json({ error: 'Token de autenticação não encontrado' });
+    }
+    
+    // Verificar e decodificar o token JWT
+    const jwtSecret = process.env.JWT_SECRET || 'cnvidas-secret-key-2024';
+    let decoded: any;
+    
+    try {
+      decoded = jwt.verify(token, jwtSecret);
+    } catch (jwtError) {
+      console.error('Token JWT inválido:', jwtError);
+      return res.status(401).json({ error: 'Token de autenticação inválido' });
+    }
+    
+    // Buscar dados atualizados do usuário no banco
+    const { pool } = await import('../db');
+    const result = await pool.query(
+      'SELECT id, email, username, full_name, role, email_verified FROM users WHERE id = $1',
+      [decoded.userId]
+    );
+    
+    const user = result.rows[0];
+    
+    if (!user) {
+      return res.status(401).json({ error: 'Usuário não encontrado' });
+    }
+    
+    // Retornar dados do usuário autenticado
+    res.json({
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      fullName: user.full_name,
+      role: user.role,
+      emailVerified: user.email_verified
+    });
+    
+  } catch (error) {
+    console.error('Erro ao verificar autenticação:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
 
