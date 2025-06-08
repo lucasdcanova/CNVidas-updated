@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -44,6 +44,7 @@ const FirstSubscriptionPage: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [location, setLocation] = useLocation();
+  const queryClient = useQueryClient();
   const [showFamilyPlans, setShowFamilyPlans] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<{id: number, name: string, price: string} | null>(null);
@@ -73,14 +74,8 @@ const FirstSubscriptionPage: React.FC = () => {
     enabled: !!user?.id,
   });
 
-  // Se o usuário já tiver uma assinatura ativa, redirecioná-lo para o dashboard
-  useEffect(() => {
-    if (userSubscription && userSubscription.status === "active") {
-      console.log("Usuário já tem assinatura ativa, redirecionando para o dashboard...");
-      // Usar redirecionamento direto do navegador para garantir que funcione
-      window.location.href = '/dashboard';
-    }
-  }, [userSubscription]);
+  // REMOVIDO: Redirecionamento automático que estava causando loop infinito
+  // O dashboard é quem deve gerenciar os redirecionamentos de assinatura
 
   // Remover o impedimento que bloqueia o usuário de sair da página
   // Isso estava causando problemas no redirecionamento para o dashboard
@@ -91,29 +86,59 @@ const FirstSubscriptionPage: React.FC = () => {
 
   const isLoading = plansLoading || subscriptionLoading;
 
-  const handleSelectPlan = (plan: SubscriptionPlan) => {
-    console.log("🔧 handleSelectPlan chamada para:", plan.name);
-    console.log("🔧 Plano completo:", plan);
+  const handleSelectPlan = async (plan: SubscriptionPlan) => {
+    console.log("🔧 Selecionando plano:", plan.name);
     
-    // TESTE: Alert sempre que qualquer plano for clicado
-    alert(`CLIQUE DETECTADO: ${plan.name} - ${plan.displayName}`);
-    
-    // Se for o plano gratuito, redireciona imediatamente
+    // Se for o plano gratuito, ativar o plano e redirecionar
     if (plan.name === 'free') {
-      console.log("🔄 REDIRECIONAMENTO para dashboard...");
-      alert("TESTE: Redirecionando para dashboard!");
-      // Redirecionamento imediato e simples
-      window.location.href = "/dashboard";
+      try {
+        console.log("🔄 Ativando plano gratuito...");
+        
+        // Fazer requisição para ativar o plano gratuito
+        const response = await apiRequest("POST", "/api/subscription/activate-free", {});
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log("✅ Plano gratuito ativado com sucesso!", data);
+          
+          // Atualizar a cache da assinatura para evitar redirecionamentos circulares
+          if (data.subscription) {
+            console.log("🔄 Atualizando cache da assinatura:", data.subscription);
+            // Como a função getUserSubscription agora extrai o objeto diretamente,
+            // vamos salvar o objeto de assinatura diretamente na cache
+            queryClient.setQueryData(["/api/subscription/current"], data.subscription);
+          }
+          
+          toast({
+            title: "Plano Gratuito Ativado!",
+            description: "Você será redirecionado para o dashboard.",
+          });
+          
+          // Aguardar um momento para mostrar o toast e depois redirecionar
+          setTimeout(() => {
+            console.log("🔄 Redirecionando para dashboard...");
+            window.location.href = "/dashboard";
+          }, 1000);
+        } else {
+          throw new Error("Falha ao ativar plano gratuito");
+        }
+      } catch (error) {
+        console.error("❌ Erro ao ativar plano gratuito:", error);
+        toast({
+          title: "Erro",
+          description: "Não foi possível ativar o plano. Tente novamente.",
+          variant: "destructive",
+        });
+      }
       return;
     }
     
-    // Para planos pagos, usamos o modal de checkout com métodos brasileiros
+    // Para planos pagos, usar o modal de checkout
     toast({
       title: "Preparando checkout...",
       description: "O formulário de pagamento será exibido em instantes.",
     });
     
-    // Definir o plano selecionado para abrir o modal de checkout
     setSelectedPlan({
       id: plan.id, 
       name: plan.displayName || plan.name,

@@ -359,10 +359,34 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteUser(id: number): Promise<boolean> {
-    const [user] = await this.db.delete(users)
-      .where(eq(users.id, id))
-      .returning();
-    return !!user;
+    try {
+      console.log(`🗑️ Tentando excluir usuário ID: ${id}`);
+      
+      // Verificar se o usuário existe primeiro
+      const existingUser = await this.getUser(id);
+      if (!existingUser) {
+        console.log(`❌ Usuário ID ${id} não encontrado`);
+        return false;
+      }
+      
+      console.log(`✅ Usuário encontrado: ${existingUser.fullName} (${existingUser.email})`);
+      
+      // Excluir o usuário
+      const [user] = await this.db.delete(users)
+        .where(eq(users.id, id))
+        .returning();
+      
+      if (user) {
+        console.log(`✅ Usuário ID ${id} excluído com sucesso`);
+        return true;
+      } else {
+        console.log(`❌ Falha ao excluir usuário ID ${id}`);
+        return false;
+      }
+    } catch (error) {
+      console.error(`❌ Erro ao excluir usuário ID ${id}:`, error);
+      throw error;
+    }
   }
 
   async getUsersByRole(role: "patient" | "partner" | "admin" | "doctor"): Promise<User[]> {

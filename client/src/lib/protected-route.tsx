@@ -24,34 +24,11 @@ export function ProtectedRoute({
   const isFirstSubscriptionPath = path === "/first-subscription";
   const isSubscriptionSuccess = path === "/subscription-success";
   
-  // Verificar status da assinatura do usuário se for um paciente
+  // DESABILITADO: Verificação de assinatura movida para o dashboard para evitar conflitos
   useEffect(() => {
-    const checkSubscription = async () => {
-      if (user?.role === "patient" && !isFirstSubscriptionPath && !isSubscriptionSuccess) {
-        setCheckingSubscription(true);
-        
-        try {
-          const response = await apiRequest("GET", "/api/subscription/current");
-          const data = await response.json();
-          
-          // Verificar se o usuário tem um plano ativo
-          const hasActivePlan = data && data.status === "active";
-          setNeedsSubscription(!hasActivePlan);
-        } catch (error) {
-          // Em caso de erro, considerar que precisa de assinatura
-          setNeedsSubscription(true);
-        } finally {
-          setCheckingSubscription(false);
-        }
-      } else {
-        setNeedsSubscription(false);
-      }
-    };
-    
-    if (user) {
-      checkSubscription();
-    }
-  }, [user, isFirstSubscriptionPath, isSubscriptionSuccess]);
+    // Sempre permitir acesso - o dashboard gerenciará os redirecionamentos de assinatura
+    setNeedsSubscription(false);
+  }, [user]);
 
   if (isLoading || checkingSubscription) {
     return (
@@ -79,14 +56,14 @@ export function ProtectedRoute({
     );
   }
   
-  // Verificar se é um paciente novo que precisa escolher um plano
-  if (user.role === "patient" && needsSubscription && !isFirstSubscriptionPath && !isSubscriptionSuccess) {
-    return (
-      <Route path={path}>
-        <Redirect to="/first-subscription" />
-      </Route>
-    );
-  }
+  // DESABILITADO: Redirecionamento movido para o dashboard para evitar loops
+  // if (user.role === "patient" && needsSubscription && !isFirstSubscriptionPath && !isSubscriptionSuccess) {
+  //   return (
+  //     <Route path={path}>
+  //       <Redirect to="/first-subscription" />
+  //     </Route>
+  //   );
+  // }
 
   return <Route path={path} component={Component} />;
 }

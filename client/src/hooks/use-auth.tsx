@@ -246,13 +246,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     onSuccess: (userData: User & { sessionId?: string, authToken?: string }) => {
       console.log("Registro bem-sucedido:", userData);
       
+      // Salvar os dados do usuário na cache (login automático)
+      queryClient.setQueryData(["/api/user"], userData);
+      
       toast({
         title: "Conta criada com sucesso",
-        description: "Você já pode fazer login com suas credenciais.",
+        description: `Bem-vindo(a) ao CN Vidas, ${userData.fullName}!`,
       });
       
-      // Redirecionar para a página de login
-      window.location.href = "/auth";
+      // Redirecionar com base no papel do usuário (login automático)
+      if (userData.role === "admin") {
+        console.log("Usuário é administrador, redirecionando para /admin/users");
+        window.location.href = "/admin/users";
+      } else if (userData.role === "doctor") {
+        console.log("Usuário é médico, redirecionando para /doctor-telemedicine");
+        window.location.href = "/doctor-telemedicine";
+      } else if (userData.role === "partner") {
+        console.log("Usuário é parceiro, redirecionando para /partner/dashboard");
+        window.location.href = "/partner/dashboard";
+      } else if (userData.role === "patient") {
+        // Novos pacientes vão direto para a página de seleção obrigatória de plano
+        console.log("Usuário é paciente, redirecionando para /first-subscription");
+        window.location.href = "/first-subscription";
+      } else {
+        console.log("Usuário registrado, redirecionando para /dashboard");
+        window.location.href = "/dashboard";
+      }
+      
+      // Forçar uma verificação de autenticação
+      setTimeout(() => refetch(), 300);
     },
     onError: (error: Error) => {
       console.error("Erro no registro:", error);

@@ -23,16 +23,24 @@ const Dashboard: React.FC = () => {
   
   // Verificar se é o primeiro login de um paciente e redirecionar para seleção de plano obrigatória
   useEffect(() => {
-    if (user?.role === "patient" && !subscriptionLoading) {
-      // Se não tiver assinatura ou se a assinatura estiver inativa, considerar primeiro login
-      const needsSubscription = !userSubscription || userSubscription.status !== "active";
-      setIsFirstLogin(needsSubscription);
+    if (user?.role === "patient" && !subscriptionLoading && userSubscription !== undefined) {
+      console.log("🔍 Dashboard - userSubscription:", userSubscription);
       
-      if (needsSubscription) {
-        // Redirecionar para a página de seleção obrigatória de plano
+      // Com a nova função getUserSubscription, já temos o objeto de assinatura diretamente
+      const hasActiveSubscription = userSubscription && userSubscription.status === "active";
+      
+      console.log("🔍 Dashboard - Status da assinatura:", userSubscription?.status);
+      console.log("🔍 Dashboard - Tem assinatura ativa?", hasActiveSubscription);
+      
+      setIsFirstLogin(!hasActiveSubscription);
+      
+      if (!hasActiveSubscription) {
+        console.log("🔄 Dashboard - Redirecionando para first-subscription");
         setLocation('/first-subscription');
+      } else {
+        console.log("✅ Dashboard - Usuário tem assinatura ativa, permanecendo no dashboard");
       }
-    } else {
+    } else if (user?.role !== "patient") {
       setIsFirstLogin(false);
     }
   }, [user, userSubscription, subscriptionLoading, setLocation]);

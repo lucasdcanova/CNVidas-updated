@@ -108,14 +108,35 @@ authRouter.post('/register', async (req: Request, res: Response) => {
 
     console.log('Usuário criado com sucesso:', { id: newUser.id, email: newUser.email });
 
-    // Retornar dados do usuário criado (sem login automático por enquanto)
+    // Fazer login automático após registro bem-sucedido
+    const jwtSecret = process.env.JWT_SECRET || 'cnvidas-secret-key-2024';
+    const token = jwt.sign(
+      { 
+        userId: newUser.id, 
+        email: newUser.email, 
+        role: newUser.role 
+      }, 
+      jwtSecret, 
+      { expiresIn: '7d' }
+    );
+    
+    // Configurar cookie httpOnly para segurança
+    res.cookie('auth_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 dias
+    });
+
+    // Retornar dados do usuário criado com login automático
     res.status(201).json({
       id: newUser.id,
       email: newUser.email,
       username: newUser.username,
       fullName: newUser.full_name,
       role: newUser.role,
-      message: 'Usuário registrado com sucesso'
+      message: 'Usuário registrado com sucesso',
+      authToken: token // Incluir token na resposta para armazenamento no localStorage se necessário
     });
 
   } catch (error) {
@@ -136,6 +157,8 @@ authRouter.post('/test', async (req: Request, res: Response) => {
   console.log('=== ROTA TEST CHAMADA ===');
   res.json({ message: 'Rota funcionando!', body: req.body });
 });
+
+
 
 /**
  * Autentica um usuário

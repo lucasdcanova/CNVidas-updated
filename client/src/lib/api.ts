@@ -303,7 +303,9 @@ export const getSubscriptionPlans = async () => {
 
 export const getUserSubscription = async () => {
   const res = await apiRequest("GET", "/api/subscription/current");
-  return await res.json();
+  const data = await res.json();
+  // Se a resposta tem estrutura aninhada, extrair o objeto subscription
+  return data.subscription || data;
 };
 
 export const createSubscription = async (planId: number) => {

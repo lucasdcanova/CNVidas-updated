@@ -494,24 +494,32 @@ adminRouter.patch('/users/:id', async (req: AuthenticatedRequest, res) => {
 adminRouter.delete('/users/:id', async (req: AuthenticatedRequest, res) => {
   try {
     const userId = parseInt(req.params.id);
+    console.log(`🔥 Admin DELETE /users/${userId} - Iniciando exclusão`);
     
     // Verificar se usuário existe
     const user = await storage.getUser(userId);
     if (!user) {
+      console.log(`❌ Usuário ${userId} não encontrado`);
       return res.status(404).json({ message: "Usuário não encontrado" });
     }
     
+    console.log(`✅ Usuário encontrado: ${user.fullName} (${user.email})`);
+    
     // Não permitir excluir o próprio usuário
     if (req.user && user.id === req.user!.id) {
+      console.log(`❌ Tentativa de auto-exclusão impedida`);
       return res.status(400).json({ message: "Você não pode excluir seu próprio usuário" });
     }
     
+    console.log(`🗑️ Chamando storage.deleteUser(${userId})`);
     // Excluir usuário
     await storage.deleteUser(userId);
     
+    console.log(`✅ Usuário ${userId} excluído com sucesso`);
     res.json({ message: "Usuário excluído com sucesso" });
   } catch (error) {
-    console.error("Erro ao excluir usuário:", error);
+    console.error("❌ Erro ao excluir usuário:", error);
+    console.error("❌ Stack trace:", error.stack);
     res.status(500).json({ message: "Erro ao excluir usuário" });
   }
 });

@@ -29,20 +29,27 @@ export const users = pgTable("users", {
   lastLogin: timestamp("last_login"),
   isActive: boolean("is_active").default(true).notNull(),
   subscriptionStatus: varchar("subscription_status", { length: 50 }).default('inactive'),
-  subscriptionPlanId: integer("subscription_plan_id").references(() => subscriptionPlans.id),
-  subscriptionStartDate: timestamp("subscription_start_date"),
-  subscriptionEndDate: timestamp("subscription_end_date"),
-  lastSubscriptionCancellation: timestamp("last_subscription_cancellation"),
+
+
   sellerId: varchar("seller_id", { length: 255 }),
   sellerName: varchar("seller_name", { length: 255 }),
   stripeCustomerId: text("stripe_customer_id"),
   stripeSubscriptionId: text("stripe_subscription_id"),
   subscriptionPlan: subscriptionPlanEnum("subscription_plan").default('free'),
-  subscriptionChangedAt: timestamp("subscription_changed_at"), // Data da última mudança de plano
+
   emailVerified: boolean("email_verified").default(false).notNull(),
   profileImage: text("profile_image"),
-  emergencyConsultationsLeft: integer("emergency_consultations_left").default(0),
+  
+  // Colunas adicionais que existem no banco
   birthDate: date("birth_date"),
+  emergencyConsultationsLeft: integer("emergency_consultations_left").default(0),
+  lastSubscriptionCancellation: timestamp("last_subscription_cancellation"),
+  street: text("street"),
+  number: text("number"),
+  complement: text("complement"),
+  neighborhood: text("neighborhood"),
+  subscriptionChangedAt: timestamp("subscription_changed_at"),
+
 });
 
 export const partners = pgTable("partners", {
@@ -164,9 +171,9 @@ export const dependents = pgTable("dependents", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   name: text("name").notNull(),
-  cpf: varchar("cpf", { length: 11 }),
+  cpf: text("cpf").notNull(),
   birthDate: date("birth_date"),
-  relationship: text("relationship").notNull(),
+  relationship: text("relationship"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

@@ -297,37 +297,8 @@ const AuthPage: React.FC = () => {
         };
       }
       
-      const user = await registerMutation.mutateAsync(registerData);
-      console.log("Registration successful, user data received:", user);
-      
-      // Store the session ID if available
-      if (user && (user as any)._debug && (user as any)._debug.sessionID) {
-        localStorage.setItem('sessionID', (user as any)._debug.sessionID);
-        console.log("Session ID stored:", (user as any)._debug.sessionID);
-      }
-      
-      // Show success message
-      toast({
-        title: "Cadastro realizado com sucesso",
-        description: `Bem-vindo(a) ao CN Vidas, ${user.fullName}!`,
-      });
-      
-      // Short delay to ensure session is properly established
-      setTimeout(() => {
-        // Redirect based on user role
-        if (user.role === "doctor") {
-          navigate("/doctor-telemedicine");
-        } else if (user.role === "partner") {
-          navigate("/partner/services"); // Caminho correto com a barra
-        } else if (user.role === "admin") {
-          navigate("/admin/users");
-        } else if (user.role === "patient") {
-          // Novos pacientes vão direto para a página de seleção obrigatória de plano
-          navigate("/first-subscription");
-        } else {
-          navigate("/dashboard");
-        }
-      }, 500);
+      await registerMutation.mutateAsync(registerData);
+      console.log("Registration successful, redirection will be handled by mutation hook");
     } catch (error) {
       // Additional error logging
       console.error("Registration error:", error);
