@@ -143,23 +143,12 @@ const AdminUsersPage: React.FC = () => {
     queryKey: ["/api/admin/users"],
     queryFn: async () => {
       console.log("Buscando lista de usuários admin");
-      const authToken = localStorage.getItem("authToken");
-      
-      if (!authToken) {
-        console.error("Nenhum token de autenticação disponível para buscar usuários");
-        throw new Error("Você precisa estar autenticado como administrador");
-      }
-      
-      const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${authToken}`
-      };
-      
-      console.log("Fazendo requisição com token:", authToken);
       
       const response = await fetch("/api/admin/users", {
         method: "GET",
-        headers,
+        headers: {
+          "Content-Type": "application/json"
+        },
         credentials: "include"
       });
       

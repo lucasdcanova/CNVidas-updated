@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
 import AdminLayout from "@/components/layouts/admin-layout";
 import { getAllPartners, getAdminPartners, updatePartner, createAdminPartner } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,8 +50,22 @@ const AdminPartners: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   
   const { data: partners = [] } = useQuery({
-    queryKey: ["/api/partners"],
-    queryFn: getAllPartners,
+    queryKey: ["/api/admin/partners"],
+    queryFn: async () => {
+      const response = await fetch("/api/admin/partners", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "include"
+      });
+      
+      if (!response.ok) {
+        throw new Error("Falha ao carregar lista de parceiros");
+      }
+      
+      return await response.json();
+    },
   });
   
   // Filter partners by status
@@ -105,8 +120,25 @@ const AdminPartners: React.FC = () => {
   });
   
   const createPartnerMutation = useMutation({
-    mutationFn: (data: any) => createAdminPartner(data),
+    mutationFn: async (data: any) => {
+      const response = await fetch("/api/admin/partners", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify(data)
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erro ao criar parceiro");
+      }
+      
+      return await response.json();
+    },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/partners"] });
       toast({
         title: "Parceiro adicionado",
         description: "O novo parceiro foi adicionado com sucesso.",
@@ -124,8 +156,25 @@ const AdminPartners: React.FC = () => {
   });
   
   const updatePartnerMutation = useMutation({
-    mutationFn: ({ id, data }: { id: number, data: any }) => updatePartner(id, data),
+    mutationFn: async ({ id, data }: { id: number, data: any }) => {
+      const response = await fetch(`/api/admin/partners/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify(data)
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erro ao atualizar parceiro");
+      }
+      
+      return await response.json();
+    },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/partners"] });
       toast({
         title: "Parceiro atualizado",
         description: "As informações do parceiro foram atualizadas com sucesso.",
