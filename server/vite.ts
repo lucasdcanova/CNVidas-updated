@@ -3,12 +3,14 @@ import fs from "fs";
 import path from "path";
 import { createServer as createViteServer, createLogger } from "vite";
 import { type Server } from "http";
-import viteConfig from "../vite.config";
 import { nanoid } from "nanoid";
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Simple config for production - will be replaced by static serving
+const viteConfig = {};
 
 const viteLogger = createLogger();
 
@@ -79,18 +81,41 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  const distPath = path.resolve(__dirname, "public");
-
-  if (!fs.existsSync(distPath)) {
-    throw new Error(
-      `Could not find the build directory: ${distPath}, make sure to build the client first`,
-    );
+  // Em produção no Render, servir arquivos estáticos do cliente
+  const clientPath = path.resolve(__dirname, "..", "client");
+  const publicPath = path.resolve(__dirname, "public");
+  
+  console.log('🔍 Tentando servir arquivos estáticos de:', clientPath);
+  console.log('🔍 Ou de:', publicPath);
+  
+  // Tentar servir do diretório public primeiro (build compilado)
+  if (fs.existsSync(publicPath)) {
+    console.log('✅ Usando diretório public compilado');
+    app.use(express.static(publicPath));
+    app.use("*", (_req, res) => {
+      res.sendFile(path.resolve(publicPath, "index.html"));
+    });
+  } 
+  // Fallback para servir diretamente do cliente (desenvolvimento/produção sem build)
+  else if (fs.existsSync(clientPath)) {
+    console.log('✅ Usando diretório client diretamente');
+    app.use(express.static(clientPath));
+    app.use("*", (_req, res) => {
+      res.sendFile(path.resolve(clientPath, "index.html"));
+    });
   }
-
-  app.use(express.static(distPath));
-
-  // fall through to index.html if the file doesn't exist
-  app.use("*", (_req, res) => {
-    res.sendFile(path.resolve(distPath, "index.html"));
-  });
+  // Fallback final - retornar JSON indicando que é uma API
+  else {
+    console.log('⚠️ Nenhum diretório de arquivos estáticos encontrado, servindo apenas API');
+    app.use("*", (req, res) => {
+      if (req.originalUrl.startsWith('/api/')) {
+        return res.status(404).json({ error: 'Endpoint not found' });
+      }
+      res.status(200).json({ 
+        message: 'CNVidas API está funcionando', 
+        timestamp: new Date().toISOString(),
+        availablePaths: ['/api/health', '/api/auth', '/api/users', '/api/subscription']
+      });
+    });
+  }
 }

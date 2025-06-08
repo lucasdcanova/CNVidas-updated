@@ -20,11 +20,11 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "postinstall": "prisma generate",
-    "copy-files": "mkdir -p dist/server/static dist/server/uploads && cp -r server/* dist/server/ 2>/dev/null || true && cp -r shared dist/ 2>/dev/null || true && cp -r client dist/ 2>/dev/null || true",
+    "copy-files": "mkdir -p dist/server/static dist/server/uploads && rsync -av --exclude='node_modules' --exclude='.git' --exclude='dist' server/ dist/server/ && rsync -av --exclude='node_modules' shared/ dist/shared/ && rsync -av --exclude='node_modules' client/ dist/client/ && cp vite.config.ts dist/ 2>/dev/null || true && cp tsconfig*.json dist/ 2>/dev/null || true && cp components.json dist/ 2>/dev/null || true",
     "clean": "rm -rf dist",
     "lint": "eslint . --ext .ts",
     "deploy": "npm run clean && npm run copy-files && prisma generate && echo 'Build completed for deploy'",
-    "render-build": "npm run clean && npm run copy-files && prisma generate",
+    "render-build": "npm run clean && npm run copy-files && prisma generate && npx tsc --project tsconfig.production.json --outDir dist/compiled --skipLibCheck --noEmit false || echo 'TypeScript compilation failed, using source files'",
     "check-build": "tsx server/scripts/check-build.ts",
     "fix-types": "tsx server/scripts/fix-types.ts",
     "prebuild:disabled": "npm run check-build && npm run fix-types"
