@@ -1,5 +1,17 @@
-
-> rest-express@1.0.0 dev
-> tsx watch server/index.ts
-
-2:15:57 PM [server] Servidor rodando na porta 3000
+yarn run v1.22.22
+$ tsx watch server/index.ts
+AuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+Registrando authRouter em /api/auth
+Registrando adminRouter em /api/admin
+Registrando rotas de parceiros em /api/partners
+5:22:26 PM [server] Servidor rodando na porta 3000
+Conexão com o banco de dados testada com sucesso: 2025-06-08T20:22:27.775Z
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie
+Session table checked/created successfully
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie
+error Command failed with signal "SIGHUP".
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.

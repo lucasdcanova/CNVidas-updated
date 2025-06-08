@@ -20,6 +20,8 @@ import profileImageRouter from './profile-image-routes';
 import addressRouter from './address-routes';
 import appointmentJoinRouter from './appointment-join';
 import publicSubscriptionRouter from './public-subscription-routes';
+import userRouter from './user-routes';
+import partnerRouter from './partner-routes';
 import { adminRouter } from '../admin-routes';
 
 export default async function setupRoutes(app: express.Express) {
@@ -92,19 +94,100 @@ export default async function setupRoutes(app: express.Express) {
   app.use('/api/emergency-notifications', emergencyNotificationsRouter);
   app.use('/api/daily-emergency', dailyEmergencyRouter);
   
+  // Rotas de usuários
+  console.log('Registrando userRouter em /api/users');
+  app.use('/api/users', userRouter);
+  
   // Rotas administrativas
   console.log('Registrando adminRouter em /api/admin');
   app.use('/api/admin', adminRouter);
   
-  // Rotas de parceiros (públicas/gerais)
-  console.log('Registrando rotas de parceiros em /api/partners');
-  app.get('/api/partners', async (req, res) => {
+  // Rotas de parceiros (autenticadas)
+  console.log('Registrando partnerRouter em /api/partners');
+  app.use('/api/partners', partnerRouter);
+  
+  // Rota pública para listar todos os parceiros
+  app.get('/api/all-partners', async (req, res) => {
     try {
       const partners = await (await import('../storage')).storage.getAllPartners();
       res.json(partners);
     } catch (error) {
       console.error('Erro ao buscar parceiros:', error);
       res.status(500).json({ error: 'Erro ao buscar parceiros' });
+    }
+  });
+  
+  // Rotas públicas para médicos
+  console.log('Registrando rotas públicas de médicos em /api/doctors');
+  app.get('/api/doctors', async (req, res) => {
+    try {
+      const doctors = await (await import('../storage')).storage.getAllDoctors();
+      res.json(doctors);
+    } catch (error) {
+      console.error('Erro ao buscar médicos:', error);
+      res.status(500).json({ error: 'Erro ao buscar médicos' });
+    }
+  });
+  
+  app.get('/api/doctors/available', async (req, res) => {
+    try {
+      const doctors = await (await import('../storage')).storage.getAvailableDoctors();
+      res.json(doctors);
+    } catch (error) {
+      console.error('Erro ao buscar médicos disponíveis:', error);
+      res.status(500).json({ error: 'Erro ao buscar médicos disponíveis' });
+    }
+  });
+  
+  // Rotas públicas para serviços
+  console.log('Registrando rotas públicas de serviços em /api/services');
+  app.get('/api/services', async (req, res) => {
+    try {
+      const { partnerId } = req.query;
+      
+      if (partnerId) {
+        // Se partnerId for fornecido, buscar apenas serviços desse parceiro
+        const partnerIdNumber = parseInt(partnerId as string);
+        if (isNaN(partnerIdNumber)) {
+          return res.status(400).json({ error: 'partnerId deve ser um número válido' });
+        }
+        const services = await (await import('../storage')).storage.getPartnerServicesByPartnerId(partnerIdNumber);
+        res.json(services);
+      } else {
+        // Caso contrário, buscar todos os serviços
+        const services = await (await import('../storage')).storage.getAllPartnerServices();
+        res.json(services);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar serviços:', error);
+      res.status(500).json({ error: 'Erro ao buscar serviços' });
+    }
+  });
+  
+  // Rota específica para serviços de um parceiro (compatibilidade)
+  app.get('/api/services/partner/:partnerId', async (req, res) => {
+    try {
+      const partnerId = parseInt(req.params.partnerId);
+      if (isNaN(partnerId)) {
+        return res.status(400).json({ error: 'partnerId deve ser um número válido' });
+      }
+      
+      const services = await (await import('../storage')).storage.getPartnerServicesByPartnerId(partnerId);
+      res.json(services);
+    } catch (error) {
+      console.error('Erro ao buscar serviços do parceiro:', error);
+      res.status(500).json({ error: 'Erro ao buscar serviços do parceiro' });
+    }
+  });
+  
+  app.get('/api/services/featured', async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 6;
+      const services = await (await import('../storage')).storage.getFeaturedServices(limit);
+      res.json(services);
+    } catch (error) {
+      console.error('Erro ao buscar serviços em destaque:', error);
+      res.status(500).json({ error: 'Erro ao buscar serviços em destaque' });
     }
   });
   

@@ -61,14 +61,11 @@ authRouter.post('/register', async (req: Request, res: Response) => {
     }
 
     // Usar SQL direto para verificar se usuário já existe
-    const { pool } = await import('../db');
+    const existingUserResult = await db.select({ id: users.id })
+      .from(users)
+      .where(eq(users.email, email));
     
-    const existingUserResult = await pool.query(
-      'SELECT id FROM users WHERE email = $1',
-      [email]
-    );
-    
-    if (existingUserResult.rows.length > 0) {
+    if (existingUserResult.length > 0) {
       return res.status(400).json({ error: 'Este email já está cadastrado' });
     }
 
@@ -85,26 +82,36 @@ authRouter.post('/register', async (req: Request, res: Response) => {
     }
 
     // Verificar se username já existe
-    const existingUsernameResult = await pool.query(
-      'SELECT id FROM users WHERE username = $1',
-      [finalUsername]
-    );
+    const existingUsernameResult = await db.select({ id: users.id })
+      .from(users)
+      .where(eq(users.username, finalUsername));
     
-    if (existingUsernameResult.rows.length > 0) {
+    if (existingUsernameResult.length > 0) {
       finalUsername = `${finalUsername}_${Date.now()}`;
     }
 
     // Hash da senha usando bcrypt
     const hashedPassword = await hash(password, 10);
 
-    // Criar usuário usando SQL direto
-    const newUserResult = await pool.query(`
-      INSERT INTO users (email, username, password, full_name, role, email_verified, created_at, updated_at)
-      VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
-      RETURNING id, email, username, full_name, role
-    `, [email, finalUsername, hashedPassword, fullName, role, true]);
+    // Criar usuário usando Drizzle
+    const newUserResult = await db.insert(users)
+      .values({
+        email,
+        username: finalUsername,
+        password: hashedPassword,
+        fullName,
+        role,
+        emailVerified: true
+      })
+      .returning({
+        id: users.id,
+        email: users.email,
+        username: users.username,
+        fullName: users.fullName,
+        role: users.role
+      });
     
-    const newUser = newUserResult.rows[0];
+    const newUser = newUserResult[0];
 
     console.log('Usuário criado com sucesso:', { id: newUser.id, email: newUser.email });
 
@@ -130,13 +137,15 @@ authRouter.post('/register', async (req: Request, res: Response) => {
 
     // Retornar dados do usuário criado com login automático
     res.status(201).json({
-      id: newUser.id,
-      email: newUser.email,
-      username: newUser.username,
-      fullName: newUser.full_name,
-      role: newUser.role,
-      message: 'Usuário registrado com sucesso',
-      authToken: token // Incluir token na resposta para armazenamento no localStorage se necessário
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        username: newUser.username,
+        fullName: newUser.fullName,
+        role: newUser.role
+      },
+      token: token,
+      message: 'Usuário registrado com sucesso'
     });
 
   } catch (error) {
@@ -181,27 +190,36 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     console.log('Buscando usuário no banco:', email);
     
     // Usar SQL direto para evitar problemas de schema
-    const { pool } = await import('../db');
-    const result = await pool.query(
-      'SELECT id, email, username, full_name, password, role, email_verified FROM users WHERE email = $1',
-      [email]
-    );
+    const result = await db.select({
+      id: users.id,
+      email: users.email,
+      username: users.username,
+      fullName: users.fullName,
+      password: users.password,
+      role: users.role,
+      emailVerified: users.emailVerified
+    })
+    .from(users)
+    .where(eq(users.email, email));
     
-    const user = result.rows[0];
+    const user = result[0];
     console.log('Usuário encontrado:', !!user);
     
     if (!user) {
       return res.status(401).json({ error: 'Email ou senha incorretos' });
     }
     
-    if (!user.email_verified) {
+    if (!user.emailVerified) {
       return res.status(401).json({ error: 'Por favor, verifique seu email antes de fazer login' });
     }
     
     // Verificar a senha (suporte para scrypt e bcrypt)
     let isPasswordValid = false;
     
-    if (user.password.includes('.')) {
+    if (user.password.startsWith('$2b$') || user.password.startsWith('$2a$') || user.password.startsWith('$2y$')) {
+      // Formato bcrypt
+      isPasswordValid = await compare(password, user.password);
+    } else if (user.password.includes('.') && !user.password.startsWith('$')) {
       // Formato scrypt (hash.salt)
       const [hashed, salt] = user.password.split(".");
       if (hashed && salt) {
@@ -210,7 +228,7 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
         isPasswordValid = timingSafeEqual(hashedBuf, suppliedBuf);
       }
     } else {
-      // Formato bcrypt
+      // Formato bcrypt como fallback
       isPasswordValid = await compare(password, user.password);
     }
     
@@ -241,13 +259,15 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     });
     
     res.json({
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      fullName: user.full_name,
-      role: user.role,
-      message: 'Login realizado com sucesso',
-      authToken: token // Incluir token na resposta para armazenamento no localStorage se necessário
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        fullName: user.fullName,
+        role: user.role
+      },
+      token: token,
+      message: 'Login realizado com sucesso'
     });
 
   } catch (error) {
@@ -571,13 +591,18 @@ authRouter.get('/user', async (req: Request, res: Response) => {
     }
     
     // Buscar dados atualizados do usuário no banco
-    const { pool } = await import('../db');
-    const result = await pool.query(
-      'SELECT id, email, username, full_name, role, email_verified FROM users WHERE id = $1',
-      [decoded.userId]
-    );
+    const result = await db.select({
+      id: users.id,
+      email: users.email,
+      username: users.username,
+      fullName: users.fullName,
+      role: users.role,
+      emailVerified: users.emailVerified
+    })
+    .from(users)
+    .where(eq(users.id, decoded.userId));
     
-    const user = result.rows[0];
+    const user = result[0];
     
     if (!user) {
       return res.status(401).json({ error: 'Usuário não encontrado' });
@@ -588,9 +613,9 @@ authRouter.get('/user', async (req: Request, res: Response) => {
       id: user.id,
       email: user.email,
       username: user.username,
-      fullName: user.full_name,
+      fullName: user.fullName,
       role: user.role,
-      emailVerified: user.email_verified
+      emailVerified: user.emailVerified
     });
     
   } catch (error) {

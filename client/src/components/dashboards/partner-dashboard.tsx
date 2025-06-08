@@ -38,9 +38,22 @@ export const PartnerDashboard: React.FC = () => {
   });
   
   const { data: services = [] } = useQuery({
-    queryKey: ["/api/services", partnerInfo?.id],
-    queryFn: () => getPartnerServicesByPartnerId(partnerInfo?.id || 0),
-    enabled: !!partnerInfo?.id,
+    queryKey: ["/api/partners/my-services"],
+    queryFn: async () => {
+      const res = await fetch("/api/partners/my-services", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        },
+        credentials: "include",
+      });
+      if (!res.ok) {
+        throw new Error("Failed to fetch partner services");
+      }
+      return await res.json();
+    },
+    enabled: !!user?.id,
   });
 
   // Busca as consultas do parceiro

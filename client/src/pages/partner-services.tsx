@@ -132,16 +132,16 @@ const PartnerServicesPage: React.FC = () => {
     isError: isServicesError, 
     error: servicesError 
   } = useQuery<PartnerService[], Error>({
-    queryKey: ["/api/services"],
+    queryKey: ["/api/partners/my-services"],
     queryFn: async () => {
       if (!user) {
         console.log("User not authenticated, cannot fetch services");
         return [];
       }
       
-      console.log(`Fetching services for partner with user ID: ${user.id}`);
+      console.log(`Fetching services for authenticated partner`);
       try {
-        const res = await apiRequest("GET", `/api/services?userId=${user.id}`);
+        const res = await apiRequest("GET", "/api/partners/my-services");
         
         if (!res.ok) {
           const errorData = await res.json().catch(() => ({}));
@@ -172,7 +172,7 @@ const PartnerServicesPage: React.FC = () => {
       return await res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/services"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/partners/my-services"] });
       toast({
         title: "Serviço criado",
         description: "O serviço foi adicionado com sucesso",
@@ -200,7 +200,7 @@ const PartnerServicesPage: React.FC = () => {
       return await res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/services"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/partners/my-services"] });
       toast({
         title: "Serviço atualizado",
         description: "As alterações foram salvas com sucesso",
