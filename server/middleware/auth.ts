@@ -7,8 +7,6 @@ import { DatabaseStorage } from '../storage';
 import { AuthenticatedRequest } from '../types/authenticated-request';
 import { validateId } from '../utils/id-converter';
 
-export { AuthenticatedRequest };
-
 export const requireAuth = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     return res.status(401).json({ error: 'Não autorizado' });
