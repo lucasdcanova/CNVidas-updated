@@ -6,7 +6,7 @@ import { storage } from './storage';
 import { hashPassword } from './auth';
 import { db } from './db';
 import { chatRouter } from './chat-routes';
-import { users, subscriptionPlans, auditLogs, dependents, claims, notifications, appointments, doctorPayments, doctors, partners, Dependent, User, InsertUser } from '../shared/schema';
+import { users, subscriptionPlans, userSubscriptions, auditLogs, dependents, claims, notifications, appointments, doctorPayments, doctors, partners, Dependent, User, InsertUser } from '../shared/schema';
 import { requireAuth, requireAdmin } from './middleware/auth';
 import { AppError } from './utils/app-error';
 import { eq, desc, and, isNotNull, ne } from 'drizzle-orm';
@@ -1150,7 +1150,9 @@ adminRouter.post('/doctors/:id/availability', async (req: AuthenticatedRequest, 
 adminRouter.patch('/users/:userId/subscription', async (req: AuthenticatedRequest, res) => {
   try {
     const userId = parseInt(req.params.userId);
-    const { subscriptionPlan, subscriptionStatus } = req.body;
+    const { subscriptionPlan, subscriptionStatus, planId } = req.body;
+    
+    console.log(`🔧 Admin atualizando assinatura do usuário ${userId}:`, { subscriptionPlan, subscriptionStatus, planId });
     
     // Verificar se usuário existe
     const user = await storage.getUser(userId);
@@ -1158,14 +1160,77 @@ adminRouter.patch('/users/:userId/subscription', async (req: AuthenticatedReques
       return res.status(404).json({ message: "Usuário não encontrado" });
     }
     
-    // Verificar se o plano é válido
-    if (!['free', 'basic', 'premium'].includes(subscriptionPlan)) {
-      return res.status(400).json({ message: "Plano de assinatura inválido" });
+    console.log(`👤 Usuário encontrado: ${user.email}`);
+    
+    // Se planId foi fornecido, usar ele; senão, mapear o subscriptionPlan para um ID
+    let targetPlanId = planId;
+    if (!targetPlanId && subscriptionPlan) {
+      // Buscar o plano pelo nome
+      const plan = await db.select().from(subscriptionPlans).where(eq(subscriptionPlans.name, subscriptionPlan)).limit(1);
+      if (plan.length > 0) {
+        targetPlanId = plan[0].id;
+      } else {
+        return res.status(400).json({ message: "Plano de assinatura não encontrado" });
+      }
     }
     
-    // Atualizar plano de assinatura
-    const updatedUser = await storage.updateUser(userId, {
-      subscriptionPlan,
+    if (!targetPlanId) {
+      return res.status(400).json({ message: "ID do plano não fornecido" });
+    }
+    
+    console.log(`📋 Plano selecionado: ID ${targetPlanId}`);
+    
+    // Buscar o plano completo
+    const [selectedPlan] = await db.select().from(subscriptionPlans).where(eq(subscriptionPlans.id, targetPlanId));
+    if (!selectedPlan) {
+      return res.status(404).json({ message: "Plano não encontrado" });
+    }
+    
+    console.log(`✅ Plano encontrado:`, selectedPlan);
+    
+    // Cancelar assinatura anterior se existir
+    const existingSubscriptions = await db
+      .select()
+      .from(userSubscriptions)
+      .where(eq(userSubscriptions.userId, userId));
+    
+    if (existingSubscriptions.length > 0) {
+      console.log(`🔄 Cancelando ${existingSubscriptions.length} assinatura(s) anterior(es)`);
+      await db
+        .update(userSubscriptions)
+        .set({ 
+          status: 'cancelled',
+          endDate: new Date(),
+          updatedAt: new Date()
+        })
+        .where(eq(userSubscriptions.userId, userId));
+    }
+    
+    // Criar nova assinatura na tabela userSubscriptions
+    const startDate = new Date();
+    const endDate = new Date();
+    endDate.setFullYear(endDate.getFullYear() + 1); // 1 ano de validade
+    
+    const [newSubscription] = await db
+      .insert(userSubscriptions)
+      .values({
+        userId: userId,
+        planId: targetPlanId,
+        status: subscriptionStatus || 'active',
+        startDate: startDate,
+        endDate: endDate,
+        price: selectedPlan.price,
+        paymentMethod: 'admin_grant',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      })
+      .returning();
+    
+    console.log(`📝 Nova assinatura criada:`, newSubscription);
+    
+    // Atualizar também o campo subscriptionPlan na tabela users para compatibilidade
+    await storage.updateUser(userId, {
+      subscriptionPlan: selectedPlan.name as any,
       subscriptionStatus: subscriptionStatus || 'active'
     });
     
@@ -1173,14 +1238,21 @@ adminRouter.patch('/users/:userId/subscription', async (req: AuthenticatedReques
     await storage.createNotification({
       userId: userId,
       title: 'Plano de assinatura atualizado',
-      message: `Seu plano de assinatura foi atualizado para ${subscriptionPlan.charAt(0).toUpperCase() + subscriptionPlan.slice(1)}.`,
+      message: `Seu plano de assinatura foi atualizado para ${selectedPlan.displayName}.`,
       type: 'subscription',
       relatedId: userId
     });
     
-    res.json(updatedUser);
+    console.log(`🎉 Assinatura do usuário ${user.email} atualizada com sucesso para ${selectedPlan.displayName}`);
+    
+    res.json({
+      success: true,
+      message: "Assinatura atualizada com sucesso",
+      subscription: newSubscription,
+      plan: selectedPlan
+    });
   } catch (error) {
-    console.error("Erro ao atualizar plano de assinatura:", error);
+    console.error("❌ Erro ao atualizar plano de assinatura:", error);
     res.status(500).json({ message: "Erro ao atualizar plano de assinatura" });
   }
 });
@@ -1433,3 +1505,4 @@ adminRouter.get('/partners/pending', async (req: AuthenticatedRequest, res) => {
     res.status(500).json({ error: 'Erro ao buscar parceiros pendentes' });
   }
 });
+

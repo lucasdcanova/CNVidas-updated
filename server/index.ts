@@ -156,6 +156,11 @@ import { eq } from "drizzle-orm";
     next();
   });
 
+  // Health check route (before authentication)
+  app.get('/api/health', (req, res) => {
+    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+  });
+
   // Middleware para garantir respostas JSON
   app.use(ensureJsonResponse);
 

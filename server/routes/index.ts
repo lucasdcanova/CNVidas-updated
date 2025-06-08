@@ -19,6 +19,7 @@ import dailyEmergencyRouter from './daily-emergency-routes';
 import profileImageRouter from './profile-image-routes';
 import addressRouter from './address-routes';
 import appointmentJoinRouter from './appointment-join';
+import claimsRouter from './claims-routes';
 import publicSubscriptionRouter from './public-subscription-routes';
 import userRouter from './user-routes';
 import partnerRouter from './partner-routes';
@@ -87,6 +88,9 @@ export default async function setupRoutes(app: express.Express) {
   
   // Rotas de agendamento
   app.use('/api/appointments', appointmentJoinRouter);
+  
+  // Rotas de claims
+  app.use('/api/claims', claimsRouter);
   
   // Rotas de upload
   app.use('/api/upload', uploadRouter);

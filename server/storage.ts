@@ -551,11 +551,54 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAllDoctors(): Promise<Doctor[]> {
-    return this.db.select().from(doctors);
+    const result = await this.db.select({
+      id: doctors.id,
+      userId: doctors.userId,
+      specialization: doctors.specialization,
+      licenseNumber: doctors.licenseNumber,
+      biography: doctors.biography,
+      education: doctors.education,
+      experienceYears: doctors.experienceYears,
+      availableForEmergency: doctors.availableForEmergency,
+      consultationFee: doctors.consultationFee,
+      profileImage: doctors.profileImage,
+      status: doctors.status,
+      createdAt: doctors.createdAt,
+      updatedAt: doctors.updatedAt,
+      name: users.fullName,
+      username: users.username,
+      email: users.email
+    })
+    .from(doctors)
+    .leftJoin(users, eq(doctors.userId, users.id));
+    
+    return result as Doctor[];
   }
 
   async getAvailableDoctors(): Promise<Doctor[]> {
-    return this.db.select().from(doctors).where(eq(doctors.availableForEmergency, true));
+    const result = await this.db.select({
+      id: doctors.id,
+      userId: doctors.userId,
+      specialization: doctors.specialization,
+      licenseNumber: doctors.licenseNumber,
+      biography: doctors.biography,
+      education: doctors.education,
+      experienceYears: doctors.experienceYears,
+      availableForEmergency: doctors.availableForEmergency,
+      consultationFee: doctors.consultationFee,
+      profileImage: doctors.profileImage,
+      status: doctors.status,
+      createdAt: doctors.createdAt,
+      updatedAt: doctors.updatedAt,
+      name: users.fullName,
+      username: users.username,
+      email: users.email
+    })
+    .from(doctors)
+    .leftJoin(users, eq(doctors.userId, users.id))
+    .where(eq(doctors.availableForEmergency, true));
+    
+    return result as Doctor[];
   }
 
   async toggleDoctorAvailability(id: number, available: boolean): Promise<Doctor> {

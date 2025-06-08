@@ -136,7 +136,7 @@ router.post('/activate-free', async (req: Request, res: Response) => {
     
   } catch (error) {
     console.error('Erro ao ativar plano gratuito:', error);
-    console.error('Stack trace:', error.stack);
+    console.error('Stack trace:', (error as Error).stack);
     
     // Mesmo com erro, vamos permitir que continue para o dashboard
     return res.json({
@@ -170,35 +170,102 @@ router.get('/current', isAuthenticated, async (req: Request, res: Response) => {
     return res.status(401).json({ message: "Usuário não autenticado" });
   }
 
-  console.log("Retornando plano gratuito padrão para usuário:", user.email);
-  
-  // Retornar plano gratuito padrão para permitir acesso ao dashboard
-  // TODO: Implementar busca real no banco quando as tabelas estiverem criadas
-  return res.json({
-    subscription: {
-      id: 1,
-      userId: user.id,
-      planId: 4,
-      status: "active",
-      startDate: new Date().toISOString(),
-      endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // 1 ano
-      plan: {
-        id: 4,
-        name: 'free',
-        displayName: 'Gratuito',
-        price: 0,
-        emergencyConsultations: '0',
-        specialistDiscount: 0,
-        insuranceCoverage: false,
-        features: [
-          'Acesso ao marketplace',
-          'Pagamento integral pelos serviços',
-          '0 teleconsultas de emergência por mês',
-          'Sem descontos e sem cobertura de seguro'
-        ]
-      }
+  try {
+    console.log(`🔍 Buscando assinatura atual para usuário ${user.email} (ID: ${user.id})`);
+    
+    // Buscar a assinatura ativa mais recente do usuário no banco
+    const userSubscription = await db
+      .select({
+        subscription: userSubscriptions,
+        plan: subscriptionPlans
+      })
+      .from(userSubscriptions)
+      .leftJoin(subscriptionPlans, eq(userSubscriptions.planId, subscriptionPlans.id))
+      .where(eq(userSubscriptions.userId, user.id))
+      .orderBy(desc(userSubscriptions.createdAt))
+      .limit(1);
+
+    if (userSubscription.length > 0) {
+      const subscription = userSubscription[0];
+      console.log(`✅ Assinatura encontrada:`, subscription);
+      
+      return res.json({
+        subscription: {
+          id: subscription.subscription.id,
+          userId: subscription.subscription.userId,
+          planId: subscription.subscription.planId,
+          status: subscription.subscription.status,
+          startDate: subscription.subscription.startDate,
+          endDate: subscription.subscription.endDate,
+          plan: subscription.plan
+        }
+      });
+    } else {
+      console.log(`⚠️ Nenhuma assinatura encontrada para ${user.email}. Retornando plano gratuito.`);
+      
+      // Se não há assinatura, retornar plano gratuito padrão
+      return res.json({
+        subscription: {
+          id: 0,
+          userId: user.id,
+          planId: 4,
+          status: "active",
+          startDate: new Date().toISOString(),
+          endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+          plan: {
+            id: 4,
+            name: 'free',
+            displayName: 'Gratuito',
+            price: 0,
+            emergencyConsultations: '0',
+            specialistDiscount: 0,
+            insuranceCoverage: false,
+            features: [
+              'Acesso ao marketplace',
+              'Pagamento integral pelos serviços',
+              '0 teleconsultas de emergência por mês',
+              'Sem descontos e sem cobertura de seguro'
+            ],
+            isDefault: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          }
+        }
+      });
     }
-  });
+  } catch (error) {
+    console.error('❌ Erro ao buscar assinatura do usuário:', error);
+    
+    // Em caso de erro, retornar plano gratuito como fallback
+    return res.json({
+      subscription: {
+        id: 0,
+        userId: user.id,
+        planId: 4,
+        status: "active",
+        startDate: new Date().toISOString(),
+        endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+        plan: {
+          id: 4,
+          name: 'free',
+          displayName: 'Gratuito',
+          price: 0,
+          emergencyConsultations: '0',
+          specialistDiscount: 0,
+          insuranceCoverage: false,
+          features: [
+            'Acesso ao marketplace',
+            'Pagamento integral pelos serviços',
+            '0 teleconsultas de emergência por mês',
+            'Sem descontos e sem cobertura de seguro'
+          ],
+          isDefault: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+      }
+    });
+  }
 });
 
 export default router; 

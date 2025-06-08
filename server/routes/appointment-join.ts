@@ -6,6 +6,101 @@ import { AuthenticatedRequest } from '../types/authenticated-request';
 const appointmentJoinRouter = Router();
 
 /**
+ * Endpoint para listar consultas próximas do usuário
+ * GET /api/appointments/upcoming
+ */
+appointmentJoinRouter.get('/upcoming', async (req: Request, res: Response) => {
+  try {
+    const authReq = req as AuthenticatedRequest;
+    
+    // Verificar autenticação
+    let userId = null;
+    let userData = null;
+    
+    if (authReq.isAuthenticated && authReq.isAuthenticated() && authReq.user) {
+      userId = authReq.user.id;
+      userData = authReq.user;
+    }
+    
+    if (!userId || !userData) {
+      return res.status(401).json({ message: 'Não autorizado' });
+    }
+    
+    console.log(`Buscando consultas próximas para usuário ${userId}`);
+    
+    // Buscar consultas próximas do usuário
+    const upcomingAppointments = await storage.getUpcomingAppointments(userId);
+    
+    console.log(`Encontradas ${upcomingAppointments.length} consultas próximas`);
+    
+    res.json(upcomingAppointments);
+    
+  } catch (error) {
+    console.error('Erro ao buscar consultas próximas:', error);
+    return res.status(500).json({ 
+      message: 'Erro ao buscar consultas próximas',
+      error: error instanceof Error ? error.message : 'Erro desconhecido'
+    });
+  }
+});
+
+/**
+ * Endpoint para criar nova consulta
+ * POST /api/appointments
+ */
+appointmentJoinRouter.post('/', async (req: Request, res: Response) => {
+  try {
+    const authReq = req as AuthenticatedRequest;
+    
+    // Verificar autenticação
+    let userId = null;
+    let userData = null;
+    
+    if (authReq.isAuthenticated && authReq.isAuthenticated() && authReq.user) {
+      userId = authReq.user.id;
+      userData = authReq.user;
+    }
+    
+    if (!userId || !userData) {
+      return res.status(401).json({ message: 'Não autorizado' });
+    }
+    
+    const { doctorId, date, duration, notes, type } = req.body;
+    
+    if (!doctorId || !date) {
+      return res.status(400).json({ message: 'doctorId e date são obrigatórios' });
+    }
+    
+    console.log(`Criando consulta para usuário ${userId} com médico ${doctorId}`);
+    
+    // Criar a consulta
+    const appointmentData = {
+      userId: userId,
+      doctorId: parseInt(doctorId),
+      date: new Date(date),
+      duration: duration || 30,
+      status: 'scheduled',
+      notes: notes || '',
+      type: type || 'telemedicine',
+      isEmergency: false
+    };
+    
+    const newAppointment = await storage.createAppointment(appointmentData);
+    
+    console.log(`Consulta criada com sucesso: ${newAppointment.id}`);
+    
+    res.status(201).json(newAppointment);
+    
+  } catch (error) {
+    console.error('Erro ao criar consulta:', error);
+    return res.status(500).json({ 
+      message: 'Erro ao criar consulta',
+      error: error instanceof Error ? error.message : 'Erro desconhecido'
+    });
+  }
+});
+
+/**
  * Endpoint para médicos entrarem em consultas específicas
  * POST /api/appointments/:id/join
  */

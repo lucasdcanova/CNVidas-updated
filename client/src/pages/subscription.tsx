@@ -17,16 +17,16 @@ import CheckoutModal from "@/components/checkout/checkout-modal";
 // Definição do tipo de plano de assinatura
 interface SubscriptionPlan {
   id: number;
-  name: string;
-  displayName?: string;
-  description: string;
+  name: "free" | "basic" | "premium" | "basic_family" | "premium_family" | "ultra" | "ultra_family";
+  displayName: string;
   price: number;
+  emergencyConsultations: string;
+  specialistDiscount: number;
+  insuranceCoverage: boolean;
   features: string[];
-  planType: "free" | "basic" | "premium" | "basic_family" | "premium_family" | "ultra" | "ultra_family";
-  isFamily?: boolean;
-  maxDependents?: number;
-  insuranceCoverageAmount?: number;
-  specialistDiscount?: number;
+  isDefault?: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface UserSubscription {
@@ -34,9 +34,9 @@ interface UserSubscription {
   userId: number;
   planId: number;
   status: string;
-  currentPeriodStart: string;
-  currentPeriodEnd: string;
-  cancelAtPeriodEnd: boolean;
+  startDate: string;
+  endDate: string;
+  cancelAtPeriodEnd?: boolean;
   plan?: SubscriptionPlan;
 }
 
@@ -62,7 +62,7 @@ const SubscriptionPage: React.FC = () => {
 
   const isCurrentPlan = (planType: string) => {
     if (!userSubscription) return planType === 'free';
-    return userSubscription.plan?.planType === planType;
+    return userSubscription.plan?.name === planType;
   };
 
   const formatDate = (dateString: string) => {
@@ -75,8 +75,8 @@ const SubscriptionPage: React.FC = () => {
   const handleSelectPlan = (plan: SubscriptionPlan) => {
     setSelectedPlan({
       id: plan.id,
-      name: plan.displayName || plan.name,
-      price: plan.price ? `R$ ${plan.price.toFixed(2)}` : "R$ 0,00"
+      name: plan.displayName,
+      price: plan.price > 0 ? `R$ ${(plan.price / 100).toFixed(2)}` : "R$ 0,00"
     });
     setCheckoutOpen(true);
   };
@@ -85,25 +85,15 @@ const SubscriptionPage: React.FC = () => {
   const getFilteredAndGroupedPlans = () => {
     if (!plans) return [];
     
-    // Primeiro, vamos agrupar os planos por tipo (básico, premium, ultra)
-    const planGroups: Record<string, SubscriptionPlan[]> = {};
-    
-    plans.forEach((plan: SubscriptionPlan) => {
-      // Extrair o tipo base do plano (remover _family se existir)
-      const baseType = plan.planType.replace('_family', '');
-      if (!planGroups[baseType]) {
-        planGroups[baseType] = [];
-      }
-      planGroups[baseType].push(plan);
-    });
-    
-    // Para cada grupo, selecionar o plano individual ou familiar com base no toggle
-    const result: SubscriptionPlan[] = [];
-    Object.entries(planGroups).forEach(([type, planGroup]) => {
-      if (planGroup.length > 0) {
-        const plan = planGroup.find(p => p.isFamily === showFamilyPlans) || planGroup[0];
-        result.push(plan);
-      }
+    // Filtrar planos com base no toggle familiar/individual
+    const filteredPlans = plans.filter((plan: SubscriptionPlan) => {
+      if (!plan || !plan.name) return false;
+      
+      const isFamilyPlan = plan.name.includes('_family');
+      
+      // Se o toggle está ativo (familiar), mostrar apenas planos familiares
+      // Se o toggle está inativo (individual), mostrar apenas planos individuais
+      return showFamilyPlans ? isFamilyPlan : !isFamilyPlan;
     });
     
     // Definir a ordem personalizada dos planos: básico, premium, ultra e gratuito por último
@@ -114,9 +104,10 @@ const SubscriptionPage: React.FC = () => {
       'free': 4
     };
     
-    return result.sort((a, b) => {
-      const baseTypeA = a.planType.replace('_family', '');
-      const baseTypeB = b.planType.replace('_family', '');
+    return filteredPlans.sort((a, b) => {
+      if (!a?.name || !b?.name) return 0; // Verificação de segurança
+      const baseTypeA = a.name.replace('_family', '');
+      const baseTypeB = b.name.replace('_family', '');
       
       return (planOrder[baseTypeA as keyof typeof planOrder] || 99) - 
              (planOrder[baseTypeB as keyof typeof planOrder] || 99);
@@ -162,11 +153,11 @@ const SubscriptionPage: React.FC = () => {
         {userSubscription && userSubscription.status !== "inactive" && (
           <Card className="mb-8 mt-4 overflow-hidden border-2 border-primary shadow-lg">
             <CardHeader className={`
-              ${userSubscription.plan?.planType === 'premium' || userSubscription.plan?.planType === 'premium_family'
+              ${userSubscription.plan?.name === 'premium' || userSubscription.plan?.name === 'premium_family'
                 ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white' 
-                : userSubscription.plan?.planType === 'basic' || userSubscription.plan?.planType === 'basic_family'
+                : userSubscription.plan?.name === 'basic' || userSubscription.plan?.name === 'basic_family'
                   ? 'bg-gradient-to-r from-emerald-400 to-teal-500 text-white' 
-                  : userSubscription.plan?.planType === 'ultra' || userSubscription.plan?.planType === 'ultra_family'
+                  : userSubscription.plan?.name === 'ultra' || userSubscription.plan?.name === 'ultra_family'
                     ? 'bg-gradient-to-r from-violet-500 to-purple-600 text-white'
                     : 'bg-gradient-to-r from-gray-100 to-gray-200'
               }`}>
@@ -176,25 +167,25 @@ const SubscriptionPage: React.FC = () => {
                   Sua Assinatura Atual
                 </CardTitle>
                 <Badge variant="outline" className={`${
-                  userSubscription.plan?.planType === 'premium' || userSubscription.plan?.planType === 'premium_family' || 
-                  userSubscription.plan?.planType === 'basic' || userSubscription.plan?.planType === 'basic_family' ||
-                  userSubscription.plan?.planType === 'ultra' || userSubscription.plan?.planType === 'ultra_family'
+                  userSubscription.plan?.name === 'premium' || userSubscription.plan?.name === 'premium_family' || 
+                  userSubscription.plan?.name === 'basic' || userSubscription.plan?.name === 'basic_family' ||
+                  userSubscription.plan?.name === 'ultra' || userSubscription.plan?.name === 'ultra_family'
                     ? 'border-white text-white bg-white/20' 
                     : 'bg-primary/20'
                 } px-3 py-1 rounded-full font-medium`}>
-                  {userSubscription.plan?.planType === 'premium' || userSubscription.plan?.planType === 'premium_family'
+                  {userSubscription.plan?.name === 'premium' || userSubscription.plan?.name === 'premium_family'
                     ? 'Premium' 
-                    : userSubscription.plan?.planType === 'basic' || userSubscription.plan?.planType === 'basic_family'
+                    : userSubscription.plan?.name === 'basic' || userSubscription.plan?.name === 'basic_family'
                       ? 'Básico' 
-                      : userSubscription.plan?.planType === 'ultra' || userSubscription.plan?.planType === 'ultra_family'
+                      : userSubscription.plan?.name === 'ultra' || userSubscription.plan?.name === 'ultra_family'
                         ? 'Ultra'
                         : 'Gratuito'}
                 </Badge>
               </div>
               <CardDescription className={
-                userSubscription.plan?.planType === 'premium' || userSubscription.plan?.planType === 'premium_family' || 
-                userSubscription.plan?.planType === 'basic' || userSubscription.plan?.planType === 'basic_family' || 
-                userSubscription.plan?.planType === 'ultra' || userSubscription.plan?.planType === 'ultra_family' 
+                userSubscription.plan?.name === 'premium' || userSubscription.plan?.name === 'premium_family' || 
+                userSubscription.plan?.name === 'basic' || userSubscription.plan?.name === 'basic_family' || 
+                userSubscription.plan?.name === 'ultra' || userSubscription.plan?.name === 'ultra_family' 
                 ? 'text-white/90' : ''
               }>
                 Informações sobre seu plano e status de pagamento
@@ -204,7 +195,7 @@ const SubscriptionPage: React.FC = () => {
               <div className="flex flex-col md:flex-row justify-between md:items-center gap-6">
                 <div>
                   <h3 className="text-xl font-bold flex items-center">
-                    <span>{userSubscription.plan?.name || "Plano Atual"}</span>
+                    <span>{userSubscription.plan?.displayName || "Plano Atual"}</span>
                     <Badge variant="success" className="ml-3">
                       {userSubscription.status === "active" ? "Ativo" : userSubscription.status}
                     </Badge>
@@ -223,23 +214,23 @@ const SubscriptionPage: React.FC = () => {
                   
                   {userSubscription.cancelAtPeriodEnd && (
                     <p className="text-sm text-yellow-600 mt-4 p-2 bg-yellow-50 rounded-md border border-yellow-200">
-                      Cancelamento programado. Sua assinatura permanecerá ativa até {formatDate(userSubscription.currentPeriodEnd)}.
+                      Cancelamento programado. Sua assinatura permanecerá ativa até {formatDate(userSubscription.endDate)}.
                     </p>
                   )}
                 </div>
                 
                 <div className="text-center md:text-right bg-gray-50 p-4 rounded-lg">
                   <p className="text-3xl font-bold">
-                    {userSubscription.plan?.price ? `R$ ${userSubscription.plan.price.toFixed(2)}` : "Gratuito"}
+                    {userSubscription.plan?.price && userSubscription.plan.price > 0 ? `R$ ${(userSubscription.plan.price / 100).toFixed(2)}` : "Gratuito"}
                   </p>
-                  {userSubscription.plan?.price ? (
+                  {userSubscription.plan?.price && userSubscription.plan.price > 0 ? (
                     <p className="text-sm text-muted-foreground">/mês</p>
                   ) : null}
                   <p className="text-xs text-muted-foreground mt-2">
                     {userSubscription.status === "active" ? (
                       <>
                         <span className="font-medium">Próxima cobrança:</span><br />
-                        {formatDate(userSubscription.currentPeriodEnd)}
+                        {formatDate(userSubscription.endDate)}
                       </>
                     ) : (
                       "Sem cobrança automática"
@@ -290,43 +281,50 @@ const SubscriptionPage: React.FC = () => {
 
         {/* Lista de planos */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          {plans && getFilteredAndGroupedPlans().map((plan: SubscriptionPlan) => (
+          {getFilteredAndGroupedPlans().length === 0 ? (
+            <div className="col-span-full text-center py-8">
+              <p className="text-muted-foreground">
+                {showFamilyPlans ? 'Nenhum plano familiar disponível' : 'Nenhum plano individual disponível'}
+              </p>
+            </div>
+          ) : (
+            getFilteredAndGroupedPlans().map((plan: SubscriptionPlan) => (
             <Card 
               key={plan.id} 
-              className={`overflow-hidden ${isCurrentPlan(plan.planType) ? 'border-2 border-primary' : ''} transform transition-all duration-300 ${
-                plan.planType === 'ultra' || plan.planType === 'ultra_family' 
+              className={`overflow-hidden ${isCurrentPlan(plan.name) ? 'border-2 border-primary' : ''} transform transition-all duration-300 ${
+                plan.name === 'ultra' || plan.name === 'ultra_family' 
                   ? 'hover:shadow-xl hover:-translate-y-1 border-violet-400 shadow-lg shadow-violet-300 animate-pulse-subtle relative ring-2 ring-violet-400/70 scale-105' : 
-                plan.planType === 'premium' || plan.planType === 'premium_family' 
+                plan.name === 'premium' || plan.name === 'premium_family' 
                   ? 'hover:shadow-lg hover:-translate-y-0.5 border-amber-300' :
-                plan.planType === 'basic' || plan.planType === 'basic_family' 
+                plan.name === 'basic' || plan.name === 'basic_family' 
                   ? 'hover:shadow-md border-emerald-300' : ''
               }`}
             >
 
               <CardHeader className={`${
-                plan.planType === 'ultra' || plan.planType === 'ultra_family'
+                plan.name === 'ultra' || plan.name === 'ultra_family'
                   ? 'bg-gradient-to-r from-violet-500 to-purple-600 text-white' 
-                : plan.planType === 'premium' || plan.planType === 'premium_family'
+                : plan.name === 'premium' || plan.name === 'premium_family'
                   ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white' 
-                : plan.planType === 'basic' || plan.planType === 'basic_family'
+                : plan.name === 'basic' || plan.name === 'basic_family'
                   ? 'bg-gradient-to-r from-emerald-400 to-teal-500 text-white' 
                 : ''
               }`}>
                 <div className="flex justify-between items-center">
                   <CardTitle className={
-                    plan.planType === 'ultra' || plan.planType === 'ultra_family'
+                    plan.name === 'ultra' || plan.name === 'ultra_family'
                       ? 'text-white flex items-center' 
-                      : plan.planType === 'premium' || plan.planType === 'premium_family' 
+                      : plan.name === 'premium' || plan.name === 'premium_family' 
                         ? 'text-white flex items-center'
-                        : plan.planType === 'basic' || plan.planType === 'basic_family'
+                        : plan.name === 'basic' || plan.name === 'basic_family'
                           ? 'text-white flex items-center'
                           : 'flex items-center'
                   }>
-                    {plan.displayName || plan.name}
+                    {plan.displayName}
                   </CardTitle>
-                  {isCurrentPlan(plan.planType) && (
+                  {isCurrentPlan(plan.name) && (
                     <Badge variant="outline" className={
-                      (plan.planType === 'premium' || plan.planType === 'premium_family' || plan.planType === 'basic' || plan.planType === 'basic_family') 
+                      (plan.name === 'premium' || plan.name === 'premium_family' || plan.name === 'basic' || plan.name === 'basic_family') 
                         ? 'border-white text-white' 
                         : ''
                     }>
@@ -335,19 +333,23 @@ const SubscriptionPage: React.FC = () => {
                   )}
                 </div>
                 <CardDescription className={
-                  (plan.planType === 'premium' || plan.planType === 'premium_family' || 
-                   plan.planType === 'basic' || plan.planType === 'basic_family' || 
-                   plan.planType === 'ultra' || plan.planType === 'ultra_family') 
-                    ? 'text-white/90' 
-                    : ''
-                }>
-                  {plan.description}
-                </CardDescription>
+                    (plan.name === 'premium' || plan.name === 'premium_family' || 
+                     plan.name === 'basic' || plan.name === 'basic_family' || 
+                     plan.name === 'ultra' || plan.name === 'ultra_family') 
+                      ? 'text-white/90' 
+                      : ''
+                  }>
+                    {plan.emergencyConsultations === 'unlimited' 
+                      ? 'Teleconsultas de emergência ilimitadas' 
+                      : plan.emergencyConsultations === '0' 
+                        ? 'Sem teleconsultas de emergência incluídas'
+                        : `${plan.emergencyConsultations} teleconsultas de emergência por mês`}
+                  </CardDescription>
               </CardHeader>
               <CardContent className="pt-6">
                 <div className="mb-6">
                   <span className="text-3xl font-bold">
-                    {plan.price ? `R$ ${plan.price.toFixed(2)}` : "Gratuito"}
+                    {plan.price > 0 ? `R$ ${(plan.price / 100).toFixed(2)}` : "Gratuito"}
                   </span>
                   {plan.price > 0 && <span className="text-muted-foreground">/mês</span>}
                 </div>
@@ -364,27 +366,28 @@ const SubscriptionPage: React.FC = () => {
               <CardFooter>
                 <Button 
                   variant={
-                    plan.planType === 'ultra' || plan.planType === 'ultra_family' ? 'default' : 
-                    plan.planType === 'premium' || plan.planType === 'premium_family' ? 'secondary' : 
-                    plan.planType === 'basic' || plan.planType === 'basic_family' ? 'outline' : 
+                    plan.name === 'ultra' || plan.name === 'ultra_family' ? 'default' : 
+                    plan.name === 'premium' || plan.name === 'premium_family' ? 'secondary' : 
+                    plan.name === 'basic' || plan.name === 'basic_family' ? 'outline' : 
                     'outline'
                   } 
                   className={`w-full ${
-                    plan.planType === 'ultra' || plan.planType === 'ultra_family' 
+                    plan.name === 'ultra' || plan.name === 'ultra_family' 
                       ? 'bg-violet-600 hover:bg-violet-700 text-white' : 
-                    plan.planType === 'premium' || plan.planType === 'premium_family'
+                    plan.name === 'premium' || plan.name === 'premium_family'
                       ? 'bg-amber-500 hover:bg-amber-600 text-white' :
-                    plan.planType === 'basic' || plan.planType === 'basic_family'
+                    plan.name === 'basic' || plan.name === 'basic_family'
                       ? 'bg-emerald-500 hover:bg-emerald-600 text-white' : ''
                   }`}
                   onClick={() => handleSelectPlan(plan)}
-                  disabled={isCurrentPlan(plan.planType)}
+                  disabled={isCurrentPlan(plan.name)}
                 >
-                  {isCurrentPlan(plan.planType) ? 'Plano Atual' : 'Selecionar Plano'}
+                  {isCurrentPlan(plan.name) ? 'Plano Atual' : 'Selecionar Plano'}
                 </Button>
               </CardFooter>
             </Card>
-          ))}
+            ))
+          )}
         </div>
 
         {/* FAQ */}

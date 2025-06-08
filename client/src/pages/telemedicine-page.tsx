@@ -391,40 +391,31 @@ export default function TelemedicinePage() {
 
   // Função para formatar o nome do médico
   const formatDoctorName = (name?: string): string => {
-    if (!name) return '';
+    if (!name) return 'Médico';
     
-    // Garantir que o nome esteja com todas as letras minúsculas, exceto a primeira de cada palavra
-    // Isso ajuda quando o nome vem todo em maiúsculas
-    name = name.toLowerCase();
+    // Dividir o nome completo em palavras, filtrar partes vazias
+    const nameParts = name.trim().split(' ').filter(part => part.length > 0);
     
-    // Dividir o nome completo em palavras
-    const nameParts = name.trim().split(' ');
-    
-    // Lista de nomes tipicamente femininos em português
+    // Lista de nomes tipicamente femininos em português (em minúsculo para comparação)
     const femaleNames = [
       'ana', 'maria', 'sandra', 'carla', 'fernanda', 'beatriz', 'julia', 'joana', 
       'camila', 'mariana', 'patricia', 'luciana', 'bruna', 'renata', 'cintia', 
-      'silvia', 'larissa', 'adriana', 'vanessa', 'leticia', 'debora', 'cristina'
+      'silvia', 'larissa', 'adriana', 'vanessa', 'leticia', 'debora', 'cristina',
+      'carolina', 'rafaela', 'gabriela', 'amanda', 'priscila', 'teresa', 'helena'
     ];
     
-    // Verificar se o primeiro nome está na lista de nomes femininos
-    // ou se o último nome termina com 'a' (comum em nomes femininos brasileiros)
-    const isFemale = 
-      femaleNames.includes(nameParts[0]) || 
-      nameParts[0].endsWith('a') ||
-      (nameParts.length > 1 && femaleNames.some(fname => nameParts.includes(fname)));
+    // Verificar se o primeiro nome é feminino
+    const firstName = nameParts[0]?.toLowerCase() || '';
+    const isFemale = femaleNames.includes(firstName) || firstName.endsWith('a');
     
-    // Formatar cada parte do nome com a primeira letra maiúscula e o resto minúsculo
-    const formattedNameParts = nameParts.map(part => {
-      if (part.length > 0) {
-        return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
-      }
-      return part;
-    });
+    // Formatar nome: primeira letra maiúscula em cada palavra
+    const formattedName = nameParts.map(part => {
+      return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+    }).join(' ');
     
-    // Juntar as partes formatadas e adicionar o prefixo
+    // Adicionar o prefixo Dr./Dra.
     const prefix = isFemale ? "Dra. " : "Dr. ";
-    return prefix + formattedNameParts.join(' ');
+    return prefix + formattedName;
   };
   
   // Função para filtrar médicos por especialidade e termo de busca
@@ -496,39 +487,75 @@ export default function TelemedicinePage() {
                   {filteredAllDoctors?.map((doctor: Doctor) => {
                     const priceInfo = getScheduledConsultationPriceInfo(doctor);
                     return (
-                      <Card key={doctor.id} className="overflow-hidden hover:shadow-lg transition-shadow group border border-border/60 rounded-xl">
+                      <Card key={doctor.id} className="doctor-card overflow-hidden shadow-doctor-card hover:shadow-doctor-card-hover group border border-border/60 rounded-xl hover:border-primary/20 fade-in">
                         <CardContent className="p-0">
                           <div className="relative pb-3">
-                            <div className="bg-gradient-to-r from-blue-50 to-blue-100 h-24 w-full"></div>
-                            <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2">
-                              <Avatar className="h-20 w-20 border-4 border-white shadow-sm">
-                                <AvatarImage src={doctor.profileImage} alt={doctor.name} />
-                                <AvatarFallback className="bg-gradient-to-br from-primary/80 to-primary text-white text-lg">
-                                  {doctor.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'MD'}
-                                </AvatarFallback>
-                              </Avatar>
+                            <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-100 h-28 w-full relative overflow-hidden">
+                              <div className="absolute inset-0 bg-pattern opacity-10"></div>
+                            </div>
+                            <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
+                              <div className="relative">
+                                <Avatar className="doctor-avatar h-24 w-24 border-4 border-white shadow-lg ring-2 ring-primary/10 group-hover:ring-primary/20">
+                                  <AvatarImage 
+                                    src={doctor.profileImage || doctor.avatarUrl} 
+                                    alt={doctor.name}
+                                    className="object-cover"
+                                  />
+                                  <AvatarFallback className="bg-gradient-to-br from-primary/80 to-primary text-white text-xl font-semibold">
+                                    {doctor.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'MD'}
+                                  </AvatarFallback>
+                                </Avatar>
+                                {doctor.availableForEmergency && (
+                                  <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           </div>
                           
-                          <div className="flex flex-col items-center text-center px-4 pt-12 pb-5">
-                            <h3 className="font-semibold text-lg text-gray-900 mb-1">{formatDoctorName(doctor.name)}</h3>
-                            <Badge variant="outline" className="bg-blue-50 text-blue-700 rounded-full mb-3">
+                          <div className="flex flex-col items-center text-center px-4 pt-14 pb-6">
+                            <h3 className="font-semibold text-lg text-gray-900 mb-1 leading-tight">
+                              {formatDoctorName(doctor.name)}
+                            </h3>
+                            <Badge variant="outline" className="bg-blue-50 text-blue-700 rounded-full mb-2 border-blue-200">
                               {doctor.specialization}
                             </Badge>
                             
-                            <div className="mt-1 mb-4 min-h-[44px]">
+
+                            
+                            <div className="w-full mb-4 min-h-[48px] flex flex-col items-center justify-center">
                               {priceInfo.badge}
                               <div className="mt-1">
                                 <span className={`text-xs ${priceInfo.color} font-medium`}>{priceInfo.text}</span>
                               </div>
                             </div>
                             
-                            <Button 
-                              onClick={() => handleOpenBookingDialog(doctor)}
-                              className="w-full rounded-full transition-all group-hover:bg-primary/90"
-                            >
-                              Agendar Consulta
-                            </Button>
+                            <div className="w-full space-y-2">
+                                                              <Button 
+                                  onClick={() => handleOpenBookingDialog(doctor)}
+                                  className="w-full rounded-full btn-hover-effect group-hover:bg-primary/90 hover:shadow-md"
+                                >
+                                  Agendar Consulta
+                                </Button>
+                              
+                              {doctor.availableForEmergency && (
+                                                                  <Button 
+                                    variant="outline"
+                                    size="sm"
+                                    className="w-full rounded-full text-xs border-green-200 text-green-700 hover:bg-green-50 btn-hover-effect"
+                                    onClick={() => handleStartEmergencyConsultation(doctor)}
+                                    disabled={isStartingEmergency}
+                                  >
+                                  {isStartingEmergency ? (
+                                    <Loader2 className="h-3 w-3 animate-spin mr-1" />
+                                  ) : (
+                                    <Heart className="h-3 w-3 mr-1" />
+                                  )}
+                                  Emergência
+                                </Button>
+                              )}
+                            </div>
                           </div>
                         </CardContent>
                       </Card>
@@ -561,35 +588,59 @@ export default function TelemedicinePage() {
                   emergencyDoctors?.map((doctor: Doctor) => {
                     const priceInfo = getEmergencyConsultationPriceInfo(doctor);
                     return (
-                      <Card key={doctor.id} className="overflow-hidden hover:shadow-md transition-shadow border-l-4 border-l-green-500">
+                      <Card key={doctor.id} className="doctor-card overflow-hidden shadow-doctor-card hover:shadow-doctor-card-hover border-l-4 border-l-green-500 hover:border-l-green-600 bg-gradient-to-r from-green-50/30 to-white slide-up">
                         <CardContent className="p-0">
-                          <div className="flex items-start p-5">
-                            <div className="mr-4">
-                              <Avatar className="h-16 w-16 border-2 border-primary/10">
-                                <AvatarImage src={doctor.profileImage} alt={doctor.name} />
-                                <AvatarFallback className="bg-primary/5 text-primary">
+                          <div className="flex items-start p-6">
+                            <div className="mr-5 relative">
+                              <Avatar className="doctor-avatar h-18 w-18 border-3 border-white shadow-lg ring-2 ring-green-100">
+                                <AvatarImage 
+                                  src={doctor.profileImage || doctor.avatarUrl} 
+                                  alt={doctor.name}
+                                  className="object-cover"
+                                />
+                                <AvatarFallback className="bg-gradient-to-br from-primary/80 to-primary text-white text-lg font-semibold">
                                   {doctor.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'MD'}
                                 </AvatarFallback>
                               </Avatar>
-                            </div>
-                            <div className="flex-1">
-                              <div className="flex items-center justify-between">
-                                <h3 className="font-medium text-lg text-gray-900">{formatDoctorName(doctor.name)}</h3>
-                                {priceInfo.badge}
+                              <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                                <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
                               </div>
-                              <p className="text-sm text-primary/80 font-medium mt-0.5">{doctor.specialization}</p>
-                              <div className="flex items-center mt-2">
-                                <Badge className="mr-2 bg-green-100 text-green-800 border-green-200">
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-start justify-between mb-2">
+                                <div className="min-w-0 flex-1">
+                                  <h3 className="font-semibold text-lg text-gray-900 leading-tight">
+                                    {formatDoctorName(doctor.name)}
+                                  </h3>
+                                  <p className="text-sm text-primary font-medium mt-0.5">{doctor.specialization}</p>
+                                </div>
+                                <div className="ml-3 flex-shrink-0">
+                                  {priceInfo.badge}
+                                </div>
+                              </div>
+                              
+
+                              
+                              <div className="flex items-center mb-4">
+                                <Badge className="mr-3 bg-green-100 text-green-800 border-green-200 px-3 py-1">
+                                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
                                   Online Agora
                                 </Badge>
                                 <span className={`text-xs ${priceInfo.color} font-medium`}>{priceInfo.text}</span>
                               </div>
-                              <div className="mt-4">
+                              
+                              <div className="w-full">
                                 <Button 
-                                  onClick={() => handleOpenBookingDialog(doctor)}
-                                  className="w-full justify-center relative overflow-hidden group"
+                                  onClick={() => handleStartEmergencyConsultation(doctor)}
+                                  disabled={isStartingEmergency}
+                                  className="w-full justify-center bg-green-600 hover:bg-green-700 text-white btn-hover-effect"
                                 >
-                                  Agendar Consulta
+                                  {isStartingEmergency ? (
+                                    <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                                  ) : (
+                                    <Heart className="h-4 w-4 mr-1" />
+                                  )}
+                                  Iniciar Consulta de Emergência
                                 </Button>
                               </div>
                             </div>
@@ -665,7 +716,7 @@ export default function TelemedicinePage() {
             <DialogTitle>Agendar Consulta</DialogTitle>
             <DialogDescription>
               {selectedDoctor?.name && (
-                <>Agende sua consulta com <span className="font-medium">{selectedDoctor.name}</span></>
+                <>Agende sua consulta com <span className="font-medium">{formatDoctorName(selectedDoctor.name)}</span></>
               )}
             </DialogDescription>
           </DialogHeader>

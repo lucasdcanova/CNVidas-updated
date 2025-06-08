@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: cnvidas-app
+    env: node
+    buildCommand: npm run render-build
+    startCommand: node --experimental-specifier-resolution=node dist/server/index.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+    disk:
+      name: uploads
+      mountPath: /app/uploads
+      sizeGB: 1 
