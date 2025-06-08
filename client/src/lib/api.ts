@@ -92,11 +92,12 @@ export const getDoctorByUserId = async (userId: number) => {
 };
 
 export const updateDoctor = async (id: number, data: any) => {
-  const res = await apiRequest("PUT", `/api/doctors/${id}`, data);
+  const res = await apiRequest("PUT", `/api/doctors/profile`, data);
   
   // Invalidar todas as consultas relacionadas ao perfil do médico
   queryClient.invalidateQueries({ queryKey: ["/api/doctors"] });
   queryClient.invalidateQueries({ queryKey: [`/api/doctors/${id}`] });
+  queryClient.invalidateQueries({ queryKey: ["/api/doctors/profile"] });
   
   // Importante: também invalidar a consulta específica do médico pelo userId
   // Esta é a consulta usada na página de perfil

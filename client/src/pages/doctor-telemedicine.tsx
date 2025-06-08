@@ -77,7 +77,7 @@ const EmergencyBanner = () => {
   return <EmergencyBannerSimple doctorProfile={doctorProfile} />;
 };
 
-const AppointmentItem = ({ appointment }: { appointment: any }) => {
+const AppointmentItem = ({ appointment, onDeleteEmergencyAppointment }: { appointment: any, onDeleteEmergencyAppointment?: (id: string) => void }) => {
   const { toast } = useToast();
   const [location, navigate] = useLocation();
   const isExpired = isPast(new Date(appointment.date)) && !isToday(new Date(appointment.date));
@@ -121,7 +121,7 @@ const AppointmentItem = ({ appointment }: { appointment: any }) => {
 
   // Mutação para excluir consulta
   const deleteAppointmentMutation = useMutation({
-    mutationFn: async (id: number) => {
+    mutationFn: async (id: string | number) => {
       const res = await apiRequest("DELETE", `/api/appointments/${id}`);
       if (!res.ok) {
         const errorData = await res.json();
@@ -134,8 +134,15 @@ const AppointmentItem = ({ appointment }: { appointment: any }) => {
         title: "Consulta excluída",
         description: "A consulta foi excluída com sucesso e o paciente foi notificado.",
       });
-      // Invalidar consultas para atualizar a lista
-      queryClient.invalidateQueries({ queryKey: ["/api/doctors/appointments"] });
+      
+      // Se for uma consulta de emergência, adicionar ao estado de excluídas
+      if (appointment.isEmergency && typeof appointment.id === 'string' && appointment.id.startsWith('emergency-doctor-')) {
+        onDeleteEmergencyAppointment?.(appointment.id);
+      } else {
+        // Para consultas normais, invalidar queries
+        queryClient.invalidateQueries({ queryKey: ["/api/doctors/appointments"] });
+      }
+      
       setShowDeleteDialog(false);
     },
     onError: (error: Error) => {
@@ -398,6 +405,14 @@ const AppointmentItem = ({ appointment }: { appointment: any }) => {
 export default function DoctorTelemedicinePage() {
   const { user } = useAuth();
   const { toast } = useToast();
+  
+  // Estado para controlar consultas de emergência excluídas
+  const [deletedEmergencyAppointments, setDeletedEmergencyAppointments] = useState<string[]>([]);
+  
+  // Função para adicionar consulta de emergência à lista de excluídas
+  const handleDeleteEmergencyAppointment = (appointmentId: string) => {
+    setDeletedEmergencyAppointments(prev => [...prev, appointmentId]);
+  };
 
   // Get doctor profile to pass doctor ID to emergency notifications
   const { data: doctorProfile } = useQuery({
@@ -414,7 +429,7 @@ export default function DoctorTelemedicinePage() {
   });
   
   // Get doctor appointments (includes emergency consultations)
-  const { data: appointments, isLoading: loadingAppointments } = useQuery({
+  const { data: appointmentsResponse, isLoading: loadingAppointments } = useQuery({
     queryKey: ["/api/doctors/appointments"],
     queryFn: ({ signal }) => 
       fetch("/api/doctors/appointments", { 
@@ -426,6 +441,9 @@ export default function DoctorTelemedicinePage() {
           return res.json();
         }),
   });
+  
+  // Extrair array de appointments da resposta
+  const appointments = appointmentsResponse?.appointments || [];
 
   // Get emergency consultations for this doctor
   const { data: emergencyConsultations } = useQuery({
@@ -445,9 +463,9 @@ export default function DoctorTelemedicinePage() {
   });
 
   // Filter telemedicine appointments
-  const telemedicineAppointments = appointments?.filter(
+  const telemedicineAppointments = appointments.filter(
     (app: any) => app.type === "telemedicine"
-  ) || [];
+  );
 
   // Criar consultas de emergência baseadas no ID do médico atual
   const doctorId = doctorProfile?.id;
@@ -473,8 +491,13 @@ export default function DoctorTelemedicinePage() {
     }
   ] : [];
 
+  // Filtrar consultas de emergência excluídas
+  const activeEmergencyAppointments = emergencyAppointments.filter(
+    appointment => !deletedEmergencyAppointments.includes(appointment.id)
+  );
+
   // Combine regular appointments with emergency consultations
-  const allAppointments = [...telemedicineAppointments, ...emergencyAppointments];
+  const allAppointments = [...telemedicineAppointments, ...activeEmergencyAppointments];
   
   // Upcoming and past appointments
   const upcomingAppointments = allAppointments.filter(
@@ -523,7 +546,11 @@ export default function DoctorTelemedicinePage() {
           )}
           
           {!loadingAppointments && upcomingAppointments.map((appointment: any) => (
-            <AppointmentItem key={appointment.id} appointment={appointment} />
+            <AppointmentItem 
+              key={appointment.id} 
+              appointment={appointment} 
+              onDeleteEmergencyAppointment={handleDeleteEmergencyAppointment}
+            />
           ))}
         </div>
         
@@ -535,7 +562,11 @@ export default function DoctorTelemedicinePage() {
             </div>
             
             {pastAppointments.slice(0, 5).map((appointment: any) => (
-              <AppointmentItem key={appointment.id} appointment={appointment} />
+              <AppointmentItem 
+                key={appointment.id} 
+                appointment={appointment} 
+                onDeleteEmergencyAppointment={handleDeleteEmergencyAppointment}
+              />
             ))}
             
             {pastAppointments.length > 5 && (

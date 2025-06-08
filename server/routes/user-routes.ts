@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { storage } from '../storage';
 import { requireAuth, AuthenticatedRequest } from '../middleware/auth';
-import { AppError } from '../utils/app-error';
+import { AppError } from '../utils/app-error.js';
 
 const userRouter = express.Router();
 

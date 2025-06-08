@@ -22,6 +22,8 @@ import appointmentJoinRouter from './appointment-join';
 import publicSubscriptionRouter from './public-subscription-routes';
 import userRouter from './user-routes';
 import partnerRouter from './partner-routes';
+import doctorRouter from './doctor-routes';
+import notificationRouter from './notification-routes';
 import { adminRouter } from '../admin-routes';
 
 export default async function setupRoutes(app: express.Express) {
@@ -105,6 +107,14 @@ export default async function setupRoutes(app: express.Express) {
   // Rotas de parceiros (autenticadas)
   console.log('Registrando partnerRouter em /api/partners');
   app.use('/api/partners', partnerRouter);
+  
+  // Rotas de médicos (autenticadas)
+  console.log('Registrando doctorRouter em /api/doctors');
+  app.use('/api/doctors', doctorRouter);
+  
+  // Rotas de notificações
+  console.log('Registrando notificationRouter em /api/notifications');
+  app.use('/api/notifications', notificationRouter);
   
   // Rota pública para listar todos os parceiros
   app.get('/api/all-partners', async (req, res) => {

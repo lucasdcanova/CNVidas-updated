@@ -92,10 +92,13 @@ export default function FinanceiroPage() {
   });
 
   // Buscar pagamentos do médico
-  const { data: payments, isLoading: isLoadingPayments } = useQuery<Payment[] | undefined>({
+  const { data: paymentsResponse, isLoading: isLoadingPayments } = useQuery<{payments: Payment[], total: number} | undefined>({
     queryKey: ['/api/doctors/payments'],
     enabled: true,
   });
+  
+  // Extrair array de pagamentos da resposta
+  const payments = paymentsResponse?.payments || [];
 
   // Formulário para informações de pagamento
   const form = useForm<PaymentInfoFormValues>({
@@ -179,12 +182,12 @@ export default function FinanceiroPage() {
   };
 
   // Calcular o total de pagamentos pendentes
-  const totalPendingAmount = payments?.filter((p: { status: string }) => p.status === "pending")
-    .reduce((sum: number, payment: { amount: number }) => sum + payment.amount, 0) || 0;
+  const totalPendingAmount = payments.filter((p: { status: string }) => p.status === "pending")
+    .reduce((sum: number, payment: { amount: number }) => sum + payment.amount, 0);
 
   // Calcular o total de pagamentos realizados
-  const totalPaidAmount = payments?.filter((p: { status: string }) => p.status === "paid")
-    .reduce((sum: number, payment: { amount: number }) => sum + payment.amount, 0) || 0;
+  const totalPaidAmount = payments.filter((p: { status: string }) => p.status === "paid")
+    .reduce((sum: number, payment: { amount: number }) => sum + payment.amount, 0);
 
   return (
     <DashboardLayout>
