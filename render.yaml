@@ -2,8 +2,8 @@ services:
   - type: web
     name: cnvidas-app
     env: node
-    buildCommand: npm run render-build
-    startCommand: node --experimental-specifier-resolution=node dist/server/index.js
+    buildCommand: npm run build
+    startCommand: npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
