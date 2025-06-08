@@ -237,13 +237,28 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
  * Desautentica um usuário
  * POST /api/auth/logout
  */
-authRouter.post('/logout', requireAuth, async (req: Request, res: Response) => {
+authRouter.post('/logout', async (req: Request, res: Response) => {
   try {
-    const authReq = req as AuthenticatedRequest;
-    // TODO: Implementar lógica de logout
+    // Limpar cookie de autenticação
+    res.clearCookie('auth_token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax'
+    });
     
+    // Invalidar sessão se existir
+    if (req.session) {
+      req.session.destroy((err) => {
+        if (err) {
+          console.error('Erro ao destruir sessão:', err);
+        }
+      });
+    }
+    
+    console.log('Logout realizado com sucesso');
     res.json({ message: 'Usuário desautenticado com sucesso' });
   } catch (error) {
+    console.error('Erro no logout:', error);
     if (error instanceof AppError) {
       res.status(error.statusCode).json({ error: error.message });
     } else {

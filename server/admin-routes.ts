@@ -29,6 +29,9 @@ export const isAdmin: RequestHandler = async (req, res, next) => {
 // Criar router administrativo
 export const adminRouter = Router();
 
+// Aplicar middleware de autenticação primeiro (para popular req.user)
+adminRouter.use(requireAuth);
+
 // Aplicar proteção admin global
 adminRouter.use(isAdmin);
 
@@ -38,24 +41,58 @@ const asHandler = (fn: (req: AuthenticatedRequest, res: Response, next: NextFunc
 // Rota para obter estatísticas da plataforma
 adminRouter.get('/stats', asHandler(async (req, res) => {
   try {
-    // Contagem de usuários por papel
-    const totalUsersCount = (await db.query.users.findMany()).length;
-    const totalPatientsCount = (await db.query.users.findMany({ where: eq(users.role, 'patient') })).length;
-    const totalDoctorsCount = (await db.query.users.findMany({ where: eq(users.role, 'doctor') })).length;
-    const totalPartnersCount = (await db.query.users.findMany({ where: eq(users.role, 'partner') })).length;
+    console.log('🔍 Admin /stats - Buscando estatísticas...');
     
-    // Estatísticas adicionais
-    const totalAppointmentsCount = (await db.query.appointments.findMany()).length;
-    const pendingClaimsCount = (await db.query.claims.findMany({ where: eq(claims.status, 'pending') })).length;
+    // Usar SQL direto para evitar problemas com Drizzle
+    const { pool } = await import('./db');
+    
+    // Estatísticas de usuários
+    const userStatsResult = await pool.query(`
+      SELECT 
+        COUNT(*) as total_users,
+        COUNT(CASE WHEN role = 'patient' THEN 1 END) as total_patients,
+        COUNT(CASE WHEN role = 'doctor' THEN 1 END) as total_doctors,
+        COUNT(CASE WHEN role = 'partner' THEN 1 END) as total_partners,
+        COUNT(CASE WHEN role = 'admin' THEN 1 END) as total_admins,
+        COUNT(CASE WHEN subscription_plan IS NOT NULL AND subscription_plan != 'free' THEN 1 END) as subscribed_users,
+        COUNT(CASE WHEN email_verified = true THEN 1 END) as verified_users
+      FROM users
+    `);
+    
+    const userStats = userStatsResult.rows[0];
+    
+    // Tentar buscar estatísticas de appointments (se a tabela existir)
+    let appointmentsCount = 0;
+    try {
+      const appointmentsResult = await pool.query('SELECT COUNT(*) as count FROM appointments');
+      appointmentsCount = parseInt(appointmentsResult.rows[0].count);
+    } catch (error) {
+      console.log('Tabela appointments não encontrada, continuando sem ela...');
+    }
+    
+    // Tentar buscar estatísticas de claims (se a tabela existir)
+    let pendingClaimsCount = 0;
+    try {
+      const claimsResult = await pool.query("SELECT COUNT(*) as count FROM claims WHERE status = 'pending'");
+      pendingClaimsCount = parseInt(claimsResult.rows[0].count);
+    } catch (error) {
+      console.log('Tabela claims não encontrada, continuando sem ela...');
+    }
 
-    res.json({
-      totalUsers: totalUsersCount,
-      totalPatients: totalPatientsCount,
-      totalDoctors: totalDoctorsCount,
-      totalPartners: totalPartnersCount,
-      totalAppointments: totalAppointmentsCount,
+    const statsData = {
+      totalUsers: parseInt(userStats.total_users),
+      totalPatients: parseInt(userStats.total_patients),
+      totalDoctors: parseInt(userStats.total_doctors),
+      totalPartners: parseInt(userStats.total_partners),
+      totalAdmins: parseInt(userStats.total_admins),
+      subscribedUsers: parseInt(userStats.subscribed_users),
+      verifiedUsers: parseInt(userStats.verified_users),
+      totalAppointments: appointmentsCount,
       pendingClaims: pendingClaimsCount
-    });
+    };
+    
+    console.log('✅ Admin /stats - Estatísticas obtidas:', statsData);
+    res.json(statsData);
   } catch (error) {
     console.error("Erro ao obter estatísticas:", error);
     res.status(500).json({ message: "Erro ao buscar estatísticas" });
@@ -262,11 +299,36 @@ adminRouter.patch('/claims/:id', async (req: AuthenticatedRequest, res) => {
 // Listar todos os usuários
 adminRouter.get('/users', async (req: AuthenticatedRequest, res) => {
   try {
-    const allUsers = await db.query.users.findMany({
-      orderBy: desc(users.createdAt)
-    });
+    console.log('🔍 Admin /users - Usuário autenticado:', !!req.user);
+    console.log('🔍 Admin /users - Role do usuário:', req.user?.role);
     
-    res.json(allUsers);
+    // Usar SQL direto para evitar problemas com Drizzle
+    const { pool } = await import('./db');
+    const result = await pool.query(`
+      SELECT id, email, username, full_name, role, cpf, phone, 
+             subscription_plan, subscription_status, email_verified, 
+             created_at, updated_at
+      FROM users 
+      ORDER BY created_at DESC
+    `);
+    
+    const users = result.rows.map(row => ({
+      id: row.id,
+      email: row.email,
+      username: row.username,
+      fullName: row.full_name,
+      role: row.role,
+      cpf: row.cpf,
+      phone: row.phone,
+      subscriptionPlan: row.subscription_plan,
+      subscriptionStatus: row.subscription_status,
+      emailVerified: row.email_verified,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at
+    }));
+    
+    console.log(`✅ Admin /users - Retornando ${users.length} usuários`);
+    res.json(users);
   } catch (error) {
     console.error("Erro ao listar usuários:", error);
     res.status(500).json({ message: "Erro ao buscar usuários" });

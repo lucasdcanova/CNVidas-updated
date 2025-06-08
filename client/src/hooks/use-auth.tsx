@@ -178,7 +178,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Mutation para logout
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      const response = await apiRequest("POST", "/api/logout");
+      const response = await apiRequest("POST", "/api/auth/logout");
       
       // Limpar dados locais
       localStorage.removeItem("authToken");

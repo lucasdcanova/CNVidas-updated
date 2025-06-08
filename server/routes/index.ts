@@ -20,6 +20,7 @@ import profileImageRouter from './profile-image-routes';
 import addressRouter from './address-routes';
 import appointmentJoinRouter from './appointment-join';
 import publicSubscriptionRouter from './public-subscription-routes';
+import { adminRouter } from '../admin-routes';
 
 export default async function setupRoutes(app: express.Express) {
   // Rotas de autenticação (PRIMEIRO para evitar conflitos)
@@ -42,6 +43,12 @@ export default async function setupRoutes(app: express.Express) {
   app.get('/api/user', (req, res, next) => {
     console.log('=== ROTA /api/user INTERCEPTADA ===');
     req.url = '/user';
+    authRouter(req, res, next);
+  });
+  
+  app.post('/api/logout', (req, res, next) => {
+    console.log('=== ROTA /api/logout INTERCEPTADA ===');
+    req.url = '/logout';
     authRouter(req, res, next);
   });
   
@@ -84,6 +91,22 @@ export default async function setupRoutes(app: express.Express) {
   app.use('/api/daily', dailyRoutesRouter);
   app.use('/api/emergency-notifications', emergencyNotificationsRouter);
   app.use('/api/daily-emergency', dailyEmergencyRouter);
+  
+  // Rotas administrativas
+  console.log('Registrando adminRouter em /api/admin');
+  app.use('/api/admin', adminRouter);
+  
+  // Rotas de parceiros (públicas/gerais)
+  console.log('Registrando rotas de parceiros em /api/partners');
+  app.get('/api/partners', async (req, res) => {
+    try {
+      const partners = await (await import('../storage')).storage.getAllPartners();
+      res.json(partners);
+    } catch (error) {
+      console.error('Erro ao buscar parceiros:', error);
+      res.status(500).json({ error: 'Erro ao buscar parceiros' });
+    }
+  });
   
   return app;
 } 

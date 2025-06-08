@@ -60,7 +60,7 @@ import { eq } from "drizzle-orm";
     const authReq = req as any;
     
     // Debug: log da requisição
-    if (req.url.includes('/api/subscription/current')) {
+    if (req.url.includes('/api/subscription/current') || req.url.includes('/api/admin/')) {
       console.log('🔍 Middleware JWT Global - Processando:', req.url);
       console.log('🔍 Cookies:', req.cookies);
       console.log('🔍 Headers auth:', req.headers.authorization);
@@ -69,7 +69,7 @@ import { eq } from "drizzle-orm";
     
     // Se já está autenticado via sessão, continuar
     if (authReq.user) {
-      if (req.url.includes('/api/subscription/current')) {
+      if (req.url.includes('/api/subscription/current') || req.url.includes('/api/admin/')) {
         console.log('✅ Já autenticado via sessão:', authReq.user.email);
       }
       return next();
@@ -82,7 +82,7 @@ import { eq } from "drizzle-orm";
                       : null);
     
     if (authToken) {
-      if (req.url.includes('/api/subscription/current')) {
+      if (req.url.includes('/api/subscription/current') || req.url.includes('/api/admin/')) {
         console.log('🔍 Token encontrado nos headers:', authToken.substring(0, 20) + '...');
       }
       try {
