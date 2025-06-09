@@ -289,14 +289,7 @@ authRouter.post('/logout', async (req: Request, res: Response) => {
       sameSite: 'lax'
     });
     
-    // Invalidar sessão se existir
-    if (req.session) {
-      req.session.destroy((err) => {
-        if (err) {
-          console.error('Erro ao destruir sessão:', err);
-        }
-      });
-    }
+    // Sessão removida - usando apenas JWT
     
     console.log('Logout realizado com sucesso');
     res.json({ message: 'Usuário desautenticado com sucesso' });

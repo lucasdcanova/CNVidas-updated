@@ -78,7 +78,7 @@ userRouter.post('/generate-qr', requireAuth, async (req: AuthenticatedRequest, r
       return res.status(401).json({ error: 'Usuário não autenticado' });
     }
 
-    const qrCode = await generateQRCode({
+    const qrData = JSON.stringify({
       userId: req.user.id,
       scannerUserId: undefined, // Pode ser preenchido se houver um usuário logado fazendo o scan
       type: 'profile',
@@ -88,6 +88,8 @@ userRouter.post('/generate-qr', requireAuth, async (req: AuthenticatedRequest, r
         email: req.user.email
       }
     });
+    
+    const qrCode = await generateQRCode(qrData);
 
     return res.json({ qrCode });
   } catch (error) {

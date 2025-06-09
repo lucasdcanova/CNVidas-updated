@@ -48,6 +48,18 @@ export const users = pgTable("users", {
   complement: text("complement"),
   neighborhood: text("neighborhood"),
   subscriptionChangedAt: timestamp("subscription_changed_at"),
+  
+  // Campos adicionais necessários
+  gender: varchar("gender", { length: 20 }),
+  status: varchar("status", { length: 50 }).default('active'),
+  subscriptionPlanId: integer("subscription_plan_id").references(() => subscriptionPlans.id),
+  subscriptionStartDate: timestamp("subscription_start_date"),
+  subscriptionEndDate: timestamp("subscription_end_date"),
+  welcomeCompleted: boolean("welcome_completed").default(false),
+  pixKeyType: varchar("pix_key_type", { length: 20 }),
+  pixKey: varchar("pix_key", { length: 255 }),
+  bankName: varchar("bank_name", { length: 100 }),
+  accountType: varchar("account_type", { length: 20 }),
 
 });
 
