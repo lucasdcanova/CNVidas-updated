@@ -5,6 +5,8 @@ import { AppError } from '../utils/app-error';
 import { storage } from '../storage';
 import { DatabaseStorage } from '../storage';
 import { AuthenticatedRequest } from '../types/authenticated-request';
+
+export { AuthenticatedRequest };
 import { validateId } from '../utils/id-converter';
 
 export const requireAuth = (req: Request, res: Response, next: NextFunction) => {

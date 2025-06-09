@@ -1,6 +1,5 @@
 // Este arquivo mantém a exportação explícita do tipo global, útil para importações direcionais.
 import { Request } from 'express';
-import { User } from './express';
 
 // Define User interface
 export interface User {
@@ -86,5 +85,4 @@ export interface AuthenticatedRequest extends Request {
   user: User;
 }
 
-// Export both types
-export type { AuthenticatedRequest, User }; 
+ 
