@@ -1,5 +1,4 @@
 import { useStripe, Elements, PaymentElement, useElements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -9,13 +8,7 @@ import { Loader2 } from "lucide-react";
 import { useAuth } from '@/hooks/use-auth';
 import { useLocation } from 'wouter';
 import { useIsMobile } from '@/hooks/use-mobile';
-
-// Make sure to call `loadStripe` outside of a component's render to avoid
-// recreating the `Stripe` object on every render.
-if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-  throw new Error('Missing required Stripe key: VITE_STRIPE_PUBLIC_KEY');
-}
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+import { stripePromise } from '@/lib/stripe-config';
 
 interface CheckoutFormProps {
   clientSecret: string;

@@ -1,5 +1,4 @@
 import { useStripe, Elements, PaymentElement, useElements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState, useMemo } from 'react';
 import { apiRequest, useQuery } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -12,13 +11,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-
-// Make sure to call `loadStripe` outside of a component's render to avoid
-// recreating the `Stripe` object on every render.
-if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-  throw new Error('Missing required Stripe key: VITE_STRIPE_PUBLIC_KEY');
-}
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+import { stripePromise } from '@/lib/stripe-config';
 
 // O tipo para os planos vindos da API
 interface SubscriptionPlan {

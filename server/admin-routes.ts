@@ -29,10 +29,79 @@ router.get('/users', async (req, res) => {
 
 router.post('/users', async (req, res) => {
   try {
-    res.json({ 
-      message: 'Create user endpoint', 
-      data: req.body 
+    const userData = req.body;
+    
+    // Validação básica
+    if (!userData.email || !userData.password || !userData.fullName || !userData.role) {
+      return res.status(400).json({ error: 'Email, password, full name and role are required' });
+    }
+    
+    // Validar role
+    const validRoles = ['patient', 'doctor', 'partner', 'admin'];
+    if (!validRoles.includes(userData.role)) {
+      return res.status(400).json({ error: 'Invalid role' });
+    }
+    
+    const { storage } = await import('./storage');
+    
+    // Verificar se o email já existe
+    const existingUser = await storage.getUserByEmail(userData.email);
+    if (existingUser) {
+      return res.status(400).json({ error: 'Email already exists' });
+    }
+    
+    // Se tiver CPF, verificar se já existe
+    if (userData.cpf) {
+      const existingCpf = await storage.getUserByCPF(userData.cpf);
+      if (existingCpf) {
+        return res.status(400).json({ error: 'CPF already exists' });
+      }
+    }
+    
+    // Hash da senha
+    const bcrypt = await import('bcryptjs');
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    
+    // Criar o usuário
+    const newUser = await storage.createUser({
+      email: userData.email,
+      username: userData.username || userData.email,
+      password: hashedPassword,
+      fullName: userData.fullName,
+      role: userData.role,
+      cpf: userData.cpf,
+      phone: userData.phone,
+      emailVerified: userData.isEmailVerified || false,
+      subscriptionPlan: userData.role === 'patient' ? (userData.subscriptionPlan || 'free') : undefined,
+      subscriptionStatus: userData.role === 'patient' ? (userData.subscriptionStatus || 'inactive') : undefined,
+      sellerName: userData.sellerName,
     });
+    
+    // Se for médico, criar o perfil médico
+    if (userData.role === 'doctor') {
+      await storage.createDoctor({
+        userId: newUser.id,
+        specialization: userData.specialty || '',
+        licenseNumber: userData.licenseNumber || '',
+        consultationFee: userData.consultationPrice || 0,
+      });
+    }
+    
+    // Se for parceiro, criar o perfil de parceiro
+    if (userData.role === 'partner') {
+      await storage.createPartner({
+        userId: newUser.id,
+        businessName: userData.businessName || userData.fullName,
+        businessType: userData.businessType || 'clinic',
+        cnpj: userData.cnpj || '',
+        tradingName: userData.tradingName || userData.businessName || userData.fullName,
+      });
+    }
+    
+    // Remover a senha antes de retornar
+    const { password, ...userWithoutPassword } = newUser;
+    
+    res.status(201).json(userWithoutPassword);
   } catch (error) {
     console.error('Error creating user:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -213,10 +282,36 @@ router.get('/services', async (req, res) => {
 
 router.post('/services', async (req, res) => {
   try {
-    res.json({ 
-      message: 'Create service endpoint', 
-      data: req.body 
+    const serviceData = req.body;
+    
+    // Validação básica
+    if (!serviceData.partnerId || !serviceData.name) {
+      return res.status(400).json({ error: 'Partner ID and name are required' });
+    }
+    
+    const { storage } = await import('./storage');
+    
+    // Verificar se o parceiro existe
+    const partner = await storage.getPartner(parseInt(serviceData.partnerId));
+    if (!partner) {
+      return res.status(404).json({ error: 'Partner not found' });
+    }
+    
+    // Criar o serviço
+    const newService = await storage.createPartnerService({
+      partnerId: parseInt(serviceData.partnerId),
+      name: serviceData.name,
+      description: serviceData.description || '',
+      regularPrice: serviceData.regularPrice || serviceData.price || 0,
+      discountPrice: serviceData.discountPrice,
+      discountPercentage: serviceData.discountPercentage,
+      category: serviceData.category,
+      duration: serviceData.duration || 30,
+      isActive: serviceData.isActive !== undefined ? serviceData.isActive : true,
+      isFeatured: serviceData.isFeatured || false,
     });
+    
+    res.status(201).json(newService);
   } catch (error) {
     console.error('Error creating service:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -226,11 +321,56 @@ router.post('/services', async (req, res) => {
 router.put('/services/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    res.json({ 
-      message: 'Update service endpoint', 
-      serviceId: id,
-      data: req.body 
-    });
+    const updateData = req.body;
+    
+    const { storage } = await import('./storage');
+    
+    // Verificar se o serviço existe
+    const service = await storage.getService(parseInt(id));
+    if (!service) {
+      return res.status(404).json({ error: 'Service not found' });
+    }
+    
+    // Remover campos que não devem ser atualizados
+    delete updateData.id;
+    delete updateData.partnerId;
+    delete updateData.createdAt;
+    delete updateData.updatedAt;
+    
+    // Atualizar o serviço
+    const updatedService = await storage.updateService(parseInt(id), updateData);
+    
+    res.json(updatedService);
+  } catch (error) {
+    console.error('Error updating service:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Suportar tanto PUT quanto PATCH para atualização de serviços
+router.patch('/services/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+    
+    const { storage } = await import('./storage');
+    
+    // Verificar se o serviço existe
+    const service = await storage.getService(parseInt(id));
+    if (!service) {
+      return res.status(404).json({ error: 'Service not found' });
+    }
+    
+    // Remover campos que não devem ser atualizados
+    delete updateData.id;
+    delete updateData.partnerId;
+    delete updateData.createdAt;
+    delete updateData.updatedAt;
+    
+    // Atualizar o serviço
+    const updatedService = await storage.updateService(parseInt(id), updateData);
+    
+    res.json(updatedService);
   } catch (error) {
     console.error('Error updating service:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -240,12 +380,49 @@ router.put('/services/:id', async (req, res) => {
 router.delete('/services/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    const { storage } = await import('./storage');
+    
+    // Verificar se o serviço existe
+    const service = await storage.getService(parseInt(id));
+    if (!service) {
+      return res.status(404).json({ error: 'Service not found' });
+    }
+    
+    // Deletar o serviço
+    await storage.deletePartnerService(parseInt(id));
+    
     res.json({ 
-      message: 'Delete service endpoint', 
+      message: 'Service deleted successfully', 
       serviceId: id 
     });
   } catch (error) {
     console.error('Error deleting service:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Rota para alternar destaque de serviço
+router.patch('/services/:id/feature', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isFeatured } = req.body;
+    
+    const { storage } = await import('./storage');
+    
+    // Verificar se o serviço existe
+    const service = await storage.getService(parseInt(id));
+    if (!service) {
+      return res.status(404).json({ error: 'Service not found' });
+    }
+    
+    // Atualizar o status de destaque
+    const updatedService = await storage.updateService(parseInt(id), {
+      isFeatured: !!isFeatured
+    });
+    
+    res.json(updatedService);
+  } catch (error) {
+    console.error('Error updating service feature status:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -274,16 +451,128 @@ router.get('/claims', async (req, res) => {
 
 router.get('/analytics/overview', async (req, res) => {
   try {
+    const { storage } = await import('./storage');
+    
+    // Obter dados reais
+    const allUsers = await storage.getAllUsers();
+    const patients = allUsers.filter(u => u.role === 'patient');
+    const doctors = allUsers.filter(u => u.role === 'doctor');
+    const partners = allUsers.filter(u => u.role === 'partner');
+    
+    // Calcular usuários ativos (com plano não free)
+    const activePatients = patients.filter(p => p.subscriptionPlan && p.subscriptionPlan !== 'free');
+    
+    // Obter sinistros
+    const claims = await storage.getAllClaims();
+    const pendingClaims = claims.filter(c => c.status === 'pending');
+    
+    // Calcular receita mensal estimada
+    const basicPlanPatients = patients.filter(p => p.subscriptionPlan === 'basic').length;
+    const premiumPlanPatients = patients.filter(p => p.subscriptionPlan === 'premium').length;
+    const monthlyRevenue = (basicPlanPatients * 49.90) + (premiumPlanPatients * 99.90);
+    
+    // Calcular crescimento mensal (últimos 30 dias)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const newUsersLastMonth = patients.filter(p => new Date(p.createdAt) > thirtyDaysAgo).length;
+    const monthlyGrowth = patients.length > 0 ? (newUsersLastMonth / patients.length) * 100 : 0;
+    
     res.json({ 
-      totalUsers: 0,
-      totalClaims: 0,
-      totalPartners: 0,
-      activeUsers: 0,
-      totalRevenue: 0,
-      monthlyGrowth: 0
+      totalUsers: allUsers.length,
+      totalPatients: patients.length,
+      totalDoctors: doctors.length,
+      totalPartners: partners.length,
+      activeUsers: activePatients.length,
+      totalClaims: claims.length,
+      pendingClaims: pendingClaims.length,
+      monthlyRevenue: monthlyRevenue.toFixed(2),
+      monthlyGrowth: monthlyGrowth.toFixed(1),
+      subscriptionBreakdown: {
+        free: patients.filter(p => !p.subscriptionPlan || p.subscriptionPlan === 'free').length,
+        basic: basicPlanPatients,
+        premium: premiumPlanPatients
+      }
     });
   } catch (error) {
     console.error('Error in admin analytics route:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Rota para dados de crescimento mensal
+router.get('/analytics/growth', async (req, res) => {
+  try {
+    const { storage } = await import('./storage');
+    const { months = 6 } = req.query;
+    
+    const allUsers = await storage.getAllUsers();
+    const now = new Date();
+    const monthsData = [];
+    
+    // Gerar dados para os últimos N meses
+    for (let i = parseInt(months as string) - 1; i >= 0; i--) {
+      const monthStart = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
+      
+      const usersInMonth = allUsers.filter(u => {
+        const createdAt = new Date(u.createdAt);
+        return createdAt >= monthStart && createdAt <= monthEnd;
+      });
+      
+      const monthName = monthStart.toLocaleDateString('pt-BR', { month: 'short' });
+      
+      monthsData.push({
+        name: monthName.charAt(0).toUpperCase() + monthName.slice(1),
+        newUsers: usersInMonth.length,
+        totalUsers: allUsers.filter(u => new Date(u.createdAt) <= monthEnd).length
+      });
+    }
+    
+    res.json(monthsData);
+  } catch (error) {
+    console.error('Error in admin growth analytics route:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Rota para dados de receita
+router.get('/analytics/revenue', async (req, res) => {
+  try {
+    const { storage } = await import('./storage');
+    const { months = 6 } = req.query;
+    
+    const allUsers = await storage.getAllUsers();
+    const patients = allUsers.filter(u => u.role === 'patient');
+    const now = new Date();
+    const monthsData = [];
+    
+    // Gerar dados para os últimos N meses
+    for (let i = parseInt(months as string) - 1; i >= 0; i--) {
+      const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
+      
+      // Calcular pacientes ativos até o final do mês
+      const activePatients = patients.filter(p => {
+        const createdAt = new Date(p.createdAt);
+        return createdAt <= monthEnd && p.subscriptionPlan && p.subscriptionPlan !== 'free';
+      });
+      
+      const basicCount = activePatients.filter(p => p.subscriptionPlan === 'basic').length;
+      const premiumCount = activePatients.filter(p => p.subscriptionPlan === 'premium').length;
+      const revenue = (basicCount * 49.90) + (premiumCount * 99.90);
+      
+      const monthName = monthEnd.toLocaleDateString('pt-BR', { month: 'short' });
+      
+      monthsData.push({
+        name: monthName.charAt(0).toUpperCase() + monthName.slice(1),
+        total: revenue,
+        basic: basicCount * 49.90,
+        premium: premiumCount * 99.90
+      });
+    }
+    
+    res.json(monthsData);
+  } catch (error) {
+    console.error('Error in admin revenue analytics route:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

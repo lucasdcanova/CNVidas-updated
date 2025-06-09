@@ -132,6 +132,11 @@ export interface IStorage {
   deletePartnerService(id: number): Promise<void>;
   getFeaturedServices(limit?: number): Promise<PartnerService[]>;
   
+  // Aliases for admin routes compatibility
+  getService(id: number): Promise<PartnerService | undefined>;
+  updateService(id: number, data: Partial<InsertPartnerService>): Promise<PartnerService>;
+  getAllServices(): Promise<PartnerService[]>;
+  
   // Appointment methods
   getAppointment(id: number): Promise<Appointment | null>;
   getUserAppointments(userId: number): Promise<Appointment[]>;
@@ -1105,6 +1110,15 @@ export class DatabaseStorage implements IStorage {
   async getAllServices(): Promise<any[]> {
     const result = await this.db.select().from(partnerServices).orderBy(desc(partnerServices.createdAt));
     return result;
+  }
+
+  // Aliases for admin routes compatibility
+  async getService(id: number): Promise<PartnerService | undefined> {
+    return this.getPartnerService(id);
+  }
+
+  async updateService(id: number, data: Partial<InsertPartnerService>): Promise<PartnerService> {
+    return this.updatePartnerService(id, data);
   }
 }
 

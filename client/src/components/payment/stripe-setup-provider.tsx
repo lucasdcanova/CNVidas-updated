@@ -1,8 +1,5 @@
 import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-
-// Carregar a chave pública do Stripe
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
+import { stripePromise } from '@/lib/stripe-config';
 
 interface StripeSetupProviderProps {
   clientSecret: string | null;
@@ -10,7 +7,7 @@ interface StripeSetupProviderProps {
 }
 
 export function StripeSetupProvider({ clientSecret, children }: StripeSetupProviderProps) {
-  if (!clientSecret) {
+  if (!clientSecret || !stripePromise) {
     return null;
   }
 

@@ -1,19 +1,16 @@
 import { useState, useEffect } from 'react';
 import { apiRequest } from '@/lib/queryClient';
 import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+import { stripePromise } from '@/lib/stripe-config';
 
 interface UseStripeSetupProps {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
 }
 
-// Carregar o Stripe com a chave pública
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-
 // Provider do Stripe
 const StripeSetupProvider = ({ children, clientSecret }: { children: React.ReactNode; clientSecret: string | null }) => {
-  if (!clientSecret) {
+  if (!clientSecret || !stripePromise) {
     return <>{children}</>;
   }
 
