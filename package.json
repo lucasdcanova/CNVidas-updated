@@ -97,6 +97,7 @@
     "wouter": "^3.0.0",
     "react-helmet": "^6.1.0",
     "html5-qrcode": "^2.3.8",
+    "react-image-crop": "^11.0.4",
     "@tailwindcss/typography": "^0.5.10",
     "tailwindcss": "^3.4.1",
     "autoprefixer": "^10.4.17",
