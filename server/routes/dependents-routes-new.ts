@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { Request, Response, NextFunction } from 'express';
 import { isAuthenticated } from '../middleware/auth.js';
 import { AppError } from '../utils/app-error';
-import { dependents } from '@shared/schema';
+import { dependents } from '../../shared/schema';
 import { db } from '../db';
 import { eq, and } from 'drizzle-orm';
 import { DatabaseStorage } from '../storage';

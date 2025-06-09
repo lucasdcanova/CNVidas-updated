@@ -4,7 +4,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { db } from '../db';
 import { eq, and } from 'drizzle-orm';
-import { appointments, doctors, users } from '@shared/schema';
+import { appointments, doctors, users } from '../../shared/schema';
 import { requireAuth, requireDoctor, requirePatient } from '../middleware/auth';
 import { checkEmergencyConsultationLimit } from '../middleware/subscription-check';
 import { AppError } from '../utils/app-error';

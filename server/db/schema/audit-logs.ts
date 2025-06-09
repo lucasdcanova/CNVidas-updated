@@ -1,6 +1,6 @@
 import { pgTable, serial, integer, text, timestamp, jsonb } from 'drizzle-orm/pg-core';
 import { AuditAction } from '../../security/audit-logger';
-import { users } from '@shared/schema';
+import { users } from '../../../shared/schema';
 
 export const auditLogs = pgTable('audit_logs', {
   id: serial('id').primaryKey(),

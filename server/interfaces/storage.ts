@@ -34,7 +34,7 @@ import {
   InsertPasswordReset,
   SubscriptionPlan,
   InsertSubscriptionPlan
-} from '@shared/schema';
+} from '../../shared/schema';
 
 export interface IStorage {
   // Session store

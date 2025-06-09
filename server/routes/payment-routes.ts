@@ -10,7 +10,7 @@ import {
 } from '../utils/stripe-payment.js';
 import { AppError } from '../utils/app-error';
 import { db } from '../db';
-import { users } from '@shared/schema';
+import { users } from '../../shared/schema';
 import { eq } from 'drizzle-orm';
 
 const paymentRouter = Router();

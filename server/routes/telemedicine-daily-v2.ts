@@ -8,7 +8,7 @@ import { storage } from '../storage';
 import { checkSubscriptionFeature } from '../middleware/subscription-check';
 import axios, { AxiosError } from 'axios';
 import { ensureDailyJsonResponse } from '../middleware/json-response';
-import { User } from '@shared/schema';
+import { User } from '../../shared/schema';
 import { prisma } from '../lib/prisma';
 import { AppError } from '../utils/app-error';
 import { Router } from 'express';

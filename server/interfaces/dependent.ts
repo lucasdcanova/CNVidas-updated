@@ -1,4 +1,4 @@
-import { Dependent, InsertDependent } from '@shared/schema';
+import { Dependent, InsertDependent } from '../../shared/schema';
 
 export interface IDependentStorage {
   getDependent(id: number): Promise<Dependent | null>;

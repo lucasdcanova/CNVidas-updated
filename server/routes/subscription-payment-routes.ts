@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { db } from '../db.js';
-import { users, subscriptionPlans } from '@shared/schema';
+import { users, subscriptionPlans } from '../../shared/schema';
 import { storage } from '../storage.js';
 import { createSubscriptionPaymentSession } from '../utils/stripe-payment.js';
 import stripe from '../utils/stripe-instance.js';

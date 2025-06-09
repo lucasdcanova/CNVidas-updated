@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { db } from '../db';
 import { eq } from 'drizzle-orm';
-import { subscriptionPlans, users, User } from '@shared/schema';
+import { subscriptionPlans, users, User } from '../../shared/schema';
 import { AuthenticatedRequest } from '../types/authenticated-request';
 import { ExpressUser } from '../../shared/types';
 import { storage } from '../storage';

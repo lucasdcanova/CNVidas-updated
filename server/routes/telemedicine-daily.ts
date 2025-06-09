@@ -13,12 +13,12 @@ import { prisma } from '../lib/prisma';
 import { sanitizeRoomName } from '../utils/sanitize';
 import Daily from '@daily-co/daily-js';
 import { AppError } from '../utils/app-error';
-import { User } from '@shared/schema';
+import { User } from '../../shared/schema';
 import { Router } from 'express';
 import { DatabaseStorage } from '../storage';
 import { toNumberOrThrow } from '../utils/id-converter';
 import { db } from '../db';
-import { appointments, users } from '@shared/schema';
+import { appointments, users } from '../../shared/schema';
 import { eq, and, gte, lte } from 'drizzle-orm';
 
 // Interface para resposta da API do Daily.co

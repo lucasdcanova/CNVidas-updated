@@ -2,7 +2,7 @@ import express, { Router } from 'express';
 import { Request, Response, NextFunction } from 'express';
 import { storage } from '../storage.js';
 import { createConsultationPaymentIntent, captureConsultationPayment, cancelConsultationPayment } from '../utils/stripe-payment.js';
-import { User } from '@shared/schema';
+import { User } from '../../shared/schema';
 import { AppError } from '../utils/app-error';
 import { isAuthenticated } from '../middleware/auth.js';
 import { checkSubscriptionFeature } from '../middleware/subscription-check.js';

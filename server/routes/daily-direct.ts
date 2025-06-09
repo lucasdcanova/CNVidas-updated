@@ -1,7 +1,7 @@
 import express from 'express';
 import { Request, Response, NextFunction } from 'express';
 import axios, { AxiosError } from 'axios';
-import { User } from '@shared/schema';
+import { User } from '../../shared/schema';
 import { isAuthenticated } from '../middleware/auth.js';
 import { AppError } from '../utils/app-error';
 import { DatabaseStorage } from '../storage';

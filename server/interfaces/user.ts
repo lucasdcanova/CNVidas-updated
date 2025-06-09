@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User } from '@shared/schema';
+import { User } from '../../shared/schema';
 
 export interface Doctor {
   id: number;

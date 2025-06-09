@@ -7,11 +7,6 @@
     "outDir": "./dist",
     "rootDir": "./",
     "baseUrl": "./",
-    "paths": {
-      "@/*": ["client/src/*"],
-      "@shared/*": ["shared/*"],
-      "@assets/*": ["attached_assets/*"]
-    },
     "resolveJsonModule": true,
     "types": ["node", "express"],
     "lib": ["ES2020"],

@@ -13,7 +13,7 @@ import { Request, Response, NextFunction } from 'express';
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { User } from '@shared/schema';
+import { User } from '../shared/schema';
 import { DatabaseStorage } from './storage';
 import { z } from 'zod';
 import { v4 as uuidv4 } from 'uuid';
