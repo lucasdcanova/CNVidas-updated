@@ -1,0 +1,90 @@
+{
+  "startTime": "2025-06-09T11:51:33.917Z",
+  "totalTests": 10,
+  "passed": 8,
+  "failed": 2,
+  "warnings": 0,
+  "results": [
+    {
+      "testName": "Servidor Ativo",
+      "status": "failed",
+      "timestamp": "2025-06-09T11:51:34.085Z",
+      "duration": 0,
+      "details": "Servidor não está respondendo",
+      "error": null
+    },
+    {
+      "testName": "Login do Paciente",
+      "status": "failed",
+      "timestamp": "2025-06-09T11:51:34.106Z",
+      "duration": 21,
+      "details": "Falha na autenticação",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: dashboard.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T11:51:34.107Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: claims.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T11:51:34.107Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: services.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T11:51:34.108Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: profile.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T11:51:34.108Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: subscription.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T11:51:34.109Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: patient-dashboard.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T11:51:34.110Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: claim-form.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T11:51:34.110Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: address-form.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T11:51:34.111Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    }
+  ],
+  "errors": []
+}
