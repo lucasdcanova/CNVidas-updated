@@ -4,7 +4,7 @@ import path from "path";
 import { createServer as createViteServer, createLogger } from "vite";
 import { type Server } from "http";
 import { nanoid } from "nanoid";
-const __dirname = __dirname || process.cwd();
+const currentDir = process.cwd();
 
 // Simple config for production - will be replaced by static serving
 const viteConfig = {};
@@ -56,8 +56,7 @@ export async function setupVite(app: Express, server: Server) {
 
     try {
       const clientTemplate = path.resolve(
-        __dirname,
-        "..",
+        currentDir,
         "client",
         "index.html",
       );
@@ -79,8 +78,8 @@ export async function setupVite(app: Express, server: Server) {
 
 export function serveStatic(app: Express) {
   // Em produção no Render, servir arquivos estáticos do cliente
-  const clientPath = path.resolve(__dirname, "..", "client");
-  const publicPath = path.resolve(__dirname, "public");
+  const clientPath = path.resolve(currentDir, "client");
+  const publicPath = path.resolve(currentDir, "public");
   
   console.log('🔍 Tentando servir arquivos estáticos de:', clientPath);
   console.log('🔍 Ou de:', publicPath);

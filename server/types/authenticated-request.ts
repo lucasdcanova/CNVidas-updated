@@ -18,7 +18,7 @@ export interface User {
   number: string | null;
   complement: string | null;
   neighborhood: string | null;
-  birthDate: string | null;
+  birthDate: Date | null;
   gender: string | null;
   profileImage: string | null;
   createdAt: Date;
@@ -39,6 +39,11 @@ export interface User {
   stripeSubscriptionId: string | null;
   lastLogin: Date | null;
   isActive: boolean;
+  welcomeCompleted: boolean;
+  pixKeyType: string | null;
+  pixKey: string | null;
+  bankName: string | null;
+  accountType: string | null;
 }
 
 // Estender o namespace do Express
