@@ -31,12 +31,14 @@ export async function setupVite(app: Express, server: Server) {
 
   const vite = await createViteServer({
     ...viteConfig,
-    configFile: false,
+    configFile: path.resolve(currentDir, "vite.config.ts"),
+    root: path.resolve(currentDir, "client"),
     customLogger: {
       ...viteLogger,
       error: (msg, options) => {
         viteLogger.error(msg, options);
-        process.exit(1);
+        // Não sair no erro para permitir que o servidor continue
+        // process.exit(1);
       },
     },
     server: serverOptions,

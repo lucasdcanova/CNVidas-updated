@@ -165,7 +165,7 @@ const AdminUsersPage: React.FC = () => {
   });
 
   // Filtrar usuários baseado na busca e no filtro de role
-  const filteredUsers = users.filter((user) => {
+  const filteredUsers = Array.isArray(users) ? users.filter((user) => {
     const matchesSearch = 
       searchQuery === "" || 
       user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -175,7 +175,7 @@ const AdminUsersPage: React.FC = () => {
     const matchesRole = filterRole === null || user.role === filterRole;
     
     return matchesSearch && matchesRole;
-  });
+  }) : [];
 
   // Form para criar novo usuário
   const createForm = useForm<UserFormData>({

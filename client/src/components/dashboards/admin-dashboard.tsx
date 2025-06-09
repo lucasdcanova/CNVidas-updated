@@ -308,10 +308,10 @@ export const AdminDashboard: React.FC = () => {
   ];
   
   // Adiciona a lista de consultas recentes
-  const recentConsultations = consultations ? consultations.slice(0, 5) : [];
+  const recentConsultations = Array.isArray(consultations) ? consultations.slice(0, 5) : [];
   
   // Adiciona a lista de sinistros recentes
-  const recentClaims = claims ? claims.slice(0, 5) : [];
+  const recentClaims = Array.isArray(claims) ? claims.slice(0, 5) : [];
   
   // Função para visualizar detalhes da consulta
   const handleViewConsultation = (row: Consultation) => {

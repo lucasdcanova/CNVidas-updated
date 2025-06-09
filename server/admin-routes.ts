@@ -12,14 +12,14 @@ router.get('/health', async (req, res) => {
   res.json({ status: 'ok', message: 'Admin routes working' });
 });
 
-// Admin routes with placeholder implementations
+// Admin routes with real implementations
 router.get('/users', async (req, res) => {
   try {
-    res.json({ 
-      message: 'Admin users endpoint', 
-      users: [],
-      total: 0 
-    });
+    const { storage } = await import('./storage');
+    const users = await storage.getAllUsers();
+    // Remove passwords before sending
+    const usersWithoutPassword = users.map(({ password, ...user }) => user);
+    res.json(usersWithoutPassword);
   } catch (error) {
     console.error('Error in admin users route:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -94,11 +94,9 @@ router.put('/claims/:id', async (req, res) => {
 
 router.get('/partners', async (req, res) => {
   try {
-    res.json({ 
-      message: 'Admin partners endpoint', 
-      partners: [],
-      total: 0 
-    });
+    const { storage } = await import('./storage');
+    const partners = await storage.getAllPartners();
+    res.json(partners);
   } catch (error) {
     console.error('Error in admin partners route:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -192,6 +190,28 @@ router.delete('/services/:id', async (req, res) => {
     });
   } catch (error) {
     console.error('Error deleting service:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.get('/pending-claims', async (req, res) => {
+  try {
+    const { storage } = await import('./storage');
+    const claims = await storage.getPendingClaims();
+    res.json(claims);
+  } catch (error) {
+    console.error('Error in admin pending claims route:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.get('/claims', async (req, res) => {
+  try {
+    const { storage } = await import('./storage');
+    const claims = await storage.getAllClaims();
+    res.json(claims);
+  } catch (error) {
+    console.error('Error in admin claims route:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
