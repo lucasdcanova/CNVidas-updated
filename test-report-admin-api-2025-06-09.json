@@ -1,5 +1,5 @@
 {
-  "startTime": "2025-06-09T15:00:50.709Z",
+  "startTime": "2025-06-09T15:10:22.242Z",
   "totalTests": 12,
   "passed": 11,
   "failed": 1,
@@ -8,15 +8,15 @@
     {
       "testName": "Login do Administrador",
       "status": "failed",
-      "timestamp": "2025-06-09T15:00:50.856Z",
-      "duration": 133,
-      "details": "Falha na autenticação",
-      "error": null
+      "timestamp": "2025-06-09T15:10:22.352Z",
+      "duration": 97,
+      "details": "fetch failed",
+      "error": "fetch failed"
     },
     {
       "testName": "Arquivo: dashboard.tsx",
       "status": "passed",
-      "timestamp": "2025-06-09T15:00:50.858Z",
+      "timestamp": "2025-06-09T15:10:22.354Z",
       "duration": 0,
       "details": "Arquivo encontrado",
       "error": null
@@ -24,7 +24,7 @@
     {
       "testName": "Arquivo: users.tsx",
       "status": "passed",
-      "timestamp": "2025-06-09T15:00:50.859Z",
+      "timestamp": "2025-06-09T15:10:22.354Z",
       "duration": 0,
       "details": "Arquivo encontrado",
       "error": null
@@ -32,7 +32,7 @@
     {
       "testName": "Arquivo: claims.tsx",
       "status": "passed",
-      "timestamp": "2025-06-09T15:00:50.859Z",
+      "timestamp": "2025-06-09T15:10:22.354Z",
       "duration": 0,
       "details": "Arquivo encontrado",
       "error": null
@@ -40,7 +40,7 @@
     {
       "testName": "Arquivo: partners.tsx",
       "status": "passed",
-      "timestamp": "2025-06-09T15:00:50.860Z",
+      "timestamp": "2025-06-09T15:10:22.355Z",
       "duration": 0,
       "details": "Arquivo encontrado",
       "error": null
@@ -48,7 +48,7 @@
     {
       "testName": "Arquivo: services.tsx",
       "status": "passed",
-      "timestamp": "2025-06-09T15:00:50.860Z",
+      "timestamp": "2025-06-09T15:10:22.355Z",
       "duration": 0,
       "details": "Arquivo encontrado",
       "error": null
@@ -56,7 +56,7 @@
     {
       "testName": "Arquivo: analytics.tsx",
       "status": "passed",
-      "timestamp": "2025-06-09T15:00:50.861Z",
+      "timestamp": "2025-06-09T15:10:22.356Z",
       "duration": 0,
       "details": "Arquivo encontrado",
       "error": null
@@ -64,7 +64,7 @@
     {
       "testName": "Arquivo: seller-stats.tsx",
       "status": "passed",
-      "timestamp": "2025-06-09T15:00:50.861Z",
+      "timestamp": "2025-06-09T15:10:22.356Z",
       "duration": 0,
       "details": "Arquivo encontrado",
       "error": null
@@ -72,7 +72,7 @@
     {
       "testName": "Arquivo: qr-auth-logs.tsx",
       "status": "passed",
-      "timestamp": "2025-06-09T15:00:50.862Z",
+      "timestamp": "2025-06-09T15:10:22.356Z",
       "duration": 0,
       "details": "Arquivo encontrado",
       "error": null
@@ -80,7 +80,7 @@
     {
       "testName": "Arquivo: subscription-plans.tsx",
       "status": "passed",
-      "timestamp": "2025-06-09T15:00:50.862Z",
+      "timestamp": "2025-06-09T15:10:22.356Z",
       "duration": 0,
       "details": "Arquivo encontrado",
       "error": null
@@ -88,7 +88,7 @@
     {
       "testName": "Arquivo: admin-layout.tsx",
       "status": "passed",
-      "timestamp": "2025-06-09T15:00:50.863Z",
+      "timestamp": "2025-06-09T15:10:22.356Z",
       "duration": 0,
       "details": "Arquivo encontrado",
       "error": null
@@ -96,7 +96,7 @@
     {
       "testName": "Arquivo: admin-routes.ts",
       "status": "passed",
-      "timestamp": "2025-06-09T15:00:50.863Z",
+      "timestamp": "2025-06-09T15:10:22.357Z",
       "duration": 0,
       "details": "Arquivo encontrado",
       "error": null

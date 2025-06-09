@@ -14,7 +14,6 @@ import { pool, db } from "./db";
 import { users } from "../shared/schema";
 import { eq } from "drizzle-orm";
 import jwt from "jsonwebtoken";
-import { adminRoutes } from './admin-routes';
 
 (async () => {
   const app = express();

@@ -63,14 +63,14 @@ dependentsRouter.post('/', requireAuth, async (req: Request, res: Response) => {
     if (!authReq.user) {
       throw new AppError('Usuário não autenticado', 401);
     }
-    const { name, birthDate, relationship, cpf } = req.body;
-    if (!name || !birthDate || !relationship || !cpf) {
+    const { fullName, birthDate, relationship, cpf } = req.body;
+    if (!fullName || !birthDate || !relationship || !cpf) {
       throw new AppError('Nome, CPF, data de nascimento e relacionamento são obrigatórios', 400);
     }
     const newDependent = await db.insert(dependents)
       .values({
         userId: authReq.user.id,
-        name: String(name),
+        fullName: String(fullName),
         cpf: String(cpf),
         birthDate: new Date(birthDate).toISOString().split('T')[0], // Convert to YYYY-MM-DD format
         relationship: String(relationship)
@@ -97,13 +97,13 @@ dependentsRouter.put('/:id', requireAuth, async (req: Request, res: Response) =>
       throw new AppError('Usuário não autenticado', 401);
     }
     const id = toNumberOrThrow(req.params.id);
-    const { name, birthDate, relationship } = req.body;
-    if (!name || !birthDate || !relationship) {
+    const { fullName, birthDate, relationship } = req.body;
+    if (!fullName || !birthDate || !relationship) {
       throw new AppError('Nome, data de nascimento e relacionamento são obrigatórios', 400);
     }
     const updatedDependent = await db.update(dependents)
       .set({
-        name: String(name),
+        fullName: String(fullName),
         birthDate: new Date(birthDate).toISOString().split('T')[0], // Convert to YYYY-MM-DD format
         relationship: String(relationship)
       })

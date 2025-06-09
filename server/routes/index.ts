@@ -25,7 +25,7 @@ import userRouter from './user-routes';
 import partnerRouter from './partner-routes';
 import doctorRouter from './doctor-routes';
 import notificationRouter from './notification-routes';
-import { adminRouter } from '../admin-routes';
+import { adminRoutes } from '../admin-routes';
 
 export default async function setupRoutes(app: express.Express) {
   // Rotas de autenticação (PRIMEIRO para evitar conflitos)
@@ -105,8 +105,8 @@ export default async function setupRoutes(app: express.Express) {
   app.use('/api/users', userRouter);
   
   // Rotas administrativas
-  console.log('Registrando adminRouter em /api/admin');
-  app.use('/api/admin', adminRouter);
+  console.log('Registrando adminRoutes em /api/admin');
+  app.use('/api/admin', adminRoutes);
   
   // Rotas de parceiros (autenticadas)
   console.log('Registrando partnerRouter em /api/partners');
