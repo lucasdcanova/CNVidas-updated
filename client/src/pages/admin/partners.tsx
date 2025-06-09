@@ -49,7 +49,7 @@ const AdminPartners: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   
-  const { data: partners = [] } = useQuery({
+  const { data: partnersData = [] } = useQuery({
     queryKey: ["/api/admin/partners"],
     queryFn: async () => {
       const response = await fetch("/api/admin/partners", {
@@ -67,6 +67,9 @@ const AdminPartners: React.FC = () => {
       return await response.json();
     },
   });
+  
+  // Garantir que partners seja sempre um array
+  const partners = Array.isArray(partnersData) ? partnersData : [];
   
   // Filter partners by status
   const activePartners = partners.filter((p: Partner) => p.status === "active");

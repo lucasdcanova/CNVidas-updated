@@ -94,30 +94,37 @@ const AdminAnalytics: React.FC = () => {
   const [timeRange, setTimeRange] = useState("6months");
   
   // Queries for real data only
-  const { data: partners = [] } = useQuery({
+  const { data: partnersData = [] } = useQuery({
     queryKey: ["/api/partners"],
     queryFn: getAllPartners,
   });
   
-  const { data: claims = [] } = useQuery<Claim[]>({
+  const { data: claimsData = [] } = useQuery<Claim[]>({
     queryKey: ["/api/claims"],
     queryFn: getAllClaims,
   });
   
-  const { data: patients = [] } = useQuery({
+  const { data: patientsData = [] } = useQuery({
     queryKey: ["/api/users", "patient"],
     queryFn: () => getUsersByRole("patient"),
   });
   
-  const { data: doctors = [] } = useQuery({
+  const { data: doctorsData = [] } = useQuery({
     queryKey: ["/api/users", "doctor"],
     queryFn: () => getUsersByRole("doctor"),
   });
   
-  const { data: allUsers = [] } = useQuery({
+  const { data: allUsersData = [] } = useQuery({
     queryKey: ["/api/users"],
     queryFn: () => fetch("/api/users", { credentials: "include" }).then(res => res.json()),
   });
+  
+  // Garantir que os dados sejam sempre arrays
+  const partners = Array.isArray(partnersData) ? partnersData : [];
+  const claims = Array.isArray(claimsData) ? claimsData : [];
+  const patients = Array.isArray(patientsData) ? patientsData : [];
+  const doctors = Array.isArray(doctorsData) ? doctorsData : [];
+  const allUsers = Array.isArray(allUsersData) ? allUsersData : [];
   
   // Number of months to show in charts
   const monthsToShow = timeRange === "12months" ? 12 : timeRange === "6months" ? 6 : 3;

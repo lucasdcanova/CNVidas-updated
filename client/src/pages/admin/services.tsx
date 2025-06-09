@@ -67,8 +67,10 @@ const AdminServices: React.FC = () => {
     try {
       const response = await apiRequest("GET", "/api/admin/services");
       const data = await response.json();
-      setServices(data);
-      console.log("Serviços carregados:", data);
+      // Garantir que data seja sempre um array
+      const servicesArray = Array.isArray(data) ? data : [];
+      setServices(servicesArray);
+      console.log("Serviços carregados:", servicesArray);
     } catch (error) {
       console.error("Erro ao carregar serviços:", error);
       toast({
@@ -76,6 +78,7 @@ const AdminServices: React.FC = () => {
         description: "Não foi possível carregar a lista de serviços.",
         variant: "destructive",
       });
+      setServices([]); // Garantir array vazio em caso de erro
     } finally {
       setLoading(false);
     }
@@ -86,9 +89,12 @@ const AdminServices: React.FC = () => {
     try {
       const response = await apiRequest("GET", "/api/admin/partners");
       const data = await response.json();
-      setPartners(data);
+      // Garantir que data seja sempre um array
+      const partnersArray = Array.isArray(data) ? data : [];
+      setPartners(partnersArray);
     } catch (error) {
       console.error("Erro ao carregar parceiros:", error);
+      setPartners([]); // Garantir array vazio em caso de erro
     }
   };
 

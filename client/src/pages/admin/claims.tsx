@@ -73,15 +73,19 @@ const AdminClaims: React.FC = () => {
   const [showReviewDialog, setShowReviewDialog] = useState(false);
   const [showDetailsDialog, setShowDetailsDialog] = useState(false);
   
-  const { data: allClaims = [], refetch: refetchAllClaims } = useQuery({
+  const { data: allClaimsData = [], refetch: refetchAllClaims } = useQuery({
     queryKey: ["/api/admin/claims"],
     queryFn: getAllClaims,
   });
   
-  const { data: pendingClaims = [], refetch: refetchPendingClaims } = useQuery({
+  const { data: pendingClaimsData = [], refetch: refetchPendingClaims } = useQuery({
     queryKey: ["/api/admin/pending-claims"],
     queryFn: getPendingClaims,
   });
+  
+  // Garantir que os dados sejam sempre arrays
+  const allClaims = Array.isArray(allClaimsData) ? allClaimsData : [];
+  const pendingClaims = Array.isArray(pendingClaimsData) ? pendingClaimsData : [];
   
   // Review form
   const form = useForm<ReviewFormValues>({

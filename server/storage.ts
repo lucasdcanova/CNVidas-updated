@@ -829,6 +829,13 @@ export class DatabaseStorage implements IStorage {
     return result[0].count;
   }
 
+  async countUsersBySeller(sellerName: string): Promise<number> {
+    const result = await this.db.select({ count: sql<number>`count(*)` })
+      .from(users)
+      .where(eq(users.sellerName, sellerName));
+    return result[0].count;
+  }
+
   async getAppointmentCount(): Promise<number> {
     const result = await this.db.select({ count: sql<number>`count(*)` }).from(appointments);
     return result[0].count;
@@ -1092,6 +1099,11 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(auditLogs.createdAt))
       .limit(limit)
       .offset(offset);
+    return result;
+  }
+
+  async getAllServices(): Promise<any[]> {
+    const result = await this.db.select().from(partnerServices).orderBy(desc(partnerServices.createdAt));
     return result;
   }
 }
