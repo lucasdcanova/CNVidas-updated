@@ -1,0 +1,106 @@
+{
+  "startTime": "2025-06-09T15:00:50.709Z",
+  "totalTests": 12,
+  "passed": 11,
+  "failed": 1,
+  "warnings": 0,
+  "results": [
+    {
+      "testName": "Login do Administrador",
+      "status": "failed",
+      "timestamp": "2025-06-09T15:00:50.856Z",
+      "duration": 133,
+      "details": "Falha na autenticação",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: dashboard.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T15:00:50.858Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: users.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T15:00:50.859Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: claims.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T15:00:50.859Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: partners.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T15:00:50.860Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: services.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T15:00:50.860Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: analytics.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T15:00:50.861Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: seller-stats.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T15:00:50.861Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: qr-auth-logs.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T15:00:50.862Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: subscription-plans.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T15:00:50.862Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: admin-layout.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T15:00:50.863Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: admin-routes.ts",
+      "status": "passed",
+      "timestamp": "2025-06-09T15:00:50.863Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    }
+  ],
+  "errors": []
+}
