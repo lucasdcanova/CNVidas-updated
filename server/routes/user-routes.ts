@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express';
 import { storage } from '../storage';
 import { requireAuth, AuthenticatedRequest } from '../middleware/auth';
 import { AppError } from '../utils/app-error.js';
+import { generateQRCode } from '../utils/qr-code';
+import { sendEmail } from '../utils/email';
 
 const userRouter = express.Router();
 
@@ -15,29 +17,17 @@ userRouter.get('/profile', requireAuth, async (req: AuthenticatedRequest, res: R
       return res.status(401).json({ error: 'Usuário não autenticado' });
     }
 
-    const user = await storage.getUser(req.user.id);
+    const user = await storage.getUserById(req.user.id);
     if (!user) {
       return res.status(404).json({ error: 'Usuário não encontrado' });
     }
 
-    res.json({
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        fullName: user.fullName,
-        role: user.role,
-        subscriptionPlan: user.subscriptionPlan,
-        emailVerified: user.emailVerified
-      }
-    });
+    // Remove campos sensíveis
+    const { password, ...userWithoutPassword } = user;
+    return res.json(userWithoutPassword);
   } catch (error) {
-    console.error('Erro ao obter perfil:', error);
-    if (error instanceof AppError) {
-      res.status(error.statusCode).json({ error: error.message });
-    } else {
-      res.status(500).json({ error: 'Erro interno do servidor' });
-    }
+    console.error('Erro ao buscar perfil:', error);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
 
@@ -51,32 +41,30 @@ userRouter.put('/profile', requireAuth, async (req: AuthenticatedRequest, res: R
       return res.status(401).json({ error: 'Usuário não autenticado' });
     }
 
-    const { fullName, username } = req.body;
-    
+    const { fullName, phone, address, city, state, zipcode, number, complement, neighborhood } = req.body;
+
     const updatedUser = await storage.updateUser(req.user.id, {
       fullName,
-      username,
-      updatedAt: new Date()
+      phone,
+      address,
+      city,
+      state,
+      zipcode,
+      number,
+      complement,
+      neighborhood
     });
 
-    res.json({
-      user: {
-        id: updatedUser.id,
-        email: updatedUser.email,
-        username: updatedUser.username,
-        fullName: updatedUser.fullName,
-        role: updatedUser.role,
-        subscriptionPlan: updatedUser.subscriptionPlan,
-        emailVerified: updatedUser.emailVerified
-      }
-    });
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'Usuário não encontrado' });
+    }
+
+    // Remove campos sensíveis
+    const { password, ...userWithoutPassword } = updatedUser;
+    return res.json(userWithoutPassword);
   } catch (error) {
     console.error('Erro ao atualizar perfil:', error);
-    if (error instanceof AppError) {
-      res.status(error.statusCode).json({ error: error.message });
-    } else {
-      res.status(500).json({ error: 'Erro interno do servidor' });
-    }
+    return res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
 
@@ -90,20 +78,21 @@ userRouter.post('/generate-qr', requireAuth, async (req: AuthenticatedRequest, r
       return res.status(401).json({ error: 'Usuário não autenticado' });
     }
 
-    const qrData = await storage.generateQrToken(req.user.id);
-    
-    res.json({
-      token: qrData.token,
-      expiresAt: qrData.expiresAt,
-      message: 'Token QR gerado com sucesso'
+    const qrCode = await generateQRCode({
+      userId: req.user.id,
+      scannerUserId: undefined, // Pode ser preenchido se houver um usuário logado fazendo o scan
+      type: 'profile',
+      data: {
+        userId: req.user.id,
+        fullName: req.user.fullName,
+        email: req.user.email
+      }
     });
+
+    return res.json({ qrCode });
   } catch (error) {
-    console.error('Erro ao gerar token QR:', error);
-    if (error instanceof AppError) {
-      res.status(error.statusCode).json({ error: error.message });
-    } else {
-      res.status(500).json({ error: 'Erro interno do servidor' });
-    }
+    console.error('Erro ao gerar QR Code:', error);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
 
@@ -169,33 +158,12 @@ userRouter.get('/', requireAuth, async (req: AuthenticatedRequest, res: Response
       return res.status(403).json({ error: 'Acesso negado' });
     }
 
-    const { role } = req.query;
     const users = await storage.getAllUsers();
-    
-    let filteredUsers = users;
-    if (role && typeof role === 'string') {
-      filteredUsers = users.filter(user => user.role === role);
-    }
-
-    const safeUsers = filteredUsers.map(user => ({
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      fullName: user.fullName,
-      role: user.role,
-      subscriptionPlan: user.subscriptionPlan,
-      emailVerified: user.emailVerified,
-      createdAt: user.createdAt
-    }));
-
-    res.json({ users: safeUsers });
+    const usersWithoutPassword = users.map(({ password, ...user }) => user);
+    return res.json(usersWithoutPassword);
   } catch (error) {
     console.error('Erro ao listar usuários:', error);
-    if (error instanceof AppError) {
-      res.status(error.statusCode).json({ error: error.message });
-    } else {
-      res.status(500).json({ error: 'Erro interno do servidor' });
-    }
+    return res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
 
