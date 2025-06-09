@@ -296,6 +296,28 @@ export const userSettings = pgTable("user_settings", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+export const paymentSchedules = pgTable("payment_schedules", {
+  id: serial("id").primaryKey(),
+  recipientId: integer("recipient_id").notNull(),
+  recipientType: text("recipient_type").notNull(), // 'doctor' ou 'seller'
+  amount: integer("amount").notNull(),
+  status: text("status").default('pending').notNull(),
+  scheduledDate: timestamp("scheduled_date").notNull(),
+  paymentMethod: text("payment_method").notNull(), // 'pix' ou 'ted'
+  paymentDetails: jsonb("payment_details").notNull(),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const sellerCommissions = pgTable("seller_commissions", {
+  id: serial("id").primaryKey(),
+  sellerId: integer("seller_id").references(() => users.id).notNull(),
+  subscriptionId: integer("subscription_id").references(() => subscriptions.id).notNull(),
+  amount: integer("amount").notNull(),
+  status: text("status").default('pending').notNull(),
+  paymentScheduleId: integer("payment_schedule_id").references(() => paymentSchedules.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 export const usersRelations = relations(users, ({ many }) => ({
   partners: many(partners),
   doctors: many(doctors),

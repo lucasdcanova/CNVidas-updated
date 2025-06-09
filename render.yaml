@@ -1,8 +1,8 @@
 services:
   - type: web
     name: cnvidas-app
-    env: node
-    buildCommand: npm run build
+    runtime: node
+    buildCommand: npm install && npm run build
     startCommand: npm start
     healthCheckPath: /api/health
     envVars:
@@ -12,5 +12,5 @@ services:
         value: 10000
     disk:
       name: uploads
-      mountPath: /app/uploads
+      mountPath: /opt/render/project/src/public/uploads
       sizeGB: 1 

@@ -9,14 +9,7 @@ import { errorHandler } from "./middleware/error-handler";
 import { verifyEmailConnection } from "./services/email";
 import path from "path";
 import { storage } from "./storage";
-import cors from "cors";
-import cookieParser from "cookie-parser";
-import session from "express-session";
-import passport from "passport";
-import { setupAuth } from "./auth";
 import { pool, db } from "./db";
-import connectPg from "connect-pg-simple";
-import jwt from "jsonwebtoken";
 import { users } from "../shared/schema";
 import { eq } from "drizzle-orm";
 
@@ -27,26 +20,6 @@ import { eq } from "drizzle-orm";
   // Configurações básicas
   app.use(express.json({ limit: '50mb' }));
   app.use(express.urlencoded({ extended: true }));
-  app.use(cookieParser());
-  app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
-    credentials: true
-  }));
-
-  // Configuração de sessão
-  app.use(session({
-    store: new (connectPg(session))({
-      pool,
-      createTableIfMissing: true,
-    }),
-    secret: process.env.SESSION_SECRET || 'cn-vidas-secret',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 24 * 60 * 60 * 1000 // 24 horas
-    }
-  }));
 
   // Configuração do Passport
   app.use(passport.initialize());
