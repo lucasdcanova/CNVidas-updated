@@ -79,7 +79,7 @@ export async function setupVite(app: Express, server: Server) {
 export function serveStatic(app: Express) {
   // Em produção no Render, servir arquivos estáticos do cliente
   const clientPath = path.resolve(currentDir, "client");
-  const publicPath = path.resolve(currentDir, "public");
+  const publicPath = path.resolve(currentDir, "dist/client");
   
   console.log('🔍 Tentando servir arquivos estáticos de:', clientPath);
   console.log('🔍 Ou de:', publicPath);

@@ -9,7 +9,7 @@
     "start": "NODE_ENV=production node dist/server/index.js",
     "clean": "rm -rf dist",
     "build:server": "tsc --project tsconfig.production.json --noEmitOnError false",
-    "build:client": "vite build --outDir dist/client",
+    "build:client": "vite build",
     "build:render": "npm run clean && prisma generate && npm run build:server && npm run build:client",
     "postbuild": "mkdir -p dist/server/uploads && cp -r shared dist/",
     "test": "jest",
