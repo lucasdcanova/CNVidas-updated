@@ -75,10 +75,10 @@ claimsRouter.post('/', async (req: Request, res: Response) => {
     // Criar o claim
     const claimData = {
       userId: userId,
-      title,
-      description,
-      amount: parseFloat(amount),
-      category: category || 'medical',
+      type: category || 'medical',
+      description: description || title,
+      amountRequested: parseFloat(amount),
+      occurrenceDate: new Date().toISOString().split('T')[0],
       status: 'pending'
     };
     

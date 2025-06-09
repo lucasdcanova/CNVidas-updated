@@ -87,8 +87,9 @@ partnerRouter.post('/services', requireAuth, requirePartner, async (req: Authent
       name,
       description,
       category,
-      price: price || 0,
-      estimatedDuration: estimatedDuration || null,
+      regularPrice: price || 0,
+      discountPrice: price || 0,
+      duration: estimatedDuration || null,
       isActive: true,
       isFeatured: false,
       createdAt: new Date(),
@@ -141,8 +142,9 @@ partnerRouter.put('/services/:id', requireAuth, requirePartner, async (req: Auth
       name: name || existingService.name,
       description: description || existingService.description,
       category: category || existingService.category,
-      price: price !== undefined ? price : existingService.price,
-      estimatedDuration: estimatedDuration !== undefined ? estimatedDuration : existingService.estimatedDuration,
+      regularPrice: price !== undefined ? price : existingService.regularPrice,
+      discountPrice: price !== undefined ? price : existingService.discountPrice,
+      duration: estimatedDuration !== undefined ? estimatedDuration : existingService.duration,
       isActive: isActive !== undefined ? isActive : existingService.isActive,
       updatedAt: new Date()
     };
