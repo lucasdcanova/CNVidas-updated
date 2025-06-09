@@ -18,7 +18,7 @@ export interface User {
   number: string | null;
   complement: string | null;
   neighborhood: string | null;
-  birthDate: Date | null;
+  birthDate: string | null;
   gender: string | null;
   profileImage: string | null;
   createdAt: Date;
@@ -65,7 +65,7 @@ declare global {
       number: string | null;
       complement: string | null;
       neighborhood: string | null;
-      birthDate: Date | null;
+      birthDate: string | null;
       gender: string | null;
       profileImage: string | null;
       createdAt: Date;
