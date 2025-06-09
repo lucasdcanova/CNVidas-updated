@@ -1,0 +1,130 @@
+{
+  "startTime": "2025-06-09T14:30:39.585Z",
+  "totalTests": 15,
+  "passed": 13,
+  "failed": 2,
+  "warnings": 0,
+  "results": [
+    {
+      "testName": "Login do Médico",
+      "status": "failed",
+      "timestamp": "2025-06-09T14:30:39.753Z",
+      "duration": 153,
+      "details": "Falha na autenticação",
+      "error": null
+    },
+    {
+      "testName": "Login do Parceiro",
+      "status": "failed",
+      "timestamp": "2025-06-09T14:30:39.762Z",
+      "duration": 9,
+      "details": "Falha na autenticação",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: doctor-telemedicine.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T14:30:39.763Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: financeiro.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T14:30:39.764Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: doctor-availability.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T14:30:39.764Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: EmergencyBanner.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T14:30:39.764Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: ProfileImageUploader.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T14:30:39.764Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: DoctorProfileForm.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T14:30:39.765Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: partner-dashboard.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T14:30:39.765Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: partner-services.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T14:30:39.766Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: partner-verification.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T14:30:39.766Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: partner-dashboard.tsx",
+      "status": "passed",
+      "timestamp": "2025-06-09T14:30:39.766Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: doctor-routes.ts",
+      "status": "passed",
+      "timestamp": "2025-06-09T14:30:39.767Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: partner-routes.ts",
+      "status": "passed",
+      "timestamp": "2025-06-09T14:30:39.768Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    },
+    {
+      "testName": "Arquivo: doctor-finance-routes.ts",
+      "status": "passed",
+      "timestamp": "2025-06-09T14:30:39.768Z",
+      "duration": 0,
+      "details": "Arquivo encontrado",
+      "error": null
+    }
+  ],
+  "errors": []
+}

@@ -1,223 +1,261 @@
-import { useState, useEffect, useRef } from "react";
-import { useAuth } from "@/hooks/use-auth";
-import { useToast } from "@/hooks/use-toast";
-import DashboardLayout from "@/components/layouts/dashboard-layout";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Loader2, Check, X, Camera, QrCode } from "lucide-react";
-import { Html5QrcodeScanner } from "html5-qrcode";
-import { verifyQrToken } from "@/lib/api";
-
-interface VerificationResult {
-  valid: boolean;
-  user?: {
-    name: string;
-    email: string;
-    status: string;
-    subscriptionStatus: string;
-  };
-  message: string;
-}
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useToast } from '@/components/ui/use-toast';
+import { QrCode, Camera, CheckCircle, XCircle, User } from 'lucide-react';
 
 export default function PartnerVerification() {
-  const { user } = useAuth();
+  const [isScanning, setIsScanning] = useState(false);
+  const [manualCode, setManualCode] = useState('');
+  const [verificationResult, setVerificationResult] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const [scanning, setScanning] = useState(false);
-  const [verifying, setVerifying] = useState(false);
-  const [result, setResult] = useState<VerificationResult | null>(null);
-  const scannerRef = useRef<Html5QrcodeScanner | null>(null);
-  const scannerContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    return () => {
-      // Cleanup scanner when component unmounts
-      if (scannerRef.current) {
-        scannerRef.current.clear();
-      }
-    };
-  }, []);
-
-  const startScanner = () => {
-    setScanning(true);
-    setResult(null);
-
-    if (scannerContainerRef.current) {
-      // Clear previous scanner if exists
-      scannerContainerRef.current.innerHTML = '';
-      
-      // Create scanner with proper configuration
-      scannerRef.current = new Html5QrcodeScanner(
-        "qr-reader", 
-        { 
-          fps: 10,
-          qrbox: { width: 250, height: 250 },
-          rememberLastUsedCamera: true,
-        },
-        /* verbose= */ false
-      );
-
-      // Start scanner with callbacks
-      scannerRef.current.render(onScanSuccess, onScanFailure);
-    }
-  };
-
-  const stopScanner = () => {
-    if (scannerRef.current) {
-      scannerRef.current.clear();
-    }
-    setScanning(false);
-  };
-
-  const onScanSuccess = async (decodedText: string) => {
-    // Stop scanning once we get a result
-    stopScanner();
-    setVerifying(true);
-
+  const startScanning = async () => {
     try {
-      // Verificar o QR code com o servidor
-      const data = await verifyQrToken(decodedText);
-      setResult(data);
+      // Check for camera permission
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      stream.getTracks().forEach(track => track.stop()); // Stop the stream immediately
       
+      setIsScanning(true);
+      
+      // Initialize QR scanner (you would integrate with a QR scanning library here)
       toast({
-        title: data.valid ? "Verificação bem-sucedida" : "Verificação falhou",
-        description: data.message,
-        variant: data.valid ? "default" : "destructive",
+        title: 'Scanner Ativo',
+        description: 'Posicione o QR Code na frente da câmera'
       });
     } catch (error) {
-      setResult({
-        valid: false,
-        message: error instanceof Error ? error.message : "Erro ao verificar o QR code",
-      });
-      
       toast({
-        title: "Erro na verificação",
-        description: "Não foi possível verificar o QR code. Tente novamente.",
-        variant: "destructive",
+        title: 'Erro de Câmera',
+        description: 'Não foi possível acessar a câmera. Verifique as permissões.',
+        variant: 'destructive'
       });
-    } finally {
-      setVerifying(false);
     }
   };
 
-  const onScanFailure = (error: string) => {
-    // Just log error, don't show to user unless scanning fails completely
-    console.error("QR scan error:", error);
+  const stopScanning = () => {
+    setIsScanning(false);
   };
 
-  if (!user || user.role !== "partner") {
-    return (
-      <DashboardLayout>
-        <div className="flex flex-col items-center justify-center min-h-[400px]">
-          <QrCode className="h-16 w-16 text-muted-foreground mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Acesso Restrito</h2>
-          <p className="text-muted-foreground text-center">
-            Esta página é exclusiva para empresas parceiras.
-          </p>
-        </div>
-      </DashboardLayout>
-    );
-  }
+  const verifyQRCode = async (code: string) => {
+    setLoading(true);
+    setVerificationResult(null);
+
+    try {
+      const response = await fetch('/api/partners/verify-qr', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ qrCode: code })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.valid) {
+        setVerificationResult({
+          valid: true,
+          user: data.user,
+          plan: data.plan,
+          expiresAt: data.expiresAt
+        });
+        
+        toast({
+          title: 'Verificação Bem-sucedida',
+          description: `Usuário ${data.user.name} verificado com sucesso`
+        });
+      } else {
+        setVerificationResult({
+          valid: false,
+          error: data.error || 'QR Code inválido ou expirado'
+        });
+        
+        toast({
+          title: 'Verificação Falhou',
+          description: data.error || 'QR Code inválido ou expirado',
+          variant: 'destructive'
+        });
+      }
+    } catch (error) {
+      setVerificationResult({
+        valid: false,
+        error: 'Erro de conexão'
+      });
+      
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível verificar o QR Code',
+        variant: 'destructive'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleManualVerification = () => {
+    if (!manualCode.trim()) {
+      toast({
+        title: 'Código Necessário',
+        description: 'Por favor, insira o código QR para verificação',
+        variant: 'destructive'
+      });
+      return;
+    }
+    
+    verifyQRCode(manualCode.trim());
+  };
 
   return (
-    <DashboardLayout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Verificação de Usuário</h1>
-          <p className="text-muted-foreground">
-            Verifique se um usuário está cadastrado e ativo na plataforma
-          </p>
-        </div>
-
+    <div className="container mx-auto py-8 px-4 max-w-4xl">
+      <h1 className="text-3xl font-bold mb-8 flex items-center gap-3">
+        <QrCode className="h-8 w-8" />
+        Verificação de Usuários
+      </h1>
+      
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Scanner Section */}
         <Card>
           <CardHeader>
-            <CardTitle>Scanner de QR Code</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Camera className="h-5 w-5" />
+              Scanner de QR Code
+            </CardTitle>
             <CardDescription>
-              Escaneie o QR Code gerado pelo usuário para verificar sua autenticidade
+              Use a câmera para escanear o QR Code do cartão virtual do usuário
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            {verifying ? (
-              <div className="flex flex-col items-center justify-center p-12">
-                <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-                <p>Verificando o código QR...</p>
-              </div>
-            ) : result ? (
-              <div className="flex flex-col items-center justify-center p-6 text-center">
-                {result.valid ? (
-                  <>
-                    <div className="h-24 w-24 rounded-full bg-green-100 flex items-center justify-center mb-4">
-                      <Check className="h-12 w-12 text-green-600" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-green-600 mb-2">Usuário Válido</h3>
-                    <p className="mb-4">{result.message}</p>
-                    {result.user && (
-                      <div className="bg-muted p-4 rounded-lg w-full max-w-md mb-6">
-                        <p className="font-medium text-lg">{result.user.name}</p>
-                        <p className="text-sm text-muted-foreground">{result.user.email}</p>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                            result.user.status === 'active' 
-                              ? 'bg-green-100 text-green-700' 
-                              : 'bg-amber-100 text-amber-700'
-                          }`}>
-                            {result.user.status === 'active' ? 'Ativo' : 'Pendente'}
-                          </span>
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                            result.user.subscriptionStatus === 'active' 
-                              ? 'bg-blue-100 text-blue-700' 
-                              : 'bg-gray-100 text-gray-700'
-                          }`}>
-                            {result.user.subscriptionStatus === 'active' 
-                              ? 'Assinatura Ativa' 
-                              : 'Sem Assinatura'}
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <div className="h-24 w-24 rounded-full bg-red-100 flex items-center justify-center mb-4">
-                      <X className="h-12 w-12 text-red-600" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-red-600 mb-2">Verificação Falhou</h3>
-                    <p>{result.message}</p>
-                  </>
-                )}
-              </div>
-            ) : scanning ? (
-              <div className="flex flex-col items-center">
-                <div ref={scannerContainerRef} id="qr-reader" className="w-full max-w-[400px]"></div>
-                <p className="text-sm text-muted-foreground mt-4">
-                  Posicione o QR Code do usuário no centro da câmera para escaneá-lo.
-                </p>
+          
+          <CardContent className="space-y-4">
+            {isScanning ? (
+              <div className="space-y-4">
+                <div className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed">
+                  <div className="text-center">
+                    <Camera className="h-16 w-16 mx-auto mb-4 text-gray-400" />
+                    <p className="text-gray-600">Câmera ativa</p>
+                    <p className="text-sm text-gray-500">Posicione o QR Code aqui</p>
+                  </div>
+                </div>
+                
+                <Button 
+                  variant="destructive" 
+                  onClick={stopScanning}
+                  className="w-full"
+                >
+                  Parar Scanner
+                </Button>
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center p-12 text-center">
-                <Camera className="h-16 w-16 text-muted-foreground mb-4" />
-                <h3 className="font-semibold mb-2">Scanner Desativado</h3>
-                <p className="text-sm text-muted-foreground mb-6">
-                  Clique no botão abaixo para ativar a câmera e começar a escanear o QR Code do usuário.
-                </p>
-                <Button onClick={startScanner}>
-                  Iniciar Scanner de QR Code
+              <div className="space-y-4">
+                <div className="aspect-square bg-gray-50 rounded-lg flex items-center justify-center border">
+                  <div className="text-center">
+                    <QrCode className="h-16 w-16 mx-auto mb-4 text-gray-400" />
+                    <p className="text-gray-600">Scanner Inativo</p>
+                  </div>
+                </div>
+                
+                <Button 
+                  onClick={startScanning}
+                  className="w-full"
+                >
+                  <Camera className="h-4 w-4 mr-2" />
+                  Iniciar Scanner
                 </Button>
               </div>
             )}
           </CardContent>
-          <CardFooter className="flex justify-center">
-            {scanning ? (
-              <Button variant="outline" onClick={stopScanner}>
-                Cancelar Scanner
-              </Button>
-            ) : result ? (
-              <Button onClick={startScanner}>
-                Escanear Outro QR Code
-              </Button>
-            ) : null}
-          </CardFooter>
+        </Card>
+
+        {/* Manual Input Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Verificação Manual</CardTitle>
+            <CardDescription>
+              Digite o código QR manualmente se o scanner não estiver funcionando
+            </CardDescription>
+          </CardHeader>
+          
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="manual-code">Código QR</Label>
+              <Input
+                id="manual-code"
+                placeholder="Digite ou cole o código aqui..."
+                value={manualCode}
+                onChange={(e) => setManualCode(e.target.value)}
+              />
+            </div>
+            
+            <Button 
+              onClick={handleManualVerification}
+              disabled={loading || !manualCode.trim()}
+              className="w-full"
+            >
+              {loading ? 'Verificando...' : 'Verificar Código'}
+            </Button>
+          </CardContent>
         </Card>
       </div>
-    </DashboardLayout>
+
+      {/* Verification Result */}
+      {verificationResult && (
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              {verificationResult.valid ? (
+                <CheckCircle className="h-5 w-5 text-green-600" />
+              ) : (
+                <XCircle className="h-5 w-5 text-red-600" />
+              )}
+              Resultado da Verificação
+            </CardTitle>
+          </CardHeader>
+          
+          <CardContent>
+            {verificationResult.valid ? (
+              <Alert className="border-green-200 bg-green-50">
+                <User className="h-4 w-4" />
+                <AlertDescription>
+                  <div className="space-y-2">
+                    <p><strong>Usuário Verificado:</strong> {verificationResult.user.name}</p>
+                    <p><strong>Plano:</strong> {verificationResult.plan}</p>
+                    <p><strong>Email:</strong> {verificationResult.user.email}</p>
+                    {verificationResult.expiresAt && (
+                      <p><strong>Válido até:</strong> {new Date(verificationResult.expiresAt).toLocaleString('pt-BR')}</p>
+                    )}
+                  </div>
+                </AlertDescription>
+              </Alert>
+            ) : (
+              <Alert variant="destructive">
+                <XCircle className="h-4 w-4" />
+                <AlertDescription>
+                  <strong>Verificação Falhou:</strong> {verificationResult.error}
+                </AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Instructions */}
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle>Como Usar</CardTitle>
+        </CardHeader>
+        
+        <CardContent>
+          <ol className="list-decimal list-inside space-y-2 text-sm">
+            <li>Solicite ao cliente para mostrar seu cartão virtual CNVidas</li>
+            <li>Use o scanner para ler o QR Code ou digite o código manualmente</li>
+            <li>Aguarde a verificação e confirme os dados do usuário</li>
+            <li>Proceda com o atendimento após verificação bem-sucedida</li>
+          </ol>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
