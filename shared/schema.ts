@@ -1,8 +1,7 @@
 import { pgTable, text, serial, integer, boolean, timestamp, pgEnum, json, date, varchar, decimal } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
-import { relations } from "drizzle-orm";
-import { InferModel } from 'drizzle-orm';
+import { relations, InferSelectModel, InferInsertModel } from "drizzle-orm";
 
 // 1. Enfileirar todas as declarações de enum, depois tabelas, depois relations, depois schemas, depois tipos.
 // 2. Garantir que nenhuma tabela seja referenciada antes de ser declarada.
@@ -304,8 +303,20 @@ export const paymentSchedules = pgTable("payment_schedules", {
   status: text("status").default('pending').notNull(),
   scheduledDate: timestamp("scheduled_date").notNull(),
   paymentMethod: text("payment_method").notNull(), // 'pix' ou 'ted'
-  paymentDetails: jsonb("payment_details").notNull(),
+  paymentDetails: json("payment_details").notNull(),
   description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const subscriptions = pgTable("subscriptions", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  planId: integer("plan_id").references(() => subscriptionPlans.id).notNull(),
+  status: text("status").notNull(),
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date"),
+  stripeSubscriptionId: text("stripe_subscription_id"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -318,6 +329,8 @@ export const sellerCommissions = pgTable("seller_commissions", {
   status: text("status").default('pending').notNull(),
   paymentScheduleId: integer("payment_schedule_id").references(() => paymentSchedules.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const usersRelations = relations(users, ({ many }) => ({
   partners: many(partners),
   doctors: many(doctors),
@@ -468,45 +481,51 @@ export const notificationSchema = z.object({
 });
 
 // Tipos inferidos
-export type User = InferModel<typeof users>;
-export type Dependent = InferModel<typeof dependents>;
-export type Partner = InferModel<typeof partners>;
-export type Doctor = InferModel<typeof doctors>;
-export type PartnerService = InferModel<typeof partnerServices>;
-export type Appointment = InferModel<typeof appointments>;
-export type Claim = InferModel<typeof claims>;
-export type Notification = InferModel<typeof notifications>;
-export type DoctorPayment = InferModel<typeof doctorPayments>;
-export type AuditLog = InferModel<typeof auditLogs>;
-export type QrToken = InferModel<typeof qrTokens>;
-export type SubscriptionPlan = InferModel<typeof subscriptionPlans>;
-export type UserSettings = InferModel<typeof userSettings>;
-export type EmailVerification = InferModel<typeof emailVerifications>;
-export type PasswordReset = InferModel<typeof passwordResets>;
-export type AvailabilitySlot = InferModel<typeof availabilitySlots>;
-export type QrAuthLog = InferModel<typeof qrAuthLogs>;
-export type UserSubscription = InferModel<typeof userSubscriptions>;
+export type User = InferSelectModel<typeof users>;
+export type Dependent = InferSelectModel<typeof dependents>;
+export type Partner = InferSelectModel<typeof partners>;
+export type Doctor = InferSelectModel<typeof doctors>;
+export type PartnerService = InferSelectModel<typeof partnerServices>;
+export type Appointment = InferSelectModel<typeof appointments>;
+export type Claim = InferSelectModel<typeof claims>;
+export type Notification = InferSelectModel<typeof notifications>;
+export type DoctorPayment = InferSelectModel<typeof doctorPayments>;
+export type AuditLog = InferSelectModel<typeof auditLogs>;
+export type QrToken = InferSelectModel<typeof qrTokens>;
+export type SubscriptionPlan = InferSelectModel<typeof subscriptionPlans>;
+export type UserSettings = InferSelectModel<typeof userSettings>;
+export type EmailVerification = InferSelectModel<typeof emailVerifications>;
+export type PasswordReset = InferSelectModel<typeof passwordResets>;
+export type AvailabilitySlot = InferSelectModel<typeof availabilitySlots>;
+export type QrAuthLog = InferSelectModel<typeof qrAuthLogs>;
+export type UserSubscription = InferSelectModel<typeof userSubscriptions>;
+export type Subscription = InferSelectModel<typeof subscriptions>;
+export type PaymentSchedule = InferSelectModel<typeof paymentSchedules>;
+export type SellerCommission = InferSelectModel<typeof sellerCommissions>;
 export type UserSchema = z.infer<typeof userSchema>;
 export type AppointmentSchema = z.infer<typeof appointmentSchema>;
 export type ClaimSchema = z.infer<typeof claimSchema>;
 export type NotificationSchema = z.infer<typeof notificationSchema>;
 
 // Tipos para inserção
-export type InsertUser = InferModel<typeof users, 'insert'>;
-export type InsertDependent = InferModel<typeof dependents, 'insert'>;
-export type InsertPartner = InferModel<typeof partners, 'insert'>;
-export type InsertDoctor = InferModel<typeof doctors, 'insert'>;
-export type InsertPartnerService = InferModel<typeof partnerServices, 'insert'>;
-export type InsertAppointment = InferModel<typeof appointments, 'insert'>;
-export type InsertClaim = InferModel<typeof claims, 'insert'>;
-export type InsertNotification = InferModel<typeof notifications, 'insert'>;
-export type InsertDoctorPayment = InferModel<typeof doctorPayments, 'insert'>;
-export type InsertAuditLog = InferModel<typeof auditLogs, 'insert'>;
-export type InsertQrToken = InferModel<typeof qrTokens, 'insert'>;
-export type InsertSubscriptionPlan = InferModel<typeof subscriptionPlans, 'insert'>;
-export type InsertUserSettings = InferModel<typeof userSettings, 'insert'>;
-export type InsertEmailVerification = InferModel<typeof emailVerifications, 'insert'>;
-export type InsertPasswordReset = InferModel<typeof passwordResets, 'insert'>;
-export type InsertAvailabilitySlot = InferModel<typeof availabilitySlots, 'insert'>;
-export type InsertQrAuthLog = InferModel<typeof qrAuthLogs, 'insert'>;
-export type InsertUserSubscription = InferModel<typeof userSubscriptions, 'insert'>;
+export type InsertUser = InferInsertModel<typeof users>;
+export type InsertDependent = InferInsertModel<typeof dependents>;
+export type InsertPartner = InferInsertModel<typeof partners>;
+export type InsertDoctor = InferInsertModel<typeof doctors>;
+export type InsertPartnerService = InferInsertModel<typeof partnerServices>;
+export type InsertAppointment = InferInsertModel<typeof appointments>;
+export type InsertClaim = InferInsertModel<typeof claims>;
+export type InsertNotification = InferInsertModel<typeof notifications>;
+export type InsertDoctorPayment = InferInsertModel<typeof doctorPayments>;
+export type InsertAuditLog = InferInsertModel<typeof auditLogs>;
+export type InsertQrToken = InferInsertModel<typeof qrTokens>;
+export type InsertSubscriptionPlan = InferInsertModel<typeof subscriptionPlans>;
+export type InsertUserSettings = InferInsertModel<typeof userSettings>;
+export type InsertEmailVerification = InferInsertModel<typeof emailVerifications>;
+export type InsertPasswordReset = InferInsertModel<typeof passwordResets>;
+export type InsertAvailabilitySlot = InferInsertModel<typeof availabilitySlots>;
+export type InsertQrAuthLog = InferInsertModel<typeof qrAuthLogs>;
+export type InsertUserSubscription = InferInsertModel<typeof userSubscriptions>;
+export type InsertSubscription = InferInsertModel<typeof subscriptions>;
+export type InsertPaymentSchedule = InferInsertModel<typeof paymentSchedules>;
+export type InsertSellerCommission = InferInsertModel<typeof sellerCommissions>;

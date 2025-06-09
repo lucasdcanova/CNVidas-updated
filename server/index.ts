@@ -12,6 +12,7 @@ import { storage } from "./storage";
 import { pool, db } from "./db";
 import { users } from "../shared/schema";
 import { eq } from "drizzle-orm";
+import jwt from "jsonwebtoken";
 
 (async () => {
   const app = express();
@@ -21,12 +22,6 @@ import { eq } from "drizzle-orm";
   app.use(express.json({ limit: '50mb' }));
   app.use(express.urlencoded({ extended: true }));
 
-  // Configuração do Passport
-  app.use(passport.initialize());
-  app.use(passport.session());
-
-  // Configurar autenticação
-  setupAuth(app);
 
   // Middleware global para processamento de tokens JWT
   app.use(async (req: Request, res: Response, next: NextFunction) => {
