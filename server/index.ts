@@ -1,6 +1,7 @@
 import 'dotenv/config'; // Garantir que as variáveis de ambiente sejam carregadas primeiro
 import express, { type Request, Response, NextFunction } from "express";
 import { createServer } from 'http';
+import cookieParser from 'cookie-parser';
 import setupRoutes from './routes/index';
 import { setupVite, serveStatic, log } from "./vite";
 import { setupSubscriptionPlans } from "./migrations/plans-setup";
@@ -21,6 +22,7 @@ import jwt from "jsonwebtoken";
   // Configurações básicas
   app.use(express.json({ limit: '50mb' }));
   app.use(express.urlencoded({ extended: true }));
+  app.use(cookieParser());
 
 
   // Middleware global para processamento de tokens JWT
