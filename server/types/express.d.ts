@@ -1,4 +1,4 @@
-import { User } from '../../shared/schema';
+import { User } from './authenticated-request';
 import { Request } from 'express';
 
 declare global {

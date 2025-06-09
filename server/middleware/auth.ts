@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { User } from '@shared/schema';
+import { User } from '../types/authenticated-request';
 import { AppError } from '../utils/app-error';
 import { storage } from '../storage';
 import { DatabaseStorage } from '../storage';
 import { AuthenticatedRequest } from '../types/authenticated-request';
 import { validateId } from '../utils/id-converter';
 
-export const requireAuth = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const requireAuth = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
@@ -15,7 +15,7 @@ export const requireAuth = (req: AuthenticatedRequest, res: Response, next: Next
 };
 
 export const requireRole = (roles: User['role'][]) => {
-  return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user || !roles.includes(req.user.role)) {
       return res.status(403).json({ error: 'Acesso negado' });
     }
@@ -23,74 +23,74 @@ export const requireRole = (roles: User['role'][]) => {
   };
 };
 
-export function optionalAuth(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export function optionalAuth(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
-export const requireAdmin = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const requireAdmin = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user || req.user.role !== 'admin') {
     return res.status(403).json({ error: 'Acesso negado' });
   }
   next();
 };
 
-export const requireDoctor = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const requireDoctor = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user || req.user.role !== 'doctor') {
     return res.status(403).json({ error: 'Acesso negado' });
   }
   next();
 };
 
-export const requirePatient = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const requirePatient = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user || req.user.role !== 'patient') {
     return res.status(403).json({ error: 'Acesso negado' });
   }
   next();
 };
 
-export const requirePartner = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const requirePartner = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user || req.user.role !== 'partner') {
     return res.status(403).json({ error: 'Acesso negado' });
   }
   next();
 };
 
-export const authenticateToken = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
 };
 
-export const isAdmin = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user?.role || req.user.role !== 'admin') {
     return res.status(403).json({ message: 'Acesso negado' });
   }
   next();
 };
 
-export const isDoctor = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const isDoctor = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user?.role || req.user.role !== 'doctor') {
     return res.status(403).json({ message: 'Acesso negado' });
   }
   next();
 };
 
-export const isPatient = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const isPatient = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user?.role || req.user.role !== 'patient') {
     return res.status(403).json({ message: 'Acesso negado' });
   }
   next();
 };
 
-export const isAuthenticated = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
   next();
 };
 
-export const isPartner = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const isPartner = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!req.user) {
       throw new AppError('Não autorizado', 401);
