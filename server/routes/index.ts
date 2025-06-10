@@ -25,6 +25,7 @@ import userRouter from './user-routes';
 import partnerRouter from './partner-routes';
 import doctorRouter from './doctor-routes';
 import notificationRouter from './notification-routes';
+import checkoutTrackingRouter from './checkout-tracking-routes';
 import { adminRoutes } from '../admin-routes';
 
 export default async function setupRoutes(app: express.Express) {
@@ -122,6 +123,10 @@ export default async function setupRoutes(app: express.Express) {
   // Rotas de notificações
   console.log('Registrando notificationRouter em /api/notifications');
   app.use('/api/notifications', notificationRouter);
+  
+  // Rotas de monitoramento de checkouts
+  console.log('Registrando checkoutTrackingRouter em /api');
+  app.use('/api', checkoutTrackingRouter);
   
   // Rota pública para listar todos os parceiros
   app.get('/api/all-partners', async (req, res) => {

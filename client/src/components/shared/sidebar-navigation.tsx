@@ -15,7 +15,8 @@ import {
   Settings, 
   HelpCircle,
   CreditCard,
-  UserPlus
+  UserPlus,
+  ShoppingCart
 } from "lucide-react";
 
 interface SidebarNavigationProps {
@@ -169,6 +170,16 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({ userRole =
               }`}>
                 <CreditCard className="w-5 h-5 mr-3" />
                 Planos de Assinatura
+            </Link>
+            
+            <Link href="/admin/checkout-tracking"
+              className={`${linkBaseClass} ${
+                isLinkActive("/admin/checkout-tracking") 
+                  ? linkActiveClass 
+                  : linkInactiveClass
+              }`}>
+                <ShoppingCart className="w-5 h-5 mr-3" />
+                Monitorar Checkouts
             </Link>
           </>
         )}

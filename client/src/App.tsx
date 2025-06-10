@@ -42,6 +42,7 @@ import QrAuthLogs from "@/pages/admin/qr-auth-logs";
 import AdminSubscriptionPlans from "@/pages/admin/subscription-plans";
 import AdminUserDependents from "@/pages/admin/users/dependents";
 import SellerStats from "@/pages/admin/seller-stats";
+import CheckoutTrackingPage from "@/pages/admin/checkout-tracking";
 import DoctorTelemedicine from "@/pages/doctor-telemedicine";
 import DoctorAvailability from "@/pages/doctor-availability";
 import DoctorEmergencyRoom from "@/pages/doctor-emergency-room";
@@ -184,6 +185,7 @@ function Router() {
       <ProtectedRoute path="/admin/analytics" component={AdminAnalytics} allowedRoles={["admin"]} />
       <ProtectedRoute path="/admin/subscription-plans" component={AdminSubscriptionPlans} allowedRoles={["admin"]} />
       <ProtectedRoute path="/admin/seller-stats" component={SellerStats} allowedRoles={["admin"]} />
+      <ProtectedRoute path="/admin/checkout-tracking" component={CheckoutTrackingPage} allowedRoles={["admin"]} />
       
       {/* Fallback to 404 */}
       <Route component={NotFound} />
