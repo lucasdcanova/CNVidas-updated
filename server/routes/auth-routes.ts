@@ -281,14 +281,29 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
  */
 authRouter.post('/logout', async (req: Request, res: Response) => {
   try {
-    // Limpar cookie de autenticação
+    // Limpar cookie de autenticação com as mesmas opções usadas ao criar
     res.clearCookie('auth_token', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      sameSite: 'lax',
+      path: '/' // Importante: especificar o path
     });
     
-    // Sessão removida - usando apenas JWT
+    // Também limpar qualquer outro cookie relacionado
+    res.clearCookie('session', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/'
+    });
+    
+    // Definir cabeçalhos para evitar cache
+    res.set({
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+      'Surrogate-Control': 'no-store'
+    });
     
     console.log('Logout realizado com sucesso');
     res.json({ message: 'Usuário desautenticado com sucesso' });

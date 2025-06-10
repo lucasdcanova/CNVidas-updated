@@ -178,29 +178,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Mutation para logout
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      const response = await apiRequest("POST", "/api/auth/logout");
+      try {
+        // Tentar fazer logout no servidor
+        const response = await fetch("/api/auth/logout", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        
+        // Ignorar erros de rede/resposta - o importante é limpar o cliente
+        console.log("Logout response status:", response.status);
+      } catch (error) {
+        console.log("Erro ao chamar logout no servidor, continuando com limpeza local:", error);
+      }
       
-      // Limpar dados locais
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("sessionID");
-      localStorage.removeItem("userData");
+      // Limpar dados locais imediatamente, independente da resposta do servidor
+      localStorage.clear();
+      sessionStorage.clear();
       
-      // Limpar cache
+      // Limpar todos os cookies do lado do cliente
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i];
+        const eqPos = cookie.indexOf("=");
+        const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+        document.cookie = `${name}=;expires=${new Date(0).toUTCString()};path=/`;
+        document.cookie = `${name}=;expires=${new Date(0).toUTCString()};path=/;domain=${window.location.hostname}`;
+        document.cookie = `${name}=;expires=${new Date(0).toUTCString()};path=/;domain=.${window.location.hostname}`;
+      }
+      
+      // Limpar cache do React Query
       queryClient.clear();
+      queryClient.removeQueries();
+      queryClient.cancelQueries();
       
-      return response;
+      // Retornar sucesso sempre
+      return { success: true };
     },
-    onSuccess: () => {
-      console.log("Logout bem-sucedido");
-      window.location.href = "/auth";
-    },
-    onError: (error: Error) => {
-      console.error("Erro no logout:", error);
-      toast({
-        title: "Erro ao sair",
-        description: "Não foi possível efetuar o logout. Tente novamente.",
-        variant: "destructive",
-      });
+    onSettled: () => {
+      // Sempre redirecionar, mesmo se houve erro
+      console.log("Redirecionando para página de login...");
+      // Usar setTimeout para garantir que todas as operações de limpeza sejam concluídas
+      setTimeout(() => {
+        window.location.href = "/auth";
+      }, 100);
     },
   });
 

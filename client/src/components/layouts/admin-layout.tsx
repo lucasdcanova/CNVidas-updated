@@ -18,16 +18,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title = "Painel Adm
   const [location] = useLocation();
 
   const handleLogout = async () => {
-    try {
-      await logoutMutation.mutateAsync();
-      navigate("/auth");
-    } catch (error) {
-      toast({
-        title: "Erro ao sair",
-        description: "Não foi possível efetuar o logout. Tente novamente.",
-        variant: "destructive",
-      });
-    }
+    // Simplesmente chamar o logout - a função já cuida de redirecionar
+    logoutMutation.mutate();
   };
 
   // Se não for admin, redireciona para login
