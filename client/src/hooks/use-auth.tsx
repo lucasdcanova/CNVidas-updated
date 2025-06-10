@@ -179,17 +179,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logoutMutation = useMutation({
     mutationFn: async () => {
       try {
+        // Obter token de autenticação para enviar no header
+        const authToken = localStorage.getItem("authToken");
+        const headers: Record<string, string> = {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        };
+        
+        if (authToken) {
+          headers["Authorization"] = `Bearer ${authToken}`;
+        }
+        
         // Tentar fazer logout no servidor
         const response = await fetch("/api/auth/logout", {
           method: "POST",
           credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers,
+          cache: "no-cache",
         });
         
-        // Ignorar erros de rede/resposta - o importante é limpar o cliente
+        // Log da resposta para debug
         console.log("Logout response status:", response.status);
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Logout response data:", data);
+        }
       } catch (error) {
         console.log("Erro ao chamar logout no servidor, continuando com limpeza local:", error);
       }
@@ -198,16 +212,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.clear();
       sessionStorage.clear();
       
-      // Limpar todos os cookies do lado do cliente
-      const cookies = document.cookie.split(";");
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i];
-        const eqPos = cookie.indexOf("=");
-        const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
-        document.cookie = `${name}=;expires=${new Date(0).toUTCString()};path=/`;
-        document.cookie = `${name}=;expires=${new Date(0).toUTCString()};path=/;domain=${window.location.hostname}`;
-        document.cookie = `${name}=;expires=${new Date(0).toUTCString()};path=/;domain=.${window.location.hostname}`;
-      }
+      // Função melhorada para limpar cookies
+      const clearAllCookies = () => {
+        // Obter todos os cookies
+        const cookies = document.cookie.split(";");
+        
+        // Para cada cookie, tentar removê-lo de várias formas
+        cookies.forEach(cookie => {
+          const eqPos = cookie.indexOf("=");
+          const name = eqPos > -1 ? cookie.substring(0, eqPos).trim() : cookie.trim();
+          
+          if (name) {
+            // Tentar remover o cookie com diferentes combinações de path e domain
+            const paths = ["/", window.location.pathname];
+            const domains = [
+              "",
+              window.location.hostname,
+              `.${window.location.hostname}`,
+              window.location.hostname.replace(/^www\./, ""),
+              `.${window.location.hostname.replace(/^www\./, "")}`,
+            ];
+            
+            paths.forEach(path => {
+              domains.forEach(domain => {
+                // Definir cookie com valor vazio e data de expiração no passado
+                document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path};${domain ? ` domain=${domain};` : ""}`;
+                document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; max-age=0; path=${path};${domain ? ` domain=${domain};` : ""}`;
+              });
+            });
+          }
+        });
+        
+        // Verificar se ainda há cookies e logar
+        console.log("Cookies após limpeza:", document.cookie);
+      };
+      
+      // Limpar todos os cookies
+      clearAllCookies();
       
       // Limpar cache do React Query
       queryClient.clear();

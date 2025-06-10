@@ -131,7 +131,9 @@ authRouter.post('/register', async (req: Request, res: Response) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 dias
+      path: '/', // Especificar path explicitamente
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
+      domain: process.env.COOKIE_DOMAIN || undefined // Adicionar domínio se configurado
     });
 
     // Retornar dados do usuário criado com login automático
@@ -254,7 +256,9 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 dias
+      path: '/', // Especificar path explicitamente
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
+      domain: process.env.COOKIE_DOMAIN || undefined // Adicionar domínio se configurado
     });
     
     res.json({
@@ -281,20 +285,41 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
  */
 authRouter.post('/logout', async (req: Request, res: Response) => {
   try {
-    // Limpar cookie de autenticação com as mesmas opções usadas ao criar
+    // Primeiro, definir o cookie como string vazia com tempo de expiração imediato
+    res.cookie('auth_token', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 0, // Expirar imediatamente
+      expires: new Date(0) // Data no passado
+    });
+    
+    // Em seguida, limpar o cookie completamente
     res.clearCookie('auth_token', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      path: '/' // Importante: especificar o path
+      path: '/',
+      domain: process.env.COOKIE_DOMAIN || undefined // Adicionar domínio se configurado
     });
     
     // Também limpar qualquer outro cookie relacionado
+    res.cookie('session', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 0,
+      expires: new Date(0)
+    });
+    
     res.clearCookie('session', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      path: '/'
+      path: '/',
+      domain: process.env.COOKIE_DOMAIN || undefined
     });
     
     // Definir cabeçalhos para evitar cache
@@ -302,11 +327,15 @@ authRouter.post('/logout', async (req: Request, res: Response) => {
       'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
       'Pragma': 'no-cache',
       'Expires': '0',
-      'Surrogate-Control': 'no-store'
+      'Surrogate-Control': 'no-store',
+      'Clear-Site-Data': '"cookies"' // Adicionar header para limpar dados do site
     });
     
-    console.log('Logout realizado com sucesso');
-    res.json({ message: 'Usuário desautenticado com sucesso' });
+    console.log('Logout realizado com sucesso - cookies removidos');
+    res.status(200).json({ 
+      success: true,
+      message: 'Usuário desautenticado com sucesso' 
+    });
   } catch (error) {
     console.error('Erro no logout:', error);
     if (error instanceof AppError) {
