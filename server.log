@@ -7153,3 +7153,431 @@ Cancelando consulta de emergência: emergency-doctor-4
 Logout realizado com sucesso - cookies removidos
 === ROTA /api/user INTERCEPTADA ===
 === ROTA /api/user INTERCEPTADA ===
+=== ROTA /api/user INTERCEPTADA ===
+=== ROTA /api/login INTERCEPTADA ===
+=== ROTA LOGIN CHAMADA ===
+URL: /login
+Method: POST
+Body: { email: 'lucas.canova@icloud.com', password: '034.742.560-76' }
+Buscando usuário no banco: lucas.canova@icloud.com
+Usuário encontrado: true
+=== ROTA /api/login INTERCEPTADA ===
+=== ROTA LOGIN CHAMADA ===
+URL: /login
+Method: POST
+Body: { email: 'lucas.canova@icloud.com', password: 'qweasdzxc123' }
+Buscando usuário no banco: lucas.canova@icloud.com
+Usuário encontrado: true
+Login bem-sucedido para: lucas.canova@icloud.com
+Cookie options: {
+  host: 'localhost:3000',
+  isLocalhost: true,
+  isProduction: false,
+  secure: false,
+  domain: undefined
+}
+🔍 Middleware JWT Global - Processando: /api/admin/users
+🔍 Cookies: {
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoibHVjYXMuY2Fub3ZhQGljbG91ZC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDk1MzA4NzQsImV4cCI6MTc1MDEzNTY3NH0.ktihJvbrwgAhDAOLOH87KavHTL44ssogd5msuU3cleE',
+  __stripe_mid: '5448f292-5e6c-418c-8541-6ae77078fbd84bd082',
+  __stripe_sid: '758a31fe-a3c3-4e18-80c5-7735c1b26d45ed4ffd'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+Session table checked/created successfully
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+=== ROTA /api/user INTERCEPTADA ===
+🔍 Middleware JWT Global - Processando: /api/admin/users
+🔍 Cookies: {
+  __stripe_mid: '5448f292-5e6c-418c-8541-6ae77078fbd84bd082',
+  __stripe_sid: '758a31fe-a3c3-4e18-80c5-7735c1b26d45ed4ffd',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoibHVjYXMuY2Fub3ZhQGljbG91ZC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDk1MzA4NzQsImV4cCI6MTc1MDEzNTY3NH0.ktihJvbrwgAhDAOLOH87KavHTL44ssogd5msuU3cleE'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+Logout realizado com sucesso - cookies removidos
+=== ROTA /api/user INTERCEPTADA ===
+=== ROTA /api/user INTERCEPTADA ===
+10:15:31 AM [tsx] change in ./server/routes/emergency-notifications.ts Restarting...
+10:15:34 AM [tsx] change in ./server/routes/profile-image-routes.ts Process hasn't exited. Killing process...
+c10:15:48 AM [tsx] change in ./server/routes/telemedicine-error-logs.ts Restarting...
+c10:16:04 AM [tsx] change in ./server/routes/daily-direct.ts Restarting...
+c10:16:08 AM [tsx] change in ./server/utils/id-converter.ts Restarting...
+10:16:09 AM [tsx] change in ./server/routes/payment-routes.ts Process hasn't exited. Killing process...
+c10:16:16 AM [tsx] change in ./server/utils/sanitize.ts Restarting...
+10:16:17 AM [tsx] change in ./server/routes/telemedicine-daily.ts Process hasn't exited. Killing process...
+c10:16:24 AM [tsx] change in ./server/routes/telemedicine-daily-v2.ts Restarting...
+c10:16:31 AM [tsx] change in ./server/utils/daily.ts Restarting...
+c10:16:35 AM [tsx] change in ./server/services/email.ts Restarting...
+10:16:36 AM [tsx] change in ./server/routes/partner-routes.ts Process hasn't exited. Killing process...
+c10:16:40 AM [tsx] change in ./server/middleware/error-handler.ts Restarting...
+c10:16:42 AM [tsx] change in ./server/middleware/json-response.ts Restarting...
+c10:16:46 AM [tsx] change in ./server/lib/prisma.ts Restarting...
+c10:16:46 AM [tsx] change in ./server/routes/public-subscription-routes.ts Restarting...
+c10:16:50 AM [tsx] change in ./server/middleware/auth.ts Restarting...
+c10:17:24 AM [tsx] change in ./server/db.ts Restarting...
+10:17:28 AM [tsx] change in ./server/db.ts Process hasn't exited. Killing process...
+c10:17:33 AM [tsx] change in ./server/services/email.ts Restarting...
+10:17:37 AM [tsx] change in ./server/services/email.ts Process hasn't exited. Killing process...
+c10:17:43 AM [tsx] change in ./server/utils/sanitize.ts Restarting...
+10:17:44 AM [tsx] change in ./server/utils/daily.ts Process hasn't exited. Killing process...
+c10:17:45 AM [tsx] change in ./server/utils/id-converter.ts Restarting...
+c10:17:52 AM [tsx] change in ./server/utils/id-converter.ts Restarting...
+AuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:17:56 AM [tsx] change in ./server/routes/diagnostic-routes.ts Process hasn't exited. Killing process...
+c10:17:56 AM [tsx] change in ./server/routes/emergency-notifications.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:18:08 AM [tsx] change in ./server/routes/diagnostic-routes.ts Restarting...
+10:18:09 AM [tsx] change in ./server/routes/index.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:18:12 AM [tsx] change in ./server/routes/auth-routes.ts Restarting...
+10:18:17 AM [tsx] Process didn't exit in 5s. Force killing...
+c10:18:17 AM [tsx] change in ./server/routes/telemedicine-daily.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:18:22 AM [tsx] change in ./server/middleware/json-response.ts Restarting...
+10:18:25 AM [tsx] change in ./server/middleware/json-response.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:18:30 AM [tsx] change in ./server/lib/prisma.ts Restarting...
+10:18:35 AM [tsx] Process didn't exit in 5s. Force killing...
+c10:18:36 AM [tsx] change in ./server/lib/prisma.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:18:41 AM [tsx] change in ./server/utils/sanitize.ts Restarting...
+10:18:46 AM [tsx] Process didn't exit in 5s. Force killing...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:18:50 AM [tsx] change in ./server/routes/telemedicine-daily-v2.ts Restarting...
+10:18:51 AM [tsx] change in ./server/routes/address-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:19:01 AM [tsx] change in ./server/routes/daily-direct.ts Restarting...
+10:19:03 AM [tsx] change in ./server/routes/consultation-payment-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:19:07 AM [tsx] change in ./server/routes/emergency-consultation.ts Restarting...
+10:19:09 AM [tsx] change in ./server/utils/stripe-instance.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:19:12 AM [tsx] change in ./server/routes/emergency-notifications.ts Restarting...
+10:19:17 AM [tsx] change in ./server/routes/notification-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:19:21 AM [tsx] change in ./server/routes/partner-routes.ts Restarting...
+10:19:23 AM [tsx] change in ./server/utils/daily.ts Process hasn't exited. Killing process...
+c10:19:25 AM [tsx] change in ./server/routes/payment-routes.ts Restarting...
+AuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:19:30 AM [tsx] Process didn't exit in 5s. Force killing...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:19:33 AM [tsx] change in ./server/routes/profile-image-routes.ts Restarting...
+10:19:34 AM [tsx] change in ./server/middleware/auth.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:19:37 AM [tsx] change in ./server/routes/public-subscription-routes.ts Restarting...
+10:19:38 AM [tsx] change in ./server/routes/telemedicine-error-logs.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:19:42 AM [tsx] change in ./server/utils/emergency-utils.ts Restarting...
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+10:19:47 AM [tsx] change in ./server/middleware/error-handler.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Conexão com o banco de dados testada com sucesso: 2025-06-10 13:19:48.858886+00
+Session table checked/created successfully
+10:19:58 AM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+10:20:17 AM [vite] Internal server error: Failed to resolve import "@/components/telemedicine/ConnectionDiagnostic" from "client/src/pages/daily-telemedicine.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/daily-telemedicine.tsx:13:33
+  28 |  import DashboardLayout from "@/components/layouts/dashboard-layout";
+  29 |  import TroubleshootingDialog from "@/components/telemedicine/TroubleshootingDialog";
+  30 |  import ConnectionDiagnostic from "@/components/telemedicine/ConnectionDiagnostic";
+     |                                    ^
+  31 |  import DailyVideoCall from "@/components/telemedicine/DailyVideoCall";
+  32 |  export default function DailyTelemedicinePage() {
+      at TransformPluginContext._formatError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:49258:41)
+      at TransformPluginContext.error (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:49253:16)
+      at normalizeUrl (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:64291:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async <anonymous> (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:64423:39)
+      at async Promise.all (index 15)
+      at async TransformPluginContext.transform (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:64350:7)
+      at async PluginContainer.transform (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:49099:18)
+      at async loadAndTransform (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:51977:27)
+10:20:17 AM [vite] Pre-transform error: Failed to resolve import "@/components/telemedicine/ConnectionDiagnostic" from "client/src/pages/daily-telemedicine.tsx". Does the file exist?
+10:20:26 AM [vite] hmr update /src/App.tsx?v=TU9dRMzj2SI5sev7_dqpo
+10:21:08 AM [vite] hmr update /src/index.css?v=TU9dRMzj2SI5sev7_dqpo, /src/pages/daily-telemedicine.tsx
+=== ROTA /api/user INTERCEPTADA ===
+10:30:16 AM [vite] hmr update /src/components/forms/appointment-form.tsx, /src/index.css?v=TU9dRMzj2SI5sev7_dqpo
+10:30:16 AM [tsx] change in ./shared/schema.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Conexão com o banco de dados testada com sucesso: 2025-06-10 13:30:19.991711+00
+Session table checked/created successfully
+10:30:23 AM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+=== ROTA /api/user INTERCEPTADA ===
+10:32:18 AM [vite] hmr update /src/index.css?v=5jDFmbDBpxH-4K47E-hgt, /src/pages/checkout.tsx, /src/pages/subscribe.tsx, /src/components/checkout/checkout-modal-fix.tsx, /src/components/checkout/checkout-modal.tsx, /src/hooks/use-stripe-setup.tsx
+10:32:18 AM [vite] hmr update /src/hooks/use-stripe-setup.tsx, /src/index.css?v=5jDFmbDBpxH-4K47E-hgt
+10:32:18 AM [vite] page reload src/components/doctors/ProfileImageUploader.tsx
+10:32:18 AM [tsx] change in ./server/routes/consultation-payment-routes.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:32:21 AM [tsx] change in ./server/routes/consultation-payment-routes.ts Restarting...
+10:32:22 AM [tsx] change in ./server/routes/emergency-consultation.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+10:32:27 AM [tsx] change in ./server/routes/user-routes.ts Restarting...
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+10:32:31 AM [tsx] change in ./server/vite.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Conexão com o banco de dados testada com sucesso: 2025-06-10 13:32:32.626797+00
+Session table checked/created successfully
+10:32:35 AM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+=== ROTA /api/user INTERCEPTADA ===
