@@ -267,17 +267,31 @@ subscriptionPaymentRouter.get("/payment-methods", requireAuth, async (req: Reque
       return res.status(401).json({ message: "Usuário não autenticado" });
     }
 
-    const user = req.user!;
+    const authReq = req as AuthenticatedRequest;
+    const user = authReq.user!;
+    let stripeCustomerId = user.stripeCustomerId;
 
-    if (!user.stripeCustomerId) {
-      return res.status(400).json({ 
-        message: "Usuário não possui cadastro no sistema de pagamento" 
+    // Se o usuário não tem customer ID, criar um agora
+    if (!stripeCustomerId) {
+      const customer = await stripe.customers.create({
+        email: user.email,
+        name: user.fullName || user.username,
+        metadata: {
+          userId: user.id.toString()
+        }
       });
+      
+      stripeCustomerId = customer.id;
+      
+      // Atualizar o ID do cliente no banco de dados
+      await db.update(users)
+        .set({ stripeCustomerId: stripeCustomerId })
+        .where(eq(users.id, user.id));
     }
 
     // Buscar todos os métodos de pagamento do cliente no Stripe
     const paymentMethods = await stripe.paymentMethods.list({
-      customer: user.stripeCustomerId,
+      customer: stripeCustomerId,
       type: 'card'
     });
 
@@ -343,17 +357,31 @@ subscriptionPaymentRouter.post("/create-setup-intent", requireAuth, async (req: 
       return res.status(401).json({ message: "Usuário não autenticado" });
     }
 
-    const user = req.user!;
+    const authReq = req as AuthenticatedRequest;
+    const user = authReq.user!;
+    let stripeCustomerId = user.stripeCustomerId;
 
-    if (!user.stripeCustomerId) {
-      return res.status(400).json({ 
-        message: "Usuário não possui cadastro no sistema de pagamento" 
+    // Se o usuário não tem customer ID, criar um agora
+    if (!stripeCustomerId) {
+      const customer = await stripe.customers.create({
+        email: user.email,
+        name: user.fullName || user.username,
+        metadata: {
+          userId: user.id.toString()
+        }
       });
+      
+      stripeCustomerId = customer.id;
+      
+      // Atualizar o ID do cliente no banco de dados
+      await db.update(users)
+        .set({ stripeCustomerId: stripeCustomerId })
+        .where(eq(users.id, user.id));
     }
 
     // Criar uma intenção de configuração no Stripe
     const setupIntent = await stripe.setupIntents.create({
-      customer: user.stripeCustomerId,
+      customer: stripeCustomerId,
       payment_method_types: ['card'],
       usage: 'off_session'
     });

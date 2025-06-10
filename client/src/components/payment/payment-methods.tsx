@@ -220,8 +220,8 @@ export default function PaymentMethods({ paymentMethods, onUpdate }: PaymentMeth
           {isAddingNew ? (
             isSetupLoading ? (
               <div>Carregando Stripe...</div>
-            ) : (
-              <StripeSetupProvider>
+            ) : clientSecret ? (
+              <StripeSetupProvider clientSecret={clientSecret}>
                 <PaymentForm
                   onCancel={() => setIsAddingNew(false)}
                   onSuccess={() => {
@@ -230,6 +230,10 @@ export default function PaymentMethods({ paymentMethods, onUpdate }: PaymentMeth
                   }}
                 />
               </StripeSetupProvider>
+            ) : (
+              <div className="text-center text-muted-foreground">
+                Erro ao carregar formulário de pagamento
+              </div>
             )
           ) : (
             <Button
