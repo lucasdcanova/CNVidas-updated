@@ -79,6 +79,9 @@ export default async function setupRoutes(app: express.Express) {
   app.use('/api/subscription', publicSubscriptionRouter); // Rotas públicas de subscription
   app.use('/api/subscriptions/payments', subscriptionPaymentRouter);
   
+  // Adicionar rotas de métodos de pagamento no caminho esperado pelo cliente
+  app.use('/api/subscription', subscriptionPaymentRouter);
+  
   // Rotas de dependentes
   app.use('/api/dependents', dependentsRouter);
   
