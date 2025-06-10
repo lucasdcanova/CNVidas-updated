@@ -9,8 +9,7 @@ import QRCode from 'react-qr-code';
 import { generateQrToken } from '@/lib/api';
 
 interface QRAuthToken {
-  token: string;
-  expiresAt: string;
+  qrCode: string;
 }
 
 const QRAuthGenerator = () => {
@@ -86,10 +85,10 @@ const QRAuthGenerator = () => {
         </div>
       </CardHeader>
       <CardContent className="flex justify-center py-4">
-        {qrToken ? (
+        {qrToken && qrToken.qrCode ? (
           <div className="p-4 bg-white rounded-lg">
             <QRCode 
-              value={qrToken.token} 
+              value={qrToken.qrCode} 
               size={200}
               level="H"
             />
