@@ -4,10 +4,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PlanIndicator, getPlanColor } from "./plan-indicator";
-import { User, UserRole } from "@/shared/types";
+import { UserData, UserRole } from "@/shared/types";
 
 interface UserProfileProps {
-  user: User | null;
+  user: UserData | null;
   compact?: boolean;
 }
 

@@ -30,6 +30,13 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const [doctorProfile, setDoctorProfile] = useState<any>(null);
   const [userWithProfileImage, setUserWithProfileImage] = useState(user);
   
+  // Debug: Log user data
+  React.useEffect(() => {
+    console.log("🔍 DashboardLayout - User data:", user);
+    console.log("🔍 DashboardLayout - Subscription Plan:", user?.subscriptionPlan);
+    console.log("🔍 DashboardLayout - Subscription Status:", user?.subscriptionStatus);
+  }, [user]);
+  
   // Buscar o perfil de médico se o usuário for um médico
   const { data: doctorData } = useQuery({
     queryKey: ["/api/doctors/user", user?.id],

@@ -56,6 +56,13 @@ export const PatientDashboard: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   
+  // Debug: Log user data
+  React.useEffect(() => {
+    console.log("🎯 PatientDashboard - User data:", user);
+    console.log("🎯 PatientDashboard - Subscription Plan:", user?.subscriptionPlan);
+    console.log("🎯 PatientDashboard - Subscription Status:", user?.subscriptionStatus);
+  }, [user]);
+  
   const { data: upcomingAppointments = [] } = useQuery({
     queryKey: ["/api/appointments/upcoming"],
     queryFn: getUpcomingAppointments,

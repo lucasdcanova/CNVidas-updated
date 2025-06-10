@@ -6,15 +6,15 @@ import {
 } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { User, LoginCredentials, RegisterCredentials } from "@/shared/types";
+import { User, UserData, LoginCredentials, RegisterCredentials } from "@/shared/types";
 
 type AuthContextType = {
-  user: User | null;
+  user: UserData | null;
   isLoading: boolean;
   error: Error | null;
-  loginMutation: UseMutationResult<User, Error, LoginCredentials>;
+  loginMutation: UseMutationResult<UserData, Error, LoginCredentials>;
   logoutMutation: UseMutationResult<Response, Error, void>;
-  registerMutation: UseMutationResult<User, Error, RegisterCredentials>;
+  registerMutation: UseMutationResult<UserData, Error, RegisterCredentials>;
   forgotPasswordMutation: UseMutationResult<Response, Error, { email: string }>;
   resetPasswordMutation: UseMutationResult<Response, Error, { token: string; password: string }>;
 };
@@ -25,7 +25,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
   
   // Função para verificar a autenticação do usuário
-  const checkAuth = async (): Promise<User | null> => {
+  const checkAuth = async (): Promise<UserData | null> => {
     try {
       console.log("Verificando autenticação do usuário...");
       
@@ -84,6 +84,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       const userData = await res.json();
       console.log("Usuário autenticado:", userData);
+      console.log("🎯 Plano do usuário:", userData.subscriptionPlan);
+      console.log("🎯 Status da assinatura:", userData.subscriptionStatus);
       return userData;
     } catch (error) {
       console.error("Erro ao verificar autenticação:", error);
@@ -140,7 +142,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       return responseData;
     },
-    onSuccess: (userData: User & { sessionId?: string, authToken?: string }) => {
+    onSuccess: (userData: UserData & { sessionId?: string, authToken?: string }) => {
       console.log("Login bem-sucedido:", userData);
       
       // Salvar os dados do usuário na cache
@@ -307,7 +309,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       return userData;
     },
-    onSuccess: (userData: User & { sessionId?: string, authToken?: string }) => {
+    onSuccess: (userData: UserData & { sessionId?: string, authToken?: string }) => {
       console.log("Registro bem-sucedido:", userData);
       
       // Salvar os dados do usuário na cache (login automático)

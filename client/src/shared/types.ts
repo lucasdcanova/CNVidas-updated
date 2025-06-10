@@ -21,8 +21,8 @@ export const userSchema = z.object({
   updatedAt: z.date(),
   lastLogin: z.date().nullable(),
   isActive: z.boolean(),
-  subscriptionStatus: z.string(),
-  subscriptionPlan: z.enum(['free', 'basic', 'premium', 'ultra', 'basic_family', 'premium_family', 'ultra_family']),
+  subscriptionStatus: z.string().optional(),
+  subscriptionPlan: z.enum(['free', 'basic', 'premium', 'ultra', 'basic_family', 'premium_family', 'ultra_family']).optional(),
   emailVerified: z.boolean(),
   profileImage: z.string().nullable(),
   emergencyConsultationsLeft: z.number().nullable(),
@@ -30,6 +30,33 @@ export const userSchema = z.object({
 });
 
 export type User = z.infer<typeof userSchema>;
+
+// Interface mais permissiva para User (para debug)
+export interface UserData {
+  id: number;
+  email: string;
+  username: string;
+  fullName: string;
+  role: UserRole;
+  cpf?: string | null;
+  phone?: string | null;
+  address?: string | null;
+  city?: string | null;
+  state?: string | null;
+  zipcode?: string | null;
+  createdAt?: Date;
+  updatedAt?: Date;
+  lastLogin?: Date | null;
+  isActive?: boolean;
+  subscriptionStatus?: string;
+  subscriptionPlan?: SubscriptionPlan;
+  emailVerified?: boolean;
+  profileImage?: string | null;
+  emergencyConsultationsLeft?: number | null;
+  emergencyConsultationsResetAt?: Date | null;
+  birthDate?: Date | null;
+  cnpj?: string | null;
+}
 
 // Schema de serviço
 export const serviceSchema = z.object({
