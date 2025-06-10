@@ -2,7 +2,6 @@ import express, { Request, Response } from 'express';
 import { storage } from '../storage';
 import { requireAuth, AuthenticatedRequest } from '../middleware/auth';
 import { AppError } from '../utils/app-error.js';
-import { generateQRCode } from '../utils/qr-code';
 import { sendEmail } from '../utils/email';
 import { compare, hash } from 'bcrypt';
 
@@ -138,20 +137,10 @@ userRouter.post('/generate-qr', requireAuth, async (req: AuthenticatedRequest, r
       return res.status(401).json({ error: 'Usuário não autenticado' });
     }
 
-    const qrData = JSON.stringify({
-      userId: req.user.id,
-      scannerUserId: undefined, // Pode ser preenchido se houver um usuário logado fazendo o scan
-      type: 'profile',
-      data: {
-        userId: req.user.id,
-        fullName: req.user.fullName,
-        email: req.user.email
-      }
-    });
+    // Gerar um token único e simples para o QR code
+    const qrToken = `CNV-${req.user.id}-${Date.now()}`;
     
-    const qrCode = await generateQRCode(qrData);
-
-    return res.json({ qrCode });
+    return res.json({ qrCode: qrToken });
   } catch (error) {
     console.error('Erro ao gerar QR Code:', error);
     return res.status(500).json({ error: 'Erro interno do servidor' });
