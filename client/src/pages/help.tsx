@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { User, Send, Phone, Mail, FileText, HelpCircle, MessageSquare } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { User, Send, Phone, Mail, FileText, HelpCircle, MessageSquare, X, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -22,6 +24,15 @@ interface Message {
   isTyping?: boolean;
 }
 
+// Tipos para documentos legais
+interface LegalDocument {
+  id: string;
+  title: string;
+  filename: string;
+  description: string;
+  lastUpdated?: string;
+}
+
 // Lista de possíveis nomes de agentes para o chatbot
 const agentNames = [
   { name: "Ana Silva", avatar: "AS" },
@@ -34,6 +45,46 @@ const agentNames = [
   { name: "Lucas Pereira", avatar: "LP" }
 ];
 
+// Lista de documentos legais disponíveis
+const legalDocuments: LegalDocument[] = [
+  {
+    id: "terms-of-use",
+    title: "Termos de Uso",
+    filename: "terms-of-use.md",
+    description: "Documento que estabelece as regras, direitos e responsabilidades para utilização da plataforma CN Vidas."
+  },
+  {
+    id: "privacy-policy",
+    title: "Política de Privacidade",
+    filename: "privacy-policy.md",
+    description: "Detalha como coletamos, utilizamos, armazenamos e protegemos seus dados pessoais e informações médicas."
+  },
+  {
+    id: "user-manual",
+    title: "Manual do Usuário",
+    filename: "user-manual.md",
+    description: "Guia completo sobre todas as funcionalidades da plataforma, com tutoriais passo a passo."
+  },
+  {
+    id: "adhesion-contract",
+    title: "Contrato de Adesão",
+    filename: "adhesion-contract.md",
+    description: "Contrato que rege a relação entre a CN Vidas e seus assinantes, detalhando obrigações e direitos."
+  },
+  {
+    id: "plan-conditions",
+    title: "Condições dos Planos",
+    filename: "adhesion-contract.md", // Está no mesmo arquivo do contrato de adesão
+    description: "Descrição detalhada de cada plano, coberturas, limites, carências e condições específicas."
+  },
+  {
+    id: "cancellation-policy",
+    title: "Política de Cancelamento",
+    filename: "cancellation-policy.md",
+    description: "Regras e condições para cancelamento de planos, reembolsos e período de fidelidade."
+  }
+];
+
 const HelpPage: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -43,6 +94,12 @@ const HelpPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [currentAgent, setCurrentAgent] = useState(agentNames[0]);
+  
+  // Estados para documentos legais
+  const [selectedDocument, setSelectedDocument] = useState<LegalDocument | null>(null);
+  const [documentContent, setDocumentContent] = useState<string>("");
+  const [isLoadingDocument, setIsLoadingDocument] = useState(false);
+  const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
 
   // Carregar conversas salvas ou iniciar uma nova conversa
   useEffect(() => {
@@ -260,30 +317,152 @@ const HelpPage: React.FC = () => {
     }
   };
 
-  // Formatar data para exibição
+  // Função para formatar time/data
   const formatTime = (date: Date | string | number | undefined | null) => {
+    if (!date) return '';
+    
     try {
-      // Validar se a data é válida
-      if (!date) {
-        return '00:00';
-      }
-      
       const dateObj = new Date(date);
-      
-      // Verificar se a data é válida
       if (isNaN(dateObj.getTime()) || !isFinite(dateObj.getTime())) {
-        console.warn('Data inválida recebida:', date);
-        return '00:00';
+        return '';
       }
       
-      return new Intl.DateTimeFormat('pt-BR', { 
-        hour: '2-digit', 
-        minute: '2-digit' 
-      }).format(dateObj);
-    } catch (e) {
-      console.error('Erro ao formatar data:', e, 'Data recebida:', date);
-      return '00:00'; // Formato padrão em caso de erro
+      const now = new Date();
+      const diff = now.getTime() - dateObj.getTime();
+      const minutes = Math.floor(diff / (1000 * 60));
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      
+      if (minutes < 1) return 'agora';
+      if (minutes < 60) return `${minutes}min`;
+      if (hours < 24) return `${hours}h`;
+      if (days < 7) return `${days}d`;
+      
+      return dateObj.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit'
+      });
+    } catch (error) {
+      console.error('Erro ao formatar data:', error);
+      return '';
     }
+  };
+
+  // Função para carregar documento legal
+  const loadDocument = async (document: LegalDocument) => {
+    setIsLoadingDocument(true);
+    setSelectedDocument(document);
+    
+    try {
+      const response = await fetch(`/api/legal-documents/${document.filename}`);
+      if (!response.ok) {
+        throw new Error('Documento não encontrado');
+      }
+      
+      const content = await response.text();
+      setDocumentContent(content);
+      setIsDocumentModalOpen(true);
+    } catch (error) {
+      console.error('Erro ao carregar documento:', error);
+      toast({
+        title: "Erro ao carregar documento",
+        description: "Não foi possível carregar o documento solicitado. Tente novamente.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoadingDocument(false);
+    }
+  };
+
+  // Função para converter markdown para HTML básico
+  const markdownToHtml = (markdown: string) => {
+    let html = markdown;
+    
+    // Headers
+    html = html.replace(/^### (.*$)/gim, '<h3 class="text-lg font-semibold mt-6 mb-3 text-gray-800 border-b border-gray-200 pb-1">$1</h3>');
+    html = html.replace(/^## (.*$)/gim, '<h2 class="text-xl font-bold mt-8 mb-4 text-gray-900 border-b border-gray-300 pb-2">$1</h2>');
+    html = html.replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold mt-8 mb-6 text-gray-900 border-b border-gray-400 pb-3">$1</h1>');
+    
+    // Bold and italic
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-800">$1</strong>');
+    html = html.replace(/\*(.*?)\*/g, '<em class="italic text-gray-700">$1</em>');
+    
+    // Lists - processar antes dos parágrafos
+    const lines = html.split('\n');
+    const processedLines = [];
+    let inList = false;
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const trimmedLine = line.trim();
+      
+      // Lista numerada
+      if (trimmedLine.match(/^\d+\.\s/)) {
+        if (!inList) {
+          processedLines.push('<ol class="list-decimal ml-6 mb-4 space-y-2">');
+          inList = 'ol';
+        } else if (inList === 'ul') {
+          processedLines.push('</ul>');
+          processedLines.push('<ol class="list-decimal ml-6 mb-4 space-y-2">');
+          inList = 'ol';
+        }
+        const content = trimmedLine.replace(/^\d+\.\s/, '');
+        processedLines.push(`<li class="text-gray-700 leading-relaxed">${content}</li>`);
+      }
+      // Lista com bullets
+      else if (trimmedLine.match(/^[-*]\s/)) {
+        if (!inList) {
+          processedLines.push('<ul class="list-disc ml-6 mb-4 space-y-2">');
+          inList = 'ul';
+        } else if (inList === 'ol') {
+          processedLines.push('</ol>');
+          processedLines.push('<ul class="list-disc ml-6 mb-4 space-y-2">');
+          inList = 'ul';
+        }
+        const content = trimmedLine.replace(/^[-*]\s/, '');
+        processedLines.push(`<li class="text-gray-700 leading-relaxed">${content}</li>`);
+      }
+      else {
+        if (inList) {
+          processedLines.push(inList === 'ol' ? '</ol>' : '</ul>');
+          inList = false;
+        }
+        processedLines.push(line);
+      }
+    }
+    
+    if (inList) {
+      processedLines.push(inList === 'ol' ? '</ol>' : '</ul>');
+    }
+    
+    html = processedLines.join('\n');
+    
+    // Separar parágrafos por linhas duplas em branco
+    html = html.replace(/\n\n+/g, '\n\n<p class="mb-4 text-gray-700 leading-relaxed">');
+    
+    // Adicionar tags de parágrafo no início se não começar com header
+    if (!html.match(/^<[h1-6]/)) {
+      html = '<p class="mb-4 text-gray-700 leading-relaxed">' + html;
+    }
+    
+    // Fechar parágrafos antes de headers
+    html = html.replace(/(<h[1-6][^>]*>)/g, '</p>$1');
+    
+    // Limpar parágrafos vazios e corrigir estrutura
+    html = html.replace(/<p[^>]*><\/p>/g, '');
+    html = html.replace(/(<\/p>)\s*(<p[^>]*>)/g, '$1\n$2');
+    
+    // Line breaks simples
+    html = html.replace(/\n(?!<)/g, '<br/>');
+    
+    // Remover <br/> antes de tags de bloco
+    html = html.replace(/<br\/>\s*(<[\/]?(?:h[1-6]|p|ol|ul|li)[^>]*>)/g, '$1');
+    
+    // Adicionar classes especiais para destacar seções importantes
+    html = html.replace(/(IMPORTANTE|ATENÇÃO|AVISO|NOTA):/gi, '<span class="inline-block bg-yellow-100 text-yellow-800 px-2 py-1 rounded font-semibold text-sm mb-2">$1</span>:');
+    
+    return html;
   };
 
   return (
@@ -575,80 +754,144 @@ const HelpPage: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <Card className="bg-white shadow-sm hover:shadow transition-shadow">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-base">Termos de Uso</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-0">
-                      <p className="text-sm text-gray-600 mb-4">
-                        Documento que estabelece as regras, direitos e responsabilidades para utilização da plataforma CN Vidas.
-                      </p>
-                      <Button variant="outline" className="w-full">Visualizar</Button>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="bg-white shadow-sm hover:shadow transition-shadow">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-base">Política de Privacidade</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-0">
-                      <p className="text-sm text-gray-600 mb-4">
-                        Detalha como coletamos, utilizamos, armazenamos e protegemos seus dados pessoais e informações médicas.
-                      </p>
-                      <Button variant="outline" className="w-full">Visualizar</Button>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="bg-white shadow-sm hover:shadow transition-shadow">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-base">Manual do Usuário</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-0">
-                      <p className="text-sm text-gray-600 mb-4">
-                        Guia completo sobre todas as funcionalidades da plataforma, com tutoriais passo a passo.
-                      </p>
-                      <Button variant="outline" className="w-full">Visualizar</Button>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="bg-white shadow-sm hover:shadow transition-shadow">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-base">Contrato de Adesão</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-0">
-                      <p className="text-sm text-gray-600 mb-4">
-                        Contrato que rege a relação entre a CN Vidas e seus assinantes, detalhando obrigações e direitos.
-                      </p>
-                      <Button variant="outline" className="w-full">Visualizar</Button>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="bg-white shadow-sm hover:shadow transition-shadow">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-base">Condições dos Planos</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-0">
-                      <p className="text-sm text-gray-600 mb-4">
-                        Descrição detalhada de cada plano, coberturas, limites, carências e condições específicas.
-                      </p>
-                      <Button variant="outline" className="w-full">Visualizar</Button>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="bg-white shadow-sm hover:shadow transition-shadow">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-base">Política de Cancelamento</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-0">
-                      <p className="text-sm text-gray-600 mb-4">
-                        Regras e condições para cancelamento de planos, reembolsos e período de fidelidade.
-                      </p>
-                      <Button variant="outline" className="w-full">Visualizar</Button>
-                    </CardContent>
-                  </Card>
+                  {legalDocuments.map((document) => (
+                    <Card key={document.id} className="bg-white shadow-sm hover:shadow transition-shadow">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base">{document.title}</CardTitle>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <p className="text-sm text-gray-600 mb-4">
+                          {document.description}
+                        </p>
+                        <Button 
+                          variant="outline" 
+                          className="w-full"
+                          onClick={() => loadDocument(document)}
+                          disabled={isLoadingDocument}
+                        >
+                          {isLoadingDocument && selectedDocument?.id === document.id ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin mr-2"></div>
+                              Carregando...
+                            </>
+                          ) : (
+                            <>
+                              <FileText className="w-4 h-4 mr-2" />
+                              Visualizar
+                            </>
+                          )}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
               </CardContent>
             </Card>
+
+            {/* Modal para exibir documentos */}
+            <Dialog open={isDocumentModalOpen} onOpenChange={setIsDocumentModalOpen}>
+              <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden bg-white">
+                <DialogHeader className="pb-4 border-b border-gray-200 bg-gray-50 -mx-6 -mt-6 px-6 pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <DialogTitle className="text-xl font-bold text-gray-900">
+                        {selectedDocument?.title}
+                      </DialogTitle>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Documento oficial da CN Vidas
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          if (documentContent) {
+                            const blob = new Blob([documentContent], { type: 'text/markdown' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `${selectedDocument?.filename || 'documento'}.md`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                            toast({
+                              title: "Download iniciado",
+                              description: "O documento foi baixado com sucesso.",
+                            });
+                          }
+                        }}
+                        className="text-xs"
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Baixar
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          if (navigator.share && documentContent) {
+                            navigator.share({
+                              title: selectedDocument?.title,
+                              text: selectedDocument?.description,
+                              url: window.location.href
+                            });
+                          }
+                        }}
+                        className="text-xs"
+                      >
+                        <FileText className="w-4 h-4 mr-2" />
+                        Compartilhar
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setIsDocumentModalOpen(false)}
+                        className="text-xs hover:bg-gray-200"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </DialogHeader>
+                
+                <ScrollArea className="h-[70vh] mt-4">
+                  <div className="px-6 py-4">
+                    {documentContent ? (
+                      <div className="prose prose-sm max-w-none">
+                        <div 
+                          className="text-gray-800 leading-relaxed"
+                          dangerouslySetInnerHTML={{ 
+                            __html: markdownToHtml(documentContent) 
+                          }} 
+                        />
+                        
+                        {/* Footer do documento */}
+                        <div className="mt-12 pt-8 border-t border-gray-200 bg-gray-50 -mx-6 px-6 py-4 rounded-lg">
+                          <div className="flex items-center justify-between text-sm text-gray-600">
+                            <div>
+                              <p className="font-medium">CN Vidas - Plataforma de Saúde Digital</p>
+                              <p>Documento gerado em: {new Date().toLocaleDateString('pt-BR')}</p>
+                            </div>
+                            <div className="text-right">
+                              <p>Para dúvidas: contato@cnvidas.com.br</p>
+                              <p>Telefone: 0800 123 4567</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+                        <div className="w-12 h-12 border-3 border-gray-300 border-t-primary rounded-full animate-spin mb-4"></div>
+                        <p className="text-lg font-medium">Carregando documento...</p>
+                        <p className="text-sm mt-2">Por favor, aguarde enquanto carregamos o conteúdo</p>
+                      </div>
+                    )}
+                  </div>
+                </ScrollArea>
+              </DialogContent>
+            </Dialog>
           </TabsContent>
 
           {/* Conteúdo da aba de Contato Direto */}

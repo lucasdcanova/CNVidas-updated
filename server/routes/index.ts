@@ -17,6 +17,7 @@ import telemedicineErrorLogsRouter from './telemedicine-error-logs';
 import uploadRouter from './upload-routes';
 import dailyEmergencyRouter from './daily-emergency-routes';
 import profileImageRouter from './profile-image-routes';
+import profileUploadRouter from './profile-upload-routes';
 import addressRouter from './address-routes';
 import appointmentJoinRouter from './appointment-join';
 import claimsRouter from './claims-routes';
@@ -27,6 +28,7 @@ import doctorRouter from './doctor-routes';
 import notificationRouter from './notification-routes';
 import checkoutTrackingRouter from './checkout-tracking-routes';
 import { adminRoutes } from '../admin-routes';
+import legalDocumentsRouter from './legal-documents-routes';
 
 export default async function setupRoutes(app: express.Express) {
   // Rotas de autenticação (PRIMEIRO para evitar conflitos)
@@ -88,6 +90,7 @@ export default async function setupRoutes(app: express.Express) {
   
   // Rotas de perfil
   app.use('/api/profile/image', profileImageRouter);
+  app.use('/api/profile', profileUploadRouter);
   app.use('/api/address', addressRouter);
   
   // Rotas de agendamento
@@ -230,6 +233,10 @@ export default async function setupRoutes(app: express.Express) {
       res.status(500).json({ error: 'Erro ao buscar serviços em destaque' });
     }
   });
+  
+  // Rotas de documentos legais
+  console.log('Registrando legalDocumentsRouter em /api/legal-documents');
+  app.use('/api/legal-documents', legalDocumentsRouter);
   
   return app;
 } 
