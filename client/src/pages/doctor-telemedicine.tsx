@@ -447,9 +447,9 @@ export default function DoctorTelemedicinePage() {
 
   // Get emergency consultations for this doctor
   const { data: emergencyConsultations } = useQuery({
-    queryKey: ["/api/emergency-notifications/doctor", doctorProfile?.id],
+    queryKey: ["/api/emergency/notifications/doctor", doctorProfile?.id],
     queryFn: ({ signal }) => 
-      doctorProfile?.id ? fetch(`/api/emergency-notifications/doctor/${doctorProfile.id}`, { 
+      doctorProfile?.id ? fetch(`/api/emergency/notifications/doctor/${doctorProfile.id}`, { 
         signal,
         credentials: "include"
       })

@@ -123,9 +123,9 @@ export default function DoctorAvailabilityPage() {
 
   // Buscar os slots de disponibilidade do médico
   const { data: availabilityData, isLoading: loadingAvailability } = useQuery({
-    queryKey: ["/api/doctors/availability-slots"],
+    queryKey: ["/api/doctors/availability"],
     queryFn: ({ signal }) => 
-      fetch("/api/doctors/availability-slots", { 
+      fetch("/api/doctors/availability", { 
         signal,
         credentials: "include"
       })
@@ -139,7 +139,7 @@ export default function DoctorAvailabilityPage() {
   // Mutation para salvar os slots de disponibilidade
   const saveAvailabilityMutation = useMutation({
     mutationFn: async (slots: AvailabilitySlot[]) => {
-      const res = await apiRequest("POST", "/api/doctors/availability-slots", { slots });
+      const res = await apiRequest("POST", "/api/doctors/availability", { slots });
       return await res.json();
     },
     onSuccess: () => {
@@ -148,7 +148,7 @@ export default function DoctorAvailabilityPage() {
         description: "Seus horários de disponibilidade foram atualizados com sucesso.",
       });
       // Recarregar dados
-      queryClient.invalidateQueries({ queryKey: ["/api/doctors/availability-slots"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/doctors/availability"] });
     },
     onError: (error: Error) => {
       toast({

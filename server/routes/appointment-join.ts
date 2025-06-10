@@ -324,4 +324,77 @@ appointmentJoinRouter.delete('/:id', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * Endpoint para cancelar consultas
+ * POST /api/appointments/:id/cancel
+ */
+appointmentJoinRouter.post('/:id/cancel', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Não autorizado' });
+    }
+    
+    const appointmentId = req.params.id;
+    const { reason } = req.body;
+    
+    console.log(`Cancelando consulta #${appointmentId} pelo usuário ${req.user.id}`);
+    
+    // Para consultas de emergência com formato especial (ex: emergency-doctor-4)
+    if (appointmentId.startsWith('emergency-')) {
+      console.log(`Cancelando consulta de emergência: ${appointmentId}`);
+      
+      // TODO: Implementar lógica específica para cancelar consultas de emergência
+      // Por enquanto, apenas retornar sucesso
+      return res.json({ 
+        success: true, 
+        message: 'Consulta de emergência cancelada com sucesso' 
+      });
+    }
+    
+    // Para consultas normais
+    const appointmentIdNum = parseInt(appointmentId);
+    if (isNaN(appointmentIdNum)) {
+      return res.status(400).json({ message: 'ID de consulta inválido' });
+    }
+    
+    // Verificar se a consulta existe
+    const appointment = await storage.getAppointmentById(appointmentIdNum);
+    if (!appointment) {
+      return res.status(404).json({ message: 'Consulta não encontrada' });
+    }
+    
+    // Verificar permissões (médico pode cancelar suas consultas, paciente pode cancelar as dele)
+    const isDoctor = req.user.role === 'doctor';
+    const hasPermission = isDoctor ? 
+      appointment.doctorId === req.user.id : 
+      appointment.userId === req.user.id;
+    
+    if (!hasPermission && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Você não tem permissão para cancelar esta consulta' });
+    }
+    
+    // Atualizar o status da consulta para cancelado
+    await storage.updateAppointment(appointmentIdNum, {
+      status: 'cancelled',
+      cancelledAt: new Date(),
+      cancelledBy: req.user.id,
+      cancellationReason: reason || 'Cancelado pelo usuário'
+    });
+    
+    console.log(`Consulta #${appointmentIdNum} cancelada com sucesso`);
+    
+    return res.json({ 
+      success: true, 
+      message: 'Consulta cancelada com sucesso' 
+    });
+    
+  } catch (error) {
+    console.error('Erro ao cancelar consulta:', error);
+    return res.status(500).json({ 
+      message: 'Erro ao cancelar consulta',
+      error: error instanceof Error ? error.message : 'Erro desconhecido'
+    });
+  }
+});
+
 export default appointmentJoinRouter;

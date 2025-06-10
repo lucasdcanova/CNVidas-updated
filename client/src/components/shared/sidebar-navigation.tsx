@@ -263,8 +263,8 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({ userRole =
             </Link>
           )}
           
-          {/* Configurações disponível para todos exceto médicos */}
-          {userRole !== "doctor" && (
+          {/* Configurações disponível apenas para pacientes */}
+          {userRole === "patient" && (
             <Link href="/settings" 
               className={`${linkBaseClass} ${
                 isLinkActive("/settings") 

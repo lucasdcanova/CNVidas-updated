@@ -29,7 +29,7 @@ export function EmergencyNotification({ doctorId }: EmergencyNotificationProps) 
   useEffect(() => {
     const checkEmergencyCalls = async () => {
       try {
-        const response = await apiRequest('GET', `/api/emergency-notifications/doctor/${doctorId}`);
+        const response = await apiRequest('GET', `/api/emergency/notifications/doctor/${doctorId}`);
         if (response.ok) {
           const data = await response.json();
           if (data.length > 0) {

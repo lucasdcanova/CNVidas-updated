@@ -122,23 +122,13 @@ export default function FinanceiroPage() {
       console.log("Chave PIX (camel):", doctor.pixKey);
       console.log("Tipo de Chave PIX (camel):", doctor.pixKeyType);
       
-      // Buscar dados diretamente do banco para debug
-      fetch('/api/save-pix-info-debug?doctorId=' + doctor.id)
-        .then(response => response.json())
-        .then(data => {
-          console.log("Dados diretos do banco:", data);
-          
-          // Forçar atualização do formulário com dados do banco
-          form.reset({
-            pixKeyType: data.pixKeyType || "",
-            pixKey: data.pixKey || "",
-            bankName: data.bankName || "",
-            accountType: data.accountType || "",
-          });
-        })
-        .catch(error => {
-          console.error("Erro ao buscar dados PIX:", error);
-        });
+      // Atualizar o formulário com os dados do médico
+      form.reset({
+        pixKeyType: doctor.pixKeyType || "",
+        pixKey: doctor.pixKey || "",
+        bankName: doctor.bankName || "",
+        accountType: doctor.accountType || "",
+      });
     }
   }, [doctor, form]);
 

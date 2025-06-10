@@ -155,22 +155,21 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               )}
             </div>
             <div className="flex items-center ml-4 space-x-2">
-              {/* Exibir ícones apenas para não-médicos */}
-              {user?.role !== "doctor" && (
+              {/* Exibir ícones apenas para pacientes */}
+              {user?.role === "patient" && (
                 <>
-                  {/* Link para Ajuda disponível apenas para pacientes */}
-                  {user?.role === "patient" && (
-                    <Link to="/help">
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="rounded-full glass-card-subtle hover:bg-white/80 transition-all duration-200"
-                      >
-                        <HelpCircle className="h-5 w-5 text-gray-700" />
-                      </Button>
-                    </Link>
-                  )}
+                  {/* Link para Ajuda */}
+                  <Link to="/help">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="rounded-full glass-card-subtle hover:bg-white/80 transition-all duration-200"
+                    >
+                      <HelpCircle className="h-5 w-5 text-gray-700" />
+                    </Button>
+                  </Link>
                   
+                  {/* Link para Configurações */}
                   <Link to="/settings">
                     <Button variant="ghost" size="icon" className="rounded-full glass-card-subtle hover:bg-white/80 transition-all duration-200">
                       <Settings className="h-5 w-5 text-gray-700" />

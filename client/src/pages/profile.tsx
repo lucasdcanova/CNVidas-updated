@@ -852,7 +852,7 @@ const Profile: React.FC = () => {
         </div>
         
         <Tabs defaultValue="profile" className="w-full">
-          <TabsList className={`grid w-full ${user?.role === "doctor" ? "grid-cols-2" : "grid-cols-3"}`}>
+          <TabsList className={`grid w-full ${user?.role === "patient" ? "grid-cols-3" : "grid-cols-2"}`}>
             <TabsTrigger value="profile">
               <User className="h-4 w-4 mr-2" />
               Perfil
@@ -861,7 +861,7 @@ const Profile: React.FC = () => {
               <Lock className="h-4 w-4 mr-2" />
               Segurança
             </TabsTrigger>
-            {user?.role !== "doctor" && (
+            {user?.role === "patient" && (
               <TabsTrigger value="billing">
                 <CreditCard className="h-4 w-4 mr-2" />
                 Pagamento

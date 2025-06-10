@@ -541,4 +541,41 @@ doctorRouter.post('/complete-welcome', requireAuth, requireDoctorRole, async (re
   }
 });
 
+/**
+ * Toggle disponibilidade para emergência
+ * POST /api/doctors/toggle-availability
+ */
+doctorRouter.post('/toggle-availability', requireAuth, requireDoctorRole, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    console.log('🔍 Doctor POST /toggle-availability - Alternando disponibilidade do médico ID:', req.user?.id);
+    
+    const { isAvailable } = req.body;
+    
+    const doctor = await storage.getDoctorByUserId(req.user!.id);
+    if (!doctor) {
+      return res.status(404).json({ error: 'Perfil de médico não encontrado' });
+    }
+    
+    // Atualizar disponibilidade para emergência
+    await storage.updateDoctor(doctor.id, {
+      availableForEmergency: isAvailable,
+      updatedAt: new Date()
+    });
+    
+    console.log(`✅ Doctor POST /toggle-availability - Disponibilidade alterada para: ${isAvailable}`);
+    res.json({ 
+      success: true, 
+      isAvailable,
+      message: isAvailable ? 'Você está disponível para emergências' : 'Você não está mais disponível para emergências'
+    });
+  } catch (error) {
+    console.error('❌ Erro ao alternar disponibilidade:', error);
+    if (error instanceof AppError) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  }
+});
+
 export default doctorRouter; 

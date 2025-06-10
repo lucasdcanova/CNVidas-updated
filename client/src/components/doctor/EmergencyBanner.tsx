@@ -30,10 +30,10 @@ export default function EmergencyBanner({
       const response = await fetch('/api/doctors/toggle-availability', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ emergencyAvailable: checked })
+        credentials: 'include',
+        body: JSON.stringify({ isAvailable: checked })
       });
 
       if (response.ok) {
