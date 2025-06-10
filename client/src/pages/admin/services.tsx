@@ -3,6 +3,14 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import AdminLayout from "@/components/layouts/admin-layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  ResponsiveTable,
+  ResponsiveTableHeader,
+  ResponsiveTableBody,
+  ResponsiveTableHead,
+  ResponsiveTableRow,
+  ResponsiveTableCell,
+} from "@/components/ui/responsive-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -332,25 +340,36 @@ const AdminServices: React.FC = () => {
 
   return (
     <AdminLayout title="Gerenciar Serviços Parceiros">
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="flex justify-between items-center">
-            <span>Serviços Parceiros</span>
-            <div className="flex gap-2">
-              <Button variant="outline" onClick={loadServices}>
-                <RefreshCw className="h-4 w-4 mr-2" /> Atualizar
+      <Card className="mb-4 lg:mb-6">
+        <CardHeader className="pb-3 lg:pb-6">
+          <div className="flex flex-col space-y-3 lg:flex-row lg:items-start lg:justify-between lg:space-y-0">
+            <div>
+              <CardTitle className="text-lg lg:text-xl">Serviços Parceiros</CardTitle>
+              <CardDescription className="text-sm lg:text-base mt-1 lg:mt-2">
+                Gerencie os serviços oferecidos pelos parceiros na plataforma.
+              </CardDescription>
+            </div>
+            <div className="flex flex-col lg:flex-row gap-2 lg:gap-3">
+              <Button 
+                variant="outline" 
+                onClick={loadServices}
+                className="w-full lg:w-auto"
+              >
+                <RefreshCw className="h-4 w-4 mr-2" /> 
+                <span>Atualizar</span>
               </Button>
-              <Button onClick={() => setOpenCreateDialog(true)}>
-                <Plus className="mr-2 h-4 w-4" /> Adicionar Serviço
+              <Button 
+                onClick={() => setOpenCreateDialog(true)}
+                className="w-full lg:w-auto"
+              >
+                <Plus className="mr-2 h-4 w-4" /> 
+                <span>Adicionar Serviço</span>
               </Button>
             </div>
-          </CardTitle>
-          <CardDescription>
-            Gerencie os serviços oferecidos pelos parceiros na plataforma.
-          </CardDescription>
+          </div>
         </CardHeader>
-        <CardContent>
-          <div className="flex mb-4">
+        <CardContent className="p-4 lg:p-6">
+          <div className="flex mb-4 lg:mb-6">
             <div className="relative flex-1">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
               <Input
@@ -369,25 +388,25 @@ const AdminServices: React.FC = () => {
             </div>
           ) : (
             <div className="border rounded-md">
-              <Table>
-                <TableHeader>
+              <ResponsiveTable>
+                <ResponsiveTableHeader>
                   <TableRow>
-                    <TableHead>Nome</TableHead>
-                    <TableHead>Parceiro</TableHead>
-                    <TableHead>Preço</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Destaque</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
+                    <ResponsiveTableHead>Nome</ResponsiveTableHead>
+                    <ResponsiveTableHead>Parceiro</ResponsiveTableHead>
+                    <ResponsiveTableHead>Preço</ResponsiveTableHead>
+                    <ResponsiveTableHead>Status</ResponsiveTableHead>
+                    <ResponsiveTableHead>Destaque</ResponsiveTableHead>
+                    <ResponsiveTableHead className="text-right">Ações</ResponsiveTableHead>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
+                </ResponsiveTableHeader>
+                <ResponsiveTableBody>
                   {filteredServices.length > 0 ? (
                     filteredServices.map((service) => (
-                      <TableRow key={service.id}>
-                        <TableCell className="font-medium">{service.name}</TableCell>
-                        <TableCell>{service.partnerName || "Parceiro Desconhecido"}</TableCell>
-                        <TableCell>R$ {((service.regularPrice || service.price || 0) / 100).toFixed(2)}</TableCell>
-                        <TableCell>
+                      <ResponsiveTableRow key={service.id}>
+                        <ResponsiveTableCell header="Nome" className="font-medium">{service.name}</ResponsiveTableCell>
+                        <ResponsiveTableCell header="Parceiro">{service.partnerName || "Parceiro Desconhecido"}</ResponsiveTableCell>
+                        <ResponsiveTableCell header="Preço">R$ {((service.regularPrice || service.price || 0) / 100).toFixed(2)}</ResponsiveTableCell>
+                        <ResponsiveTableCell header="Status">
                           {service.isActive || service.active ? (
                             <Badge className="bg-green-100 text-green-800 hover:bg-green-100 hover:text-green-800">
                               <CheckCircle className="mr-1 h-3 w-3" /> Ativo
@@ -397,32 +416,35 @@ const AdminServices: React.FC = () => {
                               <AlertCircle className="mr-1 h-3 w-3" /> Inativo
                             </Badge>
                           )}
-                        </TableCell>
-                        <TableCell>
+                        </ResponsiveTableCell>
+                        <ResponsiveTableCell header="Destaque">
                           <Switch 
                             checked={service.isFeatured || false} 
                             onCheckedChange={() => handleToggleFeature(service.id, service.isFeatured || false)}
                           />
-                        </TableCell>
-                        <TableCell className="text-right">
+                        </ResponsiveTableCell>
+                        <ResponsiveTableCell header="Ações" className="text-right">
                           <Button variant="ghost" size="icon" onClick={() => handleEdit(service)}>
                             <Edit className="h-4 w-4" />
                           </Button>
                           <Button variant="ghost" size="icon" onClick={() => handleDelete(service.id)}>
                             <Trash2 className="h-4 w-4 text-red-500" />
                           </Button>
-                        </TableCell>
-                      </TableRow>
+                        </ResponsiveTableCell>
+                      </ResponsiveTableRow>
                     ))
                   ) : (
-                    <TableRow>
-                      <TableCell colSpan={6} className="text-center py-4 text-gray-500">
-                        Nenhum serviço encontrado.
-                      </TableCell>
-                    </TableRow>
+                    <ResponsiveTableRow>
+                      <ResponsiveTableCell header="" className="text-center py-6 lg:py-8 text-gray-500" style={{ gridColumn: '1 / -1' }}>
+                        <div className="flex flex-col items-center space-y-2">
+                          <AlertCircle className="h-8 w-8 text-muted-foreground" />
+                          <p className="text-sm lg:text-base">Nenhum serviço encontrado.</p>
+                        </div>
+                      </ResponsiveTableCell>
+                    </ResponsiveTableRow>
                   )}
-                </TableBody>
-              </Table>
+                </ResponsiveTableBody>
+              </ResponsiveTable>
             </div>
           )}
         </CardContent>

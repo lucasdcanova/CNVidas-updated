@@ -479,37 +479,12 @@ export default function DoctorTelemedicinePage() {
     (app: any) => app.type === "telemedicine"
   );
 
-  // Criar consultas de emergência baseadas no ID do médico atual
-  const doctorId = doctorProfile?.id;
-  const emergencyAppointments = doctorId ? [
-    // Consulta de emergência na sala do médico específico
-    {
-      id: `emergency-doctor-${doctorId}`,
-      type: "emergency", 
-      date: new Date().toISOString(),
-      time: new Date().toLocaleTimeString('pt-BR', { 
-        hour: '2-digit', 
-        minute: '2-digit' 
-      }),
-      patient: {
-        name: "Lucas Canova",
-        profileImage: null
-      },
-      status: "emergency",
-      roomUrl: `https://cnvidas.daily.co/doctor-${doctorId}-emergency`,
-      isEmergency: true,
-      description: "Paciente aguardando na sala de emergência",
-      doctorId: doctorId
-    }
-  ] : [];
-
-  // Filtrar consultas de emergência excluídas
-  const activeEmergencyAppointments = emergencyAppointments.filter(
-    appointment => !deletedEmergencyAppointments.includes(appointment.id)
-  );
+  // Criar consultas de emergência baseadas em notificações reais
+  // (removido código de teste com consulta hardcoded)
+  const emergencyAppointments: any[] = [];
 
   // Combine regular appointments with emergency consultations
-  const allAppointments = [...telemedicineAppointments, ...activeEmergencyAppointments];
+  const allAppointments = [...telemedicineAppointments];
   
   // Upcoming and past appointments
   const upcomingAppointments = allAppointments.filter(

@@ -4,6 +4,7 @@ import { queryClient } from "@/lib/queryClient";
 import AdminLayout from "@/components/layouts/admin-layout";
 import { getAllPartners, getAdminPartners, updatePartner, createAdminPartner } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -14,6 +15,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import DataTable from "@/components/ui/data-table";
+import {
+  ResponsiveTable,
+  ResponsiveTableHeader,
+  ResponsiveTableBody,
+  ResponsiveTableHead,
+  ResponsiveTableRow,
+  ResponsiveTableCell,
+} from "@/components/ui/responsive-table";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
@@ -312,33 +321,37 @@ const AdminPartners: React.FC = () => {
     <AdminLayout title="Gerenciamento de Parceiros">
       <div className="max-w-7xl mx-auto">
         {/* Header with search and filters */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6 mt-4">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <Building className="h-5 w-5" />
-              <h1 className="text-2xl font-bold text-gray-900">Parceiros</h1>
-            </div>
-            
-            <div className="flex flex-col md:flex-row gap-3">
-              <div className="relative flex-grow">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search className="h-5 w-5 text-gray-400" />
-                </div>
-                <Input
-                  placeholder="Buscar parceiros..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
+        <Card className="mb-4 lg:mb-6">
+          <CardHeader className="pb-3 lg:pb-6">
+            <div className="flex flex-col space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
+              <div className="flex items-center gap-2">
+                <Building className="h-5 w-5" />
+                <CardTitle className="text-lg lg:text-xl text-gray-900">Parceiros</CardTitle>
               </div>
               
-              <Dialog open={addPartnerDialogOpen} onOpenChange={setAddPartnerDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="default">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Adicionar Parceiro
-                  </Button>
-                </DialogTrigger>
+              <div className="flex flex-col lg:flex-row gap-3">
+                <div className="relative flex-1 lg:flex-grow lg:min-w-[300px]">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Search className="h-4 w-4 text-gray-400" />
+                  </div>
+                  <Input
+                    placeholder="Buscar parceiros..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+                
+                <Dialog open={addPartnerDialogOpen} onOpenChange={setAddPartnerDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button 
+                      variant="default"
+                      className="w-full lg:w-auto"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      <span>Adicionar Parceiro</span>
+                    </Button>
+                  </DialogTrigger>
                 <DialogContent className="sm:max-w-md">
                   <DialogHeader>
                     <DialogTitle>Adicionar Novo Parceiro</DialogTitle>
@@ -464,9 +477,10 @@ const AdminPartners: React.FC = () => {
                   </Form>
                 </DialogContent>
               </Dialog>
+              </div>
             </div>
-          </div>
-        </div>
+          </CardHeader>
+        </Card>
         
         {/* Edit Partner Dialog */}
         <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
@@ -609,11 +623,23 @@ const AdminPartners: React.FC = () => {
         
         {/* Partner management tabs */}
         <Tabs defaultValue="all" className="w-full">
-          <TabsList className="grid grid-cols-4 mb-6">
-            <TabsTrigger value="all">Todos ({partners.length})</TabsTrigger>
-            <TabsTrigger value="active">Ativos ({activePartners.length})</TabsTrigger>
-            <TabsTrigger value="pending">Pendentes ({pendingPartners.length})</TabsTrigger>
-            <TabsTrigger value="inactive">Inativos ({inactivePartners.length})</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 mb-4 lg:mb-6 h-auto">
+            <TabsTrigger value="all" className="text-xs lg:text-sm px-2 lg:px-4 py-2">
+              <span className="hidden sm:inline">Todos ({partners.length})</span>
+              <span className="sm:hidden">Todos</span>
+            </TabsTrigger>
+            <TabsTrigger value="active" className="text-xs lg:text-sm px-2 lg:px-4 py-2">
+              <span className="hidden sm:inline">Ativos ({activePartners.length})</span>
+              <span className="sm:hidden">Ativos</span>
+            </TabsTrigger>
+            <TabsTrigger value="pending" className="text-xs lg:text-sm px-2 lg:px-4 py-2">
+              <span className="hidden sm:inline">Pendentes ({pendingPartners.length})</span>
+              <span className="sm:hidden">Pendentes</span>
+            </TabsTrigger>
+            <TabsTrigger value="inactive" className="text-xs lg:text-sm px-2 lg:px-4 py-2">
+              <span className="hidden sm:inline">Inativos ({inactivePartners.length})</span>
+              <span className="sm:hidden">Inativos</span>
+            </TabsTrigger>
           </TabsList>
           
           {/* Tab contents */}
@@ -684,36 +710,27 @@ const PartnersList: React.FC<PartnersListProps> = ({
   onDeletePartner,
   showActions 
 }) => {
-  const actions: Action<Partner>[] = showActions
-    ? [
-        {
-          label: "Ver detalhes",
-          onClick: (row) => onViewPartner(row),
-        },
-        {
-          label: "Editar",
-          onClick: (row) => onEditPartner(row),
-        },
-        {
-          label: "Excluir",
-          onClick: (row) => onDeletePartner(row),
-        },
-      ]
-    : [
-        {
-          label: "Ver detalhes",
-          onClick: (row) => onViewPartner(row),
-        },
-      ];
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'active':
+        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100 hover:text-green-800"><CheckCircle className="mr-1 h-3 w-3" />Ativo</Badge>;
+      case 'pending':
+        return <Badge variant="outline" className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100 hover:text-yellow-800"><Clock className="mr-1 h-3 w-3" />Pendente</Badge>;
+      case 'inactive':
+        return <Badge variant="outline" className="bg-gray-100 text-gray-800 hover:bg-gray-100 hover:text-gray-800"><XCircle className="mr-1 h-3 w-3" />Inativo</Badge>;
+      default:
+        return <Badge variant="outline">{status}</Badge>;
+    }
+  };
 
   return (
     <Card>
-      <CardHeader className="pb-1">
-        <div className="flex items-center justify-between">
-          <CardTitle>Lista de Parceiros</CardTitle>
+      <CardHeader className="pb-3 lg:pb-6">
+        <div className="flex flex-col space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
+          <CardTitle className="text-lg lg:text-xl">Lista de Parceiros</CardTitle>
           <div className="flex items-center space-x-2">
             <Select defaultValue="all">
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full lg:w-[180px]">
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue placeholder="Filtrar por..." />
               </SelectTrigger>
@@ -727,12 +744,75 @@ const PartnersList: React.FC<PartnersListProps> = ({
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <DataTable<Partner>
-          columns={columns}
-          data={partners || []}
-          actions={actions}
-        />
+      <CardContent className="p-4 lg:p-6">
+        {partners && partners.length > 0 ? (
+          <div className="border rounded-md">
+            <ResponsiveTable>
+              <ResponsiveTableHeader>
+                <tr>
+                  <ResponsiveTableHead>Nome</ResponsiveTableHead>
+                  <ResponsiveTableHead>Tipo</ResponsiveTableHead>
+                  <ResponsiveTableHead>Status</ResponsiveTableHead>
+                  <ResponsiveTableHead>Data</ResponsiveTableHead>
+                  <ResponsiveTableHead className="text-right">Ações</ResponsiveTableHead>
+                </tr>
+              </ResponsiveTableHeader>
+              <ResponsiveTableBody>
+                {partners.map((partner) => (
+                  <ResponsiveTableRow key={partner.id}>
+                    <ResponsiveTableCell header="Nome" className="font-medium">
+                      {partner.businessName}
+                    </ResponsiveTableCell>
+                    <ResponsiveTableCell header="Tipo">
+                      {partner.businessType}
+                    </ResponsiveTableCell>
+                    <ResponsiveTableCell header="Status">
+                      {getStatusBadge(partner.status)}
+                    </ResponsiveTableCell>
+                    <ResponsiveTableCell header="Data">
+                      {partner.createdAt ? format(new Date(partner.createdAt), "dd/MM/yyyy", { locale: ptBR }) : 'N/A'}
+                    </ResponsiveTableCell>
+                    <ResponsiveTableCell header="Ações" className="text-right">
+                      <div className="flex justify-end lg:justify-end space-x-1 lg:space-x-2">
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          onClick={() => onViewPartner(partner)}
+                          className="h-8 w-8 lg:h-9 lg:w-9"
+                        >
+                          <Eye className="h-3 w-3 lg:h-4 lg:w-4" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          onClick={() => onEditPartner(partner)}
+                          className="h-8 w-8 lg:h-9 lg:w-9"
+                        >
+                          <Edit className="h-3 w-3 lg:h-4 lg:w-4" />
+                        </Button>
+                        {showActions && (
+                          <Button 
+                            variant="ghost" 
+                            size="icon"
+                            onClick={() => onDeletePartner(partner)}
+                            className="h-8 w-8 lg:h-9 lg:w-9 text-red-500 hover:text-red-600"
+                          >
+                            <XCircle className="h-3 w-3 lg:h-4 lg:w-4" />
+                          </Button>
+                        )}
+                      </div>
+                    </ResponsiveTableCell>
+                  </ResponsiveTableRow>
+                ))}
+              </ResponsiveTableBody>
+            </ResponsiveTable>
+          </div>
+        ) : (
+          <div className="text-center py-8 lg:py-12">
+            <Building className="h-12 w-12 lg:h-16 lg:w-16 text-muted-foreground mx-auto mb-4" />
+            <p className="text-sm lg:text-base text-muted-foreground">Nenhum parceiro encontrado.</p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
