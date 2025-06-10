@@ -112,6 +112,26 @@ const PatientSettings = () => {
             profileVisibility: "contacts",
           }
         };
+      } catch (error) {
+        // Se o endpoint falhar, retornar valores padrão
+        console.log("Erro ao carregar configurações, usando valores padrão:", error);
+        return {
+          notifications: {
+            emailNotifications: true,
+            smsNotifications: false,
+            pushNotifications: true,
+            notificationFrequency: "immediate",
+            appointmentReminders: true,
+            marketingEmails: false,
+          },
+          privacy: {
+            shareWithDoctors: true,
+            shareWithPartners: false,
+            shareFullMedicalHistory: false,
+            allowAnonymizedDataUse: true,
+            profileVisibility: "contacts",
+          }
+        };
       }
     },
     enabled: !!user,

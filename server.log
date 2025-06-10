@@ -4204,3 +4204,444 @@ Cookie options: {
 12:27:38 AM [vite] hmr update /src/components/dashboards/partner-dashboard.tsx, /src/index.css?v=Xahwslkjx-zn9Aj-2Y8So
 12:28:01 AM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=Xahwslkjx-zn9Aj-2Y8So
 12:28:29 AM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=Xahwslkjx-zn9Aj-2Y8So
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:31:14 AM [vite] Pre-transform error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/patient/settings.tsx: Missing catch or finally clause. (85:6)
+
+  83 |     queryKey: ["/api/users/profile"],
+  84 |     queryFn: async () => {
+> 85 |       try {
+     |       ^
+  86 |         // Usar o endpoint de perfil que já existe
+  87 |         const response = await fetch("/api/users/profile", {
+  88 |           credentials: 'include',
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:31:15 AM [vite] Internal server error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/patient/settings.tsx: Missing catch or finally clause. (85:6)
+
+  83 |     queryKey: ["/api/users/profile"],
+  84 |     queryFn: async () => {
+> 85 |       try {
+     |       ^
+  86 |         // Usar o endpoint de perfil que já existe
+  87 |         const response = await fetch("/api/users/profile", {
+  88 |           credentials: 'include',
+  Plugin: vite:react-babel
+  File: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/patient/settings.tsx:85:6
+  83 |      queryKey: ["/api/users/profile"],
+  84 |      queryFn: async () => {
+  85 |        try {
+     |        ^
+  86 |          // Usar o endpoint de perfil que já existe
+  87 |          const response = await fetch("/api/users/profile", {
+      at toParseError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at raise (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:1503:19)
+      at parseTryStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1227:12)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:535:21)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementListItem (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:417:17)
+      at parseBlockOrModuleBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1435:16)
+      at parseBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1408:10)
+      at parseBlock (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1376:10)
+      at parseFunctionBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:2580:24)
+      at parseArrowExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:2521:10)
+      at parseAsyncArrowFromCallExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1050:10)
+      at parseAsyncArrowFromCallExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3677:20)
+      at parseCoverCallAndAsyncArrowHead (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:929:27)
+      at parseSubscript (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:790:19)
+      at parseSubscript (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:2850:20)
+      at parseSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:749:19)
+      at parseExprSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:734:17)
+      at parseUpdate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:707:21)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:669:23)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3845:20)
+      at parseMaybeUnaryOrPrivate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:403:14)
+      at parseExprOps (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:415:23)
+      at parseMaybeConditional (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:370:23)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3717:22)
+      at callback (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:257:12)
+      at allowInAnd (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:3149:12)
+      at parseMaybeAssignAllowIn (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:256:17)
+      at parseObjectProperty (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:2290:16)
+      at parseObjPropValue (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:2350:12)
+      at parseObjPropValue (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3628:20)
+      at parsePropertyDefinition (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:2193:17)
+      at parseObjectLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:2060:21)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1165:21)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:583:22)
+      at parseExprSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:728:23)
+      at parseUpdate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:707:21)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:669:23)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3845:20)
+      at parseMaybeUnaryOrPrivate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:403:14)
+      at parseExprOps (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:415:23)
+      at parseMaybeConditional (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:370:23)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3717:22)
+      at callback (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:257:12)
+      at allowInAnd (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:3149:12)
+      at parseMaybeAssignAllowIn (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:256:17)
+      at parseExprListItem (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:2743:18)
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:32:37 AM [vite] hmr update /src/pages/patient/settings.tsx, /src/index.css?v=Xahwslkjx-zn9Aj-2Y8So
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 6
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+✅ Notifications /unread-count - Contagem: 0
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
