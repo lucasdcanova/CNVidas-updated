@@ -111,12 +111,12 @@ const PartnerServicesPage: React.FC = () => {
     data: partner,
     isLoading: isLoadingPartner
   } = useQuery<Partner | null>({
-    queryKey: ["/api/partners/current"],
+    queryKey: ["/api/partners/me"],
     queryFn: async () => {
       if (!user) {
         return null;
       }
-      const res = await apiRequest("GET", `/api/partners/user/${user.id}`);
+      const res = await apiRequest("GET", "/api/partners/me");
       if (!res.ok) {
         throw new Error("Failed to fetch partner info");
       }
