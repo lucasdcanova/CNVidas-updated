@@ -50,12 +50,13 @@ export default function DoctorAvailabilityPage() {
       });
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
+      // 'variables' contém o valor booleano que foi enviado (checked)
       toast({
-        title: emergencyAvailable ? "Disponibilidade desativada" : "Disponibilidade ativada",
-        description: emergencyAvailable 
-          ? "Você não receberá mais chamadas de emergência"
-          : "Você agora está disponível para consultas de emergência",
+        title: variables ? "Disponibilidade ativada" : "Disponibilidade desativada",
+        description: variables 
+          ? "Você agora está disponível para consultas de emergência"
+          : "Você não receberá mais chamadas de emergência",
       });
       queryClient.invalidateQueries({ queryKey: ['/api/doctors/profile'] });
     },

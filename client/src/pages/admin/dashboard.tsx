@@ -89,22 +89,22 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <AdminLayout title="Dashboard">
-      <div className="grid gap-6">
+      <div className="space-y-4 lg:space-y-6">
         {/* Estatísticas principais */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
           {statsCards.map((card, index) => (
-            <Card key={index}>
-              <CardContent className={`p-6 ${card.bg} rounded-md`}>
+            <Card key={index} className="hover:shadow-md transition-shadow">
+              <CardContent className={`p-4 lg:p-6 ${card.bg} rounded-md`}>
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">{card.title}</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs lg:text-sm font-medium text-gray-600 truncate">{card.title}</p>
                     {isStatsLoading ? (
-                      <Skeleton className="h-9 w-16 mt-1" />
+                      <Skeleton className="h-7 lg:h-9 w-12 lg:w-16 mt-1" />
                     ) : (
-                      <p className="text-3xl font-bold mt-1">{card.value}</p>
+                      <p className="text-xl lg:text-3xl font-bold mt-1 truncate">{card.value}</p>
                     )}
                   </div>
-                  <div>{card.icon}</div>
+                  <div className="flex-shrink-0 ml-2">{card.icon}</div>
                 </div>
               </CardContent>
             </Card>
@@ -113,10 +113,19 @@ const AdminDashboard: React.FC = () => {
 
         {/* Tabs para diferentes visualizações */}
         <Tabs defaultValue="users">
-          <TabsList className="grid grid-cols-3 mb-6">
-            <TabsTrigger value="users">Usuários Recentes</TabsTrigger>
-            <TabsTrigger value="appointments">Consultas Recentes</TabsTrigger>
-            <TabsTrigger value="claims">Sinistros Pendentes</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 lg:w-auto lg:grid-cols-3 mb-4 lg:mb-6 h-auto">
+            <TabsTrigger value="users" className="text-xs lg:text-sm px-2 lg:px-4 py-2">
+              <span className="hidden sm:inline">Usuários Recentes</span>
+              <span className="sm:hidden">Usuários</span>
+            </TabsTrigger>
+            <TabsTrigger value="appointments" className="text-xs lg:text-sm px-2 lg:px-4 py-2">
+              <span className="hidden sm:inline">Consultas Recentes</span>
+              <span className="sm:hidden">Consultas</span>
+            </TabsTrigger>
+            <TabsTrigger value="claims" className="text-xs lg:text-sm px-2 lg:px-4 py-2">
+              <span className="hidden sm:inline">Sinistros Pendentes</span>
+              <span className="sm:hidden">Sinistros</span>
+            </TabsTrigger>
           </TabsList>
 
           {/* Tab de usuários recentes */}
@@ -141,25 +150,31 @@ const AdminDashboard: React.FC = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-3 lg:space-y-4">
                     {recentUsers?.length > 0 ? (
                       recentUsers.map((user) => (
-                        <div key={user.id} className="flex items-center p-3 border rounded-md">
-                          <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 mr-3">
-                            <UserIcon size={20} />
+                        <div key={user.id} className="flex items-start lg:items-center p-3 lg:p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                          <div className="h-8 w-8 lg:h-10 lg:w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 mr-3 flex-shrink-0">
+                            <UserIcon size={16} className="lg:w-5 lg:h-5" />
                           </div>
-                          <div className="flex-1">
-                            <p className="font-medium">{user.fullName}</p>
-                            <p className="text-sm text-gray-500">{user.email} • {renderUserRole(user.role)}</p>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-sm lg:text-base truncate">{user.fullName}</p>
+                            <div className="flex flex-col lg:flex-row lg:items-center lg:gap-2 text-xs lg:text-sm text-gray-500">
+                              <span className="truncate">{user.email}</span>
+                              <span className="hidden lg:inline">•</span>
+                              <span>{renderUserRole(user.role)}</span>
+                            </div>
                           </div>
-                          <div className="text-sm text-gray-500">
-                            <Calendar size={14} className="inline mr-1" />
-                            {new Date(user.createdAt).toLocaleDateString('pt-BR')}
+                          <div className="text-xs lg:text-sm text-gray-500 flex-shrink-0 ml-2">
+                            <div className="flex items-center lg:flex-row flex-col lg:gap-1">
+                              <Calendar size={12} className="lg:w-3.5 lg:h-3.5" />
+                              <span className="lg:ml-1">{new Date(user.createdAt).toLocaleDateString('pt-BR')}</span>
+                            </div>
                           </div>
                         </div>
                       ))
                     ) : (
-                      <p className="text-gray-500 text-center py-4">Nenhum usuário recente encontrado.</p>
+                      <p className="text-gray-500 text-center py-8 text-sm lg:text-base">Nenhum usuário recente encontrado.</p>
                     )}
                   </div>
                 )}
@@ -189,25 +204,31 @@ const AdminDashboard: React.FC = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-3 lg:space-y-4">
                     {recentAppointments?.length > 0 ? (
                       recentAppointments.map((appointment) => (
-                        <div key={appointment.id} className="flex items-center p-3 border rounded-md">
-                          <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 mr-3">
-                            <Clock size={20} />
+                        <div key={appointment.id} className="flex items-start lg:items-center p-3 lg:p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                          <div className="h-8 w-8 lg:h-10 lg:w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 mr-3 flex-shrink-0">
+                            <Clock size={16} className="lg:w-5 lg:h-5" />
                           </div>
-                          <div className="flex-1">
-                            <p className="font-medium">{appointment.serviceName || 'Consulta Médica'}</p>
-                            <p className="text-sm text-gray-500">Paciente: {appointment.patientName} • Médico: {appointment.doctorName}</p>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-sm lg:text-base truncate">{appointment.serviceName || 'Consulta Médica'}</p>
+                            <div className="flex flex-col lg:flex-row lg:items-center lg:gap-2 text-xs lg:text-sm text-gray-500">
+                              <span className="truncate">Paciente: {appointment.patientName}</span>
+                              <span className="hidden lg:inline">•</span>
+                              <span className="truncate">Médico: {appointment.doctorName}</span>
+                            </div>
                           </div>
-                          <div className="text-sm text-gray-500">
-                            <Calendar size={14} className="inline mr-1" />
-                            {new Date(appointment.scheduledAt).toLocaleDateString('pt-BR')}
+                          <div className="text-xs lg:text-sm text-gray-500 flex-shrink-0 ml-2">
+                            <div className="flex items-center lg:flex-row flex-col lg:gap-1">
+                              <Calendar size={12} className="lg:w-3.5 lg:h-3.5" />
+                              <span className="lg:ml-1">{new Date(appointment.scheduledAt).toLocaleDateString('pt-BR')}</span>
+                            </div>
                           </div>
                         </div>
                       ))
                     ) : (
-                      <p className="text-gray-500 text-center py-4">Nenhuma consulta recente encontrada.</p>
+                      <p className="text-gray-500 text-center py-8 text-sm lg:text-base">Nenhuma consulta recente encontrada.</p>
                     )}
                   </div>
                 )}
@@ -237,30 +258,33 @@ const AdminDashboard: React.FC = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-3 lg:space-y-4">
                     {pendingClaims?.length > 0 ? (
                       pendingClaims.map((claim: Claim) => (
-                        <div key={claim.id} className="flex items-center p-3 border rounded-md">
-                          <div className="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-500 mr-3">
-                            <AlertTriangle size={20} />
+                        <div key={claim.id} className="flex items-start lg:items-center p-3 lg:p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                          <div className="h-8 w-8 lg:h-10 lg:w-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-500 mr-3 flex-shrink-0">
+                            <AlertTriangle size={16} className="lg:w-5 lg:h-5" />
                           </div>
-                          <div className="flex-1">
-                            <p className="font-medium">#{claim.id} - {claim.type}</p>
-                            {/* Remover ou tornar opcional o patientName e amount */}
-                            {/* <p className="text-sm text-gray-500">Paciente: {claim.patientName} • Valor: R$ {(claim.amount / 100).toFixed(2)}</p> */}
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-sm lg:text-base truncate">#{claim.id} - {claim.type}</p>
+                            <p className="text-xs lg:text-sm text-gray-500">Status: Pendente</p>
                           </div>
-                          <div className="text-sm text-gray-500">
-                            <Calendar size={14} className="inline mr-1" />
-                            {claim.createdAt ? (
-                              <>{new Date(claim.createdAt).toLocaleDateString('pt-BR')}</>
-                            ) : (
-                              <span>Data não disponível</span>
-                            )}
+                          <div className="text-xs lg:text-sm text-gray-500 flex-shrink-0 ml-2">
+                            <div className="flex items-center lg:flex-row flex-col lg:gap-1">
+                              <Calendar size={12} className="lg:w-3.5 lg:h-3.5" />
+                              <span className="lg:ml-1">
+                                {claim.createdAt ? (
+                                  <>{new Date(claim.createdAt).toLocaleDateString('pt-BR')}</>
+                                ) : (
+                                  <span>N/A</span>
+                                )}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       ))
                     ) : (
-                      <p className="text-gray-500 text-center py-4">Nenhum sinistro pendente encontrado.</p>
+                      <p className="text-gray-500 text-center py-8 text-sm lg:text-base">Nenhum sinistro pendente encontrado.</p>
                     )}
                   </div>
                 )}

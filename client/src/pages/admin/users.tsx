@@ -23,6 +23,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  ResponsiveTable,
+  ResponsiveTableHeader,
+  ResponsiveTableBody,
+  ResponsiveTableHead,
+  ResponsiveTableRow,
+  ResponsiveTableCell,
+} from "@/components/ui/responsive-table";
+import {
   Select,
   SelectContent,
   SelectGroup,
@@ -454,14 +462,14 @@ const AdminUsersPage: React.FC = () => {
 
   return (
     <AdminLayout title="Gerenciamento de Usuários">
-      <Card className="mb-6">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-md font-medium">Filtros e Busca</CardTitle>
+      <Card className="mb-4 lg:mb-6">
+        <CardHeader className="flex flex-col space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 pb-3 lg:pb-2">
+          <CardTitle className="text-base lg:text-lg font-medium">Filtros e Busca</CardTitle>
           <Dialog open={openNewDialog} onOpenChange={setOpenNewDialog}>
             <DialogTrigger asChild>
-              <Button className="ml-auto">
+              <Button className="w-full lg:w-auto lg:ml-auto">
                 <UserPlus className="mr-2 h-4 w-4" />
-                Novo Usuário
+                <span className="lg:inline">Novo Usuário</span>
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
@@ -562,9 +570,9 @@ const AdminUsersPage: React.FC = () => {
             </DialogContent>
           </Dialog>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="col-span-2">
+        <CardContent className="p-4 lg:p-6">
+          <div className="flex flex-col space-y-3 lg:space-y-0 lg:flex-row lg:gap-4">
+            <div className="flex-1">
               <div className="relative">
                 <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
                 <Input
@@ -575,9 +583,9 @@ const AdminUsersPage: React.FC = () => {
                 />
               </div>
             </div>
-            <div>
+            <div className="lg:w-64">
               <Select onValueChange={(value) => setFilterRole(value === "all" ? null : value)}>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Filtrar por perfil" />
                 </SelectTrigger>
                 <SelectContent>
@@ -615,27 +623,27 @@ const AdminUsersPage: React.FC = () => {
             </div>
           ) : (
             <div className="rounded-md border">
-              <Table>
-                <TableHeader>
+              <ResponsiveTable>
+                <ResponsiveTableHeader>
                   <TableRow>
-                    <TableHead>Nome</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Usuário</TableHead>
-                    <TableHead>Perfil</TableHead>
-                    <TableHead>Plano</TableHead>
-                    <TableHead>Status Assinatura</TableHead>
-                    <TableHead>Verificado</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
+                    <ResponsiveTableHead>Nome</ResponsiveTableHead>
+                    <ResponsiveTableHead>Email</ResponsiveTableHead>
+                    <ResponsiveTableHead>Usuário</ResponsiveTableHead>
+                    <ResponsiveTableHead>Perfil</ResponsiveTableHead>
+                    <ResponsiveTableHead>Plano</ResponsiveTableHead>
+                    <ResponsiveTableHead>Status Assinatura</ResponsiveTableHead>
+                    <ResponsiveTableHead>Verificado</ResponsiveTableHead>
+                    <ResponsiveTableHead className="text-right">Ações</ResponsiveTableHead>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
+                </ResponsiveTableHeader>
+                <ResponsiveTableBody>
                   {filteredUsers?.length > 0 ? (
                     filteredUsers.map((user) => (
-                      <TableRow key={user.id}>
-                        <TableCell className="font-medium">{user.fullName}</TableCell>
-                        <TableCell>{user.email}</TableCell>
-                        <TableCell>{user.username}</TableCell>
-                        <TableCell>
+                      <ResponsiveTableRow key={user.id}>
+                        <ResponsiveTableCell header="Nome" className="font-medium">{user.fullName}</ResponsiveTableCell>
+                        <ResponsiveTableCell header="Email">{user.email}</ResponsiveTableCell>
+                        <ResponsiveTableCell header="Usuário">{user.username}</ResponsiveTableCell>
+                        <ResponsiveTableCell header="Perfil">
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             user.role === 'patient' ? 'bg-green-100 text-green-800' :
                             user.role === 'doctor' ? 'bg-purple-100 text-purple-800' :
@@ -646,8 +654,8 @@ const AdminUsersPage: React.FC = () => {
                              user.role === 'doctor' ? 'Médico' :
                              user.role === 'partner' ? 'Parceiro' : 'Admin'}
                           </span>
-                        </TableCell>
-                        <TableCell>
+                        </ResponsiveTableCell>
+                        <ResponsiveTableCell header="Plano">
                           {user.role === 'patient' ? (
                             user.subscriptionPlan ? (
                               <Badge className={`
@@ -664,8 +672,8 @@ const AdminUsersPage: React.FC = () => {
                           ) : (
                             <Badge variant="outline">N/A</Badge>
                           )}
-                        </TableCell>
-                        <TableCell>
+                        </ResponsiveTableCell>
+                        <ResponsiveTableCell header="Status">
                           {user.role === 'patient' ? (
                             <Badge variant={user.subscriptionStatus === 'active' ? 'default' : 'destructive'}>
                               {user.subscriptionStatus === 'active' ? 'Ativo' : 
@@ -676,15 +684,15 @@ const AdminUsersPage: React.FC = () => {
                           ) : (
                             <Badge variant="outline">N/A</Badge>
                           )}
-                        </TableCell>
-                        <TableCell>
+                        </ResponsiveTableCell>
+                        <ResponsiveTableCell header="Verificado">
                           {user.emailVerified ? (
                             <Check size={18} className="text-green-500" />
                           ) : (
                             <X size={18} className="text-red-500" />
                           )}
-                        </TableCell>
-                        <TableCell className="text-right">
+                        </ResponsiveTableCell>
+                        <ResponsiveTableCell header="Ações" className="text-right">
                           <div className="flex justify-end">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
@@ -813,12 +821,12 @@ const AdminUsersPage: React.FC = () => {
                               </AlertDialogContent>
                             </AlertDialog>
                           </div>
-                        </TableCell>
-                      </TableRow>
+                        </ResponsiveTableCell>
+                      </ResponsiveTableRow>
                     ))
                   ) : (
-                    <TableRow>
-                      <TableCell colSpan={6} className="text-center py-6 text-gray-500">
+                    <ResponsiveTableRow>
+                      <ResponsiveTableCell header="" className="text-center py-6 text-gray-500" style={{ gridColumn: '1 / -1' }}>
                         {searchQuery || filterRole ? (
                           <div className="flex flex-col items-center">
                             <AlertCircle className="h-8 w-8 mb-2" />
@@ -830,11 +838,11 @@ const AdminUsersPage: React.FC = () => {
                             <p>Nenhum usuário cadastrado no sistema.</p>
                           </div>
                         )}
-                      </TableCell>
-                    </TableRow>
+                      </ResponsiveTableCell>
+                    </ResponsiveTableRow>
                   )}
-                </TableBody>
-              </Table>
+                </ResponsiveTableBody>
+              </ResponsiveTable>
             </div>
           )}
         </CardContent>

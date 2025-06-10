@@ -305,6 +305,19 @@ export class DatabaseStorage implements IStorage {
   }
 
   async saveDoctorAvailabilitySlots(slots: InsertAvailabilitySlot[]): Promise<AvailabilitySlot[]> {
+    // Get the doctorId from the first slot (all should have the same doctorId)
+    if (slots.length === 0) {
+      return [];
+    }
+    
+    const doctorId = slots[0].doctorId;
+    
+    // Delete existing slots for this doctor in a transaction
+    await this.db.transaction(async (tx) => {
+      await tx.delete(availabilitySlots).where(eq(availabilitySlots.doctorId, doctorId));
+    });
+    
+    // Insert new slots
     const result = await this.db.insert(availabilitySlots).values(slots).returning();
     return Array.isArray(result) ? result : [result];
   }
