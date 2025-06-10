@@ -147,6 +147,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title = "Painel Adm
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="flex flex-col w-64">
+              <SheetHeader className="sr-only">
+                <SheetTitle>Menu de Navegação</SheetTitle>
+              </SheetHeader>
               <SidebarContent onLinkClick={() => setMobileMenuOpen(false)} />
             </SheetContent>
           </Sheet>
