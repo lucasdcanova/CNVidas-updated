@@ -184,28 +184,8 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
   try {
     console.log('Buscando usuário no banco:', email);
     
-    // Usar SQL direto para evitar problemas de schema
-    const result = await db.select({
-      id: users.id,
-      email: users.email,
-      username: users.username,
-      fullName: users.fullName,
-      password: users.password,
-      role: users.role,
-      emailVerified: users.emailVerified,
-      subscriptionPlan: users.subscriptionPlan,
-      subscriptionStatus: users.subscriptionStatus,
-      emergencyConsultationsLeft: users.emergencyConsultationsLeft,
-      emergencyConsultationsResetAt: users.emergencyConsultationsResetAt,
-      profileImage: users.profileImage,
-      phone: users.phone,
-      cpf: users.cpf,
-      cnpj: users.cnpj,
-      city: users.city,
-      state: users.state,
-      address: users.address,
-      zipcode: users.zipcode
-    })
+    // Usar select() sem campos específicos para evitar erro do Drizzle
+    const result = await db.select()
     .from(users)
     .where(eq(users.email, email));
     
@@ -636,26 +616,7 @@ authRouter.get('/user', async (req: Request, res: Response) => {
     }
     
     // Buscar dados atualizados do usuário no banco
-    const result = await db.select({
-      id: users.id,
-      email: users.email,
-      username: users.username,
-      fullName: users.fullName,
-      role: users.role,
-      emailVerified: users.emailVerified,
-      subscriptionPlan: users.subscriptionPlan,
-      subscriptionStatus: users.subscriptionStatus,
-      emergencyConsultationsLeft: users.emergencyConsultationsLeft,
-      emergencyConsultationsResetAt: users.emergencyConsultationsResetAt,
-      profileImage: users.profileImage,
-      phone: users.phone,
-      cpf: users.cpf,
-      cnpj: users.cnpj,
-      city: users.city,
-      state: users.state,
-      address: users.address,
-      zipcode: users.zipcode
-    })
+    const result = await db.select()
     .from(users)
     .where(eq(users.id, decoded.userId));
     
