@@ -10062,3 +10062,996 @@ Erro ao buscar dados do usuário: Error: timeout exceeded when trying to connect
 🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
 🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
 🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔧 Salvando configurações do usuário 58: {
+  notifications: {
+    emailNotifications: false,
+    smsNotifications: false,
+    pushNotifications: false,
+    notificationFrequency: 'immediate',
+    appointmentReminders: true,
+    marketingEmails: false
+  },
+  privacy: undefined
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔧 Salvando configurações do usuário 58: {
+  notifications: undefined,
+  privacy: {
+    shareWithDoctors: false,
+    shareWithPartners: false,
+    shareFullMedicalHistory: false,
+    allowAnonymizedDataUse: false,
+    profileVisibility: 'contacts'
+  }
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Senha alterada com sucesso para o usuário lucas.canova@hotmail.com
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Logout realizado com sucesso - cookies removidos
+=== ROTA /api/user INTERCEPTADA ===
+=== ROTA /api/user INTERCEPTADA ===
+=== ROTA /api/login INTERCEPTADA ===
+=== ROTA LOGIN CHAMADA ===
+URL: /login
+Method: POST
+Body: { email: 'lucas.canova@hotmail.com', password: '666666' }
+Buscando usuário no banco: lucas.canova@hotmail.com
+Usuário encontrado: true
+Login bem-sucedido para: lucas.canova@hotmail.com
+Cookie options: {
+  host: 'localhost:3000',
+  isLocalhost: true,
+  isProduction: false,
+  secure: false,
+  domain: undefined
+}
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NTkwMTQ5LCJleHAiOjE3NTAxOTQ5NDl9.u5dBcnTsPBR4ZpLpsV8CBTeVZlcg--Nza9fgJMSHOHc',
+  __stripe_mid: 'e5dc18df-91ad-4f9a-a31b-8f2249d2d5758f67fe',
+  __stripe_sid: '120b9000-7702-4641-a4af-ce8ebb6e5e06195355'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749590149,
+  exp: 1750194949
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Notifications /unread-count - Contagem: 1
+✅ Assinatura encontrada: {
+  subscription: {
+    id: 1,
+    userId: 58,
+    planId: 10,
+    status: 'active',
+    startDate: 2025-06-08T23:10:30.449Z,
+    endDate: 2026-06-08T23:10:30.449Z,
+    paymentMethod: 'admin_grant',
+    price: 23990,
+    createdAt: 2025-06-08T23:10:30.449Z,
+    updatedAt: 2025-06-08T23:10:30.449Z
+  },
+  plan: {
+    id: 10,
+    name: 'ultra_family',
+    displayName: 'Ultra Familiar',
+    price: 23990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Ultra para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  }
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Buscando consultas próximas para usuário 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Buscando claims para usuário 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Notifications - Buscando notificações do usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+Encontradas 0 consultas próximas
+Encontrados 0 claims
+✅ Notifications - Notificações encontradas: 1
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Session table checked/created successfully
+[API] Total de serviços: 10
+[API] Exemplo de serviço: {
+  id: 3,
+  name: 'Suplementos, perfumaria, ortopédicos e manipulados',
+  serviceImage: 'Sem imagem',
+  partner: 'Tem parceiro'
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: 'e5dc18df-91ad-4f9a-a31b-8f2249d2d5758f67fe',
+  __stripe_sid: '120b9000-7702-4641-a4af-ce8ebb6e5e06195355',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NTkwMTQ5LCJleHAiOjE3NTAxOTQ5NDl9.u5dBcnTsPBR4ZpLpsV8CBTeVZlcg--Nza9fgJMSHOHc'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749590149,
+  exp: 1750194949
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Notifications /unread-count - Contagem: 1
+✅ Assinatura encontrada: {
+  subscription: {
+    id: 1,
+    userId: 58,
+    planId: 10,
+    status: 'active',
+    startDate: 2025-06-08T23:10:30.449Z,
+    endDate: 2026-06-08T23:10:30.449Z,
+    paymentMethod: 'admin_grant',
+    price: 23990,
+    createdAt: 2025-06-08T23:10:30.449Z,
+    updatedAt: 2025-06-08T23:10:30.449Z
+  },
+  plan: {
+    id: 10,
+    name: 'ultra_family',
+    displayName: 'Ultra Familiar',
+    price: 23990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Ultra para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  }
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Buscando consultas próximas para usuário 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Buscando claims para usuário 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Notifications - Buscando notificações do usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Encontradas 0 consultas próximas
+Encontrados 0 claims
+✅ Notifications - Notificações encontradas: 1
+[API] Total de serviços: 10
+[API] Exemplo de serviço: {
+  id: 3,
+  name: 'Suplementos, perfumaria, ortopédicos e manipulados',
+  serviceImage: 'Sem imagem',
+  partner: 'Tem parceiro'
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+6:18:03 PM [vite] http proxy error: /api/chat
+Error: socket hang up
+    at Socket.socketOnEnd (node:_http_client:528:25)
+    at Socket.emit (node:events:531:35)
+    at endReadableNT (node:internal/streams/readable:1696:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+6:18:03 PM [vite] http proxy error: /api/users/seller
+Error: socket hang up
+    at Socket.socketOnEnd (node:_http_client:528:25)
+    at Socket.emit (node:events:531:35)
+    at endReadableNT (node:internal/streams/readable:1696:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔄 Atualizando perfil do usuário 58 com campos: [
+  'phone',
+  'birthDate',
+  'city',
+  'state',
+  'zipcode',
+  'number',
+  'complement',
+  'neighborhood'
+]
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: 'e5dc18df-91ad-4f9a-a31b-8f2249d2d5758f67fe',
+  __stripe_sid: '120b9000-7702-4641-a4af-ce8ebb6e5e06195355',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NTkwMTQ5LCJleHAiOjE3NTAxOTQ5NDl9.u5dBcnTsPBR4ZpLpsV8CBTeVZlcg--Nza9fgJMSHOHc'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749590149,
+  exp: 1750194949
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+Retornando planos de assinatura para usuário (rota pública): [
+  {
+    id: 4,
+    name: 'free',
+    displayName: 'Gratuito',
+    price: 0,
+    emergencyConsultations: '0',
+    specialistDiscount: 0,
+    insuranceCoverage: false,
+    features: [
+      'Acesso ao marketplace',
+      'Pagamento integral pelos serviços',
+      '0 teleconsultas de emergência por mês',
+      'Sem descontos e sem cobertura de seguro'
+    ],
+    isDefault: true,
+    createdAt: 2025-05-19T14:54:18.234Z,
+    updatedAt: 2025-05-19T14:54:18.234Z
+  },
+  {
+    id: 5,
+    name: 'basic',
+    displayName: 'Básico',
+    price: 8990,
+    emergencyConsultations: '2',
+    specialistDiscount: 30,
+    insuranceCoverage: true,
+    features: [
+      '2 teleconsultas de emergência por mês',
+      '30% de desconto com especialistas',
+      'Acesso completo aos descontos de parceiros',
+      'Cobertura de seguro: R$ 300/dia de internação',
+      'Suporte 24/7'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-19T14:54:18.234Z,
+    updatedAt: 2025-05-19T14:54:18.234Z
+  },
+  {
+    id: 6,
+    name: 'premium',
+    displayName: 'Premium',
+    price: 12990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 50,
+    insuranceCoverage: true,
+    features: [
+      'Teleconsultas de emergência ilimitadas',
+      '50% de desconto com especialistas',
+      'Prioridade de agendamento',
+      'Cobertura de seguro: R$ 300/dia de internação',
+      'Suporte prioritário 24/7'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-19T14:54:18.234Z,
+    updatedAt: 2025-05-19T14:54:18.234Z
+  },
+  {
+    id: 7,
+    name: 'basic_family',
+    displayName: 'Básico Familiar',
+    price: 14990,
+    emergencyConsultations: '2',
+    specialistDiscount: 30,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Básico para cada dependente',
+      'Até 4 CPFs',
+      '2 teleconsultas de emergência por mês',
+      '30% de desconto com especialistas',
+      'Acesso completo aos descontos de parceiros',
+      'Cobertura de seguro: R$ 300/dia de internação',
+      'Suporte 24/7'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  },
+  {
+    id: 8,
+    name: 'premium_family',
+    displayName: 'Premium Familiar',
+    price: 19990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 50,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Premium para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '50% de desconto com especialistas',
+      'Prioridade de agendamento',
+      'Cobertura de seguro: R$ 300/dia de internação',
+      'Suporte prioritário 24/7'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  },
+  {
+    id: 9,
+    name: 'ultra',
+    displayName: 'Ultra',
+    price: 16990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  },
+  {
+    id: 10,
+    name: 'ultra_family',
+    displayName: 'Ultra Familiar',
+    price: 23990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Ultra para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  }
+]
+✅ Assinatura encontrada: {
+  subscription: {
+    id: 1,
+    userId: 58,
+    planId: 10,
+    status: 'active',
+    startDate: 2025-06-08T23:10:30.449Z,
+    endDate: 2026-06-08T23:10:30.449Z,
+    paymentMethod: 'admin_grant',
+    price: 23990,
+    createdAt: 2025-06-08T23:10:30.449Z,
+    updatedAt: 2025-06-08T23:10:30.449Z
+  },
+  plan: {
+    id: 10,
+    name: 'ultra_family',
+    displayName: 'Ultra Familiar',
+    price: 23990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Ultra para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  }
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔄 Atualizando perfil do usuário 58 com campos: [
+  'phone',
+  'birthDate',
+  'city',
+  'state',
+  'zipcode',
+  'number',
+  'complement',
+  'neighborhood'
+]
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: 'e5dc18df-91ad-4f9a-a31b-8f2249d2d5758f67fe',
+  __stripe_sid: '120b9000-7702-4641-a4af-ce8ebb6e5e06195355',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NTkwMTQ5LCJleHAiOjE3NTAxOTQ5NDl9.u5dBcnTsPBR4ZpLpsV8CBTeVZlcg--Nza9fgJMSHOHc'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749590149,
+  exp: 1750194949
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada: {
+  subscription: {
+    id: 1,
+    userId: 58,
+    planId: 10,
+    status: 'active',
+    startDate: 2025-06-08T23:10:30.449Z,
+    endDate: 2026-06-08T23:10:30.449Z,
+    paymentMethod: 'admin_grant',
+    price: 23990,
+    createdAt: 2025-06-08T23:10:30.449Z,
+    updatedAt: 2025-06-08T23:10:30.449Z
+  },
+  plan: {
+    id: 10,
+    name: 'ultra_family',
+    displayName: 'Ultra Familiar',
+    price: 23990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Ultra para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  }
+}
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: 'e5dc18df-91ad-4f9a-a31b-8f2249d2d5758f67fe',
+  __stripe_sid: '120b9000-7702-4641-a4af-ce8ebb6e5e06195355',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NTkwMTQ5LCJleHAiOjE3NTAxOTQ5NDl9.u5dBcnTsPBR4ZpLpsV8CBTeVZlcg--Nza9fgJMSHOHc'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749590149,
+  exp: 1750194949
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada: {
+  subscription: {
+    id: 1,
+    userId: 58,
+    planId: 10,
+    status: 'active',
+    startDate: 2025-06-08T23:10:30.449Z,
+    endDate: 2026-06-08T23:10:30.449Z,
+    paymentMethod: 'admin_grant',
+    price: 23990,
+    createdAt: 2025-06-08T23:10:30.449Z,
+    updatedAt: 2025-06-08T23:10:30.449Z
+  },
+  plan: {
+    id: 10,
+    name: 'ultra_family',
+    displayName: 'Ultra Familiar',
+    price: 23990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Ultra para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  }
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+6:20:25 PM [vite] hmr update /src/pages/help.tsx, /src/index.css?v=IoDcrRnnmiCMmm5xUmKz3
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+6:20:26 PM [vite] hmr update /src/pages/help.tsx, /src/index.css?v=IoDcrRnnmiCMmm5xUmKz3
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+6:20:52 PM [vite] hmr update /src/pages/help.tsx, /src/index.css?v=IoDcrRnnmiCMmm5xUmKz3
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+6:20:53 PM [vite] hmr update /src/pages/help.tsx, /src/index.css?v=IoDcrRnnmiCMmm5xUmKz3
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+6:21:00 PM [vite] http proxy error: /api/chat
+Error: socket hang up
+    at Socket.socketOnEnd (node:_http_client:528:25)
+    at Socket.emit (node:events:531:35)
+    at endReadableNT (node:internal/streams/readable:1696:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+6:21:52 PM [vite] hmr update /src/pages/help.tsx, /src/index.css?v=IoDcrRnnmiCMmm5xUmKz3
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+6:21:52 PM [vite] Internal server error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/help.tsx: Unexpected token (81:6)
+
+  79 |         localStorage.removeItem('chatMessages');
+  80 |         localStorage.removeItem('chatAgent');
+> 81 |     } else {
+     |       ^
+  82 |       // Iniciar uma nova conversa com um agente aleatório
+  83 |       const randomAgent = agentNames[Math.floor(Math.random() * agentNames.length)];
+  84 |       setCurrentAgent(randomAgent);
+  Plugin: vite:react-babel
+  File: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/help.tsx:81:6
+  79 |          localStorage.removeItem('chatMessages');
+  80 |          localStorage.removeItem('chatAgent');
+  81 |      } else {
+     |        ^
+  82 |        // Iniciar uma nova conversa com um agente aleatório
+  83 |        const randomAgent = agentNames[Math.floor(Math.random() * agentNames.length)];
+      at toParseError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at raise (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:1503:19)
+      at unexpected (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:1543:16)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1341:16)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:583:22)
+      at parseExprSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:728:23)
+      at parseUpdate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:707:21)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:669:23)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3845:20)
+      at parseMaybeUnaryOrPrivate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:403:14)
+      at parseExprOps (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:415:23)
+      at parseMaybeConditional (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:370:23)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3717:22)
+      at parseExpressionBase (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:226:23)
+      at callback (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:217:39)
+      at allowInAnd (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:3144:16)
+      at parseExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:217:17)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:675:23)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementListItem (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:417:17)
+      at parseBlockOrModuleBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1435:16)
+      at parseBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1408:10)
+      at parseBlock (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1376:10)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:609:21)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementOrSloppyAnnexBFunctionDeclaration (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:437:17)
+      at parseIfStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1082:28)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:527:21)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementListItem (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:417:17)
+      at parseBlockOrModuleBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1435:16)
+      at parseBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1408:10)
+      at parseBlock (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1376:10)
+      at parseFunctionBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:2580:24)
+      at parseArrowExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:2521:10)
+      at parseParenAndDistinguishExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1808:12)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1153:21)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:583:22)
+      at parseExprSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:728:23)
+      at parseUpdate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:707:21)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:669:23)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3845:20)
+      at parseMaybeUnaryOrPrivate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:403:14)
+      at parseExprOps (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:415:23)
+      at parseMaybeConditional (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:370:23)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:301:21)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+6:21:53 PM [vite] Pre-transform error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/help.tsx: Unexpected token (81:6)
+
+  79 |         localStorage.removeItem('chatMessages');
+  80 |         localStorage.removeItem('chatAgent');
+> 81 |     } else {
+     |       ^
+  82 |       // Iniciar uma nova conversa com um agente aleatório
+  83 |       const randomAgent = agentNames[Math.floor(Math.random() * agentNames.length)];
+  84 |       setCurrentAgent(randomAgent);
+6:21:53 PM [vite] hmr update /src/pages/help.tsx, /src/index.css?v=IoDcrRnnmiCMmm5xUmKz3
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+6:21:53 PM [vite] Internal server error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/help.tsx: Unexpected token (81:6)
+
+  79 |         localStorage.removeItem('chatMessages');
+  80 |         localStorage.removeItem('chatAgent');
+> 81 |     } else {
+     |       ^
+  82 |       // Iniciar uma nova conversa com um agente aleatório
+  83 |       const randomAgent = agentNames[Math.floor(Math.random() * agentNames.length)];
+  84 |       setCurrentAgent(randomAgent);
+  Plugin: vite:react-babel
+  File: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/help.tsx:81:6
+  79 |          localStorage.removeItem('chatMessages');
+  80 |          localStorage.removeItem('chatAgent');
+  81 |      } else {
+     |        ^
+  82 |        // Iniciar uma nova conversa com um agente aleatório
+  83 |        const randomAgent = agentNames[Math.floor(Math.random() * agentNames.length)];
+      at toParseError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at raise (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:1503:19)
+      at unexpected (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:1543:16)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1341:16)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:583:22)
+      at parseExprSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:728:23)
+      at parseUpdate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:707:21)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:669:23)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3845:20)
+      at parseMaybeUnaryOrPrivate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:403:14)
+      at parseExprOps (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:415:23)
+      at parseMaybeConditional (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:370:23)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3717:22)
+      at parseExpressionBase (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:226:23)
+      at callback (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:217:39)
+      at allowInAnd (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:3144:16)
+      at parseExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:217:17)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:675:23)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementListItem (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:417:17)
+      at parseBlockOrModuleBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1435:16)
+      at parseBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1408:10)
+      at parseBlock (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1376:10)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:609:21)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementOrSloppyAnnexBFunctionDeclaration (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:437:17)
+      at parseIfStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1082:28)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:527:21)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementListItem (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:417:17)
+      at parseBlockOrModuleBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1435:16)
+      at parseBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1408:10)
+      at parseBlock (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1376:10)
+      at parseFunctionBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:2580:24)
+      at parseArrowExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:2521:10)
+      at parseParenAndDistinguishExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1808:12)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1153:21)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:583:22)
+      at parseExprSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:728:23)
+      at parseUpdate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:707:21)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:669:23)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3845:20)
+      at parseMaybeUnaryOrPrivate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:403:14)
+      at parseExprOps (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:415:23)
+      at parseMaybeConditional (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:370:23)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:301:21)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+6:21:54 PM [vite] Pre-transform error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/help.tsx: Unexpected token (81:6)
+
+  79 |         localStorage.removeItem('chatMessages');
+  80 |         localStorage.removeItem('chatAgent');
+> 81 |     } else {
+     |       ^
+  82 |       // Iniciar uma nova conversa com um agente aleatório
+  83 |       const randomAgent = agentNames[Math.floor(Math.random() * agentNames.length)];
+  84 |       setCurrentAgent(randomAgent);
+6:22:02 PM [vite] hmr update /src/pages/help.tsx, /src/index.css?v=IoDcrRnnmiCMmm5xUmKz3
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+6:22:04 PM [vite] hmr update /src/pages/help.tsx, /src/index.css?v=IoDcrRnnmiCMmm5xUmKz3
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family

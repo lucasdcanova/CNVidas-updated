@@ -51,10 +51,38 @@ const HelpPage: React.FC = () => {
     const savedAgent = localStorage.getItem('chatAgent');
     
     if (savedMessages && savedAgent) {
-      // Restaurar conversa salva
-      setMessages(JSON.parse(savedMessages));
-      setCurrentAgent(JSON.parse(savedAgent));
-    } else {
+      try {
+        // Restaurar conversa salva e corrigir os timestamps
+        const parsedMessages = JSON.parse(savedMessages).map((msg: any) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp) // Converter string de volta para Date
+        }));
+        
+        // Validar se todas as mensagens têm timestamps válidos
+        const validMessages = parsedMessages.filter((msg: Message) => {
+          const dateObj = new Date(msg.timestamp);
+          return !isNaN(dateObj.getTime()) && isFinite(dateObj.getTime());
+        });
+        
+        if (validMessages.length > 0) {
+          setMessages(validMessages);
+          setCurrentAgent(JSON.parse(savedAgent));
+        } else {
+          // Se não há mensagens válidas, limpar localStorage e iniciar nova conversa
+          localStorage.removeItem('chatMessages');
+          localStorage.removeItem('chatAgent');
+          throw new Error('Dados corrompidos no localStorage');
+        }
+             } catch (error) {
+         console.warn('Erro ao carregar mensagens do localStorage, iniciando nova conversa:', error);
+         // Continuar para iniciar nova conversa
+         localStorage.removeItem('chatMessages');
+         localStorage.removeItem('chatAgent');
+       }
+    }
+    
+    // Se não há dados salvos válidos ou houve erro, iniciar nova conversa
+    if (!messages.length) {
       // Iniciar uma nova conversa com um agente aleatório
       const randomAgent = agentNames[Math.floor(Math.random() * agentNames.length)];
       setCurrentAgent(randomAgent);
@@ -233,14 +261,27 @@ const HelpPage: React.FC = () => {
   };
 
   // Formatar data para exibição
-  const formatTime = (date: Date) => {
+  const formatTime = (date: Date | string | number | undefined | null) => {
     try {
+      // Validar se a data é válida
+      if (!date) {
+        return '00:00';
+      }
+      
+      const dateObj = new Date(date);
+      
+      // Verificar se a data é válida
+      if (isNaN(dateObj.getTime()) || !isFinite(dateObj.getTime())) {
+        console.warn('Data inválida recebida:', date);
+        return '00:00';
+      }
+      
       return new Intl.DateTimeFormat('pt-BR', { 
         hour: '2-digit', 
         minute: '2-digit' 
-      }).format(date);
+      }).format(dateObj);
     } catch (e) {
-      console.error('Erro ao formatar data:', e);
+      console.error('Erro ao formatar data:', e, 'Data recebida:', date);
       return '00:00'; // Formato padrão em caso de erro
     }
   };
