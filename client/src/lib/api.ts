@@ -75,6 +75,11 @@ export const getPartnerByUserId = async (userId: number) => {
   return await res.json();
 };
 
+export const getCurrentPartner = async () => {
+  const res = await apiRequest("GET", "/api/partners/me");
+  return await res.json();
+};
+
 // Doctors API
 export const getAllDoctors = async () => {
   const res = await apiRequest("GET", "/api/doctors");

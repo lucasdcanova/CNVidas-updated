@@ -25,7 +25,7 @@ import { useToast } from "@/hooks/use-toast";
 import { 
   getUserProfile,
   updateUserProfile,
-  getPartnerByUserId,
+  getCurrentPartner,
   getDoctorByUserId,
   updatePartner,
   updateDoctor
@@ -144,8 +144,8 @@ const Profile: React.FC = () => {
   
   // Fetch partner data if user is a partner
   const { data: partnerData, isLoading: partnerLoading } = useQuery({
-    queryKey: ["/api/partners/user", user?.id],
-    queryFn: () => getPartnerByUserId(user?.id || 0),
+    queryKey: ["/api/partners/me"],
+    queryFn: getCurrentPartner,
     enabled: !!user?.id && user?.role === "partner",
   });
   

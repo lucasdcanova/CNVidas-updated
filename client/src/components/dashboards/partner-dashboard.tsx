@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { getPartnerByUserId, getPartnerServicesByPartnerId, getAllConsultations } from "@/lib/api";
+import { getCurrentPartner, getPartnerServicesByPartnerId, getAllConsultations } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import DataTable from "@/components/ui/data-table";
@@ -32,8 +32,8 @@ export const PartnerDashboard: React.FC = () => {
   const { user } = useAuth();
   
   const { data: partnerInfo } = useQuery({
-    queryKey: ["/api/partners/user"],
-    queryFn: () => getPartnerByUserId(user?.id || 0),
+    queryKey: ["/api/partners/me"],
+    queryFn: getCurrentPartner,
     enabled: !!user?.id,
   });
   
