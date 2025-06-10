@@ -1085,7 +1085,7 @@ const Profile: React.FC = () => {
                         </div>
                         
                         <AddressForm
-                          key={`patient-address-${profileData?.id}`}
+                          key={`patient-address-${profileData?.id}-${isPatientFormInitialized}`}
                           defaultValues={{
                             zipcode: patientForm.watch("zipcode") || "",
                             street: patientForm.watch("street") || "",
@@ -1097,21 +1097,25 @@ const Profile: React.FC = () => {
                           }}
                           isSubmitting={isUpdatingProfile || !isEditMode}
                           onSubmit={(addressData) => {
-                            // Atualizar os valores no formulário principal em tempo real
-                            patientForm.setValue("zipcode", addressData.zipcode, { shouldDirty: true });
-                            patientForm.setValue("street", addressData.street, { shouldDirty: true });
-                            patientForm.setValue("number", addressData.number, { shouldDirty: true });
-                            patientForm.setValue("complement", addressData.complement || "", { shouldDirty: true });
-                            patientForm.setValue("neighborhood", addressData.neighborhood, { shouldDirty: true });
-                            patientForm.setValue("city", addressData.city, { shouldDirty: true });
-                            patientForm.setValue("state", addressData.state, { shouldDirty: true });
-                            
-                            // Construir o endereço completo para o campo legado
-                            const fullAddress = `${addressData.street}, ${addressData.number}${addressData.complement ? `, ${addressData.complement}` : ""} - ${addressData.neighborhood} - ${addressData.city}/${addressData.state} - CEP: ${addressData.zipcode}`;
-                            patientForm.setValue("address", fullAddress, { shouldDirty: true });
+                            // Usar setTimeout para evitar conflitos de renderização
+                            setTimeout(() => {
+                              // Atualizar os valores no formulário principal em tempo real
+                              patientForm.setValue("zipcode", addressData.zipcode, { shouldDirty: true, shouldValidate: false });
+                              patientForm.setValue("street", addressData.street, { shouldDirty: true, shouldValidate: false });
+                              patientForm.setValue("number", addressData.number, { shouldDirty: true, shouldValidate: false });
+                              patientForm.setValue("complement", addressData.complement || "", { shouldDirty: true, shouldValidate: false });
+                              patientForm.setValue("neighborhood", addressData.neighborhood, { shouldDirty: true, shouldValidate: false });
+                              patientForm.setValue("city", addressData.city, { shouldDirty: true, shouldValidate: false });
+                              patientForm.setValue("state", addressData.state, { shouldDirty: true, shouldValidate: false });
+                              
+                              // Construir o endereço completo para o campo legado
+                              const fullAddress = `${addressData.street}, ${addressData.number}${addressData.complement ? `, ${addressData.complement}` : ""} - ${addressData.neighborhood} - ${addressData.city}/${addressData.state} - CEP: ${addressData.zipcode}`;
+                              patientForm.setValue("address", fullAddress, { shouldDirty: true, shouldValidate: false });
+                            }, 0);
                           }}
                           showSubmitButton={false}
                           standAlone={false} // Modo integrado - não cria um <form> aninhado
+                          isReadOnly={!isEditMode} // Tornar readonly quando não está em modo de edição
                         />
                       </div>
                       
@@ -1455,7 +1459,7 @@ const Profile: React.FC = () => {
                         
                         <div className="address-form-container">
                           <AddressForm
-                            key={`partner-address-${partnerData?.id}`}
+                            key={`partner-address-${partnerData?.id}-${isPartnerFormInitialized}`}
                             defaultValues={{
                               zipcode: partnerForm.watch("zipcode") || "",
                               street: partnerForm.watch("street") || "",
@@ -1468,22 +1472,26 @@ const Profile: React.FC = () => {
                             onSubmit={(addressData) => {
                               console.log("Dados de endereço recebidos do componente AddressForm:", addressData);
                               
-                              // Atualizar os valores no formulário principal em tempo real
-                              partnerForm.setValue("zipcode", addressData.zipcode, { shouldDirty: true });
-                              partnerForm.setValue("street", addressData.street, { shouldDirty: true });
-                              partnerForm.setValue("number", addressData.number, { shouldDirty: true });
-                              partnerForm.setValue("complement", addressData.complement || "", { shouldDirty: true });
-                              partnerForm.setValue("neighborhood", addressData.neighborhood, { shouldDirty: true });
-                              partnerForm.setValue("city", addressData.city, { shouldDirty: true });
-                              partnerForm.setValue("state", addressData.state, { shouldDirty: true });
-                              
-                              // Construir o endereço completo para o campo legado
-                              const fullAddress = `${addressData.street}, ${addressData.number}${addressData.complement ? `, ${addressData.complement}` : ""} - ${addressData.neighborhood} - ${addressData.city}/${addressData.state} - CEP: ${addressData.zipcode}`;
-                              partnerForm.setValue("address", fullAddress, { shouldDirty: true });
+                              // Usar setTimeout para evitar conflitos de renderização
+                              setTimeout(() => {
+                                // Atualizar os valores no formulário principal em tempo real
+                                partnerForm.setValue("zipcode", addressData.zipcode, { shouldDirty: true, shouldValidate: false });
+                                partnerForm.setValue("street", addressData.street, { shouldDirty: true, shouldValidate: false });
+                                partnerForm.setValue("number", addressData.number, { shouldDirty: true, shouldValidate: false });
+                                partnerForm.setValue("complement", addressData.complement || "", { shouldDirty: true, shouldValidate: false });
+                                partnerForm.setValue("neighborhood", addressData.neighborhood, { shouldDirty: true, shouldValidate: false });
+                                partnerForm.setValue("city", addressData.city, { shouldDirty: true, shouldValidate: false });
+                                partnerForm.setValue("state", addressData.state, { shouldDirty: true, shouldValidate: false });
+                                
+                                // Construir o endereço completo para o campo legado
+                                const fullAddress = `${addressData.street}, ${addressData.number}${addressData.complement ? `, ${addressData.complement}` : ""} - ${addressData.neighborhood} - ${addressData.city}/${addressData.state} - CEP: ${addressData.zipcode}`;
+                                partnerForm.setValue("address", fullAddress, { shouldDirty: true, shouldValidate: false });
+                              }, 0);
                             }}
                             isSubmitting={isUpdatingProfile}
                             showSubmitButton={false}
                             standAlone={false} // Modo integrado - não cria um <form> aninhado
+                            isReadOnly={!isEditMode} // Tornar readonly quando não está em modo de edição
                           />
                         </div>
                       </div>

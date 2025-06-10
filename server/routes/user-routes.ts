@@ -41,19 +41,33 @@ userRouter.put('/profile', requireAuth, async (req: AuthenticatedRequest, res: R
       return res.status(401).json({ error: 'Usuário não autenticado' });
     }
 
-    const { fullName, phone, address, city, state, zipcode, number, complement, neighborhood } = req.body;
+    const { fullName, username, email, phone, birthDate, address, city, state, zipcode, number, complement, neighborhood } = req.body;
 
-    const updatedUser = await storage.updateUser(req.user.id, {
-      fullName,
-      phone,
-      address,
-      city,
-      state,
-      zipcode,
-      number,
-      complement,
-      neighborhood
-    });
+    // **CORREÇÃO: Filtrar campos undefined/null para evitar "No values to set"**
+    const updateData: any = {};
+    
+    // Incluir apenas campos que tenham valores válidos
+    if (fullName !== undefined && fullName !== null) updateData.fullName = fullName;
+    if (username !== undefined && username !== null) updateData.username = username;
+    if (email !== undefined && email !== null) updateData.email = email;
+    if (phone !== undefined && phone !== null) updateData.phone = phone;
+    if (birthDate !== undefined && birthDate !== null) updateData.birthDate = birthDate;
+    if (address !== undefined && address !== null) updateData.address = address;
+    if (city !== undefined && city !== null) updateData.city = city;
+    if (state !== undefined && state !== null) updateData.state = state;
+    if (zipcode !== undefined && zipcode !== null) updateData.zipcode = zipcode;
+    if (number !== undefined && number !== null) updateData.number = number;
+    if (complement !== undefined && complement !== null) updateData.complement = complement;
+    if (neighborhood !== undefined && neighborhood !== null) updateData.neighborhood = neighborhood;
+
+    // Verificar se há pelo menos um campo para atualizar
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({ error: 'Nenhum campo válido fornecido para atualização' });
+    }
+
+    console.log(`🔄 Atualizando perfil do usuário ${req.user.id} com campos:`, Object.keys(updateData));
+
+    const updatedUser = await storage.updateUser(req.user.id, updateData);
 
     if (!updatedUser) {
       return res.status(404).json({ error: 'Usuário não encontrado' });
@@ -214,6 +228,72 @@ userRouter.get('/', requireAuth, async (req: AuthenticatedRequest, res: Response
     return res.json(usersWithoutPassword);
   } catch (error) {
     console.error('Erro ao listar usuários:', error);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+/**
+ * Salvar configurações do usuário
+ * PUT /api/users/settings
+ */
+userRouter.put('/settings', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Usuário não autenticado' });
+    }
+
+    const { notifications, privacy } = req.body;
+
+    console.log(`🔧 Salvando configurações do usuário ${req.user.id}:`, { notifications, privacy });
+
+    const settings = await storage.saveUserSettings(req.user.id, {
+      notifications,
+      privacy
+    });
+
+    return res.json(settings);
+  } catch (error) {
+    console.error('Erro ao salvar configurações:', error);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+/**
+ * Buscar configurações do usuário
+ * GET /api/users/settings
+ */
+userRouter.get('/settings', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Usuário não autenticado' });
+    }
+
+    const settings = await storage.getUserSettings(req.user.id);
+    
+    if (!settings) {
+      // Retornar configurações padrão se não existirem
+      return res.json({
+        notifications: {
+          emailNotifications: true,
+          smsNotifications: false,
+          pushNotifications: true,
+          notificationFrequency: 'immediate',
+          appointmentReminders: true,
+          marketingEmails: false,
+        },
+        privacy: {
+          shareWithDoctors: true,
+          shareWithPartners: false,
+          shareFullMedicalHistory: false,
+          allowAnonymizedDataUse: true,
+          profileVisibility: 'contacts',
+        }
+      });
+    }
+
+    return res.json(settings);
+  } catch (error) {
+    console.error('Erro ao buscar configurações:', error);
     return res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
