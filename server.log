@@ -7131,3 +7131,1903 @@ Session table checked/created successfully
 3:53:36 PM [server] Servidor rodando na porta 3000
 Configuração de email carregada. Serviço de email disponível.
 3:58:00 PM [vite] page reload index.html
+4:00:30 PM [tsx] change in ./server/seller-utils.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Conexão com o banco de dados testada com sucesso: 2025-06-10 19:00:33.27223+00
+Session table checked/created successfully
+4:00:35 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+Erro ao buscar dados do usuário: Error: timeout exceeded when trying to connect
+    at /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1086:33
+    at runNextTicks (node:internal/process/task_queues:60:5)
+    at listOnTimeout (node:internal/timers:545:9)
+    at process.processTimers (node:internal/timers:519:7)
+    at async NeonPreparedQuery.execute (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/src/neon-serverless/session.ts:61:18)
+    at async <anonymous> (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/server/index.ts:135:28)
+Erro ao buscar dados do usuário: Error: timeout exceeded when trying to connect
+    at /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1086:33
+    at runNextTicks (node:internal/process/task_queues:60:5)
+    at process.processTimers (node:internal/timers:516:9)
+    at async NeonPreparedQuery.execute (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/src/neon-serverless/session.ts:61:18)
+    at async <anonymous> (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/server/index.ts:135:28)
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔍 Middleware JWT Global - Processando: /api/admin/checkout-tracking?
+🔍 Cookies: {
+  __stripe_mid: '77b95ec0-faaa-43f3-9ef3-bde5a70f248464f1c6',
+  __stripe_sid: 'edbc5135-066b-4fea-98ba-9b7c11493866a66e65',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoibHVjYXMuY2Fub3ZhQGljbG91ZC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDk1ODEyODcsImV4cCI6MTc1MDE4NjA4N30.bQqIBIy5lswxZ01hflEqU-9jTtShP-zXXDCfxtf7B1A'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Middleware JWT Global - Processando: /api/admin/checkout-tracking/metrics?
+🔍 Cookies: {
+  __stripe_mid: '77b95ec0-faaa-43f3-9ef3-bde5a70f248464f1c6',
+  __stripe_sid: 'edbc5135-066b-4fea-98ba-9b7c11493866a66e65',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoibHVjYXMuY2Fub3ZhQGljbG91ZC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDk1ODEyODcsImV4cCI6MTc1MDE4NjA4N30.bQqIBIy5lswxZ01hflEqU-9jTtShP-zXXDCfxtf7B1A'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Middleware JWT Global - Processando: /api/admin/checkout-tracking/problem-users
+🔍 Cookies: {
+  __stripe_mid: '77b95ec0-faaa-43f3-9ef3-bde5a70f248464f1c6',
+  __stripe_sid: 'edbc5135-066b-4fea-98ba-9b7c11493866a66e65',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoibHVjYXMuY2Fub3ZhQGljbG91ZC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDk1ODEyODcsImV4cCI6MTc1MDE4NjA4N30.bQqIBIy5lswxZ01hflEqU-9jTtShP-zXXDCfxtf7B1A'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+Erro ao listar usuários com problemas: PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRawUnsafe()` invocation:
+
+
+Raw query failed. Code: `42703`. Message: `column u.name does not exist`
+    at Zn.handleRequestError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at Zn.handleAndLogRequestError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at Zn.request (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@prisma/client/runtime/library.js:130:9778)
+    at async <anonymous> (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/server/routes/checkout-tracking-routes.ts:373:26) {
+  code: 'P2010',
+  meta: { code: '42703', message: 'column u.name does not exist' },
+  clientVersion: '6.9.0'
+}
+Erro ao listar checkouts: PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRawUnsafe()` invocation:
+
+
+Raw query failed. Code: `42703`. Message: `column u.name does not exist`
+    at Zn.handleRequestError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at Zn.handleAndLogRequestError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at Zn.request (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@prisma/client/runtime/library.js:130:9778)
+    at async Promise.all (index 0)
+    at async <anonymous> (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/server/routes/checkout-tracking-routes.ts:236:38) {
+  code: 'P2010',
+  meta: { code: '42703', message: 'column u.name does not exist' },
+  clientVersion: '6.9.0'
+}
+Erro ao buscar métricas: TypeError: Do not know how to serialize a BigInt
+    at JSON.stringify (<anonymous>)
+    at stringify (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/express/lib/response.js:1160:12)
+    at ServerResponse.json (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/express/lib/response.js:271:14)
+    at <anonymous> (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/server/routes/checkout-tracking-routes.ts:329:9)
+4:32:07 PM [vite] hmr update /src/index.css?v=oNUhufgKUWP8vHxTu0rtw, /src/pages/checkout.tsx, /src/pages/subscribe.tsx, /src/components/checkout/checkout-modal.tsx, /src/components/checkout/checkout-modal-fix.tsx, /src/hooks/use-stripe-setup.tsx
+4:32:07 PM [vite] hmr update /src/hooks/use-stripe-setup.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:07 PM [vite] page reload src/components/doctors/ProfileImageUploader.tsx
+4:32:07 PM [vite] hmr update /src/components/ui/textarea.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:07 PM [vite] hmr update /src/components/ui/badge.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:07 PM [vite] hmr update /src/pages/reenviar-verificacao.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] hmr update /src/components/ui/scroll-area.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] hmr update /src/pages/telemedicine-emergency-v2.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] hmr update /src/components/ui/tooltip.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] page reload src/components/ui/menubar.tsx
+4:32:08 PM [vite] hmr update /src/index.css?v=oNUhufgKUWP8vHxTu0rtw, /src/pages/doctor/financeiro.tsx, /src/components/ui/tooltip.tsx, /src/components/ui/card.tsx, /src/components/ui/button.tsx, /src/components/ui/form.tsx, /src/components/ui/select.tsx, /src/components/ui/input.tsx, /src/components/ui/tabs.tsx, /src/components/ui/dialog.tsx, /src/components/ui/avatar.tsx, /src/components/ui/badge.tsx, /src/components/appointments/appointment-scheduler.tsx, /src/components/ui/label.tsx, /src/components/ui/spinner.tsx, /src/components/ui/radio-group.tsx, /src/components/ui/textarea.tsx, /src/components/ui/separator.tsx, /src/components/ui/checkbox.tsx, /src/components/ui/switch.tsx, /src/components/ui/accordion.tsx, /src/components/ui/alert.tsx, /src/components/ui/alert-dialog.tsx, /src/components/layouts/admin-layout.tsx, /src/components/ui/responsive-table.tsx, /src/components/ui/skeleton.tsx, /src/components/ui/table.tsx, /src/components/ui/dropdown-menu.tsx, /src/components/ui/pagination.tsx, /src/components/ui/chart.tsx, /src/components/ui/toast.tsx, /src/components/shared/plan-indicator.tsx, /src/components/ui/sheet.tsx, /src/components/ui/scroll-area.tsx
+4:32:08 PM [vite] hmr update /src/components/shared/plan-indicator.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] hmr update /src/components/telemedicine/DailyVideoCall.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] hmr update /src/components/ui/skeleton.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] hmr update /src/components/ui/toaster.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] hmr update /src/components/ui/tabs.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] page reload src/components/ui/slider.tsx
+4:32:08 PM [vite] page reload src/components/ui/popover.tsx
+4:32:08 PM [vite] hmr update /src/lib/protected-route.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] hmr update /src/components/forms/appointment-form.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] hmr update /src/components/ui/chart.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] page reload src/components/ui/carousel.tsx
+4:32:08 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] hmr update /src/pages/subscription.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] page reload src/components/doctor/EmergencyBanner.tsx
+4:32:08 PM [vite] hmr update /src/pages/doctor/financeiro.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] hmr update /src/pages/subscribe.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] page reload src/main.tsx
+4:32:08 PM [tsx] change in ./shared/schema.ts Restarting...
+4:32:08 PM [vite] hmr update /src/components/doctor/AvailabilityManagerEnhanced.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] hmr update /src/pages/qr-code.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] page reload src/components/ui/toggle-group.tsx
+4:32:08 PM [vite] page reload src/components/ui/drawer.tsx
+4:32:08 PM [vite] hmr update /src/pages/esqueci-senha.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] hmr update /src/components/checkout/checkout-modal-fix.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [vite] hmr update /src/components/layouts/admin-layout.tsx, /src/index.css?v=oNUhufgKUWP8vHxTu0rtw
+4:32:08 PM [tsx] change in ./server/admin-routes.ts Process hasn't exited. Killing process...
+c4:32:09 PM [tsx] change in ./server/routes/payment-routes.ts Restarting...
+c4:32:09 PM [tsx] change in ./server/routes/public-subscription-routes.ts Restarting...
+c4:32:09 PM [tsx] change in ./server/routes/subscription-payment-routes.ts Restarting...
+c4:32:10 PM [tsx] change in ./server/storage.ts Restarting...
+c4:32:10 PM [tsx] change in ./server/utils/stripe-payment.ts Restarting...
+c4:32:10 PM [tsx] change in ./server/routes/checkout-tracking-routes.ts Restarting...
+c4:32:11 PM [tsx] change in ./server/routes/upload-routes.ts Restarting...
+c4:32:27 PM [tsx] change in ./server/index.ts Restarting...
+4:32:30 PM [tsx] change in ./server/routes/index.ts Process hasn't exited. Killing process...
+cnode:fs:448
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ECANCELED: operation canceled, read
+    at Object.readFileSync (node:fs:448:20)
+    at Object.transformer (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:968)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at checkoutTrackingRouter (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/server/routes/index.ts:2:24)
+    at Object.<anonymous> (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/server/routes/index.ts:31:31)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Object.transformer (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:1186) {
+  errno: -89,
+  code: 'ECANCELED',
+  syscall: 'read'
+}
+
+Node.js v20.18.0
+4:37:45 PM [tsx] change in ./postcss.config.js Rerunning...
+c4:37:47 PM [tsx] change in ./server/routes/auth-routes.ts Restarting...
+4:37:48 PM [tsx] change in ./server/utils/app-error.ts Process hasn't exited. Killing process...
+c4:37:50 PM [tsx] change in ./shared/schema.ts Restarting...
+4:37:54 PM [tsx] change in ./server/db.ts Process hasn't exited. Killing process...
+c4:37:57 PM [tsx] change in ./server/services/email.ts Restarting...
+4:37:58 PM [tsx] change in ./server/utils/id-converter.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:38:01 PM [tsx] change in ./server/utils/cookie-config.ts Restarting...
+4:38:02 PM [tsx] change in ./server/routes/diagnostic-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:38:05 PM [tsx] change in ./server/routes/telemedicine-daily.ts Restarting...
+4:38:06 PM [tsx] change in ./server/middleware/subscription-check.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:38:08 PM [tsx] change in ./server/storage.ts Restarting...
+4:38:09 PM [tsx] change in ./server/middleware/json-response.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:38:12 PM [tsx] change in ./server/lib/prisma.ts Restarting...
+4:38:13 PM [tsx] change in ./server/utils/sanitize.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:38:16 PM [tsx] change in ./server/routes/telemedicine-daily-v2.ts Restarting...
+4:38:16 PM [tsx] change in ./server/routes/daily-direct.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:38:19 PM [tsx] change in ./server/routes/consultation-payment-routes.ts Restarting...
+4:38:19 PM [tsx] change in ./server/utils/stripe-payment.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:38:22 PM [tsx] change in ./server/utils/stripe-instance.ts Restarting...
+4:38:23 PM [tsx] change in ./server/routes/daily-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:38:26 PM [tsx] change in ./server/routes/dependents-routes-new.ts Restarting...
+4:38:27 PM [tsx] change in ./server/routes/emergency-consultation.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:38:30 PM [tsx] change in ./server/utils/daily.ts Restarting...
+4:38:31 PM [tsx] change in ./server/routes/emergency-notifications.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:38:35 PM [tsx] change in ./server/middleware/auth.ts Restarting...
+4:38:35 PM [tsx] change in ./server/routes/emergency-patient.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:38:38 PM [tsx] change in ./server/routes/payment-routes.ts Restarting...
+4:38:39 PM [tsx] change in ./server/routes/subscription-create-route.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:38:43 PM [tsx] change in ./server/routes/subscription-payment-routes.ts Restarting...
+4:38:44 PM [tsx] change in ./server/routes/telemedicine-error-logs.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:38:46 PM [tsx] change in ./server/routes/upload-routes.ts Restarting...
+4:38:47 PM [tsx] change in ./server/routes/daily-emergency-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:38:50 PM [tsx] change in ./server/routes/profile-image-routes.ts Restarting...
+4:38:52 PM [tsx] change in ./server/routes/address-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:38:55 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+4:38:56 PM [tsx] change in ./server/utils/emergency-utils.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:38:59 PM [tsx] change in ./server/routes/claims-routes.ts Restarting...
+4:39:00 PM [tsx] change in ./server/routes/public-subscription-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:39:03 PM [tsx] change in ./server/routes/user-routes.ts Restarting...
+4:39:04 PM [tsx] change in ./server/routes/partner-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:39:07 PM [tsx] change in ./server/routes/doctor-routes.ts Restarting...
+4:39:09 PM [tsx] change in ./server/routes/notification-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+4:39:12 PM [tsx] change in ./server/routes/checkout-tracking-routes.ts Restarting...
+4:39:13 PM [tsx] change in ./server/admin-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+4:39:16 PM [tsx] change in ./server/vite.ts Restarting...
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+4:39:17 PM [tsx] change in ./server/middleware/error-handler.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Conexão com o banco de dados testada com sucesso: 2025-06-10 19:39:19.215988+00
+Session table checked/created successfully
+4:39:22 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+4:39:34 PM [tsx] change in ./server/seller-utils.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Conexão com o banco de dados testada com sucesso: 2025-06-10 19:39:36.650485+00
+Session table checked/created successfully
+4:39:38 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔍 Middleware JWT Global - Processando: /api/admin/claims
+🔍 Cookies: {
+  __stripe_mid: '77b95ec0-faaa-43f3-9ef3-bde5a70f248464f1c6',
+  __stripe_sid: 'edbc5135-066b-4fea-98ba-9b7c11493866a66e65',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoibHVjYXMuY2Fub3ZhQGljbG91ZC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDk1ODEyODcsImV4cCI6MTc1MDE4NjA4N30.bQqIBIy5lswxZ01hflEqU-9jTtShP-zXXDCfxtf7B1A'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Middleware JWT Global - Processando: /api/admin/pending-claims
+🔍 Cookies: {
+  __stripe_mid: '77b95ec0-faaa-43f3-9ef3-bde5a70f248464f1c6',
+  __stripe_sid: 'edbc5135-066b-4fea-98ba-9b7c11493866a66e65',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoibHVjYXMuY2Fub3ZhQGljbG91ZC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDk1ODEyODcsImV4cCI6MTc1MDE4NjA4N30.bQqIBIy5lswxZ01hflEqU-9jTtShP-zXXDCfxtf7B1A'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 1
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+Session table checked/created successfully
+✅ Notifications /unread-count - Contagem: 2
+🔍 Middleware JWT Global - Processando: /api/admin/users
+🔍 Cookies: {
+  __stripe_mid: '77b95ec0-faaa-43f3-9ef3-bde5a70f248464f1c6',
+  __stripe_sid: 'edbc5135-066b-4fea-98ba-9b7c11493866a66e65',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoibHVjYXMuY2Fub3ZhQGljbG91ZC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDk1ODEyODcsImV4cCI6MTc1MDE4NjA4N30.bQqIBIy5lswxZ01hflEqU-9jTtShP-zXXDCfxtf7B1A'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔍 Middleware JWT Global - Processando: /api/admin/checkout-tracking?
+🔍 Cookies: {
+  __stripe_mid: '77b95ec0-faaa-43f3-9ef3-bde5a70f248464f1c6',
+  __stripe_sid: 'edbc5135-066b-4fea-98ba-9b7c11493866a66e65',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoibHVjYXMuY2Fub3ZhQGljbG91ZC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDk1ODEyODcsImV4cCI6MTc1MDE4NjA4N30.bQqIBIy5lswxZ01hflEqU-9jTtShP-zXXDCfxtf7B1A'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Middleware JWT Global - Processando: /api/admin/checkout-tracking/metrics?
+🔍 Cookies: {
+  __stripe_mid: '77b95ec0-faaa-43f3-9ef3-bde5a70f248464f1c6',
+  __stripe_sid: 'edbc5135-066b-4fea-98ba-9b7c11493866a66e65',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoibHVjYXMuY2Fub3ZhQGljbG91ZC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDk1ODEyODcsImV4cCI6MTc1MDE4NjA4N30.bQqIBIy5lswxZ01hflEqU-9jTtShP-zXXDCfxtf7B1A'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Middleware JWT Global - Processando: /api/admin/checkout-tracking/problem-users
+🔍 Cookies: {
+  __stripe_mid: '77b95ec0-faaa-43f3-9ef3-bde5a70f248464f1c6',
+  __stripe_sid: 'edbc5135-066b-4fea-98ba-9b7c11493866a66e65',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoibHVjYXMuY2Fub3ZhQGljbG91ZC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDk1ODEyODcsImV4cCI6MTc1MDE4NjA4N30.bQqIBIy5lswxZ01hflEqU-9jTtShP-zXXDCfxtf7B1A'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+Erro ao listar checkouts: PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRawUnsafe()` invocation:
+
+
+Raw query failed. Code: `42703`. Message: `column u.name does not exist`
+    at Zn.handleRequestError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at Zn.handleAndLogRequestError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at Zn.request (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@prisma/client/runtime/library.js:130:9778)
+    at async Promise.all (index 0)
+    at async <anonymous> (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/server/routes/checkout-tracking-routes.ts:236:38) {
+  code: 'P2010',
+  meta: { code: '42703', message: 'column u.name does not exist' },
+  clientVersion: '6.9.0'
+}
+Erro ao listar usuários com problemas: PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRawUnsafe()` invocation:
+
+
+Raw query failed. Code: `42703`. Message: `column u.name does not exist`
+    at Zn.handleRequestError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at Zn.handleAndLogRequestError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at Zn.request (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@prisma/client/runtime/library.js:130:9778)
+    at async <anonymous> (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/server/routes/checkout-tracking-routes.ts:373:26) {
+  code: 'P2010',
+  meta: { code: '42703', message: 'column u.name does not exist' },
+  clientVersion: '6.9.0'
+}
+Erro ao buscar métricas: TypeError: Do not know how to serialize a BigInt
+    at JSON.stringify (<anonymous>)
+    at stringify (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/express/lib/response.js:1160:12)
+    at ServerResponse.json (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/express/lib/response.js:271:14)
+    at <anonymous> (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/server/routes/checkout-tracking-routes.ts:329:9)
+🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+Logout realizado com sucesso - cookies removidos
+=== ROTA /api/user INTERCEPTADA ===
+=== ROTA /api/user INTERCEPTADA ===
+=== ROTA /api/login INTERCEPTADA ===
+=== ROTA LOGIN CHAMADA ===
+URL: /login
+Method: POST
+Body: { email: 'lucas.canova@hotmail.com', password: 'qweasdzxc123' }
+Buscando usuário no banco: lucas.canova@hotmail.com
+Usuário encontrado: true
+Login bem-sucedido para: lucas.canova@hotmail.com
+Cookie options: {
+  host: 'localhost:3000',
+  isLocalhost: true,
+  isProduction: false,
+  secure: false,
+  domain: undefined
+}
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NTg1MjA2LCJleHAiOjE3NTAxOTAwMDZ9.ooYhe6WmujR2CV-ZMQUSEdDKSRVp3e_ul7Lg_0Xbfto',
+  __stripe_mid: 'e30a6b99-180c-4089-aa7b-7d0f842190d87a6767',
+  __stripe_sid: '17dd901a-d608-4629-87db-6074a49f6ada35b360'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749585206,
+  exp: 1750190006
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Notifications /unread-count - Contagem: 1
+✅ Assinatura encontrada: {
+  subscription: {
+    id: 1,
+    userId: 58,
+    planId: 10,
+    status: 'active',
+    startDate: 2025-06-08T23:10:30.449Z,
+    endDate: 2026-06-08T23:10:30.449Z,
+    paymentMethod: 'admin_grant',
+    price: 23990,
+    createdAt: 2025-06-08T23:10:30.449Z,
+    updatedAt: 2025-06-08T23:10:30.449Z
+  },
+  plan: {
+    id: 10,
+    name: 'ultra_family',
+    displayName: 'Ultra Familiar',
+    price: 23990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Ultra para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  }
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Buscando consultas próximas para usuário 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Buscando claims para usuário 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Notifications - Buscando notificações do usuário ID: 58
+Encontradas 0 consultas próximas
+Encontrados 0 claims
+[API] Total de serviços: 10
+[API] Exemplo de serviço: {
+  id: 3,
+  name: 'Suplementos, perfumaria, ortopédicos e manipulados',
+  serviceImage: 'Sem imagem',
+  partner: 'Tem parceiro'
+}
+✅ Notifications - Notificações encontradas: 1
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: 'e30a6b99-180c-4089-aa7b-7d0f842190d87a6767',
+  __stripe_sid: '17dd901a-d608-4629-87db-6074a49f6ada35b360',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NTg1MjA2LCJleHAiOjE3NTAxOTAwMDZ9.ooYhe6WmujR2CV-ZMQUSEdDKSRVp3e_ul7Lg_0Xbfto'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749585206,
+  exp: 1750190006
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Notifications /unread-count - Contagem: 1
+✅ Assinatura encontrada: {
+  subscription: {
+    id: 1,
+    userId: 58,
+    planId: 10,
+    status: 'active',
+    startDate: 2025-06-08T23:10:30.449Z,
+    endDate: 2026-06-08T23:10:30.449Z,
+    paymentMethod: 'admin_grant',
+    price: 23990,
+    createdAt: 2025-06-08T23:10:30.449Z,
+    updatedAt: 2025-06-08T23:10:30.449Z
+  },
+  plan: {
+    id: 10,
+    name: 'ultra_family',
+    displayName: 'Ultra Familiar',
+    price: 23990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Ultra para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  }
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Buscando consultas próximas para usuário 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Buscando claims para usuário 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Notifications - Buscando notificações do usuário ID: 58
+Encontradas 0 consultas próximas
+Encontrados 0 claims
+[API] Total de serviços: 10
+[API] Exemplo de serviço: {
+  id: 3,
+  name: 'Suplementos, perfumaria, ortopédicos e manipulados',
+  serviceImage: 'Sem imagem',
+  partner: 'Tem parceiro'
+}
+✅ Notifications - Notificações encontradas: 1
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+GET /api/dependents - Request received: {
+  user: {
+    id: 58,
+    email: 'lucas.canova@hotmail.com',
+    role: 'patient',
+    fullName: 'Lucas Dickel Canova',
+    username: 'p03474256076',
+    emailVerified: true,
+    subscriptionPlan: 'ultra_family',
+    subscriptionStatus: 'active',
+    emergencyConsultationsLeft: 0,
+    emergencyConsultationsResetAt: undefined,
+    profileImage: null,
+    phone: '',
+    cpf: null,
+    cnpj: undefined,
+    city: 'Três Passos',
+    state: 'RS',
+    address: null,
+    zipcode: '98600000'
+  },
+  url: '/',
+  headers: {
+    host: 'localhost:3000',
+    accept: '*/*',
+    'cache-control': 'no-cache, no-store, must-revalidate',
+    pragma: 'no-cache',
+    'sec-fetch-site': 'same-origin',
+    'x-user-id': '58',
+    'sec-fetch-mode': 'cors',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.4 Safari/605.1.15',
+    referer: 'http://localhost:3000/dependents',
+    expires: '0',
+    'sec-fetch-dest': 'empty',
+    'accept-language': 'pt-BR,pt;q=0.9',
+    priority: 'u=3, i',
+    'accept-encoding': 'gzip, deflate',
+    cookie: '__stripe_mid=e30a6b99-180c-4089-aa7b-7d0f842190d87a6767; __stripe_sid=17dd901a-d608-4629-87db-6074a49f6ada35b360; auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NTg1MjA2LCJleHAiOjE3NTAxOTAwMDZ9.ooYhe6WmujR2CV-ZMQUSEdDKSRVp3e_ul7Lg_0Xbfto',
+    connection: 'keep-alive'
+  }
+}
+Buscando dependentes para usuário ID: 58
+Dependentes encontrados: 2
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: 'e30a6b99-180c-4089-aa7b-7d0f842190d87a6767',
+  __stripe_sid: '17dd901a-d608-4629-87db-6074a49f6ada35b360',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NTg1MjA2LCJleHAiOjE3NTAxOTAwMDZ9.ooYhe6WmujR2CV-ZMQUSEdDKSRVp3e_ul7Lg_0Xbfto'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749585206,
+  exp: 1750190006
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+Retornando planos de assinatura para usuário (rota pública): [
+  {
+    id: 4,
+    name: 'free',
+    displayName: 'Gratuito',
+    price: 0,
+    emergencyConsultations: '0',
+    specialistDiscount: 0,
+    insuranceCoverage: false,
+    features: [
+      'Acesso ao marketplace',
+      'Pagamento integral pelos serviços',
+      '0 teleconsultas de emergência por mês',
+      'Sem descontos e sem cobertura de seguro'
+    ],
+    isDefault: true,
+    createdAt: 2025-05-19T14:54:18.234Z,
+    updatedAt: 2025-05-19T14:54:18.234Z
+  },
+  {
+    id: 5,
+    name: 'basic',
+    displayName: 'Básico',
+    price: 8990,
+    emergencyConsultations: '2',
+    specialistDiscount: 30,
+    insuranceCoverage: true,
+    features: [
+      '2 teleconsultas de emergência por mês',
+      '30% de desconto com especialistas',
+      'Acesso completo aos descontos de parceiros',
+      'Cobertura de seguro: R$ 300/dia de internação',
+      'Suporte 24/7'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-19T14:54:18.234Z,
+    updatedAt: 2025-05-19T14:54:18.234Z
+  },
+  {
+    id: 6,
+    name: 'premium',
+    displayName: 'Premium',
+    price: 12990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 50,
+    insuranceCoverage: true,
+    features: [
+      'Teleconsultas de emergência ilimitadas',
+      '50% de desconto com especialistas',
+      'Prioridade de agendamento',
+      'Cobertura de seguro: R$ 300/dia de internação',
+      'Suporte prioritário 24/7'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-19T14:54:18.234Z,
+    updatedAt: 2025-05-19T14:54:18.234Z
+  },
+  {
+    id: 7,
+    name: 'basic_family',
+    displayName: 'Básico Familiar',
+    price: 14990,
+    emergencyConsultations: '2',
+    specialistDiscount: 30,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Básico para cada dependente',
+      'Até 4 CPFs',
+      '2 teleconsultas de emergência por mês',
+      '30% de desconto com especialistas',
+      'Acesso completo aos descontos de parceiros',
+      'Cobertura de seguro: R$ 300/dia de internação',
+      'Suporte 24/7'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  },
+  {
+    id: 8,
+    name: 'premium_family',
+    displayName: 'Premium Familiar',
+    price: 19990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 50,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Premium para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '50% de desconto com especialistas',
+      'Prioridade de agendamento',
+      'Cobertura de seguro: R$ 300/dia de internação',
+      'Suporte prioritário 24/7'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  },
+  {
+    id: 9,
+    name: 'ultra',
+    displayName: 'Ultra',
+    price: 16990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  },
+  {
+    id: 10,
+    name: 'ultra_family',
+    displayName: 'Ultra Familiar',
+    price: 23990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Ultra para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  }
+]
+✅ Assinatura encontrada: {
+  subscription: {
+    id: 1,
+    userId: 58,
+    planId: 10,
+    status: 'active',
+    startDate: 2025-06-08T23:10:30.449Z,
+    endDate: 2026-06-08T23:10:30.449Z,
+    paymentMethod: 'admin_grant',
+    price: 23990,
+    createdAt: 2025-06-08T23:10:30.449Z,
+    updatedAt: 2025-06-08T23:10:30.449Z
+  },
+  plan: {
+    id: 10,
+    name: 'ultra_family',
+    displayName: 'Ultra Familiar',
+    price: 23990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Ultra para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  }
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+[API] Total de serviços: 10
+[API] Exemplo de serviço: {
+  id: 3,
+  name: 'Suplementos, perfumaria, ortopédicos e manipulados',
+  serviceImage: 'Sem imagem',
+  partner: 'Tem parceiro'
+}
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: 'e30a6b99-180c-4089-aa7b-7d0f842190d87a6767',
+  __stripe_sid: '17dd901a-d608-4629-87db-6074a49f6ada35b360',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NTg1MjA2LCJleHAiOjE3NTAxOTAwMDZ9.ooYhe6WmujR2CV-ZMQUSEdDKSRVp3e_ul7Lg_0Xbfto'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749585206,
+  exp: 1750190006
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada: {
+  subscription: {
+    id: 1,
+    userId: 58,
+    planId: 10,
+    status: 'active',
+    startDate: 2025-06-08T23:10:30.449Z,
+    endDate: 2026-06-08T23:10:30.449Z,
+    paymentMethod: 'admin_grant',
+    price: 23990,
+    createdAt: 2025-06-08T23:10:30.449Z,
+    updatedAt: 2025-06-08T23:10:30.449Z
+  },
+  plan: {
+    id: 10,
+    name: 'ultra_family',
+    displayName: 'Ultra Familiar',
+    price: 23990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Ultra para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  }
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Buscando consultas próximas para usuário 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Buscando claims para usuário 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Notifications - Buscando notificações do usuário ID: 58
+Encontradas 0 consultas próximas
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Encontrados 0 claims
+✅ Notifications - Notificações encontradas: 1
+[API] Total de serviços: 10
+[API] Exemplo de serviço: {
+  id: 3,
+  name: 'Suplementos, perfumaria, ortopédicos e manipulados',
+  serviceImage: 'Sem imagem',
+  partner: 'Tem parceiro'
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+5:13:19 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=h3RJClR4-3PNhmEKYq17w
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+5:13:31 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=h3RJClR4-3PNhmEKYq17w
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+5:13:42 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=h3RJClR4-3PNhmEKYq17w
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Consultando CEP: 98600000
+Resposta da API ViaCEP: {
+  cep: '98600-000',
+  logradouro: '',
+  complemento: '',
+  unidade: '',
+  bairro: '',
+  localidade: 'Três Passos',
+  uf: 'RS',
+  estado: 'Rio Grande do Sul',
+  regiao: 'Sul',
+  ibge: '4321907',
+  gia: '',
+  ddd: '55',
+  siafi: '8941'
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+[API] Total de serviços: 10
+[API] Exemplo de serviço: {
+  id: 3,
+  name: 'Suplementos, perfumaria, ortopédicos e manipulados',
+  serviceImage: 'Sem imagem',
+  partner: 'Tem parceiro'
+}
+5:20:13 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=h3RJClR4-3PNhmEKYq17w
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+5:20:56 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=h3RJClR4-3PNhmEKYq17w
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+5:21:52 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=h3RJClR4-3PNhmEKYq17w
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+5:21:53 PM [vite] Internal server error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/profile.tsx: Missing semicolon. (450:7)
+
+  448 |         city: data.city || "",
+  449 |         state: data.state || ""
+> 450 |       });
+      |        ^
+  451 |       
+  452 |       // Exibir mensagem de sucesso
+  453 |       toast({
+  Plugin: vite:react-babel
+  File: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/profile.tsx:450:7
+  448|          city: data.city || "",
+  449|          state: data.state || ""
+  450|        });
+     |         ^
+  451|        
+  452|        // Exibir mensagem de sucesso
+      at toParseError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at raise (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:1503:19)
+      at semicolon (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/util.ts:150:10)
+      at parseVarStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1243:10)
+      at parseVarStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3126:33)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:599:21)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementListItem (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:417:17)
+      at parseBlockOrModuleBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1435:16)
+      at parseBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1408:10)
+      at parseBlock (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1376:10)
+      at parseTryStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1196:23)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:535:21)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementListItem (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:417:17)
+      at parseBlockOrModuleBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1435:16)
+      at parseBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1408:10)
+      at parseBlock (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1376:10)
+      at parseFunctionBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:2580:24)
+      at parseArrowExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:2521:10)
+      at parseAsyncArrowFromCallExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1050:10)
+      at parseAsyncArrowFromCallExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3677:20)
+      at parseCoverCallAndAsyncArrowHead (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:929:27)
+      at parseSubscript (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:790:19)
+      at parseSubscript (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:2850:20)
+      at parseSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:749:19)
+      at parseExprSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:734:17)
+      at parseUpdate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:707:21)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:669:23)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3845:20)
+      at parseMaybeUnaryOrPrivate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:403:14)
+      at parseExprOps (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:415:23)
+      at parseMaybeConditional (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:370:23)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3717:22)
+      at callback (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:257:12)
+      at allowInAnd (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:3144:16)
+      at parseMaybeAssignAllowIn (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:256:17)
+      at parseVar (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1578:18)
+      at parseVarStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1242:10)
+      at parseVarStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3126:33)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:599:21)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementListItem (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:417:17)
+      at parseBlockOrModuleBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1435:16)
+      at parseBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1408:10)
+      at parseBlock (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1376:10)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+5:21:53 PM [vite] Pre-transform error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/profile.tsx: Missing semicolon. (450:7)
+
+  448 |         city: data.city || "",
+  449 |         state: data.state || ""
+> 450 |       });
+      |        ^
+  451 |       
+  452 |       // Exibir mensagem de sucesso
+  453 |       toast({
+5:22:01 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=h3RJClR4-3PNhmEKYq17w
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+5:22:01 PM [vite] Internal server error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/profile.tsx: Missing semicolon. (450:7)
+
+  448 |         city: data.city || "",
+  449 |         state: data.state || ""
+> 450 |       });
+      |        ^
+  451 |       
+  452 |       // Exibir mensagem de sucesso
+  453 |       toast({
+  Plugin: vite:react-babel
+  File: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/profile.tsx:450:7
+  448|          city: data.city || "",
+  449|          state: data.state || ""
+  450|        });
+     |         ^
+  451|        
+  452|        // Exibir mensagem de sucesso
+      at toParseError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at raise (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:1503:19)
+      at semicolon (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/util.ts:150:10)
+      at parseVarStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1243:10)
+      at parseVarStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3126:33)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:599:21)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementListItem (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:417:17)
+      at parseBlockOrModuleBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1435:16)
+      at parseBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1408:10)
+      at parseBlock (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1376:10)
+      at parseTryStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1196:23)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:535:21)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementListItem (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:417:17)
+      at parseBlockOrModuleBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1435:16)
+      at parseBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1408:10)
+      at parseBlock (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1376:10)
+      at parseFunctionBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:2580:24)
+      at parseArrowExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:2521:10)
+      at parseAsyncArrowFromCallExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1050:10)
+      at parseAsyncArrowFromCallExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3677:20)
+      at parseCoverCallAndAsyncArrowHead (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:929:27)
+      at parseSubscript (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:790:19)
+      at parseSubscript (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:2850:20)
+      at parseSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:749:19)
+      at parseExprSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:734:17)
+      at parseUpdate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:707:21)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:669:23)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3845:20)
+      at parseMaybeUnaryOrPrivate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:403:14)
+      at parseExprOps (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:415:23)
+      at parseMaybeConditional (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:370:23)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3717:22)
+      at callback (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:257:12)
+      at allowInAnd (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:3144:16)
+      at parseMaybeAssignAllowIn (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:256:17)
+      at parseVar (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1578:18)
+      at parseVarStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1242:10)
+      at parseVarStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3126:33)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:599:21)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementListItem (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:417:17)
+      at parseBlockOrModuleBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1435:16)
+      at parseBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1408:10)
+      at parseBlock (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1376:10)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+5:22:02 PM [vite] Pre-transform error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/profile.tsx: Missing semicolon. (450:7)
+
+  448 |         city: data.city || "",
+  449 |         state: data.state || ""
+> 450 |       });
+      |        ^
+  451 |       
+  452 |       // Exibir mensagem de sucesso
+  453 |       toast({
+5:22:29 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=h3RJClR4-3PNhmEKYq17w
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family

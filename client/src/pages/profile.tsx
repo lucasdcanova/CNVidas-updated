@@ -44,7 +44,7 @@ import {
   MapPin
 } from "lucide-react";
 import Breadcrumb from "@/components/ui/breadcrumb";
-import { AddressForm, AddressFormValues } from "@/components/forms/address-form";
+import { AddressFormOptimized as AddressForm, AddressFormValues } from "@/components/forms/address-form-optimized";
 import { ImageCropper } from "@/components/shared/ImageCropper";
 import PaymentMethods from "@/components/payment/payment-methods";
 import { useStripeSetup } from '@/hooks/use-stripe-setup';
@@ -126,27 +126,33 @@ const Profile: React.FC = () => {
   const [tempImageUrl, setTempImageUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
-  // Fetch user profile data
+  // Fetch user profile data with optimized cache settings
   const { data: profileData, isLoading: profileLoading } = useQuery({
     queryKey: ["/api/users/profile"],
-    queryFn: getUserProfile
+    queryFn: getUserProfile,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    cacheTime: 10 * 60 * 1000, // 10 minutes
+    refetchOnWindowFocus: false, // Avoid refetch on window focus
+    refetchOnMount: false, // Don't refetch if data is already in cache
   });
   
-  // Use useEffect to handle profile data changes
+  // Use useEffect to handle profile data changes - only for profile image
   React.useEffect(() => {
-    if (profileData && profileData.profileImage) {
+    if (profileData && profileData.profileImage && !profileImage) {
       console.log("Imagem de perfil encontrada no servidor");
       setProfileImage(profileData.profileImage);
-    } else if (profileData) {
-      console.log("Nenhuma imagem de perfil encontrada no servidor");
     }
-  }, [profileData]);
+  }, [profileData?.profileImage]); // Dependência mais específica
   
   // Fetch partner data if user is a partner
   const { data: partnerData, isLoading: partnerLoading } = useQuery({
     queryKey: ["/api/partners/me"],
     queryFn: getCurrentPartner,
     enabled: !!user?.id && user?.role === "partner",
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
   
   // Fetch doctor data if user is a doctor
@@ -156,7 +162,11 @@ const Profile: React.FC = () => {
       console.log("Buscando perfil do médico para usuário ID:", user?.id);
       return getDoctorByUserId(user?.id || 0);
     },
-    enabled: !!user?.id && user?.role === "doctor"
+    enabled: !!user?.id && user?.role === "doctor",
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
   
   // Patient profile form
@@ -172,10 +182,13 @@ const Profile: React.FC = () => {
     },
   });
   
-  // Atualizar o formulário quando os dados do perfil forem carregados ou alterados
+  // Estado para controlar se os dados iniciais já foram carregados
+  const [isPatientFormInitialized, setIsPatientFormInitialized] = React.useState(false);
+  
+  // Atualizar o formulário quando os dados do perfil forem carregados pela primeira vez
   React.useEffect(() => {
-    if (profileData) {
-      console.log("Atualizando dados do formulário com dados do perfil:", profileData);
+    if (profileData && !isPatientFormInitialized && (user?.role === "patient" || user?.role === "admin")) {
+      console.log("Inicializando formulário do paciente com dados do perfil:", profileData);
       patientForm.reset({
         fullName: profileData.fullName || "",
         username: profileData.username || "",
@@ -191,8 +204,9 @@ const Profile: React.FC = () => {
         state: profileData.state || "",
         birthDate: profileData.birthDate ? new Date(profileData.birthDate).toISOString().split('T')[0] : "",
       });
+      setIsPatientFormInitialized(true);
     }
-  }, [profileData, patientForm]);
+  }, [profileData, isPatientFormInitialized, user?.role]);
   
   // Doctor profile form
   const doctorForm = useForm<DoctorProfileFormValues>({
@@ -209,10 +223,13 @@ const Profile: React.FC = () => {
     },
   });
   
+  // Estado para controlar se os dados do médico já foram inicializados
+  const [isDoctorFormInitialized, setIsDoctorFormInitialized] = React.useState(false);
+  
   // Inicializar a imagem de perfil e atualizar o formulário quando os dados do médico forem carregados
   React.useEffect(() => {
-    if (doctorData) {
-      console.log("Atualizando formulário do médico com dados:", doctorData);
+    if (doctorData && !isDoctorFormInitialized && user?.role === "doctor") {
+      console.log("Inicializando formulário do médico com dados:", doctorData);
       doctorForm.reset({
         specialization: doctorData.specialization || "",
         licenseNumber: doctorData.licenseNumber || "",
@@ -224,11 +241,12 @@ const Profile: React.FC = () => {
         profileImage: doctorData.profileImage || "",
       });
       
-      if (doctorData.profileImage) {
+      if (doctorData.profileImage && !profileImage) {
         setProfileImage(doctorData.profileImage);
       }
+      setIsDoctorFormInitialized(true);
     }
-  }, [doctorData, doctorForm]);
+  }, [doctorData, isDoctorFormInitialized, user?.role]);
   
   // Partner profile form
   const partnerForm = useForm<PartnerProfileFormValues>({
@@ -251,10 +269,13 @@ const Profile: React.FC = () => {
     },
   });
   
-  // Atualizar o formulário do parceiro quando os dados forem carregados ou alterados
+  // Estado para controlar se os dados do parceiro já foram inicializados
+  const [isPartnerFormInitialized, setIsPartnerFormInitialized] = React.useState(false);
+  
+  // Atualizar o formulário do parceiro quando os dados forem carregados pela primeira vez
   React.useEffect(() => {
-    if (partnerData) {
-      console.log("Atualizando formulário do parceiro com dados:", partnerData);
+    if (partnerData && !isPartnerFormInitialized && user?.role === "partner") {
+      console.log("Inicializando formulário do parceiro com dados:", partnerData);
       partnerForm.reset({
         businessName: partnerData.businessName || "",
         businessType: partnerData.businessType || "",
@@ -271,8 +292,9 @@ const Profile: React.FC = () => {
         phone: partnerData.phone || "",
         cnpj: partnerData.cnpj || "",
       });
+      setIsPartnerFormInitialized(true);
     }
-  }, [partnerData, partnerForm]);
+  }, [partnerData, isPartnerFormInitialized, user?.role]);
 
   // Password form
   const passwordForm = useForm<PasswordFormValues>({
@@ -413,11 +435,8 @@ const Profile: React.FC = () => {
     setIsUpdatingProfile(true);
     
     try {
-      // Voltar ao uso do hook de mutação original, que já tem a autenticação configurada corretamente
-      await updateProfileMutation.mutateAsync({
-        fullName: data.fullName || "",
-        username: data.username || "",
-        email: data.email || "",
+      // Preparar dados para envio, excluindo campos não editáveis para não-admins
+      const updateData: any = {
         phone: data.phone || "",
         birthDate: data.birthDate || "",
         // Garantir que todos os campos de endereço são enviados explicitamente
@@ -428,7 +447,17 @@ const Profile: React.FC = () => {
         neighborhood: data.neighborhood || "",
         city: data.city || "",
         state: data.state || ""
-      });
+      };
+      
+      // Se for admin, incluir campos protegidos
+      if (user?.role === "admin") {
+        updateData.fullName = data.fullName || "";
+        updateData.username = data.username || "";
+        updateData.email = data.email || "";
+      }
+      
+      // Voltar ao uso do hook de mutação original, que já tem a autenticação configurada corretamente
+      await updateProfileMutation.mutateAsync(updateData);
       
       // Exibir mensagem de sucesso
       toast({
@@ -815,7 +844,10 @@ const Profile: React.FC = () => {
         throw new Error('Falha ao buscar métodos de pagamento');
       }
       return response.json();
-    }
+    },
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const paymentMethodsData = paymentMethodsQuery.data;
@@ -962,10 +994,16 @@ const Profile: React.FC = () => {
                               <FormControl>
                                 <Input 
                                   placeholder="Seu nome completo" 
-                                  disabled={isUpdatingProfile || !isEditMode}
+                                  disabled={true} // Sempre desabilitado para não-admins
+                                  className={user?.role !== "admin" ? "bg-muted cursor-not-allowed" : ""}
                                   {...field} 
                                 />
                               </FormControl>
+                              {user?.role !== "admin" && (
+                                <FormDescription className="text-xs">
+                                  Este campo não pode ser editado
+                                </FormDescription>
+                              )}
                               <FormMessage />
                             </FormItem>
                           )}
@@ -980,10 +1018,16 @@ const Profile: React.FC = () => {
                               <FormControl>
                                 <Input 
                                   placeholder="seunome" 
-                                  disabled={isUpdatingProfile || !isEditMode}
+                                  disabled={true} // Sempre desabilitado para não-admins
+                                  className={user?.role !== "admin" ? "bg-muted cursor-not-allowed" : ""}
                                   {...field} 
                                 />
                               </FormControl>
+                              {user?.role !== "admin" && (
+                                <FormDescription className="text-xs">
+                                  Este campo não pode ser editado
+                                </FormDescription>
+                              )}
                               <FormMessage />
                             </FormItem>
                           )}
@@ -1000,10 +1044,16 @@ const Profile: React.FC = () => {
                               <Input 
                                 placeholder="seu@email.com" 
                                 type="email" 
-                                disabled={isUpdatingProfile || !isEditMode}
+                                disabled={true} // Sempre desabilitado para não-admins
+                                className={user?.role !== "admin" ? "bg-muted cursor-not-allowed" : ""}
                                 {...field} 
                               />
                             </FormControl>
+                            {user?.role !== "admin" && (
+                              <FormDescription className="text-xs">
+                                Este campo não pode ser editado
+                              </FormDescription>
+                            )}
                             <FormMessage />
                           </FormItem>
                         )}
@@ -1035,34 +1085,30 @@ const Profile: React.FC = () => {
                         </div>
                         
                         <AddressForm
+                          key={`patient-address-${profileData?.id}`}
                           defaultValues={{
-                            zipcode: patientForm.getValues("zipcode") || "",
-                            street: patientForm.getValues("street") || "",
-                            number: patientForm.getValues("number") || "",
-                            complement: patientForm.getValues("complement") || "",
-                            neighborhood: patientForm.getValues("neighborhood") || "",
-                            city: patientForm.getValues("city") || "",
-                            state: patientForm.getValues("state") || "",
+                            zipcode: patientForm.watch("zipcode") || "",
+                            street: patientForm.watch("street") || "",
+                            number: patientForm.watch("number") || "",
+                            complement: patientForm.watch("complement") || "",
+                            neighborhood: patientForm.watch("neighborhood") || "",
+                            city: patientForm.watch("city") || "",
+                            state: patientForm.watch("state") || "",
                           }}
                           isSubmitting={isUpdatingProfile || !isEditMode}
                           onSubmit={(addressData) => {
-                            // Atualizar os valores no formulário principal
-                            patientForm.setValue("zipcode", addressData.zipcode);
-                            patientForm.setValue("street", addressData.street);
-                            patientForm.setValue("number", addressData.number);
-                            patientForm.setValue("complement", addressData.complement || "");
-                            patientForm.setValue("neighborhood", addressData.neighborhood);
-                            patientForm.setValue("city", addressData.city);
-                            patientForm.setValue("state", addressData.state);
+                            // Atualizar os valores no formulário principal em tempo real
+                            patientForm.setValue("zipcode", addressData.zipcode, { shouldDirty: true });
+                            patientForm.setValue("street", addressData.street, { shouldDirty: true });
+                            patientForm.setValue("number", addressData.number, { shouldDirty: true });
+                            patientForm.setValue("complement", addressData.complement || "", { shouldDirty: true });
+                            patientForm.setValue("neighborhood", addressData.neighborhood, { shouldDirty: true });
+                            patientForm.setValue("city", addressData.city, { shouldDirty: true });
+                            patientForm.setValue("state", addressData.state, { shouldDirty: true });
                             
                             // Construir o endereço completo para o campo legado
                             const fullAddress = `${addressData.street}, ${addressData.number}${addressData.complement ? `, ${addressData.complement}` : ""} - ${addressData.neighborhood} - ${addressData.city}/${addressData.state} - CEP: ${addressData.zipcode}`;
-                            patientForm.setValue("address", fullAddress);
-                            
-                            toast({
-                              title: "Endereço atualizado",
-                              description: "Endereço atualizado no formulário. Clique em Salvar Alterações para persistir as mudanças.",
-                            });
+                            patientForm.setValue("address", fullAddress, { shouldDirty: true });
                           }}
                           showSubmitButton={false}
                           standAlone={false} // Modo integrado - não cria um <form> aninhado
@@ -1409,35 +1455,31 @@ const Profile: React.FC = () => {
                         
                         <div className="address-form-container">
                           <AddressForm
+                            key={`partner-address-${partnerData?.id}`}
                             defaultValues={{
-                              zipcode: partnerForm.getValues("zipcode") || "",
-                              street: partnerForm.getValues("street") || "",
-                              number: partnerForm.getValues("number") || "",
-                              complement: partnerForm.getValues("complement") || "",
-                              neighborhood: partnerForm.getValues("neighborhood") || "",
-                              city: partnerForm.getValues("city") || "",
-                              state: partnerForm.getValues("state") || "",
+                              zipcode: partnerForm.watch("zipcode") || "",
+                              street: partnerForm.watch("street") || "",
+                              number: partnerForm.watch("number") || "",
+                              complement: partnerForm.watch("complement") || "",
+                              neighborhood: partnerForm.watch("neighborhood") || "",
+                              city: partnerForm.watch("city") || "",
+                              state: partnerForm.watch("state") || "",
                             }}
                             onSubmit={(addressData) => {
                               console.log("Dados de endereço recebidos do componente AddressForm:", addressData);
                               
-                              // Atualizar os valores no formulário principal
-                              partnerForm.setValue("zipcode", addressData.zipcode);
-                              partnerForm.setValue("street", addressData.street);
-                              partnerForm.setValue("number", addressData.number);
-                              partnerForm.setValue("complement", addressData.complement || "");
-                              partnerForm.setValue("neighborhood", addressData.neighborhood);
-                              partnerForm.setValue("city", addressData.city);
-                              partnerForm.setValue("state", addressData.state);
+                              // Atualizar os valores no formulário principal em tempo real
+                              partnerForm.setValue("zipcode", addressData.zipcode, { shouldDirty: true });
+                              partnerForm.setValue("street", addressData.street, { shouldDirty: true });
+                              partnerForm.setValue("number", addressData.number, { shouldDirty: true });
+                              partnerForm.setValue("complement", addressData.complement || "", { shouldDirty: true });
+                              partnerForm.setValue("neighborhood", addressData.neighborhood, { shouldDirty: true });
+                              partnerForm.setValue("city", addressData.city, { shouldDirty: true });
+                              partnerForm.setValue("state", addressData.state, { shouldDirty: true });
                               
                               // Construir o endereço completo para o campo legado
                               const fullAddress = `${addressData.street}, ${addressData.number}${addressData.complement ? `, ${addressData.complement}` : ""} - ${addressData.neighborhood} - ${addressData.city}/${addressData.state} - CEP: ${addressData.zipcode}`;
-                              partnerForm.setValue("address", fullAddress);
-                              
-                              toast({
-                                title: "Endereço atualizado",
-                                description: "Endereço atualizado no formulário. Clique em Salvar Alterações para persistir as mudanças.",
-                              });
+                              partnerForm.setValue("address", fullAddress, { shouldDirty: true });
                             }}
                             isSubmitting={isUpdatingProfile}
                             showSubmitButton={false}
