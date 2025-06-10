@@ -96,7 +96,7 @@ export default function PaymentMethods({ paymentMethods, onUpdate }: PaymentMeth
   const [isLoading, setIsLoading] = useState(false);
   const [setupError, setSetupError] = useState<string | null>(null);
   const { toast } = useToast();
-  const { StripeSetupProvider, isLoading: isSetupLoading } = useStripeSetup({
+  const { StripeSetupProvider, isLoading: isSetupLoading, clientSecret } = useStripeSetup({
     onError: (error) => {
       console.error('Erro no setup do Stripe:', error);
       setSetupError(error.message);
@@ -221,7 +221,7 @@ export default function PaymentMethods({ paymentMethods, onUpdate }: PaymentMeth
             isSetupLoading ? (
               <div>Carregando Stripe...</div>
             ) : clientSecret ? (
-              <StripeSetupProvider clientSecret={clientSecret}>
+              <StripeSetupProvider>
                 <PaymentForm
                   onCancel={() => setIsAddingNew(false)}
                   onSuccess={() => {

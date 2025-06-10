@@ -68,6 +68,7 @@ export function useStripeSetup({ onSuccess, onError }: UseStripeSetupProps = {})
       </StripeSetupProvider>
     ),
     isLoading,
-    createSetupIntent
+    createSetupIntent,
+    clientSecret
   };
 } 
