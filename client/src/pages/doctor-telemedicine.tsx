@@ -226,6 +226,11 @@ const AppointmentItem = ({ appointment, onDeleteEmergencyAppointment }: { appoin
                 <div className="flex items-center gap-2">
                   <h3 className="text-lg font-semibold">
                     {appointment.patientName || "Paciente"}
+                    {appointment.patientAge && (
+                      <span className="ml-2 text-sm text-muted-foreground font-normal">
+                        ({appointment.patientAge} anos)
+                      </span>
+                    )}
                     {isEmergency && <span className="ml-2 text-red-500 text-sm font-normal">Consulta de Emergência</span>}
                   </h3>
                   {getStatusBadge()}
@@ -251,6 +256,13 @@ const AppointmentItem = ({ appointment, onDeleteEmergencyAppointment }: { appoin
                   {appointment.patientPhone && (
                     <div className="flex items-center">
                       <span className="text-xs text-muted-foreground">Telefone: {appointment.patientPhone}</span>
+                    </div>
+                  )}
+                  {appointment.patientBirthDate && (
+                    <div className="flex items-center">
+                      <span className="text-xs text-muted-foreground">
+                        Data de nascimento: {format(new Date(appointment.patientBirthDate), "dd/MM/yyyy", { locale: ptBR })}
+                      </span>
                     </div>
                   )}
                   {isCanceled && appointment.notes && (

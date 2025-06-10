@@ -2,19 +2,14 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Calendar } from '@/components/ui/calendar';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { AppointmentScheduler } from '@/components/appointments/appointment-scheduler';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/use-auth';
-import { Textarea } from '@/components/ui/textarea';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { 
   Loader2, Clock, Calendar as CalendarIcon, Search, Filter, 
   Heart, User, Star, ArrowRight, Clock3, CheckCircle, AlertCircle
@@ -60,22 +55,6 @@ type Appointment = {
   notes?: string;
 };
 
-// Esquema de validação para o formulário de agendamento
-const appointmentSchema = z.object({
-  doctorId: z.number({
-    required_error: "Selecione um médico",
-  }),
-  date: z.date({
-    required_error: "Selecione uma data para a consulta",
-  }),
-  time: z.string({
-    required_error: "Selecione um horário para a consulta",
-  }),
-  specialization: z.string().optional(),
-  notes: z.string().optional(),
-});
-
-type AppointmentFormValues = z.infer<typeof appointmentSchema>;
 
 export default function TelemedicinePage() {
   const [location, navigate] = useLocation();
@@ -89,18 +68,9 @@ export default function TelemedicinePage() {
   const [isBookingDialogOpen, setIsBookingDialogOpen] = useState<boolean>(false);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [isStartingEmergency, setIsStartingEmergency] = useState<boolean>(false);
-  const [availableTimes, setAvailableTimes] = useState<string[]>([]);
-  const [schedulingAppointment, setSchedulingAppointment] = useState<boolean>(false);
   const [selectedSpecialty, setSelectedSpecialty] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
   
-  // Formulário de agendamento
-  const form = useForm<AppointmentFormValues>({
-    resolver: zodResolver(appointmentSchema),
-    defaultValues: {
-      notes: '',
-    },
-  });
   
   // Consultas usando React Query
   const { data: allDoctors = [], isLoading: isLoadingDoctors } = useQuery<Doctor[]>({
@@ -166,7 +136,6 @@ export default function TelemedicinePage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/appointments/upcoming'] });
       setIsBookingDialogOpen(false);
-      form.reset();
       toast({
         title: 'Consulta agendada com sucesso',
         description: 'Você receberá uma notificação quando for confirmada pelo médico.',
@@ -202,35 +171,7 @@ export default function TelemedicinePage() {
     },
   });
   
-  // Efeito para atualizar horários disponíveis quando a data mudar
-  useEffect(() => {
-    const date = form.watch('date');
-    const doctorId = form.watch('doctorId');
-    
-    if (date && doctorId) {
-      fetchAvailableTimes(doctorId, date);
-    }
-  }, [form.watch('date'), form.watch('doctorId')]);
   
-  // Função para buscar horários disponíveis
-  const fetchAvailableTimes = async (doctorId: number, date: Date): Promise<void> => {
-    try {
-      setSchedulingAppointment(true);
-      const formattedDate = format(date, 'yyyy-MM-dd');
-      const response = await apiRequest('GET', `/api/doctors/${doctorId}/availability?date=${formattedDate}`);
-      const data = await response.json();
-      setAvailableTimes(data.availableTimes || []);
-    } catch (error: unknown) {
-      console.error('Erro ao buscar horários disponíveis:', error);
-      toast({
-        title: 'Erro ao buscar horários',
-        description: 'Não foi possível obter os horários disponíveis.',
-        variant: 'destructive',
-      });
-    } finally {
-      setSchedulingAppointment(false);
-    }
-  };
   
   // Handler para iniciar consulta de emergência
   const handleStartEmergencyConsultation = (doctor: Doctor): void => {
@@ -242,15 +183,9 @@ export default function TelemedicinePage() {
   // Handler para abrir diálogo de agendamento
   const handleOpenBookingDialog = (doctor: Doctor): void => {
     setSelectedDoctor(doctor);
-    form.setValue('doctorId', doctor.id);
-    form.setValue('specialization', doctor.specialization);
     setIsBookingDialogOpen(true);
   };
   
-  // Handler para submeter formulário de agendamento
-  const onSubmitAppointmentForm = (data: AppointmentFormValues): void => {
-    createAppointmentMutation.mutate(data);
-  };
   
   // Helper para determinar o status visual de uma consulta
   const getAppointmentStatusClass = (status: string) => {
@@ -286,26 +221,39 @@ export default function TelemedicinePage() {
   
   // Verificar se o usuário pode iniciar consulta de emergência
   const canUseEmergencyConsultation = () => {
-    if (user?.subscriptionPlan === 'premium') return true;
-    if (user?.subscriptionPlan === 'basic' && user?.emergencyConsultationsLeft && user.emergencyConsultationsLeft > 0) return true;
+    if (user?.subscriptionPlan?.includes('ultra') || user?.subscriptionPlan?.includes('premium')) return true;
+    if (user?.subscriptionPlan?.includes('basic') && user?.emergencyConsultationsLeft && user.emergencyConsultationsLeft > 0) return true;
     return false;
   };
   
   // Função para obter texto do plano e preço da consulta para emergências
   const getEmergencyConsultationPriceInfo = (doctor: Doctor) => {
-    if (user?.subscriptionPlan === 'premium') {
+    // Planos Ultra e Premium têm consultas de emergência inclusas
+    if (user?.subscriptionPlan?.includes('ultra') || user?.subscriptionPlan?.includes('premium')) {
+      const planName = user.subscriptionPlan.includes('ultra') 
+        ? (user.subscriptionPlan.includes('family') ? 'Ultra Família' : 'Ultra')
+        : (user.subscriptionPlan.includes('family') ? 'Premium Família' : 'Premium');
+      
       return {
-        text: "Incluso no plano Premium",
-        color: "text-blue-600",
-        badge: <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">Gratuito</Badge>
+        text: `Incluso no plano ${planName}`,
+        color: user.subscriptionPlan.includes('ultra') ? "text-purple-600" : "text-blue-600",
+        badge: <Badge variant="outline" className={
+          user.subscriptionPlan.includes('ultra')
+            ? "bg-purple-50 text-purple-700 border-purple-200"
+            : "bg-blue-50 text-blue-700 border-blue-200"
+        }>Gratuito</Badge>
       };
-    } else if (user?.subscriptionPlan === 'basic' && user?.emergencyConsultationsLeft && user.emergencyConsultationsLeft > 0) {
+    } 
+    // Planos Basic têm número limitado de consultas
+    else if (user?.subscriptionPlan?.includes('basic') && user?.emergencyConsultationsLeft && user.emergencyConsultationsLeft > 0) {
       return {
         text: `${user.emergencyConsultationsLeft} consultas disponíveis`,
         color: "text-green-600",
         badge: <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Gratuito</Badge>
       };
-    } else {
+    } 
+    // Usuários sem plano ou que esgotaram consultas gratuitas pagam valor integral
+    else {
       if (!doctor.consultationFee) {
         return {
           text: "O médico ainda não definiu o preço da consulta",
@@ -339,34 +287,51 @@ export default function TelemedicinePage() {
     let finalPrice = basePrice;
     let discountText = "";
     let discountAmount = 0;
+    let planName = "";
     
-    if (user?.subscriptionPlan === 'premium') {
+    // Verificar planos Ultra (70% de desconto)
+    if (user?.subscriptionPlan?.includes('ultra')) {
+      finalPrice = basePrice * 0.3; // 70% de desconto
+      discountText = "70% de desconto";
+      discountAmount = basePrice - finalPrice;
+      planName = user.subscriptionPlan.includes('family') ? 'Ultra Família' : 'Ultra';
+    } 
+    // Verificar planos Premium (50% de desconto)
+    else if (user?.subscriptionPlan?.includes('premium')) {
       finalPrice = basePrice * 0.5; // 50% de desconto
       discountText = "50% de desconto";
       discountAmount = basePrice - finalPrice;
-    } else if (user?.subscriptionPlan === 'basic') {
+      planName = user.subscriptionPlan.includes('family') ? 'Premium Família' : 'Premium';
+    } 
+    // Verificar planos Basic (30% de desconto)
+    else if (user?.subscriptionPlan?.includes('basic')) {
       finalPrice = basePrice * 0.7; // 30% de desconto
       discountText = "30% de desconto";
       discountAmount = basePrice - finalPrice;
+      planName = user.subscriptionPlan.includes('family') ? 'Basic Família' : 'Basic';
     }
     
     return {
-      text: user?.subscriptionPlan !== 'free' 
-        ? `${discountText} (Plano ${user?.subscriptionPlan === 'premium' ? 'Premium' : 'Basic'})`
+      text: user?.subscriptionPlan !== 'free' && user?.subscriptionPlan
+        ? `${discountText} (Plano ${planName})`
         : "Valor integral",
-      color: user?.subscriptionPlan === 'premium' 
-        ? "text-blue-600" 
-        : user?.subscriptionPlan === 'basic' 
-          ? "text-green-600" 
-          : "text-gray-700",
+      color: user?.subscriptionPlan?.includes('ultra')
+        ? "text-purple-600"
+        : user?.subscriptionPlan?.includes('premium')
+          ? "text-blue-600" 
+          : user?.subscriptionPlan?.includes('basic')
+            ? "text-green-600" 
+            : "text-gray-700",
       badge: <Badge variant="outline" className={
-        user?.subscriptionPlan === 'premium'
-          ? "bg-blue-50 text-blue-700 border-blue-200"
-          : user?.subscriptionPlan === 'basic'
-            ? "bg-green-50 text-green-700 border-green-200"
-            : "bg-amber-50 text-amber-700 border-amber-200"
+        user?.subscriptionPlan?.includes('ultra')
+          ? "bg-purple-50 text-purple-700 border-purple-200"
+          : user?.subscriptionPlan?.includes('premium')
+            ? "bg-blue-50 text-blue-700 border-blue-200"
+            : user?.subscriptionPlan?.includes('basic')
+              ? "bg-green-50 text-green-700 border-green-200"
+              : "bg-amber-50 text-amber-700 border-amber-200"
       }>
-        {user?.subscriptionPlan !== 'free' ? (
+        {user?.subscriptionPlan !== 'free' && user?.subscriptionPlan ? (
           <>
             <span className="line-through text-gray-500 mr-1.5">R$ {basePrice.toFixed(2)}</span>
             <span>R$ {finalPrice.toFixed(2)}</span>
@@ -711,127 +676,46 @@ export default function TelemedicinePage() {
       
       {/* Diálogo de Agendamento */}
       <Dialog open={isBookingDialogOpen} onOpenChange={setIsBookingDialogOpen}>
-        <DialogContent className="sm:max-w-[520px]">
+        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Agendar Consulta</DialogTitle>
             <DialogDescription>
-              {selectedDoctor?.name && (
-                <>Agende sua consulta com <span className="font-medium">{formatDoctorName(selectedDoctor.name)}</span></>
-              )}
+              Escolha o melhor dia e horário para sua consulta
             </DialogDescription>
           </DialogHeader>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmitAppointmentForm)} className="space-y-6">
-              <div className="grid grid-cols-1 gap-6">
-                <div className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="date"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <FormLabel>Data da Consulta</FormLabel>
-                        <FormControl>
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            disabled={(date) => {
-                              const today = new Date();
-                              today.setHours(0, 0, 0, 0);
-                              return date < today;
-                            }}
-                            className="border rounded-md p-3"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+          
+          {selectedDoctor && (
+            <AppointmentScheduler
+              doctorId={selectedDoctor.id}
+              doctorName={formatDoctorName(selectedDoctor.name || 'Médico')}
+              onSelectDateTime={async (date, time) => {
+                // Combinar data e hora
+                const [hours, minutes] = time.split(':');
+                const appointmentDate = new Date(date);
+                appointmentDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+                
+                // Criar agendamento
+                try {
+                  await createAppointmentMutation.mutateAsync({
+                    doctorId: selectedDoctor.id,
+                    date: appointmentDate.toISOString(),
+                    duration: 30,
+                    notes: '',
+                    type: 'telemedicine'
+                  });
                   
-                  <FormField
-                    control={form.control}
-                    name="time"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Horário</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          disabled={schedulingAppointment || !form.watch('date')}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Selecione um horário" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {schedulingAppointment ? (
-                              <div className="flex items-center justify-center p-2">
-                                <Loader2 className="h-5 w-5 animate-spin text-primary" />
-                              </div>
-                            ) : availableTimes.length > 0 ? (
-                              availableTimes.map((time) => (
-                                <SelectItem key={time} value={time}>
-                                  {time}
-                                </SelectItem>
-                              ))
-                            ) : (
-                              <div className="p-2 text-sm text-gray-500 text-center">
-                                {form.watch('date') 
-                                  ? 'Não há horários disponíveis nesta data' 
-                                  : 'Selecione uma data primeiro'}
-                              </div>
-                            )}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="notes"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Observações (opcional)</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Descreva brevemente o motivo da consulta ou sintomas"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-              
-              <div className="flex justify-end space-x-3 pt-2">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => setIsBookingDialogOpen(false)}
-                >
-                  Cancelar
-                </Button>
-                <Button 
-                  type="submit" 
-                  disabled={createAppointmentMutation.isPending}
-                >
-                  {createAppointmentMutation.isPending ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Agendando...
-                    </>
-                  ) : (
-                    'Confirmar Agendamento'
-                  )}
-                </Button>
-              </div>
-            </form>
-          </Form>
+                  setIsBookingDialogOpen(false);
+                  toast({
+                    title: "Consulta agendada com sucesso!",
+                    description: `Sua consulta foi marcada para ${format(appointmentDate, "dd 'de' MMMM 'às' HH:mm", { locale: ptBR })}`,
+                  });
+                } catch (error) {
+                  console.error('Erro ao agendar consulta:', error);
+                }
+              }}
+              onCancel={() => setIsBookingDialogOpen(false)}
+            />
+          )}
         </DialogContent>
       </Dialog>
     </DashboardLayout>
