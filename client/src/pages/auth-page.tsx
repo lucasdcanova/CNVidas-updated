@@ -21,6 +21,16 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import { Loader2 } from "lucide-react";
@@ -48,6 +58,15 @@ const registerSchema = z.discriminatedUnion("role", [
     cnpj: z.string().optional(),
     password: z.string().min(6, { message: "A senha deve ter pelo menos 6 caracteres" }),
     fullName: z.string().min(3, { message: "O nome completo é obrigatório" }),
+    acceptTerms: z.boolean().refine(val => val === true, {
+      message: "Você deve aceitar os Termos de Uso",
+    }),
+    acceptPrivacy: z.boolean().refine(val => val === true, {
+      message: "Você deve aceitar a Política de Privacidade", 
+    }),
+    acceptContract: z.boolean().refine(val => val === true, {
+      message: "Você deve aceitar o Contrato de Adesão",
+    }),
   }),
   // Schema para parceiros (requer CNPJ)
   z.object({
@@ -58,6 +77,15 @@ const registerSchema = z.discriminatedUnion("role", [
     cnpj: z.string().min(14, { message: "CNPJ inválido" }).max(18, { message: "CNPJ inválido" }),
     password: z.string().min(6, { message: "A senha deve ter pelo menos 6 caracteres" }),
     fullName: z.string().min(3, { message: "O nome da empresa é obrigatório" }),
+    acceptTerms: z.boolean().refine(val => val === true, {
+      message: "Você deve aceitar os Termos de Uso",
+    }),
+    acceptPrivacy: z.boolean().refine(val => val === true, {
+      message: "Você deve aceitar a Política de Privacidade",
+    }),
+    acceptPartnerContract: z.boolean().refine(val => val === true, {
+      message: "Você deve aceitar o Contrato de Parceria",
+    }),
   }),
   // Schema para médicos e admins (requer username)
   z.object({
@@ -68,6 +96,12 @@ const registerSchema = z.discriminatedUnion("role", [
     cnpj: z.string().optional(),
     password: z.string().min(6, { message: "A senha deve ter pelo menos 6 caracteres" }),
     fullName: z.string().min(3, { message: "O nome completo é obrigatório" }),
+    acceptTerms: z.boolean().refine(val => val === true, {
+      message: "Você deve aceitar os Termos de Uso",
+    }),
+    acceptPrivacy: z.boolean().refine(val => val === true, {
+      message: "Você deve aceitar a Política de Privacidade",
+    }),
   }),
 ]).superRefine((data, ctx) => {
   // Se for paciente, CPF é obrigatório e deve ser válido
@@ -272,7 +306,10 @@ const AuthPage: React.FC = () => {
           password: data.password,
           fullName: data.fullName,
           role: data.role,
-          cpf: data.cpf // Enviamos o CPF formatado também
+          cpf: data.cpf, // Enviamos o CPF formatado também
+          acceptTerms: data.acceptTerms,
+          acceptPrivacy: data.acceptPrivacy,
+          acceptContract: data.acceptContract
         };
       } else if (data.role === "partner") {
         // Para parceiros/empresas, usamos o CNPJ como base para o username
@@ -283,7 +320,10 @@ const AuthPage: React.FC = () => {
           password: data.password,
           fullName: data.fullName,
           role: data.role,
-          cnpj: data.cnpj // Enviamos o CNPJ formatado também
+          cnpj: data.cnpj, // Enviamos o CNPJ formatado também
+          acceptTerms: data.acceptTerms,
+          acceptPrivacy: data.acceptPrivacy,
+          acceptPartnerContract: data.acceptPartnerContract
         };
       } else {
         // Para médicos e admins, usamos o username fornecido
@@ -293,7 +333,9 @@ const AuthPage: React.FC = () => {
           username: data.username || `u_${Date.now()}`, // Fallback para evitar username undefined
           password: data.password,
           fullName: data.fullName,
-          role: data.role
+          role: data.role,
+          acceptTerms: data.acceptTerms,
+          acceptPrivacy: data.acceptPrivacy
         };
       }
       
@@ -682,10 +724,219 @@ const AuthPage: React.FC = () => {
                     </FormItem>
                   )}
                 />
+
+                {/* Seção de Aceitação de Termos */}
+                <div className="border-t border-gray-200 pt-6 mt-6">
+                  <h3 className="text-sm font-medium text-gray-900 mb-4">
+                    Documentos Legais (Obrigatório)
+                  </h3>
+                  
+                  {/* Termos de Uso */}
+                  <FormField
+                    control={registerForm.control}
+                    name="acceptTerms"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 mb-3">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            disabled={isRegistering}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel className="text-sm">
+                            Li e aceito os{" "}
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <button
+                                  type="button"
+                                  className="text-blue-600 hover:underline font-medium"
+                                >
+                                  Termos de Uso
+                                </button>
+                              </DialogTrigger>
+                              <DialogContent className="max-w-4xl max-h-[80vh]">
+                                <DialogHeader>
+                                  <DialogTitle>Termos de Uso - CN Vidas</DialogTitle>
+                                </DialogHeader>
+                                <ScrollArea className="h-[60vh] w-full">
+                                  <div className="text-sm space-y-4 pr-4">
+                                    <p>Este documento estabelece os termos e condições para uso da plataforma CN Vidas...</p>
+                                    <p><strong>Ao aceitar estes termos, você concorda com:</strong></p>
+                                    <ul className="list-disc pl-6 space-y-1">
+                                      <li>Uso responsável da plataforma</li>
+                                      <li>Fornecer informações verdadeiras</li>
+                                      <li>Seguir as orientações médicas</li>
+                                      <li>Respeitar outros usuários e profissionais</li>
+                                    </ul>
+                                  </div>
+                                </ScrollArea>
+                              </DialogContent>
+                            </Dialog>
+                          </FormLabel>
+                          <FormMessage />
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Política de Privacidade */}
+                  <FormField
+                    control={registerForm.control}
+                    name="acceptPrivacy"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 mb-3">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            disabled={isRegistering}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel className="text-sm">
+                            Li e aceito a{" "}
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <button
+                                  type="button"
+                                  className="text-blue-600 hover:underline font-medium"
+                                >
+                                  Política de Privacidade
+                                </button>
+                              </DialogTrigger>
+                              <DialogContent className="max-w-4xl max-h-[80vh]">
+                                <DialogHeader>
+                                  <DialogTitle>Política de Privacidade - CN Vidas</DialogTitle>
+                                </DialogHeader>
+                                <ScrollArea className="h-[60vh] w-full">
+                                  <div className="text-sm space-y-4 pr-4">
+                                    <p>Esta política explica como coletamos, usamos e protegemos seus dados pessoais...</p>
+                                    <p><strong>Seus dados são protegidos por:</strong></p>
+                                    <ul className="list-disc pl-6 space-y-1">
+                                      <li>Criptografia de ponta a ponta</li>
+                                      <li>Conformidade com a LGPD</li>
+                                      <li>Servidores seguros no Brasil</li>
+                                      <li>Acesso restrito e auditado</li>
+                                    </ul>
+                                  </div>
+                                </ScrollArea>
+                              </DialogContent>
+                            </Dialog>
+                          </FormLabel>
+                          <FormMessage />
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Contrato específico baseado no tipo de usuário */}
+                  {registerForm.watch("role") === "patient" ? (
+                    <FormField
+                      control={registerForm.control}
+                      name="acceptContract"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 mb-3">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                              disabled={isRegistering}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel className="text-sm">
+                              Li e aceito o{" "}
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <button
+                                    type="button"
+                                    className="text-blue-600 hover:underline font-medium"
+                                  >
+                                    Contrato de Adesão dos Planos
+                                  </button>
+                                </DialogTrigger>
+                                <DialogContent className="max-w-4xl max-h-[80vh]">
+                                  <DialogHeader>
+                                    <DialogTitle>Contrato de Adesão - Planos CN Vidas</DialogTitle>
+                                  </DialogHeader>
+                                  <ScrollArea className="h-[60vh] w-full">
+                                    <div className="text-sm space-y-4 pr-4">
+                                      <p><strong className="text-red-600">ATENÇÃO:</strong> A cobertura de seguro só inicia no segundo mês após a contratação.</p>
+                                      <p>Este contrato estabelece os termos dos planos de assinatura...</p>
+                                      <ul className="list-disc pl-6 space-y-1">
+                                        <li>Planos disponíveis e preços</li>
+                                        <li>Período de carência de 30 dias</li>
+                                        <li>Direitos e deveres do usuário</li>
+                                        <li>Política de cancelamento</li>
+                                      </ul>
+                                    </div>
+                                  </ScrollArea>
+                                </DialogContent>
+                              </Dialog>
+                            </FormLabel>
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  ) : registerForm.watch("role") === "partner" ? (
+                    <FormField
+                      control={registerForm.control}
+                      name="acceptPartnerContract"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 mb-3">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                              disabled={isRegistering}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel className="text-sm">
+                              Li e aceito o{" "}
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <button
+                                    type="button"
+                                    className="text-blue-600 hover:underline font-medium"
+                                  >
+                                    Contrato de Parceria
+                                  </button>
+                                </DialogTrigger>
+                                <DialogContent className="max-w-4xl max-h-[80vh]">
+                                  <DialogHeader>
+                                    <DialogTitle>Contrato de Parceria - CN Vidas</DialogTitle>
+                                  </DialogHeader>
+                                  <ScrollArea className="h-[60vh] w-full">
+                                    <div className="text-sm space-y-4 pr-4">
+                                      <p><strong>Parceria de cooperação mútua</strong> sem exclusividade ou repasse financeiro.</p>
+                                      <p>Este contrato estabelece:</p>
+                                      <ul className="list-disc pl-6 space-y-1">
+                                        <li>Relação de parceria não exclusiva</li>
+                                        <li>Sem repasse de valores financeiros</li>
+                                        <li>Encaminhamento de pacientes</li>
+                                        <li>Descontos voluntários aos usuários</li>
+                                        <li>Cancelamento a qualquer momento</li>
+                                      </ul>
+                                    </div>
+                                  </ScrollArea>
+                                </DialogContent>
+                              </Dialog>
+                            </FormLabel>
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  ) : null}
+                </div>
                 
                 <Button 
                   type="submit" 
-                  className="w-full h-12 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-200 text-white font-medium shadow-md hover:shadow-lg mt-4"
+                  className="w-full h-12 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-200 text-white font-medium shadow-md hover:shadow-lg mt-6"
                   disabled={isRegistering}
                 >
                   {isRegistering ? (
@@ -696,8 +947,8 @@ const AuthPage: React.FC = () => {
                   ) : "Criar conta"}
                 </Button>
                 
-                <p className="text-center text-xs text-gray-500 mt-2">
-                  Ao criar uma conta, você concorda com nossos <a href="#" className="text-blue-600 hover:underline">Termos de Serviço</a> e <a href="#" className="text-blue-600 hover:underline">Política de Privacidade</a>.
+                <p className="text-center text-xs text-gray-500 mt-4">
+                  Ao criar uma conta, você confirma ter lido e aceito todos os documentos legais acima.
                 </p>
               </form>
             </Form>

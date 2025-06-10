@@ -191,6 +191,17 @@ export const dependents = pgTable("dependents", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const legalAcceptances = pgTable("legal_acceptances", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  documentType: varchar("document_type", { length: 50 }).notNull(), // 'terms', 'privacy', 'contract', 'partner_contract'
+  documentVersion: varchar("document_version", { length: 20 }).notNull().default('1.0.0'),
+  acceptedAt: timestamp("accepted_at").defaultNow().notNull(),
+  ipAddress: varchar("ip_address", { length: 45 }), // IPv4 e IPv6
+  userAgent: text("user_agent"),
+  isActive: boolean("is_active").default(true).notNull(),
+});
+
 export const doctorPayments = pgTable("doctor_payments", {
   id: serial("id").primaryKey(),
   doctorId: integer("doctor_id").references(() => doctors.id, { onDelete: "cascade" }).notNull(),
@@ -497,6 +508,7 @@ export const notificationSchema = z.object({
 // Tipos inferidos
 export type User = InferSelectModel<typeof users>;
 export type Dependent = InferSelectModel<typeof dependents>;
+export type LegalAcceptance = InferSelectModel<typeof legalAcceptances>;
 export type Partner = InferSelectModel<typeof partners>;
 export type Doctor = InferSelectModel<typeof doctors>;
 export type PartnerService = InferSelectModel<typeof partnerServices>;
@@ -524,6 +536,7 @@ export type NotificationSchema = z.infer<typeof notificationSchema>;
 // Tipos para inserção
 export type InsertUser = InferInsertModel<typeof users>;
 export type InsertDependent = InferInsertModel<typeof dependents>;
+export type InsertLegalAcceptance = InferInsertModel<typeof legalAcceptances>;
 export type InsertPartner = InferInsertModel<typeof partners>;
 export type InsertDoctor = InferInsertModel<typeof doctors>;
 export type InsertPartnerService = InferInsertModel<typeof partnerServices>;

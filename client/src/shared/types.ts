@@ -209,6 +209,10 @@ export type RegisterCredentials = {
   role: UserRole;
   cpf?: string;
   cnpj?: string;
+  acceptTerms?: boolean;
+  acceptPrivacy?: boolean;
+  acceptContract?: boolean;
+  acceptPartnerContract?: boolean;
 };
 
 // Tipos de mensagem

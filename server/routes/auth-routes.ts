@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { Request, Response, NextFunction } from 'express';
 import { isAuthenticated } from '../middleware/auth';
 import { AppError } from '../utils/app-error';
-import { users, User } from '../../shared/schema';
+import { users, User, legalAcceptances } from '../../shared/schema';
 import { db } from '../db';
 import { storage } from '../storage';
 import { eq } from 'drizzle-orm';
@@ -54,10 +54,36 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
 authRouter.post('/register', async (req: Request, res: Response) => {
   try {
     console.log('Registro - dados recebidos:', req.body);
-    const { email, password, fullName, role = 'patient', username, cpf, cnpj } = req.body;
+    const { 
+      email, 
+      password, 
+      fullName, 
+      role = 'patient', 
+      username, 
+      cpf, 
+      cnpj,
+      acceptTerms,
+      acceptPrivacy,
+      acceptContract,
+      acceptPartnerContract
+    } = req.body;
     
     if (!email || !password || !fullName) {
       throw new AppError('Email, senha e nome completo são obrigatórios', 400);
+    }
+
+    // Validar aceitação de termos obrigatórios
+    if (!acceptTerms || !acceptPrivacy) {
+      throw new AppError('Você deve aceitar os Termos de Uso e a Política de Privacidade', 400);
+    }
+
+    // Validar aceitação específica baseada no tipo de usuário
+    if (role === 'patient' && !acceptContract) {
+      throw new AppError('Você deve aceitar o Contrato de Adesão para pacientes', 400);
+    }
+
+    if (role === 'partner' && !acceptPartnerContract) {
+      throw new AppError('Você deve aceitar o Contrato de Parceria para empresas', 400);
     }
 
     // Usar SQL direto para verificar se usuário já existe
@@ -114,6 +140,55 @@ authRouter.post('/register', async (req: Request, res: Response) => {
     const newUser = newUserResult[0];
 
     console.log('Usuário criado com sucesso:', { id: newUser.id, email: newUser.email });
+
+    // Salvar aceitações de documentos legais
+    const clientIp = req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for'] as string || 'unknown';
+    const userAgent = req.headers['user-agent'] || 'unknown';
+    
+    const acceptances = [];
+    
+    // Sempre adicionar Termos de Uso e Política de Privacidade
+    acceptances.push({
+      userId: newUser.id,
+      documentType: 'terms',
+      documentVersion: '1.0.0',
+      ipAddress: clientIp,
+      userAgent: userAgent
+    });
+    
+    acceptances.push({
+      userId: newUser.id,
+      documentType: 'privacy',
+      documentVersion: '1.0.0',
+      ipAddress: clientIp,
+      userAgent: userAgent
+    });
+
+    // Adicionar contratos específicos baseados no tipo de usuário
+    if (role === 'patient' && acceptContract) {
+      acceptances.push({
+        userId: newUser.id,
+        documentType: 'contract',
+        documentVersion: '1.0.0',
+        ipAddress: clientIp,
+        userAgent: userAgent
+      });
+    }
+
+    if (role === 'partner' && acceptPartnerContract) {
+      acceptances.push({
+        userId: newUser.id,
+        documentType: 'partner_contract',
+        documentVersion: '1.0.0',
+        ipAddress: clientIp,
+        userAgent: userAgent
+      });
+    }
+
+    // Inserir todas as aceitações em lote
+    await db.insert(legalAcceptances).values(acceptances);
+    
+    console.log(`Salvas ${acceptances.length} aceitações de documentos legais para usuário ${newUser.id}`);
 
     // Fazer login automático após registro bem-sucedido
     const jwtSecret = process.env.JWT_SECRET || 'cnvidas-secret-key-2024';
