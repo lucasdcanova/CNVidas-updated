@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
 import { QrCode, Camera, CheckCircle, XCircle, User } from 'lucide-react';
+import DashboardLayout from '@/components/layouts/dashboard-layout';
 
 export default function PartnerVerification() {
   const [isScanning, setIsScanning] = useState(false);
@@ -45,28 +46,28 @@ export default function PartnerVerification() {
     setVerificationResult(null);
 
     try {
-      const response = await fetch('/api/partners/verify-qr', {
+      const response = await fetch('/api/users/verify-qr', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({ qrCode: code })
+        credentials: 'include',
+        body: JSON.stringify({ token: code })
       });
 
       const data = await response.json();
 
-      if (response.ok && data.valid) {
+      if (response.ok && data.user) {
         setVerificationResult({
           valid: true,
           user: data.user,
-          plan: data.plan,
-          expiresAt: data.expiresAt
+          plan: data.user.subscriptionPlan || 'free',
+          expiresAt: null
         });
         
         toast({
           title: 'Verificação Bem-sucedida',
-          description: `Usuário ${data.user.name} verificado com sucesso`
+          description: `Usuário ${data.user.fullName} verificado com sucesso`
         });
       } else {
         setVerificationResult({
@@ -110,21 +111,22 @@ export default function PartnerVerification() {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-8 flex items-center gap-3">
-        <QrCode className="h-8 w-8" />
-        Verificação de Usuários
-      </h1>
-      
-      <div className="grid gap-6 md:grid-cols-2">
+    <DashboardLayout>
+      <div className="container mx-auto py-4 md:py-8 px-4 max-w-6xl">
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 flex items-center gap-2 md:gap-3">
+          <QrCode className="h-6 w-6 md:h-8 md:w-8" />
+          Verificação de Usuários
+        </h1>
+        
+        <div className="grid gap-4 md:gap-6 lg:grid-cols-2">
         {/* Scanner Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Camera className="h-5 w-5" />
+        <Card className="shadow-sm">
+          <CardHeader className="pb-3 md:pb-6">
+            <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+              <Camera className="h-4 w-4 md:h-5 md:w-5" />
               Scanner de QR Code
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-xs md:text-sm">
               Use a câmera para escanear o QR Code do cartão virtual do usuário
             </CardDescription>
           </CardHeader>
@@ -133,10 +135,10 @@ export default function PartnerVerification() {
             {isScanning ? (
               <div className="space-y-4">
                 <div className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed">
-                  <div className="text-center">
-                    <Camera className="h-16 w-16 mx-auto mb-4 text-gray-400" />
-                    <p className="text-gray-600">Câmera ativa</p>
-                    <p className="text-sm text-gray-500">Posicione o QR Code aqui</p>
+                  <div className="text-center p-4">
+                    <Camera className="h-12 w-12 md:h-16 md:w-16 mx-auto mb-4 text-gray-400" />
+                    <p className="text-gray-600 text-sm md:text-base">Câmera ativa</p>
+                    <p className="text-xs md:text-sm text-gray-500">Posicione o QR Code aqui</p>
                   </div>
                 </div>
                 
@@ -151,9 +153,9 @@ export default function PartnerVerification() {
             ) : (
               <div className="space-y-4">
                 <div className="aspect-square bg-gray-50 rounded-lg flex items-center justify-center border">
-                  <div className="text-center">
-                    <QrCode className="h-16 w-16 mx-auto mb-4 text-gray-400" />
-                    <p className="text-gray-600">Scanner Inativo</p>
+                  <div className="text-center p-4">
+                    <QrCode className="h-12 w-12 md:h-16 md:w-16 mx-auto mb-4 text-gray-400" />
+                    <p className="text-gray-600 text-sm md:text-base">Scanner Inativo</p>
                   </div>
                 </div>
                 
@@ -170,10 +172,10 @@ export default function PartnerVerification() {
         </Card>
 
         {/* Manual Input Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Verificação Manual</CardTitle>
-            <CardDescription>
+        <Card className="shadow-sm">
+          <CardHeader className="pb-3 md:pb-6">
+            <CardTitle className="text-base md:text-lg">Verificação Manual</CardTitle>
+            <CardDescription className="text-xs md:text-sm">
               Digite o código QR manualmente se o scanner não estiver funcionando
             </CardDescription>
           </CardHeader>
@@ -200,9 +202,9 @@ export default function PartnerVerification() {
         </Card>
       </div>
 
-      {/* Verification Result */}
-      {verificationResult && (
-        <Card className="mt-6">
+        {/* Verification Result */}
+        {verificationResult && (
+          <Card className="mt-4 md:mt-6 lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               {verificationResult.valid ? (
@@ -220,11 +222,11 @@ export default function PartnerVerification() {
                 <User className="h-4 w-4" />
                 <AlertDescription>
                   <div className="space-y-2">
-                    <p><strong>Usuário Verificado:</strong> {verificationResult.user.name}</p>
-                    <p><strong>Plano:</strong> {verificationResult.plan}</p>
-                    <p><strong>Email:</strong> {verificationResult.user.email}</p>
-                    {verificationResult.expiresAt && (
-                      <p><strong>Válido até:</strong> {new Date(verificationResult.expiresAt).toLocaleString('pt-BR')}</p>
+                    <p className="text-sm md:text-base"><strong>Usuário Verificado:</strong> {verificationResult.user.fullName}</p>
+                    <p className="text-sm md:text-base"><strong>Plano:</strong> {verificationResult.plan}</p>
+                    <p className="text-sm md:text-base"><strong>Email:</strong> {verificationResult.user.email}</p>
+                    {verificationResult.user.cpf && (
+                      <p className="text-sm md:text-base"><strong>CPF:</strong> {verificationResult.user.cpf}</p>
                     )}
                   </div>
                 </AlertDescription>
@@ -241,21 +243,22 @@ export default function PartnerVerification() {
         </Card>
       )}
 
-      {/* Instructions */}
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>Como Usar</CardTitle>
-        </CardHeader>
-        
-        <CardContent>
-          <ol className="list-decimal list-inside space-y-2 text-sm">
-            <li>Solicite ao cliente para mostrar seu cartão virtual CNVidas</li>
-            <li>Use o scanner para ler o QR Code ou digite o código manualmente</li>
-            <li>Aguarde a verificação e confirme os dados do usuário</li>
-            <li>Proceda com o atendimento após verificação bem-sucedida</li>
-          </ol>
-        </CardContent>
-      </Card>
-    </div>
+        {/* Instructions */}
+        <Card className="mt-4 md:mt-6 lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="text-lg md:text-xl">Como Usar</CardTitle>
+          </CardHeader>
+          
+          <CardContent>
+            <ol className="list-decimal list-inside space-y-2 text-xs md:text-sm">
+              <li>Solicite ao cliente para mostrar seu cartão virtual CNVidas</li>
+              <li>Use o scanner para ler o QR Code ou digite o código manualmente</li>
+              <li>Aguarde a verificação e confirme os dados do usuário</li>
+              <li>Proceda com o atendimento após verificação bem-sucedida</li>
+            </ol>
+          </CardContent>
+        </Card>
+      </div>
+    </DashboardLayout>
   );
 }

@@ -5149,3 +5149,346 @@ Cookie options: {
 🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
 🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
 🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:44:33 AM [vite] hmr update /src/pages/partner-verification.tsx, /src/index.css?v=Xahwslkjx-zn9Aj-2Y8So
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:45:04 AM [vite] hmr update /src/pages/partner-verification.tsx, /src/index.css?v=Xahwslkjx-zn9Aj-2Y8So
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:45:04 AM [vite] Internal server error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/partner-verification.tsx: Unterminated JSX contents. (261:10)
+
+  259 |         </CardContent>
+  260 |       </Card>
+> 261 |     </div>
+      |           ^
+  262 |   );
+  263 | }
+  Plugin: vite:react-babel
+  File: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/partner-verification.tsx:261:10
+  259|          </CardContent>
+  260|        </Card>
+  261|      </div>
+     |            ^
+  262|    );
+  263|  }
+      at toParseError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at raise (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:1503:19)
+      at jsxReadToken (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:104:22)
+      at getTokenFromCode (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:596:14)
+      at getTokenFromCode (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:4084:13)
+      at nextToken (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:278:10)
+      at next (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:121:10)
+      at eat (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:126:12)
+      at expect (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/util.ts:157:15)
+      at jsxParseClosingElementAt (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:460:12)
+      at jsxParseElementAt (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:480:39)
+      at jsxParseElementAt (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:483:34)
+      at jsxParseElement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:559:19)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:573:21)
+      at parseExprSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:728:23)
+      at parseUpdate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:707:21)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:669:23)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3845:20)
+      at parseMaybeUnaryOrPrivate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:403:14)
+      at parseExprOps (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:415:23)
+      at parseMaybeConditional (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:370:23)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at fn (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3698:23)
+      at tryParse (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/util.ts:175:20)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3697:20)
+      at callback (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:257:12)
+      at allowInAnd (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:3149:12)
+      at parseMaybeAssignAllowIn (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:256:17)
+      at parseParenAndDistinguishExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1785:16)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1153:21)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:583:22)
+      at parseExprSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:728:23)
+      at parseUpdate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:707:21)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:669:23)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3845:20)
+      at parseMaybeUnaryOrPrivate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:403:14)
+      at parseExprOps (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:415:23)
+      at parseMaybeConditional (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:370:23)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3717:22)
+      at parseExpressionBase (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:226:23)
+      at callback (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:217:39)
+      at allowInAnd (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:3144:16)
+      at parseExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:217:17)
+      at parseReturnStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1106:28)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:529:21)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementListItem (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:417:17)
+      at parseBlockOrModuleBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1435:16)
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:45:05 AM [vite] Pre-transform error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/partner-verification.tsx: Unterminated JSX contents. (261:10)
+
+  259 |         </CardContent>
+  260 |       </Card>
+> 261 |     </div>
+      |           ^
+  262 |   );
+  263 | }
+12:45:41 AM [vite] hmr update /src/pages/partner-verification.tsx, /src/index.css?v=Xahwslkjx-zn9Aj-2Y8So
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:45:41 AM [vite] Internal server error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/partner-verification.tsx: Unterminated JSX contents. (261:10)
+
+  259 |         </CardContent>
+  260 |       </Card>
+> 261 |     </div>
+      |           ^
+  262 |   );
+  263 | }
+  Plugin: vite:react-babel
+  File: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/partner-verification.tsx:261:10
+  259|          </CardContent>
+  260|        </Card>
+  261|      </div>
+     |            ^
+  262|    );
+  263|  }
+      at toParseError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at raise (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:1503:19)
+      at jsxReadToken (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:104:22)
+      at getTokenFromCode (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:596:14)
+      at getTokenFromCode (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:4084:13)
+      at nextToken (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:278:10)
+      at next (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:121:10)
+      at eat (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:126:12)
+      at expect (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/util.ts:157:15)
+      at jsxParseClosingElementAt (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:460:12)
+      at jsxParseElementAt (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:480:39)
+      at jsxParseElementAt (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:483:34)
+      at jsxParseElement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:559:19)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:573:21)
+      at parseExprSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:728:23)
+      at parseUpdate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:707:21)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:669:23)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3845:20)
+      at parseMaybeUnaryOrPrivate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:403:14)
+      at parseExprOps (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:415:23)
+      at parseMaybeConditional (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:370:23)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at fn (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3698:23)
+      at tryParse (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/util.ts:175:20)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3697:20)
+      at callback (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:257:12)
+      at allowInAnd (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:3149:12)
+      at parseMaybeAssignAllowIn (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:256:17)
+      at parseParenAndDistinguishExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1785:16)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1153:21)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:583:22)
+      at parseExprSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:728:23)
+      at parseUpdate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:707:21)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:669:23)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3845:20)
+      at parseMaybeUnaryOrPrivate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:403:14)
+      at parseExprOps (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:415:23)
+      at parseMaybeConditional (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:370:23)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3717:22)
+      at parseExpressionBase (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:226:23)
+      at callback (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:217:39)
+      at allowInAnd (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:3144:16)
+      at parseExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:217:17)
+      at parseReturnStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1106:28)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:529:21)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementListItem (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:417:17)
+      at parseBlockOrModuleBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1435:16)
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:45:42 AM [vite] Pre-transform error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/partner-verification.tsx: Unterminated JSX contents. (261:10)
+
+  259 |         </CardContent>
+  260 |       </Card>
+> 261 |     </div>
+      |           ^
+  262 |   );
+  263 | }
+12:46:15 AM [vite] hmr update /src/pages/partner-verification.tsx, /src/index.css?v=Xahwslkjx-zn9Aj-2Y8So
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:46:16 AM [vite] Internal server error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/partner-verification.tsx: Unterminated JSX contents. (261:10)
+
+  259 |         </CardContent>
+  260 |       </Card>
+> 261 |     </div>
+      |           ^
+  262 |   );
+  263 | }
+  Plugin: vite:react-babel
+  File: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/partner-verification.tsx:261:10
+  259|          </CardContent>
+  260|        </Card>
+  261|      </div>
+     |            ^
+  262|    );
+  263|  }
+      at toParseError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at raise (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:1503:19)
+      at jsxReadToken (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:104:22)
+      at getTokenFromCode (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:596:14)
+      at getTokenFromCode (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:4084:13)
+      at nextToken (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:278:10)
+      at next (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:121:10)
+      at eat (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:126:12)
+      at expect (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/util.ts:157:15)
+      at jsxParseClosingElementAt (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:460:12)
+      at jsxParseElementAt (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:480:39)
+      at jsxParseElementAt (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:483:34)
+      at jsxParseElement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:559:19)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:573:21)
+      at parseExprSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:728:23)
+      at parseUpdate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:707:21)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:669:23)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3845:20)
+      at parseMaybeUnaryOrPrivate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:403:14)
+      at parseExprOps (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:415:23)
+      at parseMaybeConditional (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:370:23)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at fn (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3698:23)
+      at tryParse (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/util.ts:175:20)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3697:20)
+      at callback (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:257:12)
+      at allowInAnd (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:3149:12)
+      at parseMaybeAssignAllowIn (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:256:17)
+      at parseParenAndDistinguishExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1785:16)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1153:21)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:583:22)
+      at parseExprSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:728:23)
+      at parseUpdate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:707:21)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:669:23)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3845:20)
+      at parseMaybeUnaryOrPrivate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:403:14)
+      at parseExprOps (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:415:23)
+      at parseMaybeConditional (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:370:23)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3717:22)
+      at parseExpressionBase (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:226:23)
+      at callback (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:217:39)
+      at allowInAnd (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:3144:16)
+      at parseExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:217:17)
+      at parseReturnStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1106:28)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:529:21)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementListItem (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:417:17)
+      at parseBlockOrModuleBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1435:16)
+12:46:17 AM [vite] Pre-transform error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/partner-verification.tsx: Unterminated JSX contents. (261:10)
+
+  259 |         </CardContent>
+  260 |       </Card>
+> 261 |     </div>
+      |           ^
+  262 |   );
+  263 | }
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:46:33 AM [vite] hmr update /src/pages/partner-verification.tsx, /src/index.css?v=Xahwslkjx-zn9Aj-2Y8So
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:46:34 AM [vite] Internal server error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/partner-verification.tsx: Unterminated JSX contents. (261:10)
+
+  259 |         </CardContent>
+  260 |       </Card>
+> 261 |     </div>
+      |           ^
+  262 |   );
+  263 | }
+  Plugin: vite:react-babel
+  File: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/partner-verification.tsx:261:10
+  259|          </CardContent>
+  260|        </Card>
+  261|      </div>
+     |            ^
+  262|    );
+  263|  }
+      at toParseError (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at raise (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:1503:19)
+      at jsxReadToken (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:104:22)
+      at getTokenFromCode (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:596:14)
+      at getTokenFromCode (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:4084:13)
+      at nextToken (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:278:10)
+      at next (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:121:10)
+      at eat (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/tokenizer/index.ts:126:12)
+      at expect (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/util.ts:157:15)
+      at jsxParseClosingElementAt (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:460:12)
+      at jsxParseElementAt (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:480:39)
+      at jsxParseElementAt (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:483:34)
+      at jsxParseElement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:559:19)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:573:21)
+      at parseExprSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:728:23)
+      at parseUpdate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:707:21)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:669:23)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3845:20)
+      at parseMaybeUnaryOrPrivate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:403:14)
+      at parseExprOps (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:415:23)
+      at parseMaybeConditional (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:370:23)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at fn (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3698:23)
+      at tryParse (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/util.ts:175:20)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3697:20)
+      at callback (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:257:12)
+      at allowInAnd (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:3149:12)
+      at parseMaybeAssignAllowIn (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:256:17)
+      at parseParenAndDistinguishExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1785:16)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:1153:21)
+      at parseExprAtom (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/jsx/index.ts:583:22)
+      at parseExprSubscripts (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:728:23)
+      at parseUpdate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:707:21)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:669:23)
+      at parseMaybeUnary (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3845:20)
+      at parseMaybeUnaryOrPrivate (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:403:14)
+      at parseExprOps (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:415:23)
+      at parseMaybeConditional (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:370:23)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at parseMaybeAssign (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3717:22)
+      at parseExpressionBase (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:226:23)
+      at callback (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:217:39)
+      at allowInAnd (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:3144:16)
+      at parseExpression (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/expression.ts:217:17)
+      at parseReturnStatement (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1106:28)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:529:21)
+      at parseStatementContent (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/plugins/typescript/index.ts:3175:20)
+      at parseStatementLike (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:468:17)
+      at parseStatementListItem (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:417:17)
+      at parseBlockOrModuleBlockBody (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@babel/parser/src/parser/statement.ts:1435:16)
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:46:35 AM [vite] Pre-transform error: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/client/src/pages/partner-verification.tsx: Unterminated JSX contents. (261:10)
+
+  259 |         </CardContent>
+  260 |       </Card>
+> 261 |     </div>
+      |           ^
+  262 |   );
+  263 | }
+12:47:20 AM [vite] hmr update /src/pages/partner-verification.tsx, /src/index.css?v=Xahwslkjx-zn9Aj-2Y8So
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:47:48 AM [vite] hmr update /src/pages/partner-verification.tsx, /src/index.css?v=Xahwslkjx-zn9Aj-2Y8So
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:48:20 AM [vite] hmr update /src/pages/partner-verification.tsx, /src/index.css?v=Xahwslkjx-zn9Aj-2Y8So
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:49:00 AM [vite] hmr update /src/pages/partner-verification.tsx, /src/index.css?v=Xahwslkjx-zn9Aj-2Y8So
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:49:37 AM [vite] hmr update /src/pages/partner-verification.tsx, /src/index.css?v=Xahwslkjx-zn9Aj-2Y8So
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+12:50:09 AM [vite] hmr update /src/pages/partner-verification.tsx, /src/index.css?v=Xahwslkjx-zn9Aj-2Y8So
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
+🔐 JWT: Usuário lucas.canova@me.com autenticado via cookie com plano free
