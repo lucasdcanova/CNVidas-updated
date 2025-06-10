@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -12,7 +12,8 @@ import {
 } from 'lucide-react';
 import { format, addDays, startOfWeek } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { apiRequest } from '@/lib/queryClient';
+import { apiRequest, queryClient } from '@/lib/queryClient';
+import { useQuery } from '@tanstack/react-query';
 import {
   Select,
   SelectContent,
@@ -54,6 +55,41 @@ export function AvailabilityManagerEnhanced() {
     interval: 30,
     daysOfWeek: [1, 2, 3, 4, 5] // Segunda a sexta
   });
+
+  // Buscar disponibilidade existente
+  const { data: existingAvailability, isLoading } = useQuery({
+    queryKey: ['/api/doctors/availability'],
+    queryFn: async () => {
+      const response = await apiRequest('GET', '/api/doctors/availability');
+      const data = await response.json();
+      return data.availability || [];
+    }
+  });
+
+  // Atualizar estado quando carregar disponibilidade existente
+  useEffect(() => {
+    if (existingAvailability && existingAvailability.length > 0) {
+      const newAvailability = generateWeekTemplate();
+      
+      // Mapear slots existentes para o template
+      existingAvailability.forEach((slot: any) => {
+        const dayIndex = slot.dayOfWeek;
+        if (dayIndex >= 0 && dayIndex < 7) {
+          newAvailability[dayIndex].enabled = true;
+          
+          // Marcar os slots correspondentes como disponíveis
+          const slotIndex = newAvailability[dayIndex].slots.findIndex(
+            s => s.time === slot.startTime
+          );
+          if (slotIndex !== -1) {
+            newAvailability[dayIndex].slots[slotIndex].available = true;
+          }
+        }
+      });
+      
+      setWeeklyAvailability(newAvailability);
+    }
+  }, [existingAvailability]);
 
   // Gerar template da semana
   function generateWeekTemplate(): DayAvailability[] {
@@ -161,6 +197,9 @@ export function AvailabilityManagerEnhanced() {
         title: "Disponibilidade salva",
         description: "Sua disponibilidade foi atualizada com sucesso.",
       });
+      
+      // Invalidar cache para forçar reload dos dados
+      queryClient.invalidateQueries({ queryKey: ['/api/doctors/availability'] });
     } catch (error) {
       toast({
         title: "Erro ao salvar",
@@ -180,6 +219,29 @@ export function AvailabilityManagerEnhanced() {
     const newMins = totalMinutes % 60;
     return `${newHours.toString().padStart(2, '0')}:${newMins.toString().padStart(2, '0')}`;
   };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Calendar className="h-5 w-5" />
+              Gerenciar Disponibilidade
+            </CardTitle>
+            <CardDescription>
+              Configure seus horários disponíveis para consultas
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-center min-h-[200px]">
+              <Loader2 className="h-8 w-8 animate-spin" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -329,7 +391,7 @@ export function AvailabilityManagerEnhanced() {
           </Tabs>
 
           {/* Botões de ação */}
-          <div className="flex justify-end gap-2 mt-6">
+          <div className="flex justify-end gap-2 mt-6 mb-4 md:mb-0">
             <Button variant="outline" onClick={() => setWeeklyAvailability(generateWeekTemplate())}>
               Limpar Tudo
             </Button>

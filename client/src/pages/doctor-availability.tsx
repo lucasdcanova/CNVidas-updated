@@ -90,7 +90,7 @@ export default function DoctorAvailabilityPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-6 pb-6 md:pb-0">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Gerenciar Disponibilidade</h1>
           <p className="text-muted-foreground">

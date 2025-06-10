@@ -16,7 +16,7 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({ userRole = "
   const inactiveClass = "text-gray-500";
 
   return (
-    <div className="md:hidden glass-nav border-t border-gray-100/40 flex items-center justify-around fixed bottom-0 w-full z-10">
+    <div className="md:hidden glass-nav mobile-nav-bottom border-t border-gray-100/40 flex items-center justify-around fixed bottom-0 w-full z-10">
       {userRole !== "doctor" && (
         <Link href="/dashboard">
           <div className={`flex flex-col items-center py-3 px-3 ${

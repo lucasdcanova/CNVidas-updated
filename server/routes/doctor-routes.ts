@@ -359,10 +359,10 @@ doctorRouter.get('/availability', requireAuth, requireDoctorRole, async (req: Au
       return res.status(404).json({ error: 'Perfil de médico não encontrado' });
     }
     
-    // Buscar disponibilidade (implementar quando houver tabela de availability)
-    const availability = []; // Placeholder
+    // Buscar disponibilidade do médico
+    const availability = await storage.getDoctorAvailabilitySlots(doctor.id);
     
-    console.log('✅ Doctor /availability - Disponibilidade encontrada');
+    console.log('✅ Doctor /availability - Disponibilidade encontrada:', availability.length);
     res.json({ availability });
   } catch (error) {
     console.error('❌ Erro ao obter disponibilidade:', error);
@@ -382,25 +382,32 @@ doctorRouter.post('/availability', requireAuth, requireDoctorRole, async (req: A
   try {
     console.log('🔍 Doctor POST /availability - Definindo disponibilidade do médico ID:', req.user?.id);
     
-    const { dayOfWeek, startTime, endTime, available } = req.body;
+    const { slots } = req.body;
     
     const doctor = await storage.getDoctorByUserId(req.user!.id);
     if (!doctor) {
       return res.status(404).json({ error: 'Perfil de médico não encontrado' });
     }
     
-    // Criar disponibilidade (implementar quando houver tabela de availability)
-    const newAvailability = {
-      id: Date.now(), // Placeholder
-      doctorId: doctor.id,
-      dayOfWeek,
-      startTime,
-      endTime,
-      available
-    };
+    // Validar se slots é um array
+    if (!Array.isArray(slots)) {
+      return res.status(400).json({ error: 'Slots deve ser um array' });
+    }
     
-    console.log('✅ Doctor POST /availability - Disponibilidade criada');
-    res.status(201).json(newAvailability);
+    // Preparar slots para salvar
+    const slotsToSave = slots.map(slot => ({
+      doctorId: doctor.id,
+      dayOfWeek: slot.dayOfWeek,
+      startTime: slot.startTime,
+      endTime: slot.endTime,
+      isAvailable: slot.isAvailable !== false // default true
+    }));
+    
+    // Salvar disponibilidade
+    const savedSlots = await storage.saveDoctorAvailabilitySlots(slotsToSave);
+    
+    console.log('✅ Doctor POST /availability - Disponibilidade criada:', savedSlots.length);
+    res.status(201).json({ availability: savedSlots });
   } catch (error) {
     console.error('❌ Erro ao criar disponibilidade:', error);
     if (error instanceof AppError) {
@@ -548,8 +555,14 @@ doctorRouter.post('/complete-welcome', requireAuth, requireDoctorRole, async (re
 doctorRouter.post('/toggle-availability', requireAuth, requireDoctorRole, async (req: AuthenticatedRequest, res: Response) => {
   try {
     console.log('🔍 Doctor POST /toggle-availability - Alternando disponibilidade do médico ID:', req.user?.id);
+    console.log('📦 Request body:', req.body);
     
-    const { isAvailable } = req.body;
+    const { isAvailable, availableForEmergency } = req.body;
+    
+    // Support both field names for compatibility
+    const available = isAvailable !== undefined ? isAvailable : availableForEmergency;
+    
+    console.log('🔄 Available value:', available);
     
     const doctor = await storage.getDoctorByUserId(req.user!.id);
     if (!doctor) {
@@ -557,16 +570,19 @@ doctorRouter.post('/toggle-availability', requireAuth, requireDoctorRole, async 
     }
     
     // Atualizar disponibilidade para emergência
-    await storage.updateDoctor(doctor.id, {
-      availableForEmergency: isAvailable,
+    const updatedDoctor = await storage.updateDoctor(doctor.id, {
+      availableForEmergency: available,
       updatedAt: new Date()
     });
     
-    console.log(`✅ Doctor POST /toggle-availability - Disponibilidade alterada para: ${isAvailable}`);
+    console.log(`✅ Doctor POST /toggle-availability - Disponibilidade alterada para: ${available}`);
+    console.log('📋 Updated doctor:', updatedDoctor.availableForEmergency);
+    
     res.json({ 
       success: true, 
-      isAvailable,
-      message: isAvailable ? 'Você está disponível para emergências' : 'Você não está mais disponível para emergências'
+      isAvailable: available,
+      availableForEmergency: available,
+      message: available ? 'Você está disponível para emergências' : 'Você não está mais disponível para emergências'
     });
   } catch (error) {
     console.error('❌ Erro ao alternar disponibilidade:', error);

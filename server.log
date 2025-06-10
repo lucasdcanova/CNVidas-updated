@@ -10620,3 +10620,186 @@ Cookie options: {
 ✅ Doctor /payments - Pagamentos encontrados: 0
 🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
 🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+12:40:54 PM [tsx] change in ./server/routes/doctor-routes.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Erro ao testar conexão com o banco de dados: Error: Connection terminated due to connection timeout
+    at /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1086:33
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at runNextTicks (node:internal/process/task_queues:64:3)
+    at listOnTimeout (node:internal/timers:545:9)
+    at process.processTimers (node:internal/timers:519:7)
+    at async testConnection (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/server/db.ts:34:20) {
+  [cause]: ErrorEvent {
+    [Symbol(kTarget)]: WebSocket {
+      _events: [Object: null prototype],
+      _eventsCount: 4,
+      _maxListeners: undefined,
+      _binaryType: 'arraybuffer',
+      _closeCode: 1006,
+      _closeFrameReceived: false,
+      _closeFrameSent: false,
+      _closeMessage: <Buffer >,
+      _closeTimer: null,
+      _errorEmitted: true,
+      _extensions: {},
+      _paused: false,
+      _protocol: '',
+      _readyState: 3,
+      _receiver: null,
+      _sender: null,
+      _socket: null,
+      _bufferedAmount: 0,
+      _isServer: false,
+      _redirects: 0,
+      _autoPong: true,
+      _url: 'wss://ep-wandering-dawn-acwbhdh4-pooler.sa-east-1.aws.neon.tech/v2',
+      _req: [ClientRequest],
+      [Symbol(shapeMode)]: false,
+      [Symbol(kCapture)]: false
+    },
+    [Symbol(kType)]: 'error',
+    [Symbol(kError)]: Error: WebSocket was closed before the connection was established
+        at WebSocket.close (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/ws/lib/websocket.js:299:7)
+        at /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:425:4
+        at S.write (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:422:51)
+        at S.end (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:424:83)
+        at S.destroy (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:425:63)
+        at Timeout.<anonymous> (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1116:99)
+        at listOnTimeout (node:internal/timers:581:17)
+        at process.processTimers (node:internal/timers:519:7),
+    [Symbol(kMessage)]: 'WebSocket was closed before the connection was established'
+  }
+}
+Session table checked/created successfully
+12:41:02 PM [server] Servidor rodando na porta 3000
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+12:41:05 PM [tsx] change in ./server/routes/doctor-routes.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Conexão com o banco de dados testada com sucesso: 2025-06-10 15:41:10.237277+00
+Session table checked/created successfully
+12:41:12 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+12:41:16 PM [tsx] change in ./server/routes/doctor-routes.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Conexão com o banco de dados testada com sucesso: 2025-06-10 15:41:19.175703+00
+Session table checked/created successfully
+12:41:21 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+12:42:04 PM [tsx] change in ./server/routes/doctor-routes.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Conexão com o banco de dados testada com sucesso: 2025-06-10 15:42:07.550877+00
+Session table checked/created successfully
+12:42:10 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+12:42:40 PM [tsx] change in ./server/routes/doctor-routes.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Conexão com o banco de dados testada com sucesso: 2025-06-10 15:42:42.801374+00
+Session table checked/created successfully
+12:42:45 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+12:42:53 PM [tsx] change in ./server/routes/doctor-routes.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Conexão com o banco de dados testada com sucesso: 2025-06-10 15:42:56.740377+00
+Session table checked/created successfully
+12:42:59 PM [server] Servidor rodando na porta 3000
+12:43:01 PM [tsx] change in ./server/routes/doctor-routes.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Conexão com o banco de dados testada com sucesso: 2025-06-10 15:43:05.413558+00
+Session table checked/created successfully
+12:43:07 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
