@@ -67,16 +67,46 @@ import jwt from "jsonwebtoken";
         }
         
         if (decoded && decoded.userId) {
-          // Usar dados do token JWT diretamente (evitar consulta ao banco)
-          authReq.user = {
-            id: decoded.userId,
-            email: decoded.email,
-            role: decoded.role,
-            fullName: decoded.fullName || decoded.email,
-            username: decoded.username || decoded.email,
-            emailVerified: true
-          };
-          console.log(`🔐 JWT: Usuário ${decoded.email} autenticado via header`);
+          try {
+            // Buscar dados completos do usuário do banco de dados
+            const result = await db.select().from(users).where(eq(users.id, decoded.userId));
+            const user = result[0];
+            
+            if (user) {
+              authReq.user = {
+                id: user.id,
+                email: user.email,
+                role: user.role,
+                fullName: user.fullName,
+                username: user.username,
+                emailVerified: user.emailVerified,
+                subscriptionPlan: user.subscriptionPlan,
+                subscriptionStatus: user.subscriptionStatus,
+                emergencyConsultationsLeft: user.emergencyConsultationsLeft,
+                emergencyConsultationsResetAt: user.emergencyConsultationsResetAt,
+                profileImage: user.profileImage,
+                phone: user.phone,
+                cpf: user.cpf,
+                cnpj: user.cnpj,
+                city: user.city,
+                state: user.state,
+                address: user.address,
+                zipcode: user.zipcode
+              };
+              console.log(`🔐 JWT: Usuário ${decoded.email} autenticado via header com plano ${user.subscriptionPlan}`);
+            }
+          } catch (error) {
+            console.error('Erro ao buscar dados do usuário:', error);
+            // Em caso de erro, usar dados básicos do token
+            authReq.user = {
+              id: decoded.userId,
+              email: decoded.email,
+              role: decoded.role,
+              fullName: decoded.fullName || decoded.email,
+              username: decoded.username || decoded.email,
+              emailVerified: true
+            };
+          }
         }
       } catch (jwtError) {
         if (req.url.includes('/api/subscription/current')) {
@@ -100,16 +130,46 @@ import jwt from "jsonwebtoken";
         }
         
         if (decoded && decoded.userId) {
-          // Usar dados do token JWT diretamente (evitar consulta ao banco)
-          authReq.user = {
-            id: decoded.userId,
-            email: decoded.email,
-            role: decoded.role,
-            fullName: decoded.fullName || decoded.email,
-            username: decoded.username || decoded.email,
-            emailVerified: true
-          };
-          console.log(`🔐 JWT: Usuário ${decoded.email} autenticado via cookie`);
+          try {
+            // Buscar dados completos do usuário do banco de dados
+            const result = await db.select().from(users).where(eq(users.id, decoded.userId));
+            const user = result[0];
+            
+            if (user) {
+              authReq.user = {
+                id: user.id,
+                email: user.email,
+                role: user.role,
+                fullName: user.fullName,
+                username: user.username,
+                emailVerified: user.emailVerified,
+                subscriptionPlan: user.subscriptionPlan,
+                subscriptionStatus: user.subscriptionStatus,
+                emergencyConsultationsLeft: user.emergencyConsultationsLeft,
+                emergencyConsultationsResetAt: user.emergencyConsultationsResetAt,
+                profileImage: user.profileImage,
+                phone: user.phone,
+                cpf: user.cpf,
+                cnpj: user.cnpj,
+                city: user.city,
+                state: user.state,
+                address: user.address,
+                zipcode: user.zipcode
+              };
+              console.log(`🔐 JWT: Usuário ${decoded.email} autenticado via cookie com plano ${user.subscriptionPlan}`);
+            }
+          } catch (error) {
+            console.error('Erro ao buscar dados do usuário:', error);
+            // Em caso de erro, usar dados básicos do token
+            authReq.user = {
+              id: decoded.userId,
+              email: decoded.email,
+              role: decoded.role,
+              fullName: decoded.fullName || decoded.email,
+              username: decoded.username || decoded.email,
+              emailVerified: true
+            };
+          }
         }
       } catch (jwtError) {
         if (req.url.includes('/api/subscription/current')) {

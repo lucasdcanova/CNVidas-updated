@@ -192,7 +192,19 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
       fullName: users.fullName,
       password: users.password,
       role: users.role,
-      emailVerified: users.emailVerified
+      emailVerified: users.emailVerified,
+      subscriptionPlan: users.subscriptionPlan,
+      subscriptionStatus: users.subscriptionStatus,
+      emergencyConsultationsLeft: users.emergencyConsultationsLeft,
+      emergencyConsultationsResetAt: users.emergencyConsultationsResetAt,
+      profileImage: users.profileImage,
+      phone: users.phone,
+      cpf: users.cpf,
+      cnpj: users.cnpj,
+      city: users.city,
+      state: users.state,
+      address: users.address,
+      zipcode: users.zipcode
     })
     .from(users)
     .where(eq(users.email, email));
@@ -249,13 +261,23 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     res.cookie('auth_token', token, getCookieOptions(req));
     
     res.json({
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        fullName: user.fullName,
-        role: user.role
-      },
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      fullName: user.fullName,
+      role: user.role,
+      subscriptionPlan: user.subscriptionPlan,
+      subscriptionStatus: user.subscriptionStatus,
+      emergencyConsultationsLeft: user.emergencyConsultationsLeft,
+      emergencyConsultationsResetAt: user.emergencyConsultationsResetAt,
+      profileImage: user.profileImage,
+      phone: user.phone,
+      cpf: user.cpf,
+      cnpj: user.cnpj,
+      city: user.city,
+      state: user.state,
+      address: user.address,
+      zipcode: user.zipcode,
       token: token,
       message: 'Login realizado com sucesso'
     });
@@ -620,7 +642,19 @@ authRouter.get('/user', async (req: Request, res: Response) => {
       username: users.username,
       fullName: users.fullName,
       role: users.role,
-      emailVerified: users.emailVerified
+      emailVerified: users.emailVerified,
+      subscriptionPlan: users.subscriptionPlan,
+      subscriptionStatus: users.subscriptionStatus,
+      emergencyConsultationsLeft: users.emergencyConsultationsLeft,
+      emergencyConsultationsResetAt: users.emergencyConsultationsResetAt,
+      profileImage: users.profileImage,
+      phone: users.phone,
+      cpf: users.cpf,
+      cnpj: users.cnpj,
+      city: users.city,
+      state: users.state,
+      address: users.address,
+      zipcode: users.zipcode
     })
     .from(users)
     .where(eq(users.id, decoded.userId));
@@ -638,7 +672,19 @@ authRouter.get('/user', async (req: Request, res: Response) => {
       username: user.username,
       fullName: user.fullName,
       role: user.role,
-      emailVerified: user.emailVerified
+      emailVerified: user.emailVerified,
+      subscriptionPlan: user.subscriptionPlan,
+      subscriptionStatus: user.subscriptionStatus,
+      emergencyConsultationsLeft: user.emergencyConsultationsLeft,
+      emergencyConsultationsResetAt: user.emergencyConsultationsResetAt,
+      profileImage: user.profileImage,
+      phone: user.phone,
+      cpf: user.cpf,
+      cnpj: user.cnpj,
+      city: user.city,
+      state: user.state,
+      address: user.address,
+      zipcode: user.zipcode
     });
     
   } catch (error) {
