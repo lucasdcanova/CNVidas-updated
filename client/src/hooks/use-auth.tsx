@@ -98,6 +98,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     queryKey: ["/api/user"],
     queryFn: checkAuth,
     retry: 1,
+    // **CORREÇÃO: Configurações para evitar cache desatualizado de dados do usuário**
+    staleTime: 0, // Sempre considera os dados como 'stale' (desatualizados)
+    cacheTime: 1000 * 60 * 5, // Cache por apenas 5 minutos
+    refetchOnWindowFocus: true, // Recarregar quando a janela ganha foco
+    refetchOnMount: true, // Sempre recarregar ao montar o componente
   });
 
   // Mutation para login

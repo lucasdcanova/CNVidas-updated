@@ -73,8 +73,12 @@ const CheckoutForm = ({
           description: "Sua assinatura foi ativada com sucesso!",
         });
         
-        // Invalidar a consulta para atualizar a UI
+        // **CORREÇÃO: Invalidar todas as consultas relacionadas ao usuário e assinatura**
         queryClient.invalidateQueries({ queryKey: ["/api/subscription/current"] });
+        queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+        queryClient.invalidateQueries({ queryKey: ["/api/users/profile"] });
+        
+        console.log("✅ Caches invalidados após pagamento bem-sucedido");
         
         // Chamar callback de sucesso se existir
         if (onSuccess) {
@@ -163,6 +167,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     expiresAt?: string;
   } | null>(null);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   
   // Função para criar assinatura com método de pagamento específico
   const createSubscription = async (method: 'card' | 'pix' | 'boleto') => {
@@ -224,6 +229,12 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
           title: "Assinatura ativada",
           description: data.message || "Sua assinatura foi ativada com sucesso!",
         });
+        
+        // **CORREÇÃO: Invalidar caches também para planos gratuitos**
+        queryClient.invalidateQueries({ queryKey: ["/api/subscription/current"] });
+        queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+        queryClient.invalidateQueries({ queryKey: ["/api/users/profile"] });
+        console.log("✅ Caches invalidados após ativação de plano gratuito");
         
         if (onSuccess) {
           onSuccess();

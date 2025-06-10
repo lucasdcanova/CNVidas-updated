@@ -189,6 +189,26 @@ router.get('/current', isAuthenticated, async (req: Request, res: Response) => {
       const subscription = userSubscription[0];
       console.log(`✅ Assinatura encontrada:`, subscription);
       
+      // **CORREÇÃO: Sincronizar subscriptionPlan na tabela users**
+      if (subscription.plan && subscription.subscription.status === 'active') {
+        const currentUserPlan = user.subscriptionPlan;
+        const actualPlan = subscription.plan.name;
+        
+        if (currentUserPlan !== actualPlan) {
+          console.log(`🔄 Sincronizando plano do usuário: ${currentUserPlan} → ${actualPlan}`);
+          
+          await db.update(users)
+            .set({ 
+              subscriptionPlan: actualPlan,
+              subscriptionStatus: subscription.subscription.status,
+              updatedAt: new Date()
+            })
+            .where(eq(users.id, user.id));
+          
+          console.log(`✅ Plano do usuário sincronizado com sucesso`);
+        }
+      }
+      
       return res.json({
         subscription: {
           id: subscription.subscription.id,

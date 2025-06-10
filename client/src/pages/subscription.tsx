@@ -54,10 +54,15 @@ const SubscriptionPage: React.FC = () => {
   });
 
   // Buscar assinatura atual do usuário
-  const { data: userSubscription, isLoading: subscriptionLoading } = useQuery({
+  const { data: userSubscription, isLoading: subscriptionLoading, refetch: refetchSubscription } = useQuery({
     queryKey: ["/api/subscription/current"],
     queryFn: getUserSubscription,
     enabled: !!user?.id,
+    // **CORREÇÃO: Configurações para evitar cache desatualizado**
+    staleTime: 0, // Sempre considera os dados como 'stale' (desatualizados)
+    cacheTime: 1000 * 60 * 5, // Cache por apenas 5 minutos
+    refetchOnWindowFocus: true, // Recarregar quando a janela ganha foco
+    refetchOnMount: true, // Sempre recarregar ao montar o componente
   });
 
   const isCurrentPlan = (planType: string) => {

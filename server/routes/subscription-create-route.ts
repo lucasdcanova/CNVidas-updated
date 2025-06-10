@@ -467,6 +467,17 @@ router.post('/create', isAuthenticated, async (req: Request, res: Response) => {
       price: plan.price
     }).returning();
 
+    // **CORREÇÃO: Atualizar subscriptionPlan na tabela users para manter sincronização**
+    await db.update(users)
+      .set({
+        subscriptionPlan: plan.name,
+        subscriptionStatus: 'active',
+        updatedAt: new Date()
+      })
+      .where(eq(users.id, user.id));
+
+    console.log(`✅ Plano ${plan.name} ativado para usuário ${user.email} - Banco de dados sincronizado`);
+
     res.json({
       success: true,
       subscription: subscription[0]
@@ -516,6 +527,29 @@ router.put('/update/:id', isAuthenticated, async (req: Request, res: Response) =
       .where(eq(userSubscriptions.id, Number(id)))
       .returning();
 
+    // **CORREÇÃO: Sincronizar subscriptionPlan na tabela users se o plano ou status mudou**
+    if (planId || status) {
+      const updatedPlanId = planId ? Number(planId) : subscription.planId;
+      const updatedStatus = status || subscription.status;
+      
+      // Buscar o plano atualizado
+      const plan = await db.query.subscriptionPlans.findFirst({
+        where: eq(subscriptionPlans.id, updatedPlanId)
+      });
+      
+      if (plan) {
+        await db.update(users)
+          .set({
+            subscriptionPlan: plan.name,
+            subscriptionStatus: updatedStatus,
+            updatedAt: new Date()
+          })
+          .where(eq(users.id, subscription.userId));
+        
+        console.log(`✅ Plano do usuário sincronizado: ${plan.name} (${updatedStatus})`);
+      }
+    }
+
     res.json({
       success: true,
       subscription: updated[0]
@@ -562,6 +596,16 @@ router.delete('/cancel/:id', isAuthenticated, async (req: Request, res: Response
       })
       .where(eq(userSubscriptions.id, Number(id)))
       .returning();
+
+    // **CORREÇÃO: Sincronizar subscriptionStatus na tabela users ao cancelar**
+    await db.update(users)
+      .set({
+        subscriptionStatus: 'cancelled',
+        updatedAt: new Date()
+      })
+      .where(eq(users.id, subscription.userId));
+    
+    console.log(`✅ Status de assinatura atualizado para 'cancelled' para usuário ${subscription.userId}`);
 
     res.json({
       success: true,
