@@ -241,18 +241,22 @@ export const ProfileImageUploaderEnhanced: React.FC<ProfileImageUploaderEnhanced
       </CardContent>
 
       {/* Modal do Image Cropper */}
-      {showCropper && selectedImage && (
-        <ImageCropper
-          imageSrc={selectedImage}
-          onCropComplete={handleCroppedImage}
-          onCancel={() => {
-            setShowCropper(false);
-            setSelectedImage(null);
-          }}
-          aspectRatio={1}
-          cropShape="round"
-        />
-      )}
+      <ImageCropper
+        imageUrl={selectedImage || ''}
+        onCropComplete={(blob) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            handleCroppedImage(reader.result as string);
+          };
+          reader.readAsDataURL(blob);
+        }}
+        onCancel={() => {
+          setShowCropper(false);
+          setSelectedImage(null);
+        }}
+        aspectRatio={1}
+        isOpen={showCropper && !!selectedImage}
+      />
     </Card>
   );
 };
