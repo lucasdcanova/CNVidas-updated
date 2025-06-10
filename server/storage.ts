@@ -633,9 +633,32 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getPartnerServicesByPartnerId(partnerId: number): Promise<PartnerService[]> {
-    return this.db.select()
+    const results = await this.db
+      .select({
+        service: partnerServices,
+        partner: partners,
+        user: users
+      })
       .from(partnerServices)
+      .leftJoin(partners, eq(partnerServices.partnerId, partners.id))
+      .leftJoin(users, eq(partners.userId, users.id))
       .where(eq(partnerServices.partnerId, partnerId));
+    
+    return results.map(result => {
+      // Ensure serviceImage URL is properly formatted
+      const serviceImage = result.service.serviceImage || null;
+      
+      return {
+        ...result.service,
+        serviceImage,
+        partner: result.partner ? {
+          ...result.partner,
+          profileImage: result.user?.profileImage || null,
+          phone: result.partner.phone || null,
+          name: result.partner.businessName || result.partner.tradingName || null
+        } : null
+      };
+    }) as any[];
   }
 
   async createPartnerService(serviceData: InsertPartnerService): Promise<PartnerService> {
@@ -656,10 +679,33 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getFeaturedServices(limit: number = 6): Promise<PartnerService[]> {
-    return this.db.select()
+    const results = await this.db
+      .select({
+        service: partnerServices,
+        partner: partners,
+        user: users
+      })
       .from(partnerServices)
+      .leftJoin(partners, eq(partnerServices.partnerId, partners.id))
+      .leftJoin(users, eq(partners.userId, users.id))
       .where(eq(partnerServices.isFeatured, true))
       .limit(limit);
+    
+    return results.map(result => {
+      // Ensure serviceImage URL is properly formatted
+      const serviceImage = result.service.serviceImage || null;
+      
+      return {
+        ...result.service,
+        serviceImage,
+        partner: result.partner ? {
+          ...result.partner,
+          profileImage: result.user?.profileImage || null,
+          phone: result.partner.phone || null,
+          name: result.partner.businessName || result.partner.tradingName || null
+        } : null
+      };
+    }) as any[];
   }
 
   // Appointment methods
@@ -868,7 +914,31 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAllPartnerServices(): Promise<PartnerService[]> {
-    return this.db.select().from(partnerServices);
+    const results = await this.db
+      .select({
+        service: partnerServices,
+        partner: partners,
+        user: users
+      })
+      .from(partnerServices)
+      .leftJoin(partners, eq(partnerServices.partnerId, partners.id))
+      .leftJoin(users, eq(partners.userId, users.id));
+    
+    return results.map(result => {
+      // Ensure serviceImage URL is properly formatted
+      const serviceImage = result.service.serviceImage || null;
+      
+      return {
+        ...result.service,
+        serviceImage,
+        partner: result.partner ? {
+          ...result.partner,
+          profileImage: result.user?.profileImage || null,
+          phone: result.partner.phone || null,
+          name: result.partner.businessName || result.partner.tradingName || null
+        } : null
+      };
+    }) as any[];
   }
 
   async getAllAppointments(): Promise<Appointment[]> {

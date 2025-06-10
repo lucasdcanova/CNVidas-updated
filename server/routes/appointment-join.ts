@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { storage } from '../storage';
 import { createEmergencyRoom, createEmergencyToken } from '../utils/emergency-utils';
-import { AuthenticatedRequest } from '../types/authenticated-request';
+import { AuthenticatedRequest, requireAuth } from '../middleware/auth';
 
 const appointmentJoinRouter = Router();
 
@@ -9,23 +9,13 @@ const appointmentJoinRouter = Router();
  * Endpoint para listar consultas próximas do usuário
  * GET /api/appointments/upcoming
  */
-appointmentJoinRouter.get('/upcoming', async (req: Request, res: Response) => {
+appointmentJoinRouter.get('/upcoming', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const authReq = req as AuthenticatedRequest;
-    
-    // Verificar autenticação
-    let userId = null;
-    let userData = null;
-    
-    if (authReq.isAuthenticated && authReq.isAuthenticated() && authReq.user) {
-      userId = authReq.user.id;
-      userData = authReq.user;
-    }
-    
-    if (!userId || !userData) {
+    if (!req.user) {
       return res.status(401).json({ message: 'Não autorizado' });
     }
     
+    const userId = req.user.id;
     console.log(`Buscando consultas próximas para usuário ${userId}`);
     
     // Buscar consultas próximas do usuário

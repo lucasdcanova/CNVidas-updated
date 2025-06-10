@@ -72,7 +72,15 @@ const Services: React.FC = () => {
   useEffect(() => {
     if (services && services.length > 0) {
       console.log("Serviços recebidos:", services);
-      console.log("Exemplo de parceiro:", services[0].partner);
+      console.log("Exemplo de serviço completo:", services[0]);
+      console.log("serviceImage:", services[0].serviceImage);
+      console.log("partner:", services[0].partner);
+      if (services[0].partner) {
+        console.log("partner.profileImage:", services[0].partner.profileImage);
+      }
+      // Verificar se há algum serviço com imagem
+      const servicesWithImages = services.filter(s => s.serviceImage);
+      console.log(`Serviços com imagem: ${servicesWithImages.length} de ${services.length}`);
     }
   }, [services]);
   
@@ -115,32 +123,43 @@ const Services: React.FC = () => {
 
     // Verifica se o serviço tem informações do parceiro
     if (service.partner && service.partner.id) {
+      let phoneNumber = '';
+      
       // Tenta usar o telefone do parceiro registrado no sistema
-      const userPhone = "51999862303"; // Número de telefone do usuário atual para fins de demonstração
-
-      // Se existir o telefone do parceiro, abre o WhatsApp
       if (service.partner.phone && service.partner.phone.trim() !== '') {
-        // Formatando o número para WhatsApp (removendo caracteres não numéricos)
-        const phoneNumber = service.partner.phone.replace(/\D/g, '');
-        console.log("Número formatado para WhatsApp:", phoneNumber);
-        
-        // Mensagem predefinida
-        const message = encodeURIComponent(`Olá! Gostaria de obter mais informações sobre o serviço "${service.name}" oferecido pela CN Vidas.`);
-        // Abrindo o WhatsApp em uma nova aba
-        window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
-      } else {
-        // Como alternativa, usamos o número padrão da CN Vidas
-        console.log("Número do parceiro não encontrado, usando número padrão");
-        const defaultPhone = "51999862303"; // Número da CN Vidas
-        const message = encodeURIComponent(`Olá! Gostaria de obter mais informações sobre o serviço "${service.name}" oferecido pelo parceiro ${service.partner.name || 'parceiro'}.`);
-        window.open(`https://wa.me/${defaultPhone}?text=${message}`, '_blank');
+        phoneNumber = service.partner.phone.replace(/\D/g, '');
       }
+      
+      // Se não tiver telefone do parceiro, usa o número padrão da CN Vidas
+      if (!phoneNumber) {
+        console.log("Número do parceiro não encontrado, usando número padrão da CN Vidas");
+        phoneNumber = "5551999862303"; // Número da CN Vidas com código do país
+      }
+      
+      // Se o número não começar com código do país, adiciona o código do Brasil
+      if (!phoneNumber.startsWith('55')) {
+        phoneNumber = '55' + phoneNumber;
+      }
+      
+      console.log("Número formatado para WhatsApp:", phoneNumber);
+      
+      // Mensagem predefinida
+      const partnerName = service.partner.name || service.partner.businessName || service.partner.tradingName || 'parceiro';
+      const message = encodeURIComponent(
+        `Olá! Sou cliente CN Vidas e gostaria de obter mais informações sobre o serviço "${service.name}" oferecido por ${partnerName}.`
+      );
+      
+      // Abrindo o WhatsApp em uma nova aba
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+      console.log("URL do WhatsApp:", whatsappUrl);
+      window.open(whatsappUrl, '_blank');
     } else {
-      toast({
-        title: "Informações incompletas",
-        description: "Não foi possível obter as informações de contato deste parceiro.",
-        variant: "destructive"
-      });
+      // Se não tiver parceiro, ainda assim abre o WhatsApp com o número padrão
+      const defaultPhone = "5551999862303"; // Número da CN Vidas com código do país
+      const message = encodeURIComponent(
+        `Olá! Sou cliente CN Vidas e gostaria de obter mais informações sobre o serviço "${service.name}".`
+      );
+      window.open(`https://wa.me/${defaultPhone}?text=${message}`, '_blank');
     }
   };
   

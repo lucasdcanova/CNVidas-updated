@@ -18,6 +18,7 @@ import { sendVerificationEmail, sendPasswordResetEmail } from '../services/email
 import passport from 'passport';
 import { toNumberOrThrow } from '../utils/id-converter';
 import { AuthenticatedRequest } from '../types/authenticated-request';
+import { getCookieOptions } from '../utils/cookie-config';
 
 const authRouter = Router();
 
@@ -127,14 +128,7 @@ authRouter.post('/register', async (req: Request, res: Response) => {
     );
     
     // Configurar cookie httpOnly para segurança
-    res.cookie('auth_token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/', // Especificar path explicitamente
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
-      domain: process.env.COOKIE_DOMAIN || undefined // Adicionar domínio se configurado
-    });
+    res.cookie('auth_token', token, getCookieOptions(req));
 
     // Retornar dados do usuário criado com login automático
     res.status(201).json({
@@ -252,14 +246,7 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     );
     
     // Configurar cookie httpOnly para segurança
-    res.cookie('auth_token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/', // Especificar path explicitamente
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
-      domain: process.env.COOKIE_DOMAIN || undefined // Adicionar domínio se configurado
-    });
+    res.cookie('auth_token', token, getCookieOptions(req));
     
     res.json({
       user: {

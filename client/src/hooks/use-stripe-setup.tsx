@@ -28,11 +28,23 @@ export function useStripeSetup({ onSuccess, onError }: UseStripeSetupProps = {})
   const createSetupIntent = async (): Promise<void> => {
     try {
       setIsLoading(true);
+      console.log('Criando setup intent...');
+      
       const response = await apiRequest('POST', '/api/subscription/create-setup-intent');
+      
       if (!response.ok) {
-        throw new Error('Falha ao criar setup intent');
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Erro na resposta do setup intent:', response.status, errorData);
+        throw new Error(errorData.error || `Falha ao criar setup intent: ${response.status}`);
       }
+      
       const data = await response.json();
+      console.log('Setup intent criado com sucesso:', data);
+      
+      if (!data.clientSecret) {
+        throw new Error('Client secret não retornado pelo servidor');
+      }
+      
       setClientSecret(data.clientSecret);
       onSuccess?.();
     } catch (error) {

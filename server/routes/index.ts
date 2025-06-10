@@ -166,10 +166,28 @@ export default async function setupRoutes(app: express.Express) {
           return res.status(400).json({ error: 'partnerId deve ser um número válido' });
         }
         const services = await (await import('../storage')).storage.getPartnerServicesByPartnerId(partnerIdNumber);
+        console.log(`[API] Serviços do parceiro ${partnerIdNumber}:`, services.length, 'encontrados');
+        if (services.length > 0) {
+          console.log('[API] Exemplo de serviço:', {
+            id: services[0].id,
+            name: services[0].name,
+            serviceImage: services[0].serviceImage ? 'Tem imagem' : 'Sem imagem',
+            partner: services[0].partner ? 'Tem parceiro' : 'Sem parceiro'
+          });
+        }
         res.json(services);
       } else {
         // Caso contrário, buscar todos os serviços
         const services = await (await import('../storage')).storage.getAllPartnerServices();
+        console.log('[API] Total de serviços:', services.length);
+        if (services.length > 0) {
+          console.log('[API] Exemplo de serviço:', {
+            id: services[0].id,
+            name: services[0].name,
+            serviceImage: services[0].serviceImage ? 'Tem imagem' : 'Sem imagem',
+            partner: services[0].partner ? 'Tem parceiro' : 'Sem parceiro'
+          });
+        }
         res.json(services);
       }
     } catch (error) {

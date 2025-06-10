@@ -41,12 +41,15 @@ export default function AddressPage() {
     console.log('Enviando dados de endereço:', data);
     
     try {
-      const response = await fetch('/api/users/address', {
+      const response = await fetch('/api/users/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          address: data.street, // Mapear street para address
+        }),
       });
       
       if (!response.ok) {

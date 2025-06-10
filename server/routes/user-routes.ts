@@ -4,6 +4,7 @@ import { requireAuth, AuthenticatedRequest } from '../middleware/auth';
 import { AppError } from '../utils/app-error.js';
 import { generateQRCode } from '../utils/qr-code';
 import { sendEmail } from '../utils/email';
+import { compare, hash } from 'bcrypt';
 
 const userRouter = express.Router();
 
@@ -64,6 +65,65 @@ userRouter.put('/profile', requireAuth, async (req: AuthenticatedRequest, res: R
     return res.json(userWithoutPassword);
   } catch (error) {
     console.error('Erro ao atualizar perfil:', error);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+/**
+ * Alterar senha do usuário
+ * PUT /api/users/password
+ */
+userRouter.put('/password', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Usuário não autenticado' });
+    }
+
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ error: 'Senha atual e nova senha são obrigatórias' });
+    }
+
+    // Buscar o usuário completo para verificar a senha atual
+    const user = await storage.getUserById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Usuário não encontrado' });
+    }
+
+    // Verificar a senha atual
+    let isPasswordValid = false;
+    
+    // Suporte para diferentes formatos de hash
+    if (user.password.startsWith('$2b$') || user.password.startsWith('$2a$') || user.password.startsWith('$2y$')) {
+      // Hash bcrypt padrão
+      isPasswordValid = await compare(currentPassword, user.password);
+    } else {
+      // Tentar comparação direta se não for um hash bcrypt válido
+      isPasswordValid = await compare(currentPassword, user.password);
+    }
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: 'Senha atual incorreta' });
+    }
+
+    // Verificar se a nova senha é diferente da atual
+    const isSamePassword = await compare(newPassword, user.password);
+    if (isSamePassword) {
+      return res.status(400).json({ error: 'A nova senha deve ser diferente da senha atual' });
+    }
+
+    // Hash da nova senha
+    const hashedPassword = await hash(newPassword, 10);
+
+    // Atualizar a senha
+    await storage.updateUserPassword(req.user.id, hashedPassword);
+
+    console.log(`Senha alterada com sucesso para o usuário ${user.email}`);
+
+    return res.json({ message: 'Senha alterada com sucesso' });
+  } catch (error) {
+    console.error('Erro ao alterar senha:', error);
     return res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });

@@ -183,9 +183,9 @@ export const notifications = pgTable("notifications", {
 export const dependents = pgTable("dependents", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
-  fullName: text("full_name").notNull(),
-  cpf: text("cpf").notNull(),
-  birthDate: text("birth_date"),
+  fullName: text("name").notNull(),
+  cpf: text("cpf").notNull().unique(),
+  birthDate: date("birth_date"),
   relationship: text("relationship"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

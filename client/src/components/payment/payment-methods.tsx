@@ -94,8 +94,19 @@ function PaymentForm({ onCancel, onSuccess }: { onCancel: () => void; onSuccess:
 export default function PaymentMethods({ paymentMethods, onUpdate }: PaymentMethodsProps) {
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [setupError, setSetupError] = useState<string | null>(null);
   const { toast } = useToast();
-  const { StripeSetupProvider, isLoading: isSetupLoading } = useStripeSetup();
+  const { StripeSetupProvider, isLoading: isSetupLoading } = useStripeSetup({
+    onError: (error) => {
+      console.error('Erro no setup do Stripe:', error);
+      setSetupError(error.message);
+      toast({
+        title: "Erro ao carregar formulário de pagamento",
+        description: error.message || "Não foi possível carregar o formulário de pagamento. Tente novamente mais tarde.",
+        variant: "destructive",
+      });
+    }
+  });
 
   const handleSetDefault = async (paymentMethodId: string) => {
     try {

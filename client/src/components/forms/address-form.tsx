@@ -113,17 +113,8 @@ export function AddressForm({
       form.setValue('city', data.city || '');
       form.setValue('state', data.state || '');
       
-      // Chamar onSubmit com os dados atualizados para sincronizar com o formulário principal
-      const currentValues = form.getValues();
-      onSubmit({
-        zipcode: cleanCep,
-        street: data.street || '',
-        number: currentValues.number || '',
-        complement: currentValues.complement || '',
-        neighborhood: data.neighborhood || '',
-        city: data.city || '',
-        state: data.state || ''
-      });
+      // NÃO chamar onSubmit aqui - apenas preencher os campos
+      // O usuário deve clicar em salvar quando terminar de preencher todos os campos
       
       // Manter o foco no campo de número após preencher o endereço
       setTimeout(() => {
