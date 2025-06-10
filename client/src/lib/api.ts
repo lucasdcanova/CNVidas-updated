@@ -139,8 +139,9 @@ export const updateService = async (id: number, data: any) => {
 };
 
 export const deleteService = async (id: number) => {
-  await apiRequest("DELETE", `/api/partner-services/${id}`);
+  await apiRequest("DELETE", `/api/partners/services/${id}`);
   queryClient.invalidateQueries({ queryKey: ["/api/services"] });
+  queryClient.invalidateQueries({ queryKey: ["/api/partners/my-services"] });
 };
 
 export const getPartnerServicesByPartnerId = async (partnerId: number) => {
