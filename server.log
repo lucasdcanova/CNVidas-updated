@@ -6789,3 +6789,345 @@ Erro ao buscar métricas: TypeError: Do not know how to serialize a BigInt
 3:49:18 PM [vite] hmr update /src/components/checkout/checkout-modal.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
 🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
 🔐 JWT: Usuário lucas.canova@icloud.com autenticado via cookie com plano premium
+3:50:22 PM [vite] hmr update /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7, /src/pages/checkout.tsx, /src/pages/subscribe.tsx, /src/components/checkout/checkout-modal.tsx, /src/components/checkout/checkout-modal-fix.tsx, /src/hooks/use-stripe-setup.tsx
+3:50:22 PM [vite] hmr update /src/hooks/use-stripe-setup.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:22 PM [vite] page reload src/components/doctors/ProfileImageUploader.tsx
+3:50:22 PM [vite] hmr update /src/components/ui/textarea.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:22 PM [vite] hmr update /src/components/ui/badge.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:22 PM [vite] hmr update /src/pages/reenviar-verificacao.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:22 PM [vite] hmr update /src/components/ui/scroll-area.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:22 PM [vite] hmr update /src/pages/telemedicine-emergency-v2.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:22 PM [vite] hmr update /src/components/ui/tooltip.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:22 PM [vite] page reload src/components/ui/menubar.tsx
+3:50:23 PM [vite] hmr update /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7, /src/components/ui/tooltip.tsx, /src/components/ui/button.tsx, /src/components/ui/card.tsx, /src/pages/doctor/financeiro.tsx, /src/components/ui/avatar.tsx, /src/components/ui/dialog.tsx, /src/components/ui/badge.tsx, /src/components/ui/tabs.tsx, /src/components/ui/select.tsx, /src/components/appointments/appointment-scheduler.tsx, /src/components/ui/form.tsx, /src/components/ui/input.tsx, /src/components/ui/separator.tsx, /src/components/ui/radio-group.tsx, /src/components/ui/label.tsx, /src/components/ui/textarea.tsx, /src/components/ui/spinner.tsx, /src/components/ui/switch.tsx, /src/components/ui/checkbox.tsx, /src/components/ui/accordion.tsx, /src/components/ui/alert.tsx, /src/components/ui/alert-dialog.tsx, /src/components/ui/table.tsx, /src/components/layouts/admin-layout.tsx, /src/components/ui/skeleton.tsx, /src/components/ui/responsive-table.tsx, /src/components/ui/dropdown-menu.tsx, /src/components/ui/chart.tsx, /src/components/ui/pagination.tsx, /src/components/ui/toast.tsx, /src/components/shared/plan-indicator.tsx, /src/components/ui/sheet.tsx, /src/components/ui/scroll-area.tsx
+3:50:23 PM [vite] hmr update /src/components/shared/plan-indicator.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] hmr update /src/components/telemedicine/DailyVideoCall.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] hmr update /src/components/ui/skeleton.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] hmr update /src/components/ui/toaster.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] hmr update /src/components/ui/tabs.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] page reload src/components/ui/slider.tsx
+3:50:23 PM [vite] page reload src/components/ui/popover.tsx
+3:50:23 PM [vite] hmr update /src/lib/protected-route.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] hmr update /src/components/ui/chart.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] page reload src/components/ui/carousel.tsx
+3:50:23 PM [vite] hmr update /src/components/forms/appointment-form.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] hmr update /src/pages/subscription.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] page reload src/components/doctor/EmergencyBanner.tsx
+3:50:23 PM [vite] hmr update /src/pages/doctor/financeiro.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] hmr update /src/pages/subscribe.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] page reload src/main.tsx
+3:50:23 PM [vite] hmr update /src/components/doctor/AvailabilityManagerEnhanced.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] hmr update /src/pages/qr-code.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] page reload src/components/ui/toggle-group.tsx
+3:50:23 PM [vite] page reload src/components/ui/drawer.tsx
+3:50:23 PM [vite] hmr update /src/pages/esqueci-senha.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] hmr update /src/components/checkout/checkout-modal-fix.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] hmr update /src/components/layouts/admin-layout.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] page reload src/components/ui/context-menu.tsx
+3:50:23 PM [vite] page reload src/pages/dependents-page.tsx
+3:50:23 PM [vite] hmr update /src/pages/claims/new.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] hmr update /src/components/telemedicine/ConnectionDiagnostic.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] hmr update /src/pages/admin/claims.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] hmr update /src/components/ui/radio-group.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] page reload src/components/ui/collapsible.tsx
+3:50:23 PM [vite] page reload src/components/ui/breadcrumb.tsx
+3:50:23 PM [vite] page reload src/components/ui/toggle.tsx
+3:50:23 PM [vite] hmr update /src/components/ui/checkbox.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] page reload src/components/ui/mobile-form-wrapper.tsx
+3:50:23 PM [vite] hmr update /src/pages/doctor-telemedicine.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] hmr update /src/hooks/use-auth.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:23 PM [vite] hmr update /src/pages/admin/dashboard.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:24 PM [vite] page reload /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/tailwind.config.ts
+3:50:24 PM [vite] changed tsconfig file detected: /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+3:50:24 PM [tsx] change in ./server/middleware/json-response.ts Restarting...
+3:50:24 PM [vite] hmr update /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7, /src/pages/checkout.tsx, /src/pages/subscribe.tsx
+3:50:24 PM [vite] page reload src/components/ui/resizable.tsx
+3:50:24 PM [vite] hmr update /src/pages/telemedicine-emergency-room-v4.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:24 PM [vite] hmr update /src/pages/admin/analytics.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:24 PM [vite] page reload src/components/telemedicine/DirectIframeVideoCall.tsx
+3:50:24 PM [vite] hmr update /src/pages/partner-verification.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:24 PM [vite] hmr update /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7, /src/components/telemedicine/ConnectionDiagnostic.tsx
+3:50:24 PM [vite] hmr update /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7, /src/pages/telemedicine-page.tsx, /src/pages/daily-telemedicine.tsx, /src/pages/claims.tsx
+3:50:24 PM [vite] hmr update /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7, /src/pages/address.tsx, /src/pages/patient/settings.tsx
+3:50:24 PM [vite] hmr update /src/pages/claims.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:24 PM [vite] hmr update /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7, /src/pages/auth-page.tsx
+3:50:24 PM [vite] hmr update /src/pages/redefinir-senha.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:24 PM [vite] page reload src/components/doctors/ProfileImageUploaderEnhanced.tsx
+3:50:24 PM [vite] page reload src/hooks/use-subscription.ts
+3:50:24 PM [vite] hmr update /src/components/ui/pagination.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:24 PM [vite] hmr update /src/pages/telemedicine-emergency-v3.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:24 PM [vite] page reload src/pages/emergency-test.tsx
+3:50:24 PM [vite] page reload src/error-handler.js
+3:50:24 PM [vite] page reload src/components/telemedicine/RobustVideoCall.tsx
+3:50:24 PM [vite] hmr update /src/pages/first-subscription.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:24 PM [vite] page reload src/pages/telemedicine.tsx
+3:50:25 PM [vite] hmr update /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:25 PM [vite] hmr update /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7, /src/pages/auth-page.tsx
+3:50:25 PM [vite] hmr update /src/components/forms/address-form.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:25 PM [vite] hmr update /src/components/ui/label.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:25 PM [vite] hmr update /src/components/ui/responsive-table.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:25 PM [vite] hmr update /src/components/ui/upgrade-plan-message.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:25 PM [vite] page reload src/components/ProfileTabs/DoctorProfileTabs.tsx
+3:50:25 PM [vite] page reload src/disable-error-overlay.js
+3:50:25 PM [vite] page reload index.html
+3:50:25 PM [vite] hmr update /src/components/layouts/dashboard-layout.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:25 PM [vite] hmr update /src/pages/admin/subscription-plans.tsx, /src/index.css?v=42GUoKgOuuN9tIXvnyAZ7
+3:50:25 PM [tsx] change in ./server/routes/public-subscription-routes.ts Process hasn't exited. Killing process...
+c3:50:25 PM [tsx] change in ./server/routes/subscription-payment-routes.ts Restarting...
+c3:50:25 PM [tsx] change in ./server/storage.ts Restarting...
+c3:50:26 PM [tsx] change in ./postcss.config.js Restarting...
+c3:50:55 PM [tsx] change in ./server/index.ts Restarting...
+c3:50:59 PM [tsx] change in ./server/routes/index.ts Restarting...
+3:51:04 PM [tsx] change in ./server/routes/auth-routes.ts Process hasn't exited. Killing process...
+c3:51:11 PM [tsx] change in ./server/utils/app-error.ts Restarting...
+3:51:12 PM [tsx] change in ./shared/schema.ts Process hasn't exited. Killing process...
+c3:51:16 PM [tsx] change in ./server/db.ts Restarting...
+3:51:21 PM [tsx] change in ./server/services/email.ts Process hasn't exited. Killing process...
+c3:51:28 PM [tsx] change in ./server/utils/id-converter.ts Restarting...
+AuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:51:30 PM [tsx] change in ./server/utils/cookie-config.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:51:34 PM [tsx] change in ./server/routes/diagnostic-routes.ts Restarting...
+3:51:36 PM [tsx] change in ./server/routes/telemedicine-daily.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:51:39 PM [tsx] change in ./server/middleware/subscription-check.ts Restarting...
+3:51:41 PM [tsx] change in ./server/storage.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:51:45 PM [tsx] change in ./server/middleware/json-response.ts Restarting...
+3:51:46 PM [tsx] change in ./server/routes/public-subscription-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:51:50 PM [tsx] change in ./server/routes/subscription-create-route.ts Restarting...
+3:51:52 PM [tsx] change in ./server/lib/prisma.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:51:57 PM [tsx] change in ./server/utils/sanitize.ts Restarting...
+3:51:59 PM [tsx] change in ./server/routes/telemedicine-daily-v2.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:52:04 PM [tsx] change in ./server/routes/daily-direct.ts Restarting...
+3:52:08 PM [tsx] change in ./server/routes/consultation-payment-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:52:12 PM [tsx] change in ./server/utils/stripe-payment.ts Restarting...
+3:52:13 PM [tsx] change in ./server/utils/stripe-instance.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:52:18 PM [tsx] change in ./server/routes/daily-routes.ts Restarting...
+3:52:20 PM [tsx] change in ./server/routes/dependents-routes-new.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:52:23 PM [tsx] change in ./server/routes/emergency-consultation.ts Restarting...
+3:52:25 PM [tsx] change in ./server/utils/daily.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:52:28 PM [tsx] change in ./server/routes/emergency-notifications.ts Restarting...
+3:52:29 PM [tsx] change in ./server/middleware/auth.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:52:32 PM [tsx] change in ./server/routes/emergency-patient.ts Restarting...
+3:52:34 PM [tsx] change in ./server/routes/payment-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:52:37 PM [tsx] change in ./server/routes/subscription-payment-routes.ts Restarting...
+3:52:38 PM [tsx] change in ./server/routes/telemedicine-error-logs.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:52:42 PM [tsx] change in ./server/routes/upload-routes.ts Restarting...
+3:52:44 PM [tsx] change in ./server/routes/daily-emergency-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:52:47 PM [tsx] change in ./server/routes/profile-image-routes.ts Restarting...
+3:52:48 PM [tsx] change in ./server/routes/address-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:52:52 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+3:52:54 PM [tsx] change in ./server/utils/emergency-utils.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:52:58 PM [tsx] change in ./server/routes/claims-routes.ts Restarting...
+3:52:59 PM [tsx] change in ./server/routes/user-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:53:03 PM [tsx] change in ./server/routes/partner-routes.ts Restarting...
+3:53:05 PM [tsx] change in ./server/routes/doctor-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:53:08 PM [tsx] change in ./server/routes/notification-routes.ts Restarting...
+3:53:10 PM [tsx] change in ./server/routes/checkout-tracking-routes.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+3:53:13 PM [tsx] change in ./server/admin-routes.ts Restarting...
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+3:53:14 PM [tsx] change in ./server/vite.ts Process hasn't exited. Killing process...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+3:53:20 PM [tsx] change in ./server/middleware/error-handler.ts Restarting...
+Erro ao testar conexão com o banco de dados: Error: Connection terminated due to connection timeout
+    at /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1086:33
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at runNextTicks (node:internal/process/task_queues:64:3)
+    at listOnTimeout (node:internal/timers:545:9)
+    at process.processTimers (node:internal/timers:519:7)
+    at async testConnection (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/server/db.ts:34:20) {
+  [cause]: ErrorEvent {
+    [Symbol(kTarget)]: WebSocket {
+      _events: [Object: null prototype],
+      _eventsCount: 4,
+      _maxListeners: undefined,
+      _binaryType: 'arraybuffer',
+      _closeCode: 1006,
+      _closeFrameReceived: false,
+      _closeFrameSent: false,
+      _closeMessage: <Buffer >,
+      _closeTimer: null,
+      _errorEmitted: true,
+      _extensions: {},
+      _paused: false,
+      _protocol: '',
+      _readyState: 3,
+      _receiver: null,
+      _sender: null,
+      _socket: null,
+      _bufferedAmount: 0,
+      _isServer: false,
+      _redirects: 0,
+      _autoPong: true,
+      _url: 'wss://ep-wandering-dawn-acwbhdh4-pooler.sa-east-1.aws.neon.tech/v2',
+      _req: [ClientRequest],
+      [Symbol(shapeMode)]: false,
+      [Symbol(kCapture)]: false
+    },
+    [Symbol(kType)]: 'error',
+    [Symbol(kError)]: Error: WebSocket was closed before the connection was established
+        at WebSocket.close (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/ws/lib/websocket.js:299:7)
+        at /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:425:4
+        at S.write (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:422:51)
+        at S.end (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:424:83)
+        at S.destroy (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:425:63)
+        at Timeout.<anonymous> (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1116:99)
+        at listOnTimeout (node:internal/timers:581:17)
+        at process.processTimers (node:internal/timers:519:7),
+    [Symbol(kMessage)]: 'WebSocket was closed before the connection was established'
+  }
+}
+Error creating session table: Error: timeout exceeded when trying to connect
+    at /Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1086:33
+    at async <anonymous> (/Users/lucascanova/Documents/CN Vidas - Domingo 08-06/CNVidas-updated/server/storage.ts:36:5)
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Conexão com o banco de dados testada com sucesso: 2025-06-10 18:53:22.77251+00
+Session table checked/created successfully
+3:53:29 PM [server] Servidor rodando na porta 3000
+3:53:30 PM [tsx] change in ./postcss.config.js Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Conexão com o banco de dados testada com sucesso: 2025-06-10 18:53:34.568638+00
+Session table checked/created successfully
+3:53:36 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+3:58:00 PM [vite] page reload index.html

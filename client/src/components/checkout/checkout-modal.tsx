@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useCheckoutTracking } from "@/hooks/use-checkout-tracking";
 import { Loader2, Copy, CheckCircle } from "lucide-react";
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from "@/components/ui/button";
@@ -38,6 +39,11 @@ const CheckoutForm = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { 
+    trackCheckoutProgress, 
+    trackCheckoutComplete, 
+    trackCheckoutFailed 
+  } = useCheckoutTracking();
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,6 +54,11 @@ const CheckoutForm = ({
     
     setIsProcessing(true);
     setErrorMessage(null);
+    
+    // Rastrear início do processamento do pagamento
+    await trackCheckoutProgress('processing', {
+      paymentMethod: 'card'
+    });
     
     try {
       // Confirmar o pagamento
@@ -61,6 +72,13 @@ const CheckoutForm = ({
       
       if (error) {
         setErrorMessage(error.message || 'Ocorreu um erro ao processar o pagamento.');
+        
+        // Rastrear falha no pagamento
+        await trackCheckoutFailed(
+          error.message || "Erro ao processar pagamento",
+          error.code
+        );
+        
         toast({
           title: "Erro na assinatura",
           description: error.message || "Ocorreu um erro ao processar sua assinatura.",
@@ -68,6 +86,13 @@ const CheckoutForm = ({
         });
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
         // Pagamento bem-sucedido
+        
+        // Rastrear checkout completo
+        await trackCheckoutComplete(
+          paymentIntent.id,
+          paymentIntent.client_secret
+        );
+        
         toast({
           title: "Assinatura confirmada",
           description: "Sua assinatura foi ativada com sucesso!",
@@ -168,12 +193,26 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   } | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { 
+    trackCheckoutStart, 
+    trackCheckoutAbandoned,
+    setupAbandonmentDetection 
+  } = useCheckoutTracking();
   
   // Função para criar assinatura com método de pagamento específico
   const createSubscription = async (method: 'card' | 'pix' | 'boleto') => {
     if (!planId) return;
     
     setIsLoading(true);
+    
+    // Rastrear início do checkout
+    const priceNumber = parseFloat(planPrice.replace('R$', '').replace(',', '.')) * 100;
+    await trackCheckoutStart('subscription', priceNumber, {
+      planName,
+      planId,
+      paymentMethod: method
+    });
+    
     try {
       console.log('Iniciando criação de assinatura para o plano:', planId, 'com método de pagamento:', method);
       const response = await apiRequest("POST", "/api/subscription/create-session", { 
@@ -270,6 +309,14 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       getPaymentIntent();
     }
   }, [planId, isOpen, toast, onClose, onSuccess]);
+  
+  // Configurar detecção de abandono quando o modal abrir
+  useEffect(() => {
+    if (isOpen) {
+      const cleanup = setupAbandonmentDetection();
+      return cleanup;
+    }
+  }, [isOpen, setupAbandonmentDetection]);
 
   // Função para lidar com o redirecionamento ao Stripe Checkout
   // Esta função só é usada como fallback se o iframe não carregar
@@ -378,8 +425,18 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     );
   };
   
+  // Função para lidar com o fechamento do modal
+  const handleClose = () => {
+    // Se há um checkout em andamento, marcar como abandonado
+    const checkoutId = sessionStorage.getItem('currentCheckoutId');
+    if (checkoutId && !clientSecret && !checkoutUrl) {
+      trackCheckoutAbandoned();
+    }
+    onClose();
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md md:max-w-xl">
         <DialogHeader>
           <DialogTitle>Assinar plano {planName}</DialogTitle>
