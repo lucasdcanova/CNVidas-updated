@@ -80,23 +80,25 @@ const PatientSettings = () => {
   
   // Carregar configurações atuais do usuário
   const { data: userSettings, isLoading: isSettingsLoading } = useQuery({
-    queryKey: ["/api/users/settings"],
+    queryKey: ["/api/users/profile"],
     queryFn: async () => {
       try {
-        // Usar fetch diretamente para fazer a requisição
-        const response = await fetch("/api/users/settings");
+        // Usar o endpoint de perfil que já existe
+        const response = await fetch("/api/users/profile", {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        return data;
-      } catch (error) {
-        // Se o endpoint ainda não existir, retornar valores padrão
-        console.log("Endpoint de configurações não encontrado, usando valores padrão");
+        // Retornar dados de configurações do perfil
         return {
           notifications: {
-            emailNotifications: true,
-            smsNotifications: false,
+            emailNotifications: data.emailNotifications ?? true,
+            smsNotifications: data.smsNotifications ?? false,
             pushNotifications: true,
             notificationFrequency: "immediate",
             appointmentReminders: true,
@@ -155,12 +157,18 @@ const PatientSettings = () => {
   // Mutation para salvar configurações
   const saveSettingsMutation = useMutation({
     mutationFn: async (data: any) => {
-      const response = await fetch("/api/users/settings", {
+      const response = await fetch("/api/users/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        credentials: 'include',
+        body: JSON.stringify({
+          ...data,
+          // Mapear as configurações para os campos do perfil
+          emailNotifications: data.notifications?.emailNotifications,
+          smsNotifications: data.notifications?.smsNotifications,
+        }),
       });
       
       if (!response.ok) {
@@ -174,7 +182,7 @@ const PatientSettings = () => {
         title: "Configurações salvas",
         description: "Suas preferências foram atualizadas com sucesso.",
       });
-      queryClient.invalidateQueries({ queryKey: ["/api/users/settings"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/users/profile"] });
     },
     onError: (error) => {
       console.error("Erro ao salvar configurações:", error);
