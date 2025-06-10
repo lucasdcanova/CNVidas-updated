@@ -164,7 +164,7 @@ const PartnerServicesPage: React.FC = () => {
   const createServiceMutation = useMutation<PartnerService, Error, ServiceFormData>({
     mutationFn: async (data) => {
       console.log("Creating new service with data:", data);
-      const res = await apiRequest("POST", "/api/partner-services", data);
+      const res = await apiRequest("POST", "/api/partners/services", data);
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
         throw new Error(errorData.message || `Error creating service: ${res.status}`);
@@ -192,7 +192,7 @@ const PartnerServicesPage: React.FC = () => {
   const updateServiceMutation = useMutation<PartnerService, Error, ServiceMutationVariables>({
     mutationFn: async ({ id, data }) => {
       console.log(`Updating service with ID: ${id}, data:`, data);
-      const res = await apiRequest("PATCH", `/api/partner-services/${id}`, data);
+      const res = await apiRequest("PATCH", `/api/partners/services/${id}`, data);
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
         throw new Error(errorData.message || `Error updating service: ${res.status}`);

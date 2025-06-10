@@ -66,7 +66,7 @@ export const updatePartner = async (id: number, data: any) => {
   const res = await apiRequest("PUT", `/api/partners/${id}`, data);
   queryClient.invalidateQueries({ queryKey: ["/api/partners"] });
   queryClient.invalidateQueries({ queryKey: [`/api/partners/${id}`] });
-  queryClient.invalidateQueries({ queryKey: ["/api/partners/user", data.userId] });
+  queryClient.invalidateQueries({ queryKey: ["/api/partners/me"] });
   return await res.json();
 };
 
