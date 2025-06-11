@@ -452,6 +452,7 @@ export default function DoctorTelemedicinePage() {
           if (!res.ok) throw new Error("Falha ao buscar consultas");
           return res.json();
         }),
+    refetchInterval: 5000, // Poll every 5 seconds to get new emergency consultations
   });
   
   // Extrair array de appointments da resposta
@@ -459,9 +460,9 @@ export default function DoctorTelemedicinePage() {
 
   // Get emergency consultations for this doctor
   const { data: emergencyConsultations } = useQuery({
-    queryKey: ["/api/emergency/notifications/doctor", doctorProfile?.id],
+    queryKey: ["/api/emergency/v2/notifications", doctorProfile?.id],
     queryFn: ({ signal }) => 
-      doctorProfile?.id ? fetch(`/api/emergency/notifications/doctor/${doctorProfile.id}`, { 
+      doctorProfile?.id ? fetch(`/api/emergency/v2/notifications/${doctorProfile.id}`, { 
         signal,
         credentials: "include"
       })
@@ -474,25 +475,41 @@ export default function DoctorTelemedicinePage() {
     refetchInterval: 5000, // Check every 5 seconds for new emergencies
   });
 
-  // Filter telemedicine appointments
+  // Filter telemedicine appointments (includes emergency consultations)
   const telemedicineAppointments = appointments.filter(
     (app: any) => app.type === "telemedicine"
   );
 
-  // Criar consultas de emergência baseadas em notificações reais
-  // (removido código de teste com consulta hardcoded)
-  const emergencyAppointments: any[] = [];
+  console.log('📊 Doctor Telemedicine - Total appointments:', appointments.length);
+  console.log('📊 Doctor Telemedicine - Telemedicine appointments:', telemedicineAppointments.length);
+  console.log('📊 Doctor Telemedicine - Emergency appointments:', telemedicineAppointments.filter((app: any) => app.isEmergency).length);
+  console.log('📊 Doctor Telemedicine - Waiting appointments:', telemedicineAppointments.filter((app: any) => app.status === 'waiting').length);
 
   // Combine regular appointments with emergency consultations
   const allAppointments = [...telemedicineAppointments];
   
   // Upcoming and past appointments
   const upcomingAppointments = allAppointments.filter(
-    (app: any) => !isPast(new Date(app.date)) || isToday(new Date(app.date)) || app.isEmergency
+    (app: any) => {
+      const appointmentDate = new Date(app.date);
+      const isUpcoming = !isPast(appointmentDate) || isToday(appointmentDate);
+      const isWaitingEmergency = app.isEmergency && app.status === 'waiting';
+      const isInProgressEmergency = app.isEmergency && app.status === 'in_progress';
+      
+      // Include: future appointments, today's appointments, and active emergency consultations
+      return isUpcoming || isWaitingEmergency || isInProgressEmergency;
+    }
   );
   
   const pastAppointments = allAppointments.filter(
-    (app: any) => isPast(new Date(app.date)) && !isToday(new Date(app.date)) && !app.isEmergency
+    (app: any) => {
+      const appointmentDate = new Date(app.date);
+      const isPastDate = isPast(appointmentDate) && !isToday(appointmentDate);
+      const isCompletedEmergency = app.isEmergency && (app.status === 'completed' || app.status === 'cancelled');
+      
+      // Include: past appointments and completed emergency consultations
+      return isPastDate || isCompletedEmergency;
+    }
   );
 
   return (

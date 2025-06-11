@@ -174,11 +174,50 @@ doctorRouter.get('/appointments', requireAuth, requireDoctorRole, async (req: Au
       return res.status(404).json({ error: 'Perfil de médico não encontrado' });
     }
     
-    // Buscar consultas do médico (implementar quando houver tabela de appointments)
-    const appointments = []; // Placeholder
+    // Buscar todas as consultas do médico
+    const allAppointments = await storage.getAllAppointments();
     
-    console.log('✅ Doctor /appointments - Consultas encontradas:', appointments.length);
-    res.json({ appointments, total: appointments.length });
+    // Filtrar apenas as consultas deste médico
+    const doctorAppointments = allAppointments.filter(app => app.doctorId === doctor.id);
+    
+    console.log('🔍 Doctor /appointments - Total de consultas:', allAppointments.length);
+    console.log('🔍 Doctor /appointments - Consultas do médico (ID ' + doctor.id + '):', doctorAppointments.length);
+    console.log('🔍 Doctor /appointments - Consultas de emergência:', doctorAppointments.filter(app => app.isEmergency).length);
+    console.log('🔍 Doctor /appointments - Consultas com status waiting:', doctorAppointments.filter(app => app.status === 'waiting').length);
+    
+    // Adicionar informações do paciente para cada consulta
+    const appointmentsWithPatientInfo = await Promise.all(
+      doctorAppointments.map(async (appointment) => {
+        const patient = appointment.userId ? await storage.getUser(appointment.userId) : null;
+        return {
+          ...appointment,
+          patientName: patient?.fullName || patient?.username || 'Paciente',
+          patientEmail: patient?.email,
+          patientPhone: patient?.phone,
+          patientProfileImage: patient?.profileImage,
+          patientBirthDate: patient?.birthDate,
+          patientAge: patient?.birthDate ? 
+            Math.floor((Date.now() - new Date(patient.birthDate).getTime()) / (365.25 * 24 * 60 * 60 * 1000)) : 
+            null
+        };
+      })
+    );
+    
+    // Filtrar por status se especificado
+    let filteredAppointments = appointmentsWithPatientInfo;
+    if (status) {
+      filteredAppointments = appointmentsWithPatientInfo.filter(app => app.status === status);
+    }
+    
+    // Ordenar por data (mais recentes primeiro)
+    filteredAppointments.sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return dateB - dateA;
+    });
+    
+    console.log('✅ Doctor /appointments - Consultas encontradas:', filteredAppointments.length);
+    res.json({ appointments: filteredAppointments, total: filteredAppointments.length });
   } catch (error) {
     console.error('❌ Erro ao obter consultas do médico:', error);
     if (error instanceof AppError) {

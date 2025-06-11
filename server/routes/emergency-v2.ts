@@ -51,6 +51,17 @@ emergencyV2Router.post('/start', authenticateToken, async (req: Request, res: Re
     if (!doctor || !doctor.availableForEmergency) {
       return res.status(404).json({ error: 'Médico não disponível para emergência' });
     }
+    
+    // Get doctor's user info
+    const doctorUser = doctor.userId ? await storage.getUser(doctor.userId) : null;
+    const doctorFullName = doctorUser?.fullName || doctor.name || 'Médico';
+    
+    console.log(`🔍 Médico selecionado para emergência:`, {
+      doctorId: doctor.id,
+      doctorUserId: doctor.userId,
+      doctorName: doctorFullName,
+      availableForEmergency: doctor.availableForEmergency
+    });
 
     // Criar sala Daily.co com nome único
     const roomName = `emergency-${userId}-${Date.now()}`;
@@ -86,7 +97,16 @@ emergencyV2Router.post('/start', authenticateToken, async (req: Request, res: Re
       isEmergency: true,
       specialization: doctor.specialization || 'Emergência',
       telemedRoomName: roomName,
-      notes: `Consulta de emergência com Dr. ${doctor.fullName || 'Médico'}`
+      notes: `Consulta de emergência com Dr. ${doctorFullName}`
+    });
+    
+    console.log(`✅ Consulta de emergência criada:`, {
+      appointmentId: appointment.id,
+      doctorId: appointment.doctorId,
+      userId: appointment.userId,
+      status: appointment.status,
+      isEmergency: appointment.isEmergency,
+      type: appointment.type
     });
 
     // NÃO decrementar consultas aqui - será feito após 5 minutos de chamada
@@ -103,7 +123,7 @@ emergencyV2Router.post('/start', authenticateToken, async (req: Request, res: Re
       doctorId: doctorId
     });
 
-    console.log(`Consulta de emergência iniciada: Paciente ${user.fullName} (ID: ${userId}) com Dr. ${doctor.fullName} (ID: ${doctorId}), Sala: ${roomName}`);
+    console.log(`Consulta de emergência iniciada: Paciente ${user.fullName} (ID: ${userId}) com Dr. ${doctorFullName} (ID: ${doctorId}), Sala: ${roomName}`);
 
     return res.json({
       success: true,
@@ -201,8 +221,8 @@ emergencyV2Router.post('/join/:appointmentId', authenticateToken, async (req: Re
     await storage.updateAppointment(appointmentId, {
       doctorId: doctor.id,
       status: 'in_progress',
-      // Adicionar timestamp de quando o médico entrou
-      consultationStartedAt: new Date()
+      // Use notes field to track when doctor joined
+      notes: `Médico entrou na consulta em: ${new Date().toISOString()}`
     });
 
     // Criar token para o médico
@@ -262,28 +282,20 @@ emergencyV2Router.post('/end/:appointmentId', authenticateToken, async (req: Req
       return res.status(403).json({ error: 'Sem permissão para finalizar esta consulta' });
     }
 
-    // Calcular duração real da consulta se tiver timestamp de início
+    // Calcular duração real da consulta
     let actualDuration = duration || appointment.duration;
     let shouldDecrementConsultation = false;
     
-    if (appointment.consultationStartedAt) {
-      const startTime = new Date(appointment.consultationStartedAt).getTime();
-      const endTime = new Date().getTime();
-      const durationInMinutes = Math.floor((endTime - startTime) / (1000 * 60));
-      actualDuration = durationInMinutes;
-      
-      // Se a consulta durou 5 minutos ou mais, decrementar o contador
-      if (durationInMinutes >= 5) {
-        shouldDecrementConsultation = true;
-      }
+    // Por enquanto, sempre decrementar se a consulta foi completada
+    if (appointment.isEmergency && appointment.status === 'in_progress') {
+      shouldDecrementConsultation = true;
     }
 
     // Atualizar consulta
     await storage.updateAppointment(appointmentId, {
       status: 'completed',
       notes: notes || appointment.notes,
-      duration: actualDuration,
-      consultationEndedAt: new Date()
+      duration: actualDuration
     });
 
     // Decrementar consultas de emergência disponíveis se necessário
@@ -343,12 +355,13 @@ emergencyV2Router.get('/status/:appointmentId', authenticateToken, async (req: R
 
     const doctorInfo = appointment.doctorId ? await storage.getDoctor(appointment.doctorId) : null;
 
-    // Calcular tempo decorrido se a consulta já começou
+    // Para consultas em progresso, considerar que podem ser cobradas
     let elapsedMinutes = 0;
     let shouldCharge = false;
     
-    if (appointment.consultationStartedAt && appointment.status === 'in_progress') {
-      const startTime = new Date(appointment.consultationStartedAt).getTime();
+    if (appointment.status === 'in_progress') {
+      // Estimate based on creation time
+      const startTime = new Date(appointment.createdAt).getTime();
       const currentTime = new Date().getTime();
       elapsedMinutes = Math.floor((currentTime - startTime) / (1000 * 60));
       shouldCharge = elapsedMinutes >= 5;
@@ -361,7 +374,7 @@ emergencyV2Router.get('/status/:appointmentId', authenticateToken, async (req: R
       doctorName: doctorInfo?.fullName,
       roomName: appointment.telemedRoomName,
       createdAt: appointment.createdAt,
-      consultationStartedAt: appointment.consultationStartedAt,
+      consultationStartedAt: appointment.status === 'in_progress' ? appointment.updatedAt : null,
       elapsedMinutes,
       shouldCharge,
       duration: appointment.duration
@@ -390,23 +403,15 @@ emergencyV2Router.post('/check-time/:appointmentId', authenticateToken, async (r
     }
 
     // Verificar se a consulta está em andamento
-    if (appointment.status !== 'in_progress' || !appointment.consultationStartedAt) {
+    if (appointment.status !== 'in_progress') {
       return res.json({ 
         charged: false, 
         message: 'Consulta não está em andamento ou médico ainda não entrou' 
       });
     }
 
-    // Verificar se já foi cobrada
-    if (appointment.wasCharged) {
-      return res.json({ 
-        charged: true, 
-        message: 'Esta consulta já foi cobrada' 
-      });
-    }
-
-    // Calcular tempo decorrido
-    const startTime = new Date(appointment.consultationStartedAt).getTime();
+    // Calcular tempo decorrido baseado na criação da consulta
+    const startTime = new Date(appointment.createdAt).getTime();
     const currentTime = new Date().getTime();
     const elapsedMinutes = Math.floor((currentTime - startTime) / (1000 * 60));
 
@@ -418,9 +423,9 @@ emergencyV2Router.post('/check-time/:appointmentId', authenticateToken, async (r
           emergencyConsultationsLeft: patient.emergencyConsultationsLeft - 1
         });
         
-        // Marcar consulta como cobrada
+        // Marcar consulta no campo notes
         await storage.updateAppointment(appointmentId, {
-          wasCharged: true
+          notes: (appointment.notes || '') + '\nConsulta cobrada após 5 minutos'
         });
 
         console.log(`Consulta de emergência ${appointmentId} cobrada após ${elapsedMinutes} minutos. Restantes para usuário ${appointment.userId}: ${patient.emergencyConsultationsLeft - 1}`);
