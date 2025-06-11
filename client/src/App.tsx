@@ -171,6 +171,7 @@ function Router() {
       {/* Nova implementação de emergência */}
       <ProtectedRoute path="/emergency-room" component={PatientEmergencyRoom} allowedRoles={["patient"]} />
       <ProtectedRoute path="/doctor-emergency/:appointmentId" component={DoctorEmergencyRoom} allowedRoles={["doctor"]} />
+      <ProtectedRoute path="/doctor-emergency-room/:id" component={DoctorEmergencyRoom} allowedRoles={["doctor"]} />
       
       {/* Partner Routes */}
       <ProtectedRoute path="/partner/dashboard" component={PartnerDashboard} allowedRoles={["partner"]} />

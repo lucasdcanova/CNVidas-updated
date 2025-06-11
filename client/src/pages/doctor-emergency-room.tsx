@@ -35,7 +35,9 @@ interface CallState {
 }
 
 export default function DoctorEmergencyRoom() {
-  const { appointmentId } = useParams();
+  const params = useParams();
+  // Aceitar tanto 'appointmentId' quanto 'id' como parâmetros da URL
+  const appointmentId = params.appointmentId || params.id;
   const { user } = useAuth();
   const { toast } = useToast();
   const [, navigate] = useLocation();
