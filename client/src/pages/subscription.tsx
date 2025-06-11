@@ -61,15 +61,57 @@ const SubscriptionPage: React.FC = () => {
     enabled: !!user?.id,
     // **CORREÇÃO: Configurações para evitar cache desatualizado**
     staleTime: 0, // Sempre considera os dados como 'stale' (desatualizados)
-    cacheTime: 1000 * 60 * 5, // Cache por apenas 5 minutos
+    cacheTime: 0, // Sem cache - sempre buscar dados frescos
     refetchOnWindowFocus: true, // Recarregar quando a janela ganha foco
-    refetchOnMount: true, // Sempre recarregar ao montar o componente
+    refetchOnMount: 'always', // Sempre recarregar ao montar o componente
+    refetchInterval: false, // Não recarregar automaticamente
     retry: 1, // Tentar apenas uma vez em caso de erro
   });
 
+  // Forçar refetch quando o componente monta ou quando o usuário muda
+  useEffect(() => {
+    if (user?.id) {
+      console.log('🔄 Forçando refetch da assinatura atual...');
+      refetchSubscription();
+    }
+  }, [user?.id, refetchSubscription]);
+
+  // Helper para extrair dados da assinatura corretamente
+  const getSubscriptionData = (data: any) => {
+    // A API retorna os dados em data.subscription
+    if (data?.subscription) {
+      return data.subscription;
+    }
+    // Fallback para caso os dados venham diretamente
+    return data;
+  };
+
+  // Extrair dados da assinatura atual
+  const currentSubscription = userSubscription ? getSubscriptionData(userSubscription) : null;
+
+  // Debug: Log subscription data
+  useEffect(() => {
+    if (userSubscription) {
+      console.log('📊 Dados da assinatura recebidos (raw):', userSubscription);
+      console.log('📊 Dados da assinatura processados:', {
+        subscription: currentSubscription,
+        planName: currentSubscription?.plan?.name,
+        planDisplayName: currentSubscription?.plan?.displayName,
+        status: currentSubscription?.status
+      });
+    }
+    if (user) {
+      console.log('👤 Dados do usuário:', {
+        email: user.email,
+        subscriptionPlan: user.subscriptionPlan,
+        subscriptionStatus: user.subscriptionStatus
+      });
+    }
+  }, [userSubscription, currentSubscription, user]);
+
   const isCurrentPlan = (planType: string) => {
-    if (!userSubscription) return planType === 'free';
-    return userSubscription.plan?.name === planType;
+    if (!currentSubscription) return planType === 'free';
+    return currentSubscription.plan?.name === planType;
   };
 
   const formatDate = (dateString: string) => {
@@ -189,42 +231,43 @@ const SubscriptionPage: React.FC = () => {
     <DashboardLayout title="Gerenciar Planos">
       <div className="max-w-7xl mx-auto">
         {/* Informações da assinatura atual */}
-        {userSubscription && userSubscription.status !== "inactive" && (
+        {currentSubscription && currentSubscription.status !== "inactive" && (
           <Card className="mb-8 mt-4 overflow-hidden border-2 border-primary shadow-lg">
             <CardHeader className={`
-              ${userSubscription.plan?.name === 'premium' || userSubscription.plan?.name === 'premium_family'
-                ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white' 
-                : userSubscription.plan?.name === 'basic' || userSubscription.plan?.name === 'basic_family'
-                  ? 'bg-gradient-to-r from-emerald-400 to-teal-500 text-white' 
-                  : userSubscription.plan?.name === 'ultra' || userSubscription.plan?.name === 'ultra_family'
-                    ? 'bg-gradient-to-r from-violet-500 to-purple-600 text-white'
-                    : 'bg-gradient-to-r from-gray-100 to-gray-200'
-              }`}>
+              ${(() => {
+                const subscription = userSubscription.subscription || userSubscription;
+                const planName = subscription.plan?.name;
+                if (planName === 'premium' || planName === 'premium_family') return 'bg-gradient-to-r from-amber-400 to-orange-500 text-white';
+                if (planName === 'basic' || planName === 'basic_family') return 'bg-gradient-to-r from-emerald-400 to-teal-500 text-white';
+                if (planName === 'ultra' || planName === 'ultra_family') return 'bg-gradient-to-r from-violet-500 to-purple-600 text-white';
+                return 'bg-gradient-to-r from-gray-100 to-gray-200';
+              })()}
+            `}>
               <div className="flex justify-between items-center">
                 <CardTitle className="flex items-center">
                   <CreditCard className="mr-2 h-5 w-5" />
                   Sua Assinatura Atual
                 </CardTitle>
                 <Badge variant="outline" className={`${
-                  userSubscription.plan?.name === 'premium' || userSubscription.plan?.name === 'premium_family' || 
-                  userSubscription.plan?.name === 'basic' || userSubscription.plan?.name === 'basic_family' ||
-                  userSubscription.plan?.name === 'ultra' || userSubscription.plan?.name === 'ultra_family'
+                  currentSubscription?.plan?.name === 'premium' || currentSubscription?.plan?.name === 'premium_family' || 
+                  currentSubscription?.plan?.name === 'basic' || currentSubscription?.plan?.name === 'basic_family' ||
+                  currentSubscription?.plan?.name === 'ultra' || currentSubscription?.plan?.name === 'ultra_family'
                     ? 'border-white text-white bg-white/20' 
                     : 'bg-primary/20'
                 } px-3 py-1 rounded-full font-medium`}>
-                  {userSubscription.plan?.name === 'premium' || userSubscription.plan?.name === 'premium_family'
+                  {currentSubscription?.plan?.name === 'premium' || currentSubscription?.plan?.name === 'premium_family'
                     ? 'Premium' 
-                    : userSubscription.plan?.name === 'basic' || userSubscription.plan?.name === 'basic_family'
+                    : currentSubscription?.plan?.name === 'basic' || currentSubscription?.plan?.name === 'basic_family'
                       ? 'Básico' 
-                      : userSubscription.plan?.name === 'ultra' || userSubscription.plan?.name === 'ultra_family'
+                      : currentSubscription?.plan?.name === 'ultra' || currentSubscription?.plan?.name === 'ultra_family'
                         ? 'Ultra'
                         : 'Gratuito'}
                 </Badge>
               </div>
               <CardDescription className={
-                userSubscription.plan?.name === 'premium' || userSubscription.plan?.name === 'premium_family' || 
-                userSubscription.plan?.name === 'basic' || userSubscription.plan?.name === 'basic_family' || 
-                userSubscription.plan?.name === 'ultra' || userSubscription.plan?.name === 'ultra_family' 
+                currentSubscription?.plan?.name === 'premium' || currentSubscription?.plan?.name === 'premium_family' || 
+                currentSubscription?.plan?.name === 'basic' || currentSubscription?.plan?.name === 'basic_family' || 
+                currentSubscription?.plan?.name === 'ultra' || currentSubscription?.plan?.name === 'ultra_family' 
                 ? 'text-white/90' : ''
               }>
                 Informações sobre seu plano e status de pagamento
@@ -234,15 +277,15 @@ const SubscriptionPage: React.FC = () => {
               <div className="flex flex-col md:flex-row justify-between md:items-center gap-6">
                 <div>
                   <h3 className="text-xl font-bold flex items-center">
-                    <span>{userSubscription.plan?.displayName || "Plano Atual"}</span>
+                    <span>{currentSubscription?.plan?.displayName || "Plano Atual"}</span>
                     <Badge variant="success" className="ml-3">
-                      {userSubscription.status === "active" ? "Ativo" : userSubscription.status}
+                      {currentSubscription.status === "active" ? "Ativo" : currentSubscription.status}
                     </Badge>
                   </h3>
                   
-                  {userSubscription.plan?.features && (
+                  {currentSubscription?.plan?.features && (
                     <ul className="space-y-2 mt-4">
-                      {userSubscription.plan.features.slice(0, 3).map((feature: string, index: number) => (
+                      {currentSubscription?.plan.features.slice(0, 3).map((feature: string, index: number) => (
                         <li key={index} className="flex items-start">
                           <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
                           <span>{feature}</span>
@@ -251,25 +294,25 @@ const SubscriptionPage: React.FC = () => {
                     </ul>
                   )}
                   
-                  {userSubscription.cancelAtPeriodEnd && (
+                  {currentSubscription.cancelAtPeriodEnd && (
                     <p className="text-sm text-yellow-600 mt-4 p-2 bg-yellow-50 rounded-md border border-yellow-200">
-                      Cancelamento programado. Sua assinatura permanecerá ativa até {formatDate(userSubscription.endDate)}.
+                      Cancelamento programado. Sua assinatura permanecerá ativa até {formatDate(currentSubscription.endDate)}.
                     </p>
                   )}
                 </div>
                 
                 <div className="text-center md:text-right bg-gray-50 p-4 rounded-lg">
                   <p className="text-3xl font-bold">
-                    {userSubscription.plan?.price && userSubscription.plan.price > 0 ? `R$ ${(userSubscription.plan.price / 100).toFixed(2)}` : "Gratuito"}
+                    {currentSubscription?.plan?.price && currentSubscription?.plan.price > 0 ? `R$ ${(currentSubscription?.plan.price / 100).toFixed(2)}` : "Gratuito"}
                   </p>
-                  {userSubscription.plan?.price && userSubscription.plan.price > 0 ? (
+                  {currentSubscription?.plan?.price && currentSubscription?.plan.price > 0 ? (
                     <p className="text-sm text-muted-foreground">/mês</p>
                   ) : null}
                   <p className="text-xs text-muted-foreground mt-2">
-                    {userSubscription.status === "active" ? (
+                    {currentSubscription.status === "active" ? (
                       <>
                         <span className="font-medium">Próxima cobrança:</span><br />
-                        {formatDate(userSubscription.endDate)}
+                        {formatDate(currentSubscription.endDate)}
                       </>
                     ) : (
                       "Sem cobrança automática"
@@ -278,7 +321,7 @@ const SubscriptionPage: React.FC = () => {
                 </div>
               </div>
               
-              {!userSubscription.cancelAtPeriodEnd && userSubscription.status === "active" && (
+              {!currentSubscription.cancelAtPeriodEnd && currentSubscription.status === "active" && (
                 <div className="mt-6 flex justify-end">
                   <Button 
                     variant="outline" 

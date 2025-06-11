@@ -56,11 +56,14 @@ emergencyPatientRouter.post('/start', async (req: Request, res: Response) => {
     }
     
     // Criar token para o paciente
-    const token = await createToken(roomName, {
+    const tokenResponse = await createToken(roomName, {
       user_id: req.user!.id.toString(),
       user_name: req.user!.fullName,
       is_owner: true
     });
+    
+    // Extrair o token da resposta
+    const token = tokenResponse.token;
     
     // Registrar consulta de emergência no banco de dados
     const appointmentData = {

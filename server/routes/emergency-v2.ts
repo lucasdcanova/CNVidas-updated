@@ -66,11 +66,14 @@ emergencyV2Router.post('/start', authenticateToken, async (req: Request, res: Re
     });
 
     // Criar token para o paciente
-    const patientToken = await createToken(roomName, {
+    const tokenResponse = await createToken(roomName, {
       user_id: userId.toString(),
       user_name: user.fullName || user.username,
       is_owner: false
     });
+    
+    // Extrair o token da resposta
+    const patientToken = tokenResponse.token;
 
     // Criar registro de consulta com médico específico
     const appointment = await storage.createAppointment({
@@ -203,11 +206,14 @@ emergencyV2Router.post('/join/:appointmentId', authenticateToken, async (req: Re
     });
 
     // Criar token para o médico
-    const doctorToken = await createToken(appointment.telemedRoomName!, {
+    const tokenResponse = await createToken(appointment.telemedRoomName!, {
       user_id: userId.toString(),
       user_name: doctor.fullName || 'Médico',
       is_owner: true
     });
+    
+    // Extrair o token da resposta
+    const doctorToken = tokenResponse.token;
 
     // Limpar notificação do médico (consulta foi aceita)
     emergencyNotifications.delete(doctor.id);

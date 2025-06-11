@@ -173,11 +173,14 @@ emergencyRouter.post('/join', async (req: Request, res: Response) => {
       });
       
       // Criar token para o médico na sala existente (não criamos nova sala)
-      const token = await createToken(roomName, {
+      const tokenResponse = await createToken(roomName, {
         user_id: userId.toString(),
         user_name: userData.fullName,
         is_owner: true
       });
+      
+      // Extrair o token da resposta
+      const token = tokenResponse.token;
       
       // Enviar os dados da sala para o cliente
       return res.json({

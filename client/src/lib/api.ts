@@ -191,10 +191,27 @@ export const getPendingClaims = async () => {
 };
 
 export const createClaim = async (formData: FormData) => {
+  // Verificar se existe um token de autenticação
+  const authToken = localStorage.getItem("authToken");
+  const sessionID = localStorage.getItem("sessionID");
+  
+  // Adicionar headers de autenticação
+  const headers: Record<string, string> = {};
+  
+  if (sessionID) {
+    headers["X-Session-ID"] = sessionID;
+  }
+  
+  if (authToken) {
+    headers["Authorization"] = `Bearer ${authToken}`;
+    headers["X-Auth-Token"] = authToken;
+  }
+  
   const res = await fetch("/api/claims", {
     method: "POST",
     body: formData,
     credentials: "include",
+    headers,
   });
   
   if (!res.ok) {

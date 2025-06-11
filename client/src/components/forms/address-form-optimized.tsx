@@ -155,15 +155,6 @@ export const AddressFormOptimized = memo(({
     onSubmit(formattedData);
   }, [onSubmit]);
 
-  // Handle field change - atualizar o formulário pai em tempo real
-  const handleFieldChange = useCallback((fieldName: keyof AddressFormValues, value: string) => {
-    // Atualizar o valor no formulário local
-    form.setValue(fieldName, value, { shouldValidate: true, shouldDirty: true });
-    
-    // Obter todos os valores atuais e enviar para o formulário pai
-    const currentValues = form.getValues();
-    onSubmit(currentValues);
-  }, [form, onSubmit]);
 
   const formFields = (
     <>
@@ -241,9 +232,10 @@ export const AddressFormOptimized = memo(({
                     placeholder="Nome da rua"
                     disabled={isSubmitting || isReadOnly}
                     {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange('street', e.target.value);
+                    onBlur={(e) => {
+                      // Atualizar o formulário pai apenas quando o campo perde o foco
+                      const currentValues = form.getValues();
+                      onSubmit(currentValues);
                     }}
                     className="transition-all duration-300 hover:shadow-sm focus:shadow-md"
                   />
@@ -269,9 +261,9 @@ export const AddressFormOptimized = memo(({
                     placeholder="123"
                     disabled={isSubmitting || isReadOnly}
                     {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange('number', e.target.value);
+                    onBlur={() => {
+                      const currentValues = form.getValues();
+                      onSubmit(currentValues);
                     }}
                     className="transition-all duration-300 hover:shadow-sm focus:shadow-md"
                   />
@@ -295,9 +287,9 @@ export const AddressFormOptimized = memo(({
                     placeholder="Apto 101, Bloco B, etc."
                     disabled={isSubmitting || isReadOnly}
                     {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange('complement', e.target.value);
+                    onBlur={() => {
+                      const currentValues = form.getValues();
+                      onSubmit(currentValues);
                     }}
                     className="transition-all duration-300 hover:shadow-sm focus:shadow-md"
                   />
@@ -321,9 +313,9 @@ export const AddressFormOptimized = memo(({
                 placeholder="Nome do bairro"
                 disabled={isSubmitting || isReadOnly}
                 {...field}
-                onChange={(e) => {
-                  field.onChange(e);
-                  handleFieldChange('neighborhood', e.target.value);
+                onBlur={() => {
+                  const currentValues = form.getValues();
+                  onSubmit(currentValues);
                 }}
                 className="transition-all duration-300 hover:shadow-sm focus:shadow-md"
               />
@@ -347,9 +339,9 @@ export const AddressFormOptimized = memo(({
                     placeholder="Nome da cidade"
                     disabled={isSubmitting || isReadOnly}
                     {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange('city', e.target.value);
+                    onBlur={() => {
+                      const currentValues = form.getValues();
+                      onSubmit(currentValues);
                     }}
                     className="transition-all duration-300 hover:shadow-sm focus:shadow-md"
                   />
@@ -375,9 +367,13 @@ export const AddressFormOptimized = memo(({
                     maxLength={2}
                     {...field}
                     onChange={(e) => {
+                      // Ainda precisamos do onChange aqui para transformar em maiúsculas
                       const value = e.target.value.toUpperCase();
                       field.onChange(value);
-                      handleFieldChange('state', value);
+                    }}
+                    onBlur={() => {
+                      const currentValues = form.getValues();
+                      onSubmit(currentValues);
                     }}
                     className="transition-all duration-300 hover:shadow-sm focus:shadow-md"
                   />
