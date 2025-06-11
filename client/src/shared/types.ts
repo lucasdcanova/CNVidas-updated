@@ -170,6 +170,7 @@ export const partnerSchema = z.object({
   state: z.string().nullable(),
   phone: z.string().nullable(),
   cnpj: z.string().nullable(),
+  nationwideService: z.boolean().nullable(),
   status: z.string(),
 });
 

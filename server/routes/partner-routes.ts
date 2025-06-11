@@ -215,25 +215,43 @@ partnerRouter.put('/me', requireAuth, requirePartner, async (req: AuthenticatedR
     }
 
     const { 
+      businessName,
+      businessType,
       tradingName, 
       description, 
       phone, 
       website, 
-      address, 
+      address,
+      zipcode,
+      street,
+      number,
+      complement,
+      neighborhood,
       city, 
       state, 
-      postalCode 
+      postalCode,
+      cnpj,
+      nationwideService
     } = req.body;
 
     const updateData = {
+      businessName: businessName || partner.businessName,
+      businessType: businessType || partner.businessType,
       tradingName: tradingName || partner.tradingName,
       description: description || partner.description,
       phone: phone || partner.phone,
       website: website || partner.website,
       address: address || partner.address,
+      zipcode: zipcode || partner.zipcode,
+      street: street || partner.street,
+      number: number || partner.number,
+      complement: complement || partner.complement,
+      neighborhood: neighborhood || partner.neighborhood,
       city: city || partner.city,
       state: state || partner.state,
       postalCode: postalCode || partner.postalCode,
+      cnpj: cnpj || partner.cnpj,
+      nationwideService: nationwideService !== undefined ? nationwideService : partner.nationwideService,
       updatedAt: new Date()
     };
 

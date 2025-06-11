@@ -283,20 +283,12 @@ const AppointmentItem = ({ appointment, onDeleteEmergencyAppointment }: { appoin
                     <Button 
                       onClick={() => {
                         if (isEmergency) {
-                          // Para consultas de emergência, abrir diretamente a sala
-                          if (appointment.roomUrl) {
-                            window.open(appointment.roomUrl, '_blank');
-                            toast({
-                              title: "Entrando na sala de emergência",
-                              description: "Conectando com o paciente...",
-                            });
-                          } else {
-                            toast({
-                              title: "Erro",
-                              description: "URL da sala não encontrada",
-                              variant: "destructive",
-                            });
-                          }
+                          // Para consultas de emergência, redirecionar para a sala de emergência
+                          navigate(`/unified-emergency-room?id=${appointment.id}`);
+                          toast({
+                            title: "Entrando na sala de emergência",
+                            description: "Conectando com o paciente...",
+                          });
                         } else {
                           // Consulta normal de telemedicina
                           navigate(`/telemedicine-consultation?appointmentId=${appointment.id}`);

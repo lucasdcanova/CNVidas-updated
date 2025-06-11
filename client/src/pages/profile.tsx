@@ -21,6 +21,7 @@ import SellerForm from "@/components/forms/seller-form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { 
   getUserProfile,
@@ -96,6 +97,7 @@ const partnerProfileSchema = z.object({
   state: z.string().optional(),
   phone: z.string().min(1, "Telefone é obrigatório"),
   cnpj: z.string().min(14, "CNPJ deve ter pelo menos 14 caracteres").optional(),
+  nationwideService: z.boolean().optional(),
 });
 
 // Password change form schema
@@ -266,6 +268,7 @@ const Profile: React.FC = () => {
       state: partnerData?.state || "",
       phone: partnerData?.phone || "",
       cnpj: partnerData?.cnpj || "",
+      nationwideService: partnerData?.nationwideService || false,
     },
   });
   
@@ -291,6 +294,7 @@ const Profile: React.FC = () => {
         state: partnerData.state || "",
         phone: partnerData.phone || "",
         cnpj: partnerData.cnpj || "",
+        nationwideService: partnerData.nationwideService || false,
       });
       setIsPartnerFormInitialized(true);
     }
@@ -374,13 +378,13 @@ const Profile: React.FC = () => {
   
   // Partner profile update mutation
   const updatePartnerMutation = useMutation({
-    mutationFn: (data: PartnerProfileFormValues) => {
-      console.log(`Enviando atualização para parceiro ID: ${partnerData?.id}`);
-      // Garantir que temos um ID válido antes de enviar
-      if (!partnerData?.id) {
-        throw new Error("ID do parceiro não encontrado");
-      }
-      return updatePartner(partnerData.id, data);
+    mutationFn: async (data: PartnerProfileFormValues) => {
+      console.log("Enviando atualização do perfil do parceiro:", data);
+      
+      // Usar o endpoint correto para atualizar o perfil do parceiro logado
+      const res = await apiRequest("PUT", "/api/partners/me", data);
+      
+      return await res.json();
     },
     onSuccess: (response) => {
       console.log("Perfil de parceiro atualizado com sucesso:", response);
@@ -390,8 +394,11 @@ const Profile: React.FC = () => {
       });
       setIsUpdatingProfile(false);
       setIsEditMode(false);
-      // Forçar a atualização da página para mostrar os dados atualizados
+      
+      // Invalidar cache para forçar reload dos dados
+      queryClient.invalidateQueries({ queryKey: ["/api/partners/me"] });
       queryClient.invalidateQueries({ queryKey: ["/api/partners/user", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["/api/partners"] });
     },
     onError: (error) => {
       console.error("Erro ao atualizar perfil de parceiro:", error);
@@ -598,6 +605,7 @@ const Profile: React.FC = () => {
         website: data.website || "",
         phone: data.phone || "",
         cnpj: data.cnpj || "",
+        nationwideService: data.nationwideService || false,
         // Campos de endereço explícitos - usar valores capturados
         zipcode: data.zipcode || "",
         street: streetValue,
@@ -1450,11 +1458,39 @@ const Profile: React.FC = () => {
                         )}
                       />
                       
+                      {/* Toggle Atendimento Nacional */}
+                      <FormField
+                        control={partnerForm.control}
+                        name="nationwideService"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                            <div className="space-y-0.5">
+                              <FormLabel className="text-base">
+                                Atendimento em todo o Brasil
+                              </FormLabel>
+                              <FormDescription>
+                                Quando ativado, seu serviço ficará disponível para pacientes de qualquer localidade, sem necessidade de endereço específico.
+                              </FormDescription>
+                            </div>
+                            <FormControl>
+                              <Switch
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                                disabled={isUpdatingProfile || !isEditMode}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+
                       {/* Seção de Endereço Comercial Completo */}
                       <div className="mt-6 mb-4">
                         <div className="flex items-center gap-2 mb-4">
                           <MapPin className="h-5 w-5 text-primary" />
                           <h3 className="text-lg font-medium">Endereço Comercial</h3>
+                          {partnerForm.watch("nationwideService") && (
+                            <span className="text-sm text-muted-foreground">(Desabilitado - Atendimento Nacional Ativo)</span>
+                          )}
                         </div>
                         
                         <div className="address-form-container">
@@ -1491,7 +1527,7 @@ const Profile: React.FC = () => {
                             isSubmitting={isUpdatingProfile}
                             showSubmitButton={false}
                             standAlone={false} // Modo integrado - não cria um <form> aninhado
-                            isReadOnly={!isEditMode} // Tornar readonly quando não está em modo de edição
+                            isReadOnly={!isEditMode || partnerForm.watch("nationwideService")} // Tornar readonly quando não está em modo de edição ou quando atendimento nacional está ativo
                           />
                         </div>
                       </div>

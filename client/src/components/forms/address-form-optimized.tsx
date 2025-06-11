@@ -155,6 +155,16 @@ export const AddressFormOptimized = memo(({
     onSubmit(formattedData);
   }, [onSubmit]);
 
+  // Função para sincronizar valores em tempo real com o formulário pai
+  const syncWithParent = useCallback(() => {
+    const currentValues = form.getValues();
+    const formattedData = {
+      ...currentValues,
+      zipcode: currentValues.zipcode.replace(/\D/g, ''),
+    };
+    onSubmit(formattedData);
+  }, [form, onSubmit]);
+
 
   const formFields = (
     <>
@@ -188,7 +198,6 @@ export const AddressFormOptimized = memo(({
                       onChange={(e) => {
                         const formatted = formatCep(e.target.value);
                         field.onChange(formatted);
-                        handleFieldChange('zipcode', formatted);
                         
                         // Se o CEP tiver 8 dígitos, buscar endereço automaticamente
                         if (e.target.value.replace(/\D/g, '').length === 8) {
@@ -232,10 +241,10 @@ export const AddressFormOptimized = memo(({
                     placeholder="Nome da rua"
                     disabled={isSubmitting || isReadOnly}
                     {...field}
-                    onBlur={(e) => {
-                      // Atualizar o formulário pai apenas quando o campo perde o foco
-                      const currentValues = form.getValues();
-                      onSubmit(currentValues);
+                    onChange={(e) => {
+                      field.onChange(e);
+                      // Sincronizar em tempo real
+                      setTimeout(syncWithParent, 0);
                     }}
                     className="transition-all duration-300 hover:shadow-sm focus:shadow-md"
                   />
@@ -261,9 +270,9 @@ export const AddressFormOptimized = memo(({
                     placeholder="123"
                     disabled={isSubmitting || isReadOnly}
                     {...field}
-                    onBlur={() => {
-                      const currentValues = form.getValues();
-                      onSubmit(currentValues);
+                    onChange={(e) => {
+                      field.onChange(e);
+                      setTimeout(syncWithParent, 0);
                     }}
                     className="transition-all duration-300 hover:shadow-sm focus:shadow-md"
                   />
@@ -287,9 +296,9 @@ export const AddressFormOptimized = memo(({
                     placeholder="Apto 101, Bloco B, etc."
                     disabled={isSubmitting || isReadOnly}
                     {...field}
-                    onBlur={() => {
-                      const currentValues = form.getValues();
-                      onSubmit(currentValues);
+                    onChange={(e) => {
+                      field.onChange(e);
+                      setTimeout(syncWithParent, 0);
                     }}
                     className="transition-all duration-300 hover:shadow-sm focus:shadow-md"
                   />
@@ -313,9 +322,9 @@ export const AddressFormOptimized = memo(({
                 placeholder="Nome do bairro"
                 disabled={isSubmitting || isReadOnly}
                 {...field}
-                onBlur={() => {
-                  const currentValues = form.getValues();
-                  onSubmit(currentValues);
+                onChange={(e) => {
+                  field.onChange(e);
+                  setTimeout(syncWithParent, 0);
                 }}
                 className="transition-all duration-300 hover:shadow-sm focus:shadow-md"
               />
@@ -339,9 +348,9 @@ export const AddressFormOptimized = memo(({
                     placeholder="Nome da cidade"
                     disabled={isSubmitting || isReadOnly}
                     {...field}
-                    onBlur={() => {
-                      const currentValues = form.getValues();
-                      onSubmit(currentValues);
+                    onChange={(e) => {
+                      field.onChange(e);
+                      setTimeout(syncWithParent, 0);
                     }}
                     className="transition-all duration-300 hover:shadow-sm focus:shadow-md"
                   />
@@ -367,13 +376,10 @@ export const AddressFormOptimized = memo(({
                     maxLength={2}
                     {...field}
                     onChange={(e) => {
-                      // Ainda precisamos do onChange aqui para transformar em maiúsculas
+                      // Transformar em maiúsculas e sincronizar
                       const value = e.target.value.toUpperCase();
                       field.onChange(value);
-                    }}
-                    onBlur={() => {
-                      const currentValues = form.getValues();
-                      onSubmit(currentValues);
+                      setTimeout(syncWithParent, 0);
                     }}
                     className="transition-all duration-300 hover:shadow-sm focus:shadow-md"
                   />

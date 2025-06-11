@@ -137,7 +137,14 @@ appointmentJoinRouter.post('/:id/join', requireAuth, async (req: AuthenticatedRe
     
     // Verificar permissões de acesso
     const isPatientOwner = userRole === 'patient' && appointment.userId === userId;
-    const isDoctorAssigned = userRole === 'doctor' && (appointment.doctorId === userId || !appointment.doctorId);
+    let isDoctorAssigned = false;
+    
+    if (userRole === 'doctor') {
+      // Se for médico, buscar o doctorId baseado no userId
+      const doctor = await storage.getDoctorByUserId(userId);
+      isDoctorAssigned = doctor ? (appointment.doctorId === doctor.id || !appointment.doctorId) : false;
+    }
+    
     const hasAccess = isPatientOwner || isDoctorAssigned || userRole === 'admin';
     
     if (!hasAccess) {
@@ -161,7 +168,10 @@ appointmentJoinRouter.post('/:id/join', requireAuth, async (req: AuthenticatedRe
       
       // Só atribuir médico se o usuário for médico
       if (userRole === 'doctor') {
-        updateData.doctorId = userId;
+        const doctor = await storage.getDoctorByUserId(userId);
+        if (doctor) {
+          updateData.doctorId = doctor.id;
+        }
       }
       
       await storage.updateAppointment(appointmentId, updateData);
@@ -172,8 +182,11 @@ appointmentJoinRouter.post('/:id/join', requireAuth, async (req: AuthenticatedRe
       
       // Se a consulta não tiver médico atribuído e o usuário atual for médico, atualizar
       if (!appointment.doctorId && userRole === 'doctor') {
-        await storage.updateAppointment(appointmentId, { doctorId: userId });
-        console.log(`Médico ${userId} atribuído à consulta #${appointmentId}`);
+        const doctor = await storage.getDoctorByUserId(userId);
+        if (doctor) {
+          await storage.updateAppointment(appointmentId, { doctorId: doctor.id });
+          console.log(`Médico ${doctor.id} (userId: ${userId}) atribuído à consulta #${appointmentId}`);
+        }
       }
     }
     
@@ -297,9 +310,19 @@ appointmentJoinRouter.delete('/:id', async (req: Request, res: Response) => {
     }
     
     // Verificar permissões: médico pode excluir suas consultas, paciente pode excluir as suas
-    const canDelete = (userRole === 'doctor' && appointment.doctorId === userId) ||
-                     (userRole === 'patient' && appointment.userId === userId) ||
-                     (userRole === 'admin');
+    let canDelete = false;
+    
+    if (userRole === 'doctor') {
+      // Se for médico, buscar o doctorId baseado no userId
+      const doctor = await storage.getDoctorByUserId(userId);
+      canDelete = doctor ? appointment.doctorId === doctor.id : false;
+    } else if (userRole === 'patient') {
+      // Se for paciente, comparar diretamente o userId
+      canDelete = appointment.userId === userId;
+    } else if (userRole === 'admin') {
+      // Admin pode excluir qualquer consulta
+      canDelete = true;
+    }
     
     if (!canDelete) {
       return res.status(403).json({ message: 'Sem permissão para excluir esta consulta' });
@@ -365,20 +388,31 @@ appointmentJoinRouter.post('/:id/cancel', requireAuth, async (req: Authenticated
     
     // Verificar permissões (médico pode cancelar suas consultas, paciente pode cancelar as dele)
     const isDoctor = req.user.role === 'doctor';
-    const hasPermission = isDoctor ? 
-      appointment.doctorId === req.user.id : 
-      appointment.userId === req.user.id;
+    let hasPermission = false;
+    
+    if (isDoctor) {
+      // Se for médico, buscar o doctorId baseado no userId
+      const doctor = await storage.getDoctorByUserId(req.user.id);
+      console.log(`Verificando permissão do médico - userId: ${req.user.id}, doctorId: ${doctor?.id}, appointment.doctorId: ${appointment.doctorId}`);
+      hasPermission = doctor ? appointment.doctorId === doctor.id : false;
+    } else {
+      // Se for paciente, comparar diretamente o userId
+      console.log(`Verificando permissão do paciente - userId: ${req.user.id}, appointment.userId: ${appointment.userId}`);
+      hasPermission = appointment.userId === req.user.id;
+    }
     
     if (!hasPermission && req.user.role !== 'admin') {
       return res.status(403).json({ message: 'Você não tem permissão para cancelar esta consulta' });
     }
     
     // Atualizar o status da consulta para cancelado
+    // Nota: os campos cancelledAt, cancelledBy e cancellationReason não existem no schema
+    // Vamos usar o campo notes para registrar o cancelamento
+    const cancelInfo = `Cancelado por ${req.user.fullName || req.user.username} em ${new Date().toISOString()}. Motivo: ${reason || 'Não especificado'}`;
+    
     await storage.updateAppointment(appointmentIdNum, {
       status: 'cancelled',
-      cancelledAt: new Date(),
-      cancelledBy: req.user.id,
-      cancellationReason: reason || 'Cancelado pelo usuário'
+      notes: appointment.notes ? `${appointment.notes}\n\n${cancelInfo}` : cancelInfo
     });
     
     console.log(`Consulta #${appointmentIdNum} cancelada com sucesso`);

@@ -2660,3 +2660,1704 @@ Encontrados 0 claims
 🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
 🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
 🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Médico selecionado para emergência: {
+  doctorId: 4,
+  doctorUserId: 32,
+  doctorName: 'Lucas Dickel Canova',
+  availableForEmergency: true
+}
+➡️ Criando sala emergency-58-1749681188836 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749681188836" já existe...
+Sala "emergency-58-1749681188836" não existe, será criada
+🆕 Criando nova sala "emergency-58-1749681188836" no Daily.co...
+Payload para criação da sala: {"name":"emergency-58-1749681188836","properties":{"start_audio_off":false,"start_video_off":false,"enable_chat":true,"enable_screenshare":true,"exp":null}}
+✅ Sala "emergency-58-1749681188836" criada com sucesso
+Criando token para sala emergency-58-1749681188836
+Verificando/criando sala emergency-58-1749681188836 antes de gerar token
+➡️ Criando sala emergency-58-1749681188836 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749681188836" já existe...
+✅ Sala "emergency-58-1749681188836" já existe no Daily.co
+Sala emergency-58-1749681188836 verificada/criada com sucesso
+Solicitando token com propriedades: {
+  room_name: 'emergency-58-1749681188836',
+  user_id: '58',
+  user_name: 'Lucas Dickel Canov',
+  exp: 1749688390,
+  is_owner: false,
+  enable_screenshare: true,
+  start_video_off: false,
+  start_audio_off: false
+}
+Token simplificado criado com sucesso: eyJhbGciOiJIUzI...
+✅ Consulta de emergência criada: {
+  appointmentId: 70,
+  doctorId: 4,
+  userId: 58,
+  status: 'waiting',
+  isEmergency: true,
+  type: 'telemedicine'
+}
+Consulta de emergência iniciada: Paciente Lucas Dickel Canov (ID: 58) com Dr. Lucas Dickel Canova (ID: 4), Sala: emergency-58-1749681188836
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Join consulta - Usuário 58 (Lucas Dickel Canov, role: patient) tentando entrar na consulta
+Usuário 58 (Lucas Dickel Canov, role: patient) entrando na consulta #70
+Buscando consulta #70 no banco de dados...
+Consulta encontrada: {
+  id: 70,
+  type: 'telemedicine',
+  isEmergency: true,
+  status: 'waiting',
+  userId: 58,
+  doctorId: 4,
+  telemedRoomName: 'emergency-58-1749681188836'
+}
+Usando sala existente para consulta #70: emergency-58-1749681188836
+Sala já existe: emergency-58-1749681188836
+Sala já existe: emergency-58-1749681188836
+Token de emergência criado com sucesso para Lucas Dickel Canov na sala emergency-58-1749681188836
+Sala e token criados com sucesso: emergency-58-1749681188836
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Logout realizado com sucesso - cookies removidos
+=== ROTA /api/user INTERCEPTADA ===
+=== ROTA /api/user INTERCEPTADA ===
+=== ROTA /api/login INTERCEPTADA ===
+=== ROTA LOGIN CHAMADA ===
+URL: /login
+Method: POST
+Body: { email: 'dr@lucascanova.com', password: 'qweasdzxc123' }
+Buscando usuário no banco: dr@lucascanova.com
+Usuário encontrado: true
+Login bem-sucedido para: dr@lucascanova.com
+Cookie options: {
+  host: 'localhost:3000',
+  isLocalhost: true,
+  isProduction: false,
+  secure: false,
+  domain: undefined
+}
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /profile - Buscando perfil do médico ID: 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /user/:userId - Buscando médico para user ID: 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+✅ Doctor /profile - Perfil encontrado: 4
+✅ Doctor /user/:userId - Médico encontrado: 4
+✅ Notifications /unread-count - Contagem: 45
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+=== ROTA /api/user INTERCEPTADA ===
+🔍 Doctor /appointments - Total de consultas: 14
+🔍 Doctor /appointments - Consultas do médico (ID 4): 14
+🔍 Doctor /appointments - Consultas de emergência: 14
+🔍 Doctor /appointments - Consultas com status waiting: 13
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+✅ Doctor /appointments - Consultas encontradas: 14
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /user/:userId - Buscando médico para user ID: 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /profile - Buscando perfil do médico ID: 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+✅ Doctor /user/:userId - Médico encontrado: 4
+✅ Notifications /unread-count - Contagem: 45
+✅ Doctor /profile - Perfil encontrado: 4
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Total de consultas: 14
+🔍 Doctor /appointments - Consultas do médico (ID 4): 14
+🔍 Doctor /appointments - Consultas de emergência: 14
+🔍 Doctor /appointments - Consultas com status waiting: 13
+✅ Doctor /appointments - Consultas encontradas: 14
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 14
+🔍 Doctor /appointments - Consultas do médico (ID 4): 14
+🔍 Doctor /appointments - Consultas de emergência: 14
+🔍 Doctor /appointments - Consultas com status waiting: 13
+✅ Doctor /appointments - Consultas encontradas: 14
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 14
+🔍 Doctor /appointments - Consultas do médico (ID 4): 14
+🔍 Doctor /appointments - Consultas de emergência: 14
+🔍 Doctor /appointments - Consultas com status waiting: 13
+✅ Doctor /appointments - Consultas encontradas: 14
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 14
+🔍 Doctor /appointments - Consultas do médico (ID 4): 14
+🔍 Doctor /appointments - Consultas de emergência: 14
+🔍 Doctor /appointments - Consultas com status waiting: 13
+✅ Doctor /appointments - Consultas encontradas: 14
+7:38:32 PM [vite] hmr update /src/components/forms/appointment-form.tsx, /src/index.css?v=DSgRtJueYnkkxQxDWq7y9
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:38:32 PM [tsx] change in ./shared/schema.ts Restarting...
+c7:38:33 PM [tsx] change in ./shared/schema.ts Restarting...
+AuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-11 22:38:40.188047+00
+Session table checked/created successfully
+7:38:41 PM [server] Servidor rodando na porta 3000
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Total de consultas: 14
+🔍 Doctor /appointments - Consultas do médico (ID 4): 14
+🔍 Doctor /appointments - Consultas de emergência: 14
+🔍 Doctor /appointments - Consultas com status waiting: 13
+❌ Erro ao obter consultas do médico: Error: timeout exceeded when trying to connect
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1086:33
+    at runNextTicks (node:internal/process/task_queues:60:5)
+    at listOnTimeout (node:internal/timers:545:9)
+    at process.processTimers (node:internal/timers:519:7)
+    at async NeonPreparedQuery.execute (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/neon-serverless/session.ts:61:18)
+    at async DatabaseStorage.getUser (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/storage.ts:328:20)
+    at async <anonymous> (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/doctor-routes.ts:191:46)
+    at async Promise.all (index 6)
+    at async <anonymous> (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/doctor-routes.ts:189:41)
+Erro ao buscar dados do usuário: Error: timeout exceeded when trying to connect
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1086:33
+    at runNextTicks (node:internal/process/task_queues:60:5)
+    at listOnTimeout (node:internal/timers:545:9)
+    at process.processTimers (node:internal/timers:519:7)
+    at async NeonPreparedQuery.execute (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/neon-serverless/session.ts:61:18)
+    at async <anonymous> (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts:135:28)
+Erro ao buscar dados do usuário: Error: timeout exceeded when trying to connect
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1086:33
+    at runNextTicks (node:internal/process/task_queues:60:5)
+    at listOnTimeout (node:internal/timers:545:9)
+    at process.processTimers (node:internal/timers:519:7)
+    at async NeonPreparedQuery.execute (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/neon-serverless/session.ts:61:18)
+    at async <anonymous> (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts:135:28)
+Erro ao buscar dados do usuário: Error: timeout exceeded when trying to connect
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1086:33
+    at runNextTicks (node:internal/process/task_queues:60:5)
+    at process.processTimers (node:internal/timers:516:9)
+    at async NeonPreparedQuery.execute (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/neon-serverless/session.ts:61:18)
+    at async <anonymous> (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts:135:28)
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+Configuração de email carregada. Serviço de email disponível.
+7:38:53 PM [tsx] change in ./shared/schema.ts Restarting...
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+Erro ao buscar dados do usuário: Error: timeout exceeded when trying to connect
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1086:33
+    at runNextTicks (node:internal/process/task_queues:60:5)
+    at listOnTimeout (node:internal/timers:545:9)
+    at process.processTimers (node:internal/timers:519:7)
+    at async NeonPreparedQuery.execute (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/neon-serverless/session.ts:61:18)
+    at async <anonymous> (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts:135:28)
+Erro ao buscar dados do usuário: Error: timeout exceeded when trying to connect
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1086:33
+    at runNextTicks (node:internal/process/task_queues:60:5)
+    at process.processTimers (node:internal/timers:516:9)
+    at async NeonPreparedQuery.execute (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/neon-serverless/session.ts:61:18)
+    at async <anonymous> (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts:135:28)
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-11 22:38:57.722199+00
+Session table checked/created successfully
+7:38:58 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+Buscando consultas próximas para usuário 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+Buscando claims para usuário 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /user/:userId - Buscando médico para user ID: 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 32
+Encontradas 0 consultas próximas
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Notifications - Buscando notificações do usuário ID: 32
+Encontrados 0 claims
+Session table checked/created successfully
+Erro ao buscar serviços: error: column partners.nationwide_service does not exist
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1086:33
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/neon-serverless/session.ts:61:18)
+    at async DatabaseStorage.getAllPartnerServices (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/storage.ts:936:21)
+    at async <anonymous> (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts:192:26) {
+  length: 126,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '884',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3716',
+  routine: 'errorMissingColumn'
+}
+✅ Doctor /user/:userId - Médico encontrado: 4
+✅ Notifications /unread-count - Contagem: 45
+✅ Notifications - Notificações encontradas: 45
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /profile - Buscando perfil do médico ID: 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+✅ Doctor /profile - Perfil encontrado: 4
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:40:22 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=vC8Hq5fiZGaylyBhN_bMA
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:40:23 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=vC8Hq5fiZGaylyBhN_bMA
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:40:36 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=vC8Hq5fiZGaylyBhN_bMA
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:40:38 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=vC8Hq5fiZGaylyBhN_bMA
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+Cancelando consulta #71 pelo usuário 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+7:41:54 PM [vite] hmr update /src/pages/doctor-telemedicine.tsx, /src/index.css?v=vC8Hq5fiZGaylyBhN_bMA
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:41:57 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=vC8Hq5fiZGaylyBhN_bMA
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:41:58 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=vC8Hq5fiZGaylyBhN_bMA
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+7:42:08 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=vC8Hq5fiZGaylyBhN_bMA
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:42:08 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=vC8Hq5fiZGaylyBhN_bMA
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:42:09 PM [vite] hmr update /src/pages/profile.tsx, /src/index.css?v=vC8Hq5fiZGaylyBhN_bMA
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+7:42:20 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-11 22:42:24.743348+00
+Session table checked/created successfully
+7:42:25 PM [server] Servidor rodando na porta 3000
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:42:27 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-11 22:42:31.528594+00
+Session table checked/created successfully
+7:42:32 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-11 22:42:35.890868+00
+Session table checked/created successfully
+7:42:36 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+7:42:45 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-11 22:42:49.191209+00
+Session table checked/created successfully
+7:42:50 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+7:42:54 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-11 22:42:58.297366+00
+Session table checked/created successfully
+7:42:59 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+7:43:05 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-11 22:43:09.088198+00
+Session table checked/created successfully
+7:43:09 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+7:43:18 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-11 22:43:22.826838+00
+Session table checked/created successfully
+7:43:23 PM [server] Servidor rodando na porta 3000
+7:43:24 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+7:43:28 PM [tsx] change in ./server/routes/partner-routes.ts Restarting...
+c7:43:29 PM [tsx] change in ./server/routes/partner-routes.ts Restarting...
+AuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+c7:43:32 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+AuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-11 22:43:37.307689+00
+Session table checked/created successfully
+7:43:38 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+Erro ao buscar dados do usuário: Error: timeout exceeded when trying to connect
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1086:33
+    at runNextTicks (node:internal/process/task_queues:60:5)
+    at listOnTimeout (node:internal/timers:545:9)
+    at process.processTimers (node:internal/timers:519:7)
+    at async NeonPreparedQuery.execute (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/neon-serverless/session.ts:61:18)
+    at async <anonymous> (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts:135:28)
+Erro ao buscar dados do usuário: Error: timeout exceeded when trying to connect
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1086:33
+    at runNextTicks (node:internal/process/task_queues:60:5)
+    at listOnTimeout (node:internal/timers:545:9)
+    at process.processTimers (node:internal/timers:519:7)
+    at async NeonPreparedQuery.execute (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/neon-serverless/session.ts:61:18)
+    at async <anonymous> (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts:135:28)
+Erro ao buscar dados do usuário: Error: timeout exceeded when trying to connect
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/@neondatabase/serverless/index.js:1086:33
+    at runNextTicks (node:internal/process/task_queues:60:5)
+    at process.processTimers (node:internal/timers:516:9)
+    at async NeonPreparedQuery.execute (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/neon-serverless/session.ts:61:18)
+    at async <anonymous> (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts:135:28)
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /profile - Buscando perfil do médico ID: 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /user/:userId - Buscando médico para user ID: 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+✅ Doctor /profile - Perfil encontrado: 4
+✅ Doctor /user/:userId - Médico encontrado: 4
+✅ Notifications /unread-count - Contagem: 45
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 15
+🔍 Doctor /appointments - Consultas do médico (ID 4): 15
+🔍 Doctor /appointments - Consultas de emergência: 15
+🔍 Doctor /appointments - Consultas com status waiting: 14
+✅ Doctor /appointments - Consultas encontradas: 15
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+Join consulta - Usuário 32 (Lucas Dickel Canova, role: doctor) tentando entrar na consulta
+Usuário 32 (Lucas Dickel Canova, role: doctor) entrando na consulta #71
+Buscando consulta #71 no banco de dados...
+Consulta encontrada: {
+  id: 71,
+  type: 'telemedicine',
+  isEmergency: true,
+  status: 'waiting',
+  userId: 58,
+  doctorId: 4,
+  telemedRoomName: 'emergency-58-1749681569099'
+}
+Usando sala existente para consulta #71: emergency-58-1749681569099
+Sala já existe: emergency-58-1749681569099
+Sala já existe: emergency-58-1749681569099
+Token de emergência criado com sucesso para Lucas Dickel Canova na sala emergency-58-1749681569099
+Sala e token criados com sucesso: emergency-58-1749681569099
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+Buscando consultas próximas para usuário 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+Buscando claims para usuário 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Notifications - Buscando notificações do usuário ID: 32
+Encontradas 0 consultas próximas
+Encontrados 0 claims
+✅ Notifications - Notificações encontradas: 45
+Session table checked/created successfully
+[API] Total de serviços: 10
+[API] Exemplo de serviço: {
+  id: 3,
+  name: 'Suplementos, perfumaria, ortopédicos e manipulados',
+  serviceImage: 'Sem imagem',
+  partner: 'Tem parceiro'
+}
+7:45:12 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:45:12 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:45:13 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:45:23 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:45:24 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:45:34 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:45:35 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:45:48 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+7:45:48 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:45:49 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:45:57 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:45:58 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:45:58 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:45:59 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:46:08 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:46:09 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:46:33 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:46:34 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:46:42 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+7:46:43 PM [vite] hmr update /src/components/forms/address-form-optimized.tsx, /src/index.css?v=LIUk0WLIuDIi9wBEohQai
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
