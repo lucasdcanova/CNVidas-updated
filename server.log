@@ -1,5 +1,5 @@
 
-> rest-express@1.0.0 dev
+> rest-express@1.0.0 dev:server
 > tsx watch server/index.ts
 
 AuthRouter carregado - rotas disponíveis:
@@ -18,7 +18,418 @@ Registrando checkoutTrackingRouter em /api
 Registrando rotas públicas de médicos em /api/doctors
 Registrando rotas públicas de serviços em /api/services
 Registrando legalDocumentsRouter em /api/legal-documents
-Conexão com o banco de dados testada com sucesso: 2025-06-11 20:04:39.866953+00
+Conexão com o banco de dados testada com sucesso: 2025-06-11 21:57:53.483199+00
 Session table checked/created successfully
-5:04:41 PM [server] Servidor rodando na porta 3000
+6:57:55 PM [server] Servidor rodando na porta 3000
 Configuração de email carregada. Serviço de email disponível.
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: 'c71dc248-4c17-4375-8b90-ae04e2c8a210e8bf36',
+  __stripe_sid: '76835d44-ae78-47b5-a858-4ccd152f4bef47457e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NjczOTA3LCJleHAiOjE3NTAyNzg3MDd9.k8-zN5Kf6_b97wx9UbqoEJwGDExBM3pjRV94ID2CBl0'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749673907,
+  exp: 1750278707
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Notifications /unread-count - Contagem: 1
+✅ Assinatura encontrada: {
+  subscription: {
+    id: 1,
+    userId: 58,
+    planId: 10,
+    status: 'active',
+    startDate: 2025-06-08T23:10:30.449Z,
+    endDate: 2026-06-08T23:10:30.449Z,
+    paymentMethod: 'admin_grant',
+    price: 23990,
+    createdAt: 2025-06-08T23:10:30.449Z,
+    updatedAt: 2025-06-08T23:10:30.449Z
+  },
+  plan: {
+    id: 10,
+    name: 'ultra_family',
+    displayName: 'Ultra Familiar',
+    price: 23990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Ultra para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  }
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Buscando consultas próximas para usuário 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Buscando claims para usuário 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Notifications - Buscando notificações do usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Encontradas 0 consultas próximas
+Encontrados 0 claims
+✅ Notifications - Notificações encontradas: 1
+Session table checked/created successfully
+[API] Total de serviços: 10
+[API] Exemplo de serviço: {
+  id: 3,
+  name: 'Suplementos, perfumaria, ortopédicos e manipulados',
+  serviceImage: 'Sem imagem',
+  partner: 'Tem parceiro'
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+➡️ Criando sala emergency-58-1749679137307 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749679137307" já existe...
+Sala "emergency-58-1749679137307" não existe, será criada
+🆕 Criando nova sala "emergency-58-1749679137307" no Daily.co...
+Payload para criação da sala: {"name":"emergency-58-1749679137307","properties":{"start_audio_off":false,"start_video_off":false,"enable_chat":true,"enable_screenshare":true,"exp":null}}
+✅ Sala "emergency-58-1749679137307" criada com sucesso
+Criando token para sala emergency-58-1749679137307
+Verificando/criando sala emergency-58-1749679137307 antes de gerar token
+➡️ Criando sala emergency-58-1749679137307 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749679137307" já existe...
+✅ Sala "emergency-58-1749679137307" já existe no Daily.co
+Sala emergency-58-1749679137307 verificada/criada com sucesso
+Solicitando token com propriedades: {
+  room_name: 'emergency-58-1749679137307',
+  user_id: '58',
+  user_name: 'Lucas Dickel Canov',
+  exp: 1749686339,
+  is_owner: false,
+  enable_screenshare: true,
+  start_video_off: false,
+  start_audio_off: false
+}
+Token simplificado criado com sucesso: eyJhbGciOiJIUzI...
+Consulta de emergência iniciada: Paciente Lucas Dickel Canov (ID: 58) com Dr. undefined (ID: 4), Sala: emergency-58-1749679137307
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+➡️ Criando sala emergency-58-1749679143050 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749679143050" já existe...
+Sala "emergency-58-1749679143050" não existe, será criada
+🆕 Criando nova sala "emergency-58-1749679143050" no Daily.co...
+Payload para criação da sala: {"name":"emergency-58-1749679143050","properties":{"start_audio_off":false,"start_video_off":false,"enable_chat":true,"enable_screenshare":true,"exp":null}}
+✅ Sala "emergency-58-1749679143050" criada com sucesso
+Criando token para sala emergency-58-1749679143050
+Verificando/criando sala emergency-58-1749679143050 antes de gerar token
+➡️ Criando sala emergency-58-1749679143050 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749679143050" já existe...
+✅ Sala "emergency-58-1749679143050" já existe no Daily.co
+Sala emergency-58-1749679143050 verificada/criada com sucesso
+Solicitando token com propriedades: {
+  room_name: 'emergency-58-1749679143050',
+  user_id: '58',
+  user_name: 'Lucas Dickel Canov',
+  exp: 1749686344,
+  is_owner: false,
+  enable_screenshare: true,
+  start_video_off: false,
+  start_audio_off: false
+}
+Token simplificado criado com sucesso: eyJhbGciOiJIUzI...
+Consulta de emergência iniciada: Paciente Lucas Dickel Canov (ID: 58) com Dr. undefined (ID: 4), Sala: emergency-58-1749679143050
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Erro ao finalizar consulta: TypeError: Cannot read properties of undefined (reading 'name')
+    at <anonymous> (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/pg-core/dialect.ts:112:43)
+    at Array.flatMap (<anonymous>)
+    at PgDialect.buildUpdateSet (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/pg-core/dialect.ts:110:6)
+    at PgDialect.buildUpdateQuery (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/pg-core/dialect.ts:122:23)
+    at QueryPromise.getSQL (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/pg-core/query-builders/update.ts:236:23)
+    at QueryPromise._prepare (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/pg-core/query-builders/update.ts:245:65)
+    at QueryPromise.execute (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/pg-core/query-builders/update.ts:253:15)
+    at QueryPromise.then (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/query-promise.ts:31:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Erro ao finalizar consulta: TypeError: Cannot read properties of undefined (reading 'name')
+    at <anonymous> (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/pg-core/dialect.ts:112:43)
+    at Array.flatMap (<anonymous>)
+    at PgDialect.buildUpdateSet (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/pg-core/dialect.ts:110:6)
+    at PgDialect.buildUpdateQuery (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/pg-core/dialect.ts:122:23)
+    at QueryPromise.getSQL (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/pg-core/query-builders/update.ts:236:23)
+    at QueryPromise._prepare (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/pg-core/query-builders/update.ts:245:65)
+    at QueryPromise.execute (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/pg-core/query-builders/update.ts:253:15)
+    at QueryPromise.then (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/src/query-promise.ts:31:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Buscando consultas próximas para usuário 58
+✅ Notifications /unread-count - Contagem: 1
+Encontradas 0 consultas próximas
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Buscando claims para usuário 58
+Encontrados 0 claims
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+➡️ Criando sala emergency-58-1749679584868 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749679584868" já existe...
+Sala "emergency-58-1749679584868" não existe, será criada
+🆕 Criando nova sala "emergency-58-1749679584868" no Daily.co...
+Payload para criação da sala: {"name":"emergency-58-1749679584868","properties":{"start_audio_off":false,"start_video_off":false,"enable_chat":true,"enable_screenshare":true,"exp":null}}
+✅ Sala "emergency-58-1749679584868" criada com sucesso
+Criando token para sala emergency-58-1749679584868
+Verificando/criando sala emergency-58-1749679584868 antes de gerar token
+➡️ Criando sala emergency-58-1749679584868 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749679584868" já existe...
+✅ Sala "emergency-58-1749679584868" já existe no Daily.co
+Sala emergency-58-1749679584868 verificada/criada com sucesso
+Solicitando token com propriedades: {
+  room_name: 'emergency-58-1749679584868',
+  user_id: '58',
+  user_name: 'Lucas Dickel Canov',
+  exp: 1749686785,
+  is_owner: false,
+  enable_screenshare: true,
+  start_video_off: false,
+  start_audio_off: false
+}
+Token simplificado criado com sucesso: eyJhbGciOiJIUzI...
+Consulta de emergência iniciada: Paciente Lucas Dickel Canov (ID: 58) com Dr. undefined (ID: 4), Sala: emergency-58-1749679584868
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Buscando consultas próximas para usuário 58
+✅ Notifications /unread-count - Contagem: 1
+Encontradas 0 consultas próximas
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Buscando consultas próximas para usuário 58
+✅ Notifications /unread-count - Contagem: 1
+Encontradas 0 consultas próximas
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+➡️ Criando sala emergency-58-1749679611361 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749679611361" já existe...
+Sala "emergency-58-1749679611361" não existe, será criada
+🆕 Criando nova sala "emergency-58-1749679611361" no Daily.co...
+Payload para criação da sala: {"name":"emergency-58-1749679611361","properties":{"start_audio_off":false,"start_video_off":false,"enable_chat":true,"enable_screenshare":true,"exp":null}}
+✅ Sala "emergency-58-1749679611361" criada com sucesso
+Criando token para sala emergency-58-1749679611361
+Verificando/criando sala emergency-58-1749679611361 antes de gerar token
+➡️ Criando sala emergency-58-1749679611361 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749679611361" já existe...
+✅ Sala "emergency-58-1749679611361" já existe no Daily.co
+Sala emergency-58-1749679611361 verificada/criada com sucesso
+Solicitando token com propriedades: {
+  room_name: 'emergency-58-1749679611361',
+  user_id: '58',
+  user_name: 'Lucas Dickel Canov',
+  exp: 1749686812,
+  is_owner: false,
+  enable_screenshare: true,
+  start_video_off: false,
+  start_audio_off: false
+}
+Token simplificado criado com sucesso: eyJhbGciOiJIUzI...
+Consulta de emergência iniciada: Paciente Lucas Dickel Canov (ID: 58) com Dr. undefined (ID: 4), Sala: emergency-58-1749679611361
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+7:08:01 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-11 22:08:05.399779+00
+Session table checked/created successfully
+7:08:06 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+7:08:15 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-11 22:08:19.478434+00
+Session table checked/created successfully
+7:08:20 PM [server] Servidor rodando na porta 3000
+7:08:21 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-11 22:08:25.425692+00
+Session table checked/created successfully
+7:08:26 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+7:08:29 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-11 22:08:33.283382+00
+Session table checked/created successfully
+7:08:34 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+7:09:02 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-11 22:09:06.663481+00
+Session table checked/created successfully
+7:09:07 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+7:09:58 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-11 22:10:02.135099+00
+Session table checked/created successfully
+7:10:03 PM [server] Servidor rodando na porta 3000
+Configuração de email carregada. Serviço de email disponível.
+7:10:24 PM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+c

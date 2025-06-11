@@ -94,47 +94,18 @@ appointmentJoinRouter.post('/', async (req: Request, res: Response) => {
  * Endpoint para médicos entrarem em consultas específicas
  * POST /api/appointments/:id/join
  */
-appointmentJoinRouter.post('/:id/join', async (req: Request, res: Response) => {
+appointmentJoinRouter.post('/:id/join', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const authReq = req as AuthenticatedRequest;
-    // Verificar autenticação por vários métodos
-    let userId = null;
-    let userRole = null;
-    let userData = null;
+    // Como usamos requireAuth, req.user já está garantido
+    const userId = req.user!.id;
+    const userRole = req.user!.role;
+    const userData = req.user!;
     
-    // 1. Verificar autenticação via sessão (método padrão)
-    if (authReq.isAuthenticated && authReq.isAuthenticated() && authReq.user) {
-      userId = authReq.user.id;
-      userRole = authReq.user.role;
-      userData = authReq.user;
-      console.log("Join consulta - Usuário autenticado via sessão:", userId, userRole);
-    } 
-    // 2. Verificar autenticação via cabeçalho X-Session-ID
-    else if (req.headers['x-session-id']) {
-      const sessionId = req.headers['x-session-id'] as string;
-      console.log("Join consulta - Tentando autenticar via X-Session-ID:", sessionId);
-      
-      try {
-        // Buscar sessão e usuário pelo token da sessão
-        userData = await storage.getUserBySessionId(sessionId);
-        if (userData) {
-          userId = userData.id;
-          userRole = userData.role;
-          console.log("Join consulta - Usuário autenticado via X-Session-ID:", userId, userRole);
-        }
-      } catch (err) {
-        console.error("Erro ao verificar X-Session-ID:", err);
-      }
-    }
+    console.log(`Join consulta - Usuário ${userId} (${userData.fullName}, role: ${userRole}) tentando entrar na consulta`);
     
-    // Se não conseguimos autenticar por nenhum método
-    if (!userId || !userData) {
-      return res.status(401).json({ message: 'Não autorizado' });
-    }
-    
-    // Verifica se o usuário é médico
-    if (userRole !== 'doctor') {
-      return res.status(403).json({ message: 'Acesso permitido apenas para médicos' });
+    // Permitir acesso para médicos e pacientes
+    if (userRole !== 'doctor' && userRole !== 'patient') {
+      return res.status(403).json({ message: 'Acesso permitido apenas para médicos e pacientes' });
     }
     
     // Obter ID da consulta
@@ -163,17 +134,21 @@ appointmentJoinRouter.post('/:id/join', async (req: Request, res: Response) => {
       roomName = `appointment-${appointmentId}-${Date.now()}`;
       
       // Atualizar a consulta com o nome da sala
-      await storage.updateAppointment(appointmentId, { 
-        telemedRoomName: roomName,
-        doctorId: userId  // Atribuir médico à consulta
-      });
+      const updateData: any = { telemedRoomName: roomName };
+      
+      // Só atribuir médico se o usuário for médico
+      if (userRole === 'doctor') {
+        updateData.doctorId = userId;
+      }
+      
+      await storage.updateAppointment(appointmentId, updateData);
       
       console.log(`Criada nova sala para consulta #${appointmentId}: ${roomName}`);
     } else {
       console.log(`Usando sala existente para consulta #${appointmentId}: ${roomName}`);
       
-      // Se a consulta não tiver médico atribuído, atualizar com o médico atual
-      if (!appointment.doctorId) {
+      // Se a consulta não tiver médico atribuído e o usuário atual for médico, atualizar
+      if (!appointment.doctorId && userRole === 'doctor') {
         await storage.updateAppointment(appointmentId, { doctorId: userId });
         console.log(`Médico ${userId} atribuído à consulta #${appointmentId}`);
       }
@@ -186,8 +161,10 @@ appointmentJoinRouter.post('/:id/join', async (req: Request, res: Response) => {
       // Criar/verificar a sala no Daily.co
       const room = await createEmergencyRoom(sanitizedRoomName);
       
-      // Criar token para o médico
-      const token = await createEmergencyToken(sanitizedRoomName, userData.fullName || 'Médico', true);
+      // Criar token para o usuário (médico ou paciente)
+      const isOwner = userRole === 'doctor';
+      const displayName = userData.fullName || (userRole === 'doctor' ? 'Médico' : 'Paciente');
+      const token = await createEmergencyToken(sanitizedRoomName, displayName, isOwner);
       
       console.log(`Sala e token criados com sucesso: ${sanitizedRoomName}`);
       

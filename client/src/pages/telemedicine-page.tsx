@@ -158,8 +158,13 @@ export default function TelemedicinePage() {
     },
     onSuccess: (data: any) => {
       setIsStartingEmergency(false);
-      // Redirecionar para a sala de emergência do paciente
-      navigate(`/emergency-room`);
+      // Redirecionar para a sala de emergência com o ID da consulta criada
+      if (data.appointmentId) {
+        navigate(`/unified-emergency-room?id=${data.appointmentId}`);
+      } else {
+        // Fallback para a página antiga se não houver appointmentId
+        navigate(`/emergency-room`);
+      }
     },
     onError: (error: Error) => {
       setIsStartingEmergency(false);

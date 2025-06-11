@@ -47,6 +47,7 @@ export function AvailabilityManagerEnhanced() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('simple');
   const [saving, setSaving] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [weeklyAvailability, setWeeklyAvailability] = useState<DayAvailability[]>(generateWeekTemplate());
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<Set<string>>(new Set());
   const [recurringPattern, setRecurringPattern] = useState<RecurringPattern>({
@@ -88,8 +89,70 @@ export function AvailabilityManagerEnhanced() {
       });
       
       setWeeklyAvailability(newAvailability);
+      
+      // Tentar detectar padrão recorrente dos dados salvos
+      const detectedPattern = detectRecurringPattern(existingAvailability);
+      if (detectedPattern) {
+        setRecurringPattern(detectedPattern);
+        // Só mostrar toast se não for o carregamento inicial
+        if (!isInitialLoad) {
+          toast({
+            title: "Padrão detectado",
+            description: "Seu padrão de disponibilidade foi restaurado automaticamente.",
+          });
+        }
+      }
+      
+      // Marcar que o carregamento inicial foi concluído
+      setIsInitialLoad(false);
     }
   }, [existingAvailability]);
+
+  // Detectar padrão recorrente a partir dos slots salvos
+  const detectRecurringPattern = (slots: any[]): RecurringPattern | null => {
+    if (!slots || slots.length === 0) return null;
+    
+    // Agrupar slots por dia da semana
+    const slotsByDay: { [key: number]: any[] } = {};
+    slots.forEach(slot => {
+      if (!slotsByDay[slot.dayOfWeek]) {
+        slotsByDay[slot.dayOfWeek] = [];
+      }
+      slotsByDay[slot.dayOfWeek].push(slot);
+    });
+    
+    // Verificar se há um padrão consistente
+    const daysWithSlots = Object.keys(slotsByDay).map(Number);
+    if (daysWithSlots.length === 0) return null;
+    
+    // Pegar o primeiro dia como referência
+    const firstDay = daysWithSlots[0];
+    const referenceSlots = slotsByDay[firstDay].sort((a, b) => a.startTime.localeCompare(b.startTime));
+    
+    if (referenceSlots.length === 0) return null;
+    
+    const startTime = referenceSlots[0].startTime;
+    const endTime = referenceSlots[referenceSlots.length - 1].endTime;
+    
+    // Verificar se todos os dias têm o mesmo padrão
+    const isConsistent = daysWithSlots.every(day => {
+      const daySlots = slotsByDay[day].sort((a, b) => a.startTime.localeCompare(b.startTime));
+      return daySlots.length === referenceSlots.length &&
+             daySlots[0]?.startTime === startTime &&
+             daySlots[daySlots.length - 1]?.endTime === endTime;
+    });
+    
+    if (isConsistent) {
+      return {
+        startTime: startTime.substring(0, 5), // Remover segundos se houver
+        endTime: endTime.substring(0, 5),
+        interval: 30, // Assumir 30 minutos
+        daysOfWeek: daysWithSlots
+      };
+    }
+    
+    return null;
+  };
 
   // Gerar template da semana
   function generateWeekTemplate(): DayAvailability[] {
@@ -123,9 +186,18 @@ export function AvailabilityManagerEnhanced() {
   };
 
   // Aplicar padrão recorrente
-  const applyRecurringPattern = () => {
+  const applyRecurringPattern = async () => {
     const newAvailability = [...weeklyAvailability];
     
+    // Primeiro, desabilitar todos os dias
+    newAvailability.forEach(day => {
+      day.enabled = false;
+      day.slots.forEach(slot => {
+        slot.available = false;
+      });
+    });
+    
+    // Aplicar padrão aos dias selecionados
     recurringPattern.daysOfWeek.forEach(dayIndex => {
       if (dayIndex >= 0 && dayIndex < 7) {
         newAvailability[dayIndex].enabled = true;
@@ -150,9 +222,10 @@ export function AvailabilityManagerEnhanced() {
     });
     
     setWeeklyAvailability(newAvailability);
+    
     toast({
       title: "Padrão aplicado",
-      description: "O padrão recorrente foi aplicado aos dias selecionados.",
+      description: "O padrão recorrente foi aplicado aos dias selecionados. Clique em 'Salvar' para confirmar.",
     });
   };
 

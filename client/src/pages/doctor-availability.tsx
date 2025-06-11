@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { useAuth } from '@/hooks/use-auth';
@@ -26,10 +26,16 @@ export default function DoctorAvailabilityPage() {
     queryFn: async () => {
       const response = await apiRequest('GET', '/api/doctors/profile');
       const data = await response.json();
-      setEmergencyAvailable(data.availableForEmergency || false);
       return data;
     }
   });
+
+  // Atualizar estado local quando os dados do perfil mudarem
+  useEffect(() => {
+    if (doctorProfile) {
+      setEmergencyAvailable(doctorProfile.availableForEmergency || false);
+    }
+  }, [doctorProfile]);
 
   // Buscar próximas consultas agendadas
   const { data: upcomingAppointments, isLoading: loadingAppointments } = useQuery({
