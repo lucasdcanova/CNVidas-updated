@@ -46,7 +46,7 @@ import CheckoutTrackingPage from "@/pages/admin/checkout-tracking";
 import DoctorTelemedicine from "@/pages/doctor-telemedicine";
 import DoctorAvailability from "@/pages/doctor-availability";
 import DoctorEmergencyRoom from "@/pages/doctor-emergency-room";
-import DoctorEmergencyRoomPage from "@/pages/doctor-emergency-room";
+import PatientEmergencyRoom from "@/pages/patient-emergency-room";
 import DoctorDirectEmergency from "@/pages/doctor-direct-emergency";
 import DoctorWelcome from "@/pages/doctor/welcome";
 import DoctorFinanceiro from "@/pages/doctor/financeiro";
@@ -166,7 +166,11 @@ function Router() {
       <ProtectedRoute path="/emergency-call" component={EmergencyCallPage} allowedRoles={["patient", "doctor"]} />
       
       {/* Sala de Emergência específica do médico */}
-      <ProtectedRoute path="/emergency/doctor/:doctorId" component={DoctorEmergencyRoomPage} allowedRoles={["patient", "doctor"]} />
+      <ProtectedRoute path="/emergency/doctor/:doctorId" component={DoctorEmergencyRoom} allowedRoles={["patient", "doctor"]} />
+      
+      {/* Nova implementação de emergência */}
+      <ProtectedRoute path="/emergency-room" component={PatientEmergencyRoom} allowedRoles={["patient"]} />
+      <ProtectedRoute path="/doctor-emergency/:appointmentId" component={DoctorEmergencyRoom} allowedRoles={["doctor"]} />
       
       {/* Partner Routes */}
       <ProtectedRoute path="/partner/dashboard" component={PartnerDashboard} allowedRoles={["partner"]} />

@@ -139,6 +139,7 @@ export interface IStorage {
   
   // Appointment methods
   getAppointment(id: number): Promise<Appointment | null>;
+  getAppointmentById(id: number): Promise<Appointment | null>;
   getUserAppointments(userId: number): Promise<Appointment[]>;
   getUpcomingAppointments(userId: number): Promise<Appointment[]>;
   getPartnerAppointments(partnerId: number): Promise<Appointment[]>;
@@ -725,6 +726,11 @@ export class DatabaseStorage implements IStorage {
   async getAppointment(id: number): Promise<Appointment | null> {
     const [appointment] = await this.db.select().from(appointments).where(eq(appointments.id, id));
     return appointment as Appointment || null;
+  }
+  
+  // Alias para compatibilidade
+  async getAppointmentById(id: number): Promise<Appointment | null> {
+    return this.getAppointment(id);
   }
 
   async getUserAppointments(userId: number): Promise<Appointment[]> {

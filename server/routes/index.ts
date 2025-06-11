@@ -10,6 +10,7 @@ import dependentsRouter from './dependents-routes-new';
 import emergencyConsultationRouter from './emergency-consultation';
 import emergencyNotificationsRouter from './emergency-notifications';
 import emergencyPatientRouter from './emergency-patient';
+import emergencyV2Router from './emergency-v2';
 import paymentRouter from './payment-routes';
 import subscriptionCreateRouter from './subscription-create-route';
 import subscriptionPaymentRouter from './subscription-payment-routes';
@@ -17,7 +18,6 @@ import telemedicineErrorLogsRouter from './telemedicine-error-logs';
 import uploadRouter from './upload-routes';
 import dailyEmergencyRouter from './daily-emergency-routes';
 import profileImageRouter from './profile-image-routes';
-import profileUploadRouter from './profile-upload-routes';
 import addressRouter from './address-routes';
 import appointmentJoinRouter from './appointment-join';
 import claimsRouter from './claims-routes';
@@ -75,6 +75,7 @@ export default async function setupRoutes(app: express.Express) {
   app.use('/api/emergency/notifications', emergencyNotificationsRouter);
   app.use('/api/emergency/patient', emergencyPatientRouter);
   app.use('/api/emergency/daily', dailyEmergencyRouter);
+  app.use('/api/emergency/v2', emergencyV2Router);
   
   // Rotas de pagamento
   app.use('/api/payments', paymentRouter);
@@ -90,7 +91,6 @@ export default async function setupRoutes(app: express.Express) {
   
   // Rotas de perfil
   app.use('/api/profile/image', profileImageRouter);
-  app.use('/api/profile', profileUploadRouter);
   app.use('/api/address', addressRouter);
   
   // Rotas de agendamento

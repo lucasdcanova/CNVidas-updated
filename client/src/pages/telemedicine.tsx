@@ -14,7 +14,9 @@ import {
   Clock,
   User,
   Star,
-  AlertCircle
+  AlertCircle,
+  Stethoscope,
+  Calendar
 } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { apiRequest } from '@/lib/queryClient';
@@ -48,6 +50,141 @@ export default function TelemedicinePage() {
   const { toast } = useToast();
   const [location, navigate] = useLocation();
   const { appointmentId } = useParams();
+  
+  // Se tiver appointmentId na URL, é uma consulta específica
+  if (appointmentId) {
+    return <TelemedicineCallPage appointmentId={appointmentId} />;
+  }
+  
+  // Página principal de telemedicina
+  return (
+    <div className="container max-w-6xl mx-auto p-4">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">Telemedicina</h1>
+        <p className="text-muted-foreground">
+          Consulte médicos especialistas de forma rápida e segura por videochamada
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* Card de Atendimento de Emergência */}
+        <Card className="border-red-200 hover:border-red-300 transition-colors">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <ShieldAlert className="h-5 w-5 text-red-600" />
+              Atendimento de Emergência
+            </CardTitle>
+            <CardDescription>
+              Conecte-se imediatamente com um médico para situações urgentes
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-2 text-sm mb-4">
+              <li className="flex items-center gap-2">
+                <div className="h-1.5 w-1.5 bg-red-500 rounded-full" />
+                Atendimento imediato
+              </li>
+              <li className="flex items-center gap-2">
+                <div className="h-1.5 w-1.5 bg-red-500 rounded-full" />
+                Médicos de plantão 24/7
+              </li>
+              <li className="flex items-center gap-2">
+                <div className="h-1.5 w-1.5 bg-red-500 rounded-full" />
+                Para situações urgentes
+              </li>
+            </ul>
+          </CardContent>
+          <CardFooter>
+            <Button 
+              className="w-full bg-red-600 hover:bg-red-700"
+              onClick={() => navigate('/emergency-room')}
+            >
+              <ShieldAlert className="mr-2 h-4 w-4" />
+              Iniciar Consulta de Emergência
+            </Button>
+          </CardFooter>
+        </Card>
+
+        {/* Card de Consultas Agendadas */}
+        <Card className="border-blue-200 hover:border-blue-300 transition-colors">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-blue-600" />
+              Consultas Agendadas
+            </CardTitle>
+            <CardDescription>
+              Agende uma consulta com seu médico de preferência
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-2 text-sm mb-4">
+              <li className="flex items-center gap-2">
+                <div className="h-1.5 w-1.5 bg-blue-500 rounded-full" />
+                Escolha o melhor horário
+              </li>
+              <li className="flex items-center gap-2">
+                <div className="h-1.5 w-1.5 bg-blue-500 rounded-full" />
+                Diversos especialistas
+              </li>
+              <li className="flex items-center gap-2">
+                <div className="h-1.5 w-1.5 bg-blue-500 rounded-full" />
+                Consultas programadas
+              </li>
+            </ul>
+          </CardContent>
+          <CardFooter>
+            <Button 
+              variant="outline"
+              className="w-full"
+              onClick={() => navigate('/appointments')}
+            >
+              <Calendar className="mr-2 h-4 w-4" />
+              Ver Minhas Consultas
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+
+      {/* Informações importantes */}
+      <Card className="mt-8 border-yellow-200 bg-yellow-50">
+        <CardHeader>
+          <CardTitle className="text-yellow-800">Informações Importantes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3 text-sm text-yellow-700">
+            <div className="flex items-start gap-2">
+              <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+              <p>
+                Para emergências médicas graves, ligue imediatamente para <strong>192 (SAMU)</strong> ou 
+                dirija-se ao pronto-socorro mais próximo.
+              </p>
+            </div>
+            <div className="flex items-start gap-2">
+              <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+              <p>
+                As consultas de emergência são cobradas conforme seu plano de assinatura. 
+                Verifique seu saldo de consultas disponíveis.
+              </p>
+            </div>
+            <div className="flex items-start gap-2">
+              <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+              <p>
+                Tenha em mãos seus documentos e informações médicas relevantes para 
+                agilizar o atendimento.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+// Componente separado para a chamada de vídeo
+function TelemedicineCallPage({ appointmentId }: { appointmentId: string }) {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [location, navigate] = useLocation();
   
   // Referências
   const callFrameRef = useRef<any>(null);

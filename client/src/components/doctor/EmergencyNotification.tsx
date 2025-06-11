@@ -19,6 +19,7 @@ interface EmergencyAlert {
   patientProfileImage?: string;
   timestamp: string;
   roomUrl: string;
+  appointmentId?: number;
 }
 
 export function EmergencyNotification({ doctorId }: EmergencyNotificationProps) {
@@ -29,7 +30,7 @@ export function EmergencyNotification({ doctorId }: EmergencyNotificationProps) 
   useEffect(() => {
     const checkEmergencyCalls = async () => {
       try {
-        const response = await apiRequest('GET', `/api/emergency/notifications/doctor/${doctorId}`);
+        const response = await apiRequest('GET', `/api/emergency/v2/notifications/${doctorId}`);
         if (response.ok) {
           const data = await response.json();
           if (data.length > 0) {
@@ -50,8 +51,8 @@ export function EmergencyNotification({ doctorId }: EmergencyNotificationProps) 
   }, [doctorId]);
 
   const handleJoinEmergency = (alert: EmergencyAlert) => {
-    // Redirecionar para a página de emergência do médico
-    window.location.href = `/emergency/doctor/${doctorId}?patientId=${alert.patientId}`;
+    // Redirecionar para a página de emergência do médico com o appointmentId
+    window.location.href = `/doctor-emergency/${alert.appointmentId || alert.id}`;
     
     toast({
       title: "Entrando na sala de emergência",

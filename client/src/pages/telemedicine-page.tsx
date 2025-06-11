@@ -153,13 +153,13 @@ export default function TelemedicinePage() {
   // Mutation para iniciar consulta de emergência
   const startEmergencyConsultationMutation = useMutation<unknown, Error, number>({
     mutationFn: async (doctorId: number): Promise<unknown> => {
-      const response = await apiRequest('POST', '/api/telemedicine/emergency', { doctorId });
+      const response = await apiRequest('POST', '/api/emergency/v2/start', { doctorId });
       return await response.json();
     },
     onSuccess: (data: any) => {
       setIsStartingEmergency(false);
-      // Redirecionar para a nova sala de emergência v4 com Agora.io
-      navigate(`/telemedicine-emergency-v4/${data.appointmentId}`);
+      // Redirecionar para a sala de emergência do paciente
+      navigate(`/emergency-room`);
     },
     onError: (error: Error) => {
       setIsStartingEmergency(false);
