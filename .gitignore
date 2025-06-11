@@ -47,3 +47,20 @@ Thumbs.db
 # Uploads
 server/uploads/*
 !server/uploads/.gitkeep
+
+# Server logs
+*.log
+server-*.log
+
+# Test files with credentials
+test-*.js
+test-*.mjs
+test-*.cjs
+
+# Personal/sensitive files
+*_cookies.txt
+
+# Temporary server files
+server-fixed.js
+server-simple.js
+server-working.js
