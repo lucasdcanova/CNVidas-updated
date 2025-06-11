@@ -241,44 +241,14 @@ appointmentJoinRouter.post('/:id/join', requireAuth, async (req: AuthenticatedRe
  * Endpoint para excluir consultas
  * DELETE /api/appointments/:id
  */
-appointmentJoinRouter.delete('/:id', async (req: Request, res: Response) => {
+appointmentJoinRouter.delete('/:id', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const authReq = req as AuthenticatedRequest;
+    // Como usamos requireAuth, req.user já está garantido
+    const userId = req.user!.id;
+    const userRole = req.user!.role;
+    const userData = req.user!;
     
-    // Verificar autenticação por vários métodos
-    let userId = null;
-    let userRole = null;
-    let userData = null;
-    
-    // 1. Verificar autenticação via sessão (método padrão)
-    if (authReq.isAuthenticated && authReq.isAuthenticated() && authReq.user) {
-      userId = authReq.user.id;
-      userRole = authReq.user.role;
-      userData = authReq.user;
-      console.log("Delete consulta - Usuário autenticado via sessão:", userId, userRole);
-    } 
-    // 2. Verificar autenticação via cabeçalho X-Session-ID
-    else if (req.headers['x-session-id']) {
-      const sessionId = req.headers['x-session-id'] as string;
-      console.log("Delete consulta - Tentando autenticar via X-Session-ID:", sessionId);
-      
-      try {
-        // Buscar sessão e usuário pelo token da sessão
-        userData = await storage.getUserBySessionId(sessionId);
-        if (userData) {
-          userId = userData.id;
-          userRole = userData.role;
-          console.log("Delete consulta - Usuário autenticado via X-Session-ID:", userId, userRole);
-        }
-      } catch (err) {
-        console.error("Erro ao verificar X-Session-ID:", err);
-      }
-    }
-    
-    // Se não conseguimos autenticar por nenhum método
-    if (!userId || !userData) {
-      return res.status(401).json({ message: 'Não autorizado' });
-    }
+    console.log(`Delete consulta - Usuário ${userId} (${userData.fullName}, role: ${userRole}) tentando excluir consulta`);
     
     // Obter ID da consulta
     const appointmentId = req.params.id;
@@ -306,8 +276,18 @@ appointmentJoinRouter.delete('/:id', async (req: Request, res: Response) => {
     // Buscar a consulta
     const appointment = await storage.getAppointment(appointmentIdNum);
     if (!appointment) {
+      console.log(`Consulta #${appointmentIdNum} não encontrada`);
       return res.status(404).json({ message: 'Consulta não encontrada' });
     }
+    
+    console.log(`Consulta encontrada:`, {
+      id: appointment.id,
+      userId: appointment.userId,
+      doctorId: appointment.doctorId,
+      type: appointment.type,
+      status: appointment.status,
+      isEmergency: appointment.isEmergency
+    });
     
     // Verificar permissões: médico pode excluir suas consultas, paciente pode excluir as suas
     let canDelete = false;
@@ -315,14 +295,23 @@ appointmentJoinRouter.delete('/:id', async (req: Request, res: Response) => {
     if (userRole === 'doctor') {
       // Se for médico, buscar o doctorId baseado no userId
       const doctor = await storage.getDoctorByUserId(userId);
-      canDelete = doctor ? appointment.doctorId === doctor.id : false;
+      console.log(`Verificando permissão de exclusão - Médico userId: ${userId}, doctorId: ${doctor?.id}, appointment.doctorId: ${appointment.doctorId}`);
+      
+      // Médico pode excluir se:
+      // 1. É o médico atribuído à consulta
+      // 2. A consulta ainda não tem médico atribuído (consulta órfã)
+      canDelete = doctor ? (appointment.doctorId === doctor.id || !appointment.doctorId) : false;
     } else if (userRole === 'patient') {
       // Se for paciente, comparar diretamente o userId
+      console.log(`Verificando permissão de exclusão - Paciente userId: ${userId}, appointment.userId: ${appointment.userId}`);
       canDelete = appointment.userId === userId;
     } else if (userRole === 'admin') {
       // Admin pode excluir qualquer consulta
       canDelete = true;
     }
+    
+    console.log(`Permissão de exclusão: ${canDelete} para usuário ${userId} (${userRole})`);
+    
     
     if (!canDelete) {
       return res.status(403).json({ message: 'Sem permissão para excluir esta consulta' });
@@ -393,11 +382,15 @@ appointmentJoinRouter.post('/:id/cancel', requireAuth, async (req: Authenticated
     if (isDoctor) {
       // Se for médico, buscar o doctorId baseado no userId
       const doctor = await storage.getDoctorByUserId(req.user.id);
-      console.log(`Verificando permissão do médico - userId: ${req.user.id}, doctorId: ${doctor?.id}, appointment.doctorId: ${appointment.doctorId}`);
-      hasPermission = doctor ? appointment.doctorId === doctor.id : false;
+      console.log(`Verificando permissão de cancelamento - Médico userId: ${req.user.id}, doctorId: ${doctor?.id}, appointment.doctorId: ${appointment.doctorId}`);
+      
+      // Médico pode cancelar se:
+      // 1. É o médico atribuído à consulta
+      // 2. A consulta ainda não tem médico atribuído (consulta órfã)
+      hasPermission = doctor ? (appointment.doctorId === doctor.id || !appointment.doctorId) : false;
     } else {
       // Se for paciente, comparar diretamente o userId
-      console.log(`Verificando permissão do paciente - userId: ${req.user.id}, appointment.userId: ${appointment.userId}`);
+      console.log(`Verificando permissão de cancelamento - Paciente userId: ${req.user.id}, appointment.userId: ${appointment.userId}`);
       hasPermission = appointment.userId === req.user.id;
     }
     

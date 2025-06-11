@@ -10,15 +10,23 @@ export type { AuthenticatedRequest };
 import { validateId } from '../utils/id-converter';
 
 export const requireAuth = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user) {
-    return res.status(401).json({ error: 'Não autorizado' });
+  const authReq = req as AuthenticatedRequest;
+  console.log(`🔐 requireAuth - Verificando autenticação para ${req.method} ${req.path}`);
+  console.log(`🔐 requireAuth - req.user:`, authReq.user ? `${authReq.user.id} (${authReq.user.role})` : 'undefined');
+  
+  if (!authReq.user) {
+    console.log(`❌ requireAuth - Usuário não autenticado para ${req.method} ${req.path}`);
+    return res.status(401).json({ message: 'Não autorizado' });
   }
+  
+  console.log(`✅ requireAuth - Usuário autenticado: ${authReq.user.id} (${authReq.user.role})`);
   next();
 };
 
 export const requireRole = (roles: User['role'][]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user || !roles.includes(req.user.role)) {
+    const authReq = req as AuthenticatedRequest;
+    if (!authReq.user || !roles.includes(authReq.user.role)) {
       return res.status(403).json({ error: 'Acesso negado' });
     }
     next();
@@ -30,21 +38,24 @@ export function optionalAuth(req: Request, res: Response, next: NextFunction) {
 }
 
 export const requireAdmin = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user || req.user.role !== 'admin') {
+  const authReq = req as AuthenticatedRequest;
+  if (!authReq.user || authReq.user.role !== 'admin') {
     return res.status(403).json({ error: 'Acesso negado' });
   }
   next();
 };
 
 export const requireDoctor = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user || req.user.role !== 'doctor') {
+  const authReq = req as AuthenticatedRequest;
+  if (!authReq.user || authReq.user.role !== 'doctor') {
     return res.status(403).json({ error: 'Acesso negado' });
   }
   next();
 };
 
 export const requirePatient = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user || req.user.role !== 'patient') {
+  const authReq = req as AuthenticatedRequest;
+  if (!authReq.user || authReq.user.role !== 'patient') {
     return res.status(403).json({ error: 'Acesso negado' });
   }
   next();

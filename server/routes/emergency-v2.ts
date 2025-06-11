@@ -225,10 +225,14 @@ emergencyV2Router.post('/join/:appointmentId', authenticateToken, async (req: Re
       notes: `Médico entrou na consulta em: ${new Date().toISOString()}`
     });
 
+    // Obter nome do médico
+    const doctorUser = await storage.getUser(doctor.userId);
+    const doctorName = doctorUser?.fullName || doctor.name || 'Médico';
+    
     // Criar token para o médico
     const tokenResponse = await createToken(appointment.telemedRoomName!, {
       user_id: userId.toString(),
-      user_name: doctor.fullName || 'Médico',
+      user_name: doctorName,
       is_owner: true
     });
     
@@ -239,7 +243,14 @@ emergencyV2Router.post('/join/:appointmentId', authenticateToken, async (req: Re
     emergencyNotifications.delete(doctor.id);
 
     // Registrar início do atendimento
-    console.log(`Médico ${doctor.fullName} (ID: ${doctor.id}) entrou na consulta de emergência ${appointmentId}`);
+    console.log(`Médico ${doctorName} (ID: ${doctor.id}) entrou na consulta de emergência ${appointmentId}`);
+    console.log(`🏥 Detalhes da sala de emergência:`, {
+      appointmentId: appointmentId,
+      roomName: appointment.telemedRoomName,
+      roomUrl: `https://cnvidas.daily.co/${appointment.telemedRoomName}`,
+      doctorId: doctor.id,
+      patientId: appointment.userId
+    });
 
     return res.json({
       success: true,

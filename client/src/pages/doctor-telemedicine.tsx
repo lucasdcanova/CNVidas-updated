@@ -283,8 +283,8 @@ const AppointmentItem = ({ appointment, onDeleteEmergencyAppointment }: { appoin
                     <Button 
                       onClick={() => {
                         if (isEmergency) {
-                          // Para consultas de emergência, redirecionar para a sala de emergência
-                          navigate(`/unified-emergency-room?id=${appointment.id}`);
+                          // Para consultas de emergência, redirecionar para a sala correta do médico
+                          navigate(`/doctor-emergency-room/${appointment.id}`);
                           toast({
                             title: "Entrando na sala de emergência",
                             description: "Conectando com o paciente...",
