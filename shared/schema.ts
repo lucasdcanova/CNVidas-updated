@@ -199,7 +199,6 @@ export const legalAcceptances = pgTable("legal_acceptances", {
   acceptedAt: timestamp("accepted_at").defaultNow().notNull(),
   ipAddress: varchar("ip_address", { length: 45 }), // IPv4 e IPv6
   userAgent: text("user_agent"),
-  isActive: boolean("is_active").default(true).notNull(),
 });
 
 export const doctorPayments = pgTable("doctor_payments", {
