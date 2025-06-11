@@ -79,17 +79,15 @@ emergencyV2Router.post('/start', authenticateToken, async (req: Request, res: Re
       date: new Date(),
       duration: 30,
       type: 'telemedicine',
-      status: 'scheduled',
+      status: 'waiting',
       isEmergency: true,
       specialization: doctor.specialization || 'Emergência',
       telemedRoomName: roomName,
       notes: `Consulta de emergência com Dr. ${doctor.fullName || 'Médico'}`
     });
 
-    // Decrementar consultas de emergência disponíveis
-    await storage.updateUser(userId, {
-      emergencyConsultationsLeft: user.emergencyConsultationsLeft - 1
-    });
+    // NÃO decrementar consultas aqui - será feito após 5 minutos de chamada
+    // quando médico e paciente estiverem juntos
 
     // Adicionar notificação apenas para o médico selecionado
     emergencyNotifications.set(doctorId, {
@@ -196,10 +194,12 @@ emergencyV2Router.post('/join/:appointmentId', authenticateToken, async (req: Re
       return res.status(400).json({ error: 'Esta consulta já está sendo atendida por outro médico' });
     }
 
-    // Atualizar consulta com o médico
+    // Atualizar consulta com o médico e marcar início do atendimento
     await storage.updateAppointment(appointmentId, {
       doctorId: doctor.id,
-      status: 'in_progress'
+      status: 'in_progress',
+      // Adicionar timestamp de quando o médico entrou
+      consultationStartedAt: new Date()
     });
 
     // Criar token para o médico
@@ -256,23 +256,53 @@ emergencyV2Router.post('/end/:appointmentId', authenticateToken, async (req: Req
       return res.status(403).json({ error: 'Sem permissão para finalizar esta consulta' });
     }
 
+    // Calcular duração real da consulta se tiver timestamp de início
+    let actualDuration = duration || appointment.duration;
+    let shouldDecrementConsultation = false;
+    
+    if (appointment.consultationStartedAt) {
+      const startTime = new Date(appointment.consultationStartedAt).getTime();
+      const endTime = new Date().getTime();
+      const durationInMinutes = Math.floor((endTime - startTime) / (1000 * 60));
+      actualDuration = durationInMinutes;
+      
+      // Se a consulta durou 5 minutos ou mais, decrementar o contador
+      if (durationInMinutes >= 5) {
+        shouldDecrementConsultation = true;
+      }
+    }
+
     // Atualizar consulta
     await storage.updateAppointment(appointmentId, {
       status: 'completed',
       notes: notes || appointment.notes,
-      duration: duration || appointment.duration
+      duration: actualDuration,
+      consultationEndedAt: new Date()
     });
+
+    // Decrementar consultas de emergência disponíveis se necessário
+    if (shouldDecrementConsultation && appointment.isEmergency) {
+      const patient = await storage.getUser(appointment.userId);
+      if (patient && patient.emergencyConsultationsLeft > 0) {
+        await storage.updateUser(appointment.userId, {
+          emergencyConsultationsLeft: patient.emergencyConsultationsLeft - 1
+        });
+        console.log(`Consulta de emergência decrementada para usuário ${appointment.userId}. Restantes: ${patient.emergencyConsultationsLeft - 1}`);
+      }
+    }
 
     // Limpar notificações se ainda existirem
     if (appointment.doctorId) {
       emergencyNotifications.delete(appointment.doctorId);
     }
 
-    console.log(`Consulta de emergência ${appointmentId} finalizada`);
+    console.log(`Consulta de emergência ${appointmentId} finalizada. Duração: ${actualDuration} minutos. Consultação cobrada: ${shouldDecrementConsultation ? 'Sim' : 'Não'}`);
 
     return res.json({
       success: true,
-      message: 'Consulta finalizada com sucesso'
+      message: 'Consulta finalizada com sucesso',
+      duration: actualDuration,
+      consultationCharged: shouldDecrementConsultation
     });
 
   } catch (error) {
@@ -307,6 +337,17 @@ emergencyV2Router.get('/status/:appointmentId', authenticateToken, async (req: R
 
     const doctorInfo = appointment.doctorId ? await storage.getDoctor(appointment.doctorId) : null;
 
+    // Calcular tempo decorrido se a consulta já começou
+    let elapsedMinutes = 0;
+    let shouldCharge = false;
+    
+    if (appointment.consultationStartedAt && appointment.status === 'in_progress') {
+      const startTime = new Date(appointment.consultationStartedAt).getTime();
+      const currentTime = new Date().getTime();
+      elapsedMinutes = Math.floor((currentTime - startTime) / (1000 * 60));
+      shouldCharge = elapsedMinutes >= 5;
+    }
+
     return res.json({
       id: appointment.id,
       status: appointment.status,
@@ -314,6 +355,9 @@ emergencyV2Router.get('/status/:appointmentId', authenticateToken, async (req: R
       doctorName: doctorInfo?.fullName,
       roomName: appointment.telemedRoomName,
       createdAt: appointment.createdAt,
+      consultationStartedAt: appointment.consultationStartedAt,
+      elapsedMinutes,
+      shouldCharge,
       duration: appointment.duration
     });
 
@@ -321,6 +365,80 @@ emergencyV2Router.get('/status/:appointmentId', authenticateToken, async (req: R
     console.error('Erro ao verificar status:', error);
     return res.status(500).json({ 
       error: 'Erro ao verificar status',
+      details: error instanceof Error ? error.message : 'Erro desconhecido'
+    });
+  }
+});
+
+/**
+ * POST /api/emergency/v2/check-time/:appointmentId
+ * Verificar tempo da consulta e decrementar se necessário
+ */
+emergencyV2Router.post('/check-time/:appointmentId', authenticateToken, async (req: Request, res: Response) => {
+  try {
+    const appointmentId = parseInt(req.params.appointmentId);
+    
+    const appointment = await storage.getAppointmentById(appointmentId);
+    if (!appointment || !appointment.isEmergency) {
+      return res.status(404).json({ error: 'Consulta de emergência não encontrada' });
+    }
+
+    // Verificar se a consulta está em andamento
+    if (appointment.status !== 'in_progress' || !appointment.consultationStartedAt) {
+      return res.json({ 
+        charged: false, 
+        message: 'Consulta não está em andamento ou médico ainda não entrou' 
+      });
+    }
+
+    // Verificar se já foi cobrada
+    if (appointment.wasCharged) {
+      return res.json({ 
+        charged: true, 
+        message: 'Esta consulta já foi cobrada' 
+      });
+    }
+
+    // Calcular tempo decorrido
+    const startTime = new Date(appointment.consultationStartedAt).getTime();
+    const currentTime = new Date().getTime();
+    const elapsedMinutes = Math.floor((currentTime - startTime) / (1000 * 60));
+
+    // Se passou 5 minutos ou mais, decrementar
+    if (elapsedMinutes >= 5) {
+      const patient = await storage.getUser(appointment.userId);
+      if (patient && patient.emergencyConsultationsLeft > 0) {
+        await storage.updateUser(appointment.userId, {
+          emergencyConsultationsLeft: patient.emergencyConsultationsLeft - 1
+        });
+        
+        // Marcar consulta como cobrada
+        await storage.updateAppointment(appointmentId, {
+          wasCharged: true
+        });
+
+        console.log(`Consulta de emergência ${appointmentId} cobrada após ${elapsedMinutes} minutos. Restantes para usuário ${appointment.userId}: ${patient.emergencyConsultationsLeft - 1}`);
+
+        return res.json({
+          charged: true,
+          elapsedMinutes,
+          consultationsLeft: patient.emergencyConsultationsLeft - 1,
+          message: 'Consulta cobrada após 5 minutos de atendimento'
+        });
+      }
+    }
+
+    return res.json({
+      charged: false,
+      elapsedMinutes,
+      minutesRemaining: 5 - elapsedMinutes,
+      message: `Faltam ${5 - elapsedMinutes} minutos para a consulta ser cobrada`
+    });
+
+  } catch (error) {
+    console.error('Erro ao verificar tempo:', error);
+    return res.status(500).json({ 
+      error: 'Erro ao verificar tempo da consulta',
       details: error instanceof Error ? error.message : 'Erro desconhecido'
     });
   }

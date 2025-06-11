@@ -5,6 +5,8 @@
   "main": "dist/server/index.js",
   "scripts": {
     "dev": "tsx watch server/index.ts",
+    "dev:server": "tsx watch server/index.ts",
+    "dev:client": "vite",
     "build": "npm run build:render",
     "start": "NODE_ENV=production node dist/server/index.js",
     "clean": "rm -rf dist",

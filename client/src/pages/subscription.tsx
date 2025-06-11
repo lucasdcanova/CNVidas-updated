@@ -3,9 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
 import DashboardLayout from "@/components/layouts/dashboard-layout";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Check, CreditCard, User, Users } from "lucide-react";
+import { Loader2, Check, CreditCard, User, Users, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import Breadcrumb from "@/components/ui/breadcrumb";
@@ -50,19 +51,20 @@ const SubscriptionPage: React.FC = () => {
   // Buscar planos de assinatura disponíveis
   const { data: plans, isLoading: plansLoading } = useQuery({
     queryKey: ["/api/subscription/plans"],
-    queryFn: getSubscriptionPlans,
+    // Usando queryFn padrão que tem melhor tratamento de erros
   });
 
   // Buscar assinatura atual do usuário
-  const { data: userSubscription, isLoading: subscriptionLoading, refetch: refetchSubscription } = useQuery({
+  const { data: userSubscription, isLoading: subscriptionLoading, refetch: refetchSubscription, error: subscriptionError } = useQuery({
     queryKey: ["/api/subscription/current"],
-    queryFn: getUserSubscription,
+    // Usando queryFn padrão que tem melhor tratamento de erros
     enabled: !!user?.id,
     // **CORREÇÃO: Configurações para evitar cache desatualizado**
     staleTime: 0, // Sempre considera os dados como 'stale' (desatualizados)
     cacheTime: 1000 * 60 * 5, // Cache por apenas 5 minutos
     refetchOnWindowFocus: true, // Recarregar quando a janela ganha foco
     refetchOnMount: true, // Sempre recarregar ao montar o componente
+    retry: 1, // Tentar apenas uma vez em caso de erro
   });
 
   const isCurrentPlan = (planType: string) => {
@@ -140,6 +142,38 @@ const SubscriptionPage: React.FC = () => {
       <DashboardLayout title="Gerenciar Planos">
         <div className="flex items-center justify-center min-h-[60vh]">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  // Mostrar erro se houver problemas ao carregar dados
+  if (subscriptionError || (!plans && !plansLoading)) {
+    return (
+      <DashboardLayout title="Gerenciar Planos">
+        <div className="max-w-7xl mx-auto">
+          <Alert className="mb-4">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Erro ao carregar dados</AlertTitle>
+            <AlertDescription>
+              Não foi possível carregar os planos de assinatura. 
+              {subscriptionError && (
+                <span className="block mt-2 text-sm text-muted-foreground">
+                  Erro: {subscriptionError instanceof Error ? subscriptionError.message : 'Erro desconhecido'}
+                </span>
+              )}
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="mt-2"
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                Tentar novamente
+              </Button>
+            </AlertDescription>
+          </Alert>
         </div>
       </DashboardLayout>
     );

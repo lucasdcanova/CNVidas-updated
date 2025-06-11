@@ -30,6 +30,7 @@ interface CallState {
   error: string | null;
   isAudioMuted: boolean;
   isVideoMuted: boolean;
+  wasCharged: boolean;
 }
 
 interface Doctor {
@@ -66,6 +67,7 @@ export default function PatientEmergencyRoom() {
     error: null,
     isAudioMuted: false,
     isVideoMuted: false,
+    wasCharged: false,
   });
 
   // Buscar médicos disponíveis
@@ -150,18 +152,36 @@ export default function PatientEmergencyRoom() {
 
   // Verificar status da consulta periodicamente
   useEffect(() => {
-    if (callState.appointmentId && callState.isCallActive && !callState.doctorJoined) {
+    if (callState.appointmentId && callState.isCallActive) {
       const checkStatus = async () => {
         try {
           const response = await apiRequest('GET', `/api/emergency/v2/status/${callState.appointmentId}`);
           if (response.ok) {
             const data = await response.json();
-            if (data.doctorId) {
+            
+            // Verificar se médico entrou
+            if (data.doctorId && !callState.doctorJoined) {
               setCallState(prev => ({ ...prev, doctorJoined: true }));
               toast({
                 title: 'Médico conectado!',
                 description: `Dr. ${data.doctorName} entrou na consulta`,
               });
+            }
+            
+            // Se a consulta já começou há mais de 5 minutos, verificar cobrança
+            if (data.consultationStartedAt && data.elapsedMinutes >= 5 && !callState.wasCharged) {
+              const chargeResponse = await apiRequest('POST', `/api/emergency/v2/check-time/${callState.appointmentId}`);
+              if (chargeResponse.ok) {
+                const chargeData = await chargeResponse.json();
+                if (chargeData.charged) {
+                  setCallState(prev => ({ ...prev, wasCharged: true }));
+                  toast({
+                    title: 'Consulta cobrada',
+                    description: `Consulta cobrada após 5 minutos. Restam ${chargeData.consultationsLeft} consultas.`,
+                    variant: 'default',
+                  });
+                }
+              }
             }
           }
         } catch (error) {
@@ -169,8 +189,8 @@ export default function PatientEmergencyRoom() {
         }
       };
 
-      // Verificar a cada 3 segundos
-      statusCheckRef.current = setInterval(checkStatus, 3000);
+      // Verificar a cada 10 segundos
+      statusCheckRef.current = setInterval(checkStatus, 10000);
       // Verificar imediatamente
       checkStatus();
     }
@@ -178,7 +198,7 @@ export default function PatientEmergencyRoom() {
     return () => {
       if (statusCheckRef.current) clearInterval(statusCheckRef.current);
     };
-  }, [callState.appointmentId, callState.isCallActive, callState.doctorJoined, toast]);
+  }, [callState.appointmentId, callState.isCallActive, callState.doctorJoined, callState.wasCharged, toast]);
 
   // Iniciar consulta de emergência
   const startEmergencyCall = async () => {
@@ -332,6 +352,7 @@ export default function PatientEmergencyRoom() {
         error: null,
         isAudioMuted: false,
         isVideoMuted: false,
+        wasCharged: false,
       });
 
       toast({
@@ -517,7 +538,19 @@ export default function PatientEmergencyRoom() {
                 )}
                 <div className="text-sm text-muted-foreground">
                   {callState.doctorJoined ? (
-                    <span>Duração: {formatDuration(callState.callDuration)}</span>
+                    <div className="flex flex-col items-end">
+                      <span>Duração: {formatDuration(callState.callDuration)}</span>
+                      {callState.callDuration < 300 && !callState.wasCharged && (
+                        <span className="text-xs text-amber-600">
+                          Cobrança em {formatDuration(300 - callState.callDuration)}
+                        </span>
+                      )}
+                      {callState.wasCharged && (
+                        <span className="text-xs text-green-600">
+                          ✓ Consulta cobrada
+                        </span>
+                      )}
+                    </div>
                   ) : (
                     <span>Esperando: {formatDuration(callState.waitingDuration)}</span>
                   )}
