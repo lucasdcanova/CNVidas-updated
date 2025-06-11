@@ -45,17 +45,52 @@ interface RecurringPattern {
 
 export function AvailabilityManagerEnhanced() {
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState('simple');
+  const [activeTab, setActiveTab] = useState(() => {
+    // Recuperar aba ativa do localStorage ou usar 'simple' como padrão
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('doctor-availability-tab') || 'simple';
+    }
+    return 'simple';
+  });
   const [saving, setSaving] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [weeklyAvailability, setWeeklyAvailability] = useState<DayAvailability[]>(generateWeekTemplate());
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<Set<string>>(new Set());
-  const [recurringPattern, setRecurringPattern] = useState<RecurringPattern>({
-    startTime: '09:00',
-    endTime: '18:00',
-    interval: 30,
-    daysOfWeek: [1, 2, 3, 4, 5] // Segunda a sexta
+  const [recurringPattern, setRecurringPattern] = useState<RecurringPattern>(() => {
+    // Recuperar padrão recorrente do localStorage ou usar padrão
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('doctor-recurring-pattern');
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {
+          console.warn('Erro ao carregar padrão recorrente do localStorage:', e);
+        }
+      }
+    }
+    return {
+      startTime: '09:00',
+      endTime: '18:00',
+      interval: 30,
+      daysOfWeek: [1, 2, 3, 4, 5] // Segunda a sexta
+    };
   });
+
+  // Função para atualizar aba ativa e salvar no localStorage
+  const handleTabChange = (newTab: string) => {
+    setActiveTab(newTab);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('doctor-availability-tab', newTab);
+    }
+  };
+
+  // Função para atualizar padrão recorrente e salvar no localStorage
+  const updateRecurringPattern = (newPattern: RecurringPattern) => {
+    setRecurringPattern(newPattern);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('doctor-recurring-pattern', JSON.stringify(newPattern));
+    }
+  };
 
   // Buscar disponibilidade existente
   const { data: existingAvailability, isLoading } = useQuery({
@@ -90,16 +125,20 @@ export function AvailabilityManagerEnhanced() {
       
       setWeeklyAvailability(newAvailability);
       
-      // Tentar detectar padrão recorrente dos dados salvos
-      const detectedPattern = detectRecurringPattern(existingAvailability);
-      if (detectedPattern) {
-        setRecurringPattern(detectedPattern);
-        // Só mostrar toast se não for o carregamento inicial
-        if (!isInitialLoad) {
-          toast({
-            title: "Padrão detectado",
-            description: "Seu padrão de disponibilidade foi restaurado automaticamente.",
-          });
+      // Tentar detectar padrão recorrente dos dados salvos apenas se não houver padrão salvo no localStorage
+      const hasLocalPattern = typeof window !== 'undefined' && localStorage.getItem('doctor-recurring-pattern');
+      
+      if (!hasLocalPattern) {
+        const detectedPattern = detectRecurringPattern(existingAvailability);
+        if (detectedPattern) {
+          updateRecurringPattern(detectedPattern);
+          // Só mostrar toast se não for o carregamento inicial
+          if (!isInitialLoad) {
+            toast({
+              title: "Padrão detectado",
+              description: "Seu padrão de disponibilidade foi restaurado automaticamente.",
+            });
+          }
         }
       }
       
@@ -329,7 +368,7 @@ export function AvailabilityManagerEnhanced() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <Tabs value={activeTab} onValueChange={handleTabChange}>
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="simple">Configuração Rápida</TabsTrigger>
               <TabsTrigger value="detailed">Configuração Detalhada</TabsTrigger>
@@ -352,7 +391,7 @@ export function AvailabilityManagerEnhanced() {
                     <Select
                       value={recurringPattern.startTime}
                       onValueChange={(value) => 
-                        setRecurringPattern({...recurringPattern, startTime: value})
+                        updateRecurringPattern({...recurringPattern, startTime: value})
                       }
                     >
                       <SelectTrigger>
@@ -371,7 +410,7 @@ export function AvailabilityManagerEnhanced() {
                     <Select
                       value={recurringPattern.endTime}
                       onValueChange={(value) => 
-                        setRecurringPattern({...recurringPattern, endTime: value})
+                        updateRecurringPattern({...recurringPattern, endTime: value})
                       }
                     >
                       <SelectTrigger>
@@ -399,7 +438,7 @@ export function AvailabilityManagerEnhanced() {
                           const newDays = recurringPattern.daysOfWeek.includes(index)
                             ? recurringPattern.daysOfWeek.filter(d => d !== index)
                             : [...recurringPattern.daysOfWeek, index];
-                          setRecurringPattern({...recurringPattern, daysOfWeek: newDays});
+                          updateRecurringPattern({...recurringPattern, daysOfWeek: newDays});
                         }}
                       >
                         {day.dayName}

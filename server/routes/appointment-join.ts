@@ -114,12 +114,35 @@ appointmentJoinRouter.post('/:id/join', requireAuth, async (req: AuthenticatedRe
       return res.status(400).json({ message: 'ID de consulta inválido' });
     }
     
-    console.log(`Médico ${userId} (${userData.fullName}) entrando na consulta #${appointmentId}`);
+    console.log(`Usuário ${userId} (${userData.fullName}, role: ${userRole}) entrando na consulta #${appointmentId}`);
     
     // Buscar a consulta
+    console.log(`Buscando consulta #${appointmentId} no banco de dados...`);
     const appointment = await storage.getAppointment(appointmentId);
+    
     if (!appointment) {
+      console.error(`Consulta #${appointmentId} não encontrada no banco de dados`);
       return res.status(404).json({ message: 'Consulta não encontrada' });
+    }
+    
+    console.log(`Consulta encontrada:`, {
+      id: appointment.id,
+      type: appointment.type,
+      isEmergency: appointment.isEmergency,
+      status: appointment.status,
+      userId: appointment.userId,
+      doctorId: appointment.doctorId,
+      telemedRoomName: appointment.telemedRoomName
+    });
+    
+    // Verificar permissões de acesso
+    const isPatientOwner = userRole === 'patient' && appointment.userId === userId;
+    const isDoctorAssigned = userRole === 'doctor' && (appointment.doctorId === userId || !appointment.doctorId);
+    const hasAccess = isPatientOwner || isDoctorAssigned || userRole === 'admin';
+    
+    if (!hasAccess) {
+      console.error(`Usuário ${userId} não tem permissão para acessar consulta #${appointmentId}`);
+      return res.status(403).json({ message: 'Você não tem permissão para acessar esta consulta' });
     }
     
     // Verificar se é uma consulta de telemedicina
