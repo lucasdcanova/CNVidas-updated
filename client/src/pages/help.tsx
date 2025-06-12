@@ -883,7 +883,7 @@ const HelpPage: React.FC = () => {
                       </div>
                     ) : (
                       <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-                        <div className="w-12 h-12 border-3 border-gray-300 border-t-primary rounded-full animate-spin mb-4"></div>
+                        <div className="w-12 h-12 border-4 border-gray-300 border-t-primary rounded-full animate-spin mb-4"></div>
                         <p className="text-lg font-medium">Carregando documento...</p>
                         <p className="text-sm mt-2">Por favor, aguarde enquanto carregamos o conteúdo</p>
                       </div>

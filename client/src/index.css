@@ -544,6 +544,13 @@
     @apply transition-all duration-300 ease-in-out;
   }
   
+  .doctor-avatar img {
+    object-fit: cover !important;
+    object-position: center !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
   .doctor-card:hover .doctor-avatar {
     @apply scale-105;
   }

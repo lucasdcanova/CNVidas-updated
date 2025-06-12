@@ -561,12 +561,12 @@ export default function TelemedicinePage() {
                       <Card key={doctor.id} className="doctor-card overflow-hidden shadow-doctor-card hover:shadow-doctor-card-hover border-l-4 border-l-green-500 hover:border-l-green-600 bg-gradient-to-r from-green-50/30 to-white slide-up">
                         <CardContent className="p-0">
                           <div className="flex items-start p-6">
-                            <div className="mr-5 relative">
-                              <Avatar className="doctor-avatar h-18 w-18 border-3 border-white shadow-lg ring-2 ring-green-100">
+                            <div className="mr-5 relative flex-shrink-0">
+                              <Avatar className="doctor-avatar h-16 w-16 border-2 border-white shadow-lg ring-2 ring-green-100">
                                 <AvatarImage 
                                   src={doctor.profileImage || doctor.avatarUrl} 
                                   alt={doctor.name}
-                                  className="object-cover"
+                                  className="object-cover w-full h-full"
                                 />
                                 <AvatarFallback className="bg-gradient-to-br from-primary/80 to-primary text-white text-lg font-semibold">
                                   {doctor.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'MD'}

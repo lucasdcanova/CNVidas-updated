@@ -10,7 +10,7 @@ const spinnerVariants = cva(
         default: "h-4 w-4 border-2",
         sm: "h-3 w-3 border-2",
         lg: "h-6 w-6 border-2",
-        xl: "h-8 w-8 border-3",
+        xl: "h-8 w-8 border-4",
       },
       variant: {
         default: "text-primary",

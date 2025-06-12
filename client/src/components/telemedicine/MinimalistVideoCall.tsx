@@ -401,7 +401,7 @@ export default function MinimalistVideoCall({
       {isConnecting && (
         <div className="absolute inset-0 flex items-center justify-center bg-black z-40">
           <div className="text-center p-4">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 border-3 sm:border-4 border-white/20 border-t-white rounded-full animate-spin mb-3 sm:mb-4 mx-auto" />
+            <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 border-4 sm:border-4 border-white/20 border-t-white rounded-full animate-spin mb-3 sm:mb-4 mx-auto" />
             <p className="text-white text-base sm:text-lg md:text-xl">Conectando...</p>
             <p className="text-white/60 text-xs sm:text-sm mt-2">Preparando sua consulta</p>
           </div>
