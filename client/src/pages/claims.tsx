@@ -137,6 +137,13 @@ const Claims: React.FC = () => {
                 <span>Data de envio não disponível</span>
               )}
             </div>
+
+            {claim.daysHospitalized !== null && claim.daysHospitalized !== undefined && claim.daysHospitalized > 0 && (
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="material-icons text-blue-500 mr-2 text-sm">local_hospital</span>
+                Dias internado: {claim.daysHospitalized} {claim.daysHospitalized === 1 ? 'dia' : 'dias'}
+              </div>
+            )}
             
             {claim.amountRequested !== null && claim.amountRequested !== undefined && (
               <div className="flex items-center text-sm text-gray-600">

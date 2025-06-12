@@ -510,6 +510,7 @@ export const claimSchema = z.object({
   type: z.string(),
   occurrenceDate: z.string(),
   description: z.string(),
+  daysHospitalized: z.number().optional(),
   documents: z.array(z.string()).optional(),
   status: z.string(),
   reviewNotes: z.string().optional(),
