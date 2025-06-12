@@ -15,9 +15,7 @@ import paymentRouter from './payment-routes';
 import subscriptionCreateRouter from './subscription-create-route';
 import subscriptionPaymentRouter from './subscription-payment-routes';
 import telemedicineErrorLogsRouter from './telemedicine-error-logs';
-import uploadRouter from './upload-routes';
 import dailyEmergencyRouter from './daily-emergency-routes';
-import profileImageRouter from './profile-image-routes';
 import addressRouter from './address-routes';
 import appointmentJoinRouter from './appointment-join';
 import claimsRouter from './claims-routes';
@@ -92,7 +90,6 @@ export default async function setupRoutes(app: express.Express) {
   
   // Rotas de perfil (ordem específica para evitar conflitos)
   app.use('/api/profile', profileUploadRouter);
-  app.use('/api/profile/image', profileImageRouter);
   app.use('/api/address', addressRouter);
   
   // Rotas de agendamento
@@ -100,9 +97,6 @@ export default async function setupRoutes(app: express.Express) {
   
   // Rotas de claims
   app.use('/api/claims', claimsRouter);
-  
-  // Rotas de upload
-  app.use('/api/upload', uploadRouter);
   
   // Rotas do Daily
   app.use('/api/daily', dailyRoutesRouter);
