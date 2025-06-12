@@ -34,9 +34,12 @@ export default function MinimalistVideoCall({
   const [callDuration, setCallDuration] = useState(0);
   const [isPortrait, setIsPortrait] = useState(window.innerHeight > window.innerWidth);
   const callStartTimeRef = useRef<number>(0);
+  const [isMounted, setIsMounted] = useState(false);
 
-  // Detectar orientação da tela
+  // Detectar orientação da tela e marcar como montado
   useEffect(() => {
+    setIsMounted(true);
+    
     const handleResize = () => {
       setIsPortrait(window.innerHeight > window.innerWidth);
     };
@@ -47,6 +50,7 @@ export default function MinimalistVideoCall({
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('orientationchange', handleResize);
+      setIsMounted(false);
     };
   }, []);
 
@@ -105,8 +109,17 @@ export default function MinimalistVideoCall({
       // Solicitar permissões de mídia
       await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
 
+      // Aguardar um pouco para garantir que o container esteja renderizado
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       if (!videoContainerRef.current) {
-        throw new Error('Container de vídeo não encontrado');
+        console.error('Container de vídeo não encontrado, tentando novamente...');
+        // Tentar novamente após um pequeno delay
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        if (!videoContainerRef.current) {
+          throw new Error('Container de vídeo não encontrado após múltiplas tentativas');
+        }
       }
 
       // Configuração minimalista do Daily.co
@@ -158,6 +171,10 @@ export default function MinimalistVideoCall({
       callFrame.on('error', (error: any) => {
         console.error('Erro na chamada:', error);
         setIsConnecting(false);
+        // Não propagar erros 429 (rate limit) pois são do Sentry
+        if (error?.errorMsg?.includes('429')) {
+          return;
+        }
       });
 
       const updateParticipants = () => {
@@ -185,10 +202,15 @@ export default function MinimalistVideoCall({
 
   // Auto-iniciar se tiver URL
   useEffect(() => {
-    if (roomUrl && !isCallActive && !isConnecting) {
-      joinCall();
+    if (roomUrl && !isCallActive && !isConnecting && isMounted) {
+      // Aguardar o componente estar montado antes de iniciar a chamada
+      const timer = setTimeout(() => {
+        joinCall();
+      }, 500);
+      
+      return () => clearTimeout(timer);
     }
-  }, [roomUrl]);
+  }, [roomUrl, isCallActive, isConnecting, isMounted, joinCall]);
 
   // Limpar ao desmontar
   useEffect(() => {

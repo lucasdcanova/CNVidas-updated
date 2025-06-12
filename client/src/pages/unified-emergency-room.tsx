@@ -6,6 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, ShieldAlert } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import { Button } from '@/components/ui/button';
+import MinimalistVideoCall from '@/components/telemedicine/MinimalistVideoCall';
 
 /**
  * Sala de Emergência Unificada
@@ -63,27 +64,64 @@ export default function UnifiedEmergencyRoom() {
         throw new Error('ID da consulta não fornecido');
       }
       
-      // 2. Entrar na sala - Mesma API para médico e paciente
-      const joinResponse = await apiRequest('POST', `/api/appointments/${appointmentId}/join`);
+      // 2. Buscar dados da consulta de emergência
+      const response = await apiRequest('GET', `/api/emergency/v2/consultation/${appointmentId}`);
       
-      if (!joinResponse.ok) {
-        const errorData = await joinResponse.json();
-        throw new Error(errorData.message || 'Não foi possível acessar a sala');
+      if (!response.ok) {
+        throw new Error('Consulta não encontrada');
+      }
+
+      const data = await response.json();
+      console.log('Dados da consulta:', data);
+
+      // Garantir que temos a URL da sala
+      let roomUrl = data.roomUrl || data.dailyRoomUrl;
+      
+      if (!roomUrl && data.telemedRoomName) {
+        roomUrl = `https://cnvidas.daily.co/${data.telemedRoomName}`;
       }
       
-      const joinData = await joinResponse.json();
-      console.log('Dados da sala recebidos:', joinData);
+      if (!roomUrl) {
+        // Criar sala se não existir
+        console.log('Criando sala de emergência...');
+        const roomName = `emergency-${appointmentId}`;
+        
+        const createResponse = await apiRequest('POST', '/api/telemedicine/daily/room', {
+          roomName,
+          isEmergency: true
+        });
+        
+        if (createResponse.ok) {
+          const roomData = await createResponse.json();
+          roomUrl = roomData.url || `https://cnvidas.daily.co/${roomName}`;
+        } else {
+          throw new Error('Erro ao criar sala de emergência');
+        }
+      }
       
-      if (!joinData.room || !joinData.token) {
-        throw new Error('Dados da sala inválidos');
+      // Obter token para a sala
+      const tokenResponse = await apiRequest('POST', '/api/telemedicine/daily/token', {
+        appointmentId,
+        roomName: roomUrl.split('/').pop()
+      });
+      
+      let token = data.token;
+      
+      if (tokenResponse.ok) {
+        try {
+          const tokenData = await tokenResponse.json();
+          token = tokenData.token || token;
+        } catch (e) {
+          console.log('Usando token existente');
+        }
       }
       
       // Configurar dados da sala
       const roomInfo = {
-        roomUrl: joinData.room.url,
-        token: joinData.token,
+        roomUrl,
+        token: token || null,
         appointmentId: appointmentId,
-        roomName: joinData.room.name
+        roomName: roomUrl.split('/').pop() || `emergency-${appointmentId}`
       };
       
       // Atualizar estado
@@ -171,30 +209,14 @@ export default function UnifiedEmergencyRoom() {
           
           {!loading && !error && roomData && (
             <div className="bg-card rounded-xl shadow-lg overflow-hidden">
-              <div className="aspect-video md:aspect-[16/9] lg:aspect-[16/9] w-full">
-                <div className="p-1 bg-white">
-                  <iframe
-                    src={`https://cnvidas.daily.co/${roomData.roomName}?t=${roomData.token}&name=${encodeURIComponent(user?.fullName || (isDoctor ? 'Médico' : 'Paciente'))}&_=${Date.now()}`}
-                    allow="camera; microphone; fullscreen; speaker; display-capture; autoplay"
-                    style={{
-                      border: 'none',
-                      width: '100%', 
-                      height: '500px'
-                    }}
-                    title="Videochamada médica de emergência"
-                  />
-                </div>
-              </div>
-              
-              <div className="p-4 flex justify-center">
-                <Button
-                  variant="destructive"
-                  size="lg"
-                  className="px-8"
-                  onClick={handleLeaveCall}
-                >
-                  Encerrar consulta
-                </Button>
+              <div className="aspect-video md:aspect-[16/9] lg:aspect-[16/9] w-full" style={{ minHeight: '500px' }}>
+                <MinimalistVideoCall
+                  roomUrl={roomData.roomUrl}
+                  token={roomData.token}
+                  userName={user?.fullName || (isDoctor ? 'Médico' : 'Paciente')}
+                  isDoctor={isDoctor}
+                  onLeaveCall={handleLeaveCall}
+                />
               </div>
             </div>
           )}
