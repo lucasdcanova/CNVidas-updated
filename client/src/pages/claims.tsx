@@ -111,7 +111,7 @@ const Claims: React.FC = () => {
   
   const renderClaimCard = (claim: Claim): React.ReactNode => {
     return (
-      <Card key={claim.id} className="mb-4">
+      <Card key={claim.id} className="w-full">
         <CardHeader className="pb-2">
           <div className="flex justify-between items-start">
             <div>
@@ -157,14 +157,7 @@ const Claims: React.FC = () => {
               <p className="text-sm text-gray-600">{claim.description.substring(0, 150)}...</p>
             </div>
             
-            <div className="flex mt-4 pt-4 border-t border-gray-200">
-              <Link href={`/claims/${claim.id}`}>
-                <Button variant="outline">
-                  <FileText className="mr-2 h-4 w-4" />
-                  Ver Detalhes
-                </Button>
-              </Link>
-            </div>
+
           </div>
         </CardContent>
       </Card>
@@ -257,7 +250,7 @@ const Claims: React.FC = () => {
             
             <TabsContent value="all">
               {claims.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="space-y-4">
                   {claims.map((claim: Claim) => renderClaimCard(claim))}
                 </div>
               ) : (
@@ -277,7 +270,7 @@ const Claims: React.FC = () => {
             
             <TabsContent value="pending">
               {pendingClaims.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="space-y-4">
                   {pendingClaims.map((claim: Claim) => renderClaimCard(claim))}
                 </div>
               ) : (
@@ -291,7 +284,7 @@ const Claims: React.FC = () => {
             
             <TabsContent value="approved">
               {approvedClaims.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="space-y-4">
                   {approvedClaims.map((claim: Claim) => renderClaimCard(claim))}
                 </div>
               ) : (
@@ -305,7 +298,7 @@ const Claims: React.FC = () => {
             
             <TabsContent value="rejected">
               {rejectedClaims.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="space-y-4">
                   {rejectedClaims.map((claim: Claim) => renderClaimCard(claim))}
                 </div>
               ) : (
