@@ -58,4 +58,26 @@ export interface PartnerReview {
   updatedAt: Date;
 }
 
-export type InsertPartnerReview = Omit<PartnerReview, 'id' | 'createdAt' | 'updatedAt'>; 
+export type InsertPartnerReview = Omit<PartnerReview, 'id' | 'createdAt' | 'updatedAt'>;
+
+export interface PartnerAddress {
+  id: number;
+  partnerId: number;
+  name: string;
+  cep: string;
+  address: string;
+  number: string;
+  complement?: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  isPrimary: boolean;
+  isActive: boolean;
+  phone?: string;
+  email?: string;
+  openingHours?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export type InsertPartnerAddress = Omit<PartnerAddress, 'id' | 'createdAt' | 'updatedAt'>; 

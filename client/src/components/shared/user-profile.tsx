@@ -144,9 +144,11 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, compact = false 
       <div className="ml-3 flex-1 min-w-0">
         <p className="text-sm font-semibold text-gray-800 truncate">{user.fullName || user.username}</p>
         <div className="flex items-center mt-0.5 gap-1.5">
-          <span className={`text-xs px-2 py-0.5 rounded-full backdrop-blur-sm ${getRoleBadgeColor()}`}>
-            {getRoleLabel()}
-          </span>
+          {user.role !== "patient" && (
+            <span className={`text-xs px-2 py-0.5 rounded-full backdrop-blur-sm ${getRoleBadgeColor()}`}>
+              {getRoleLabel()}
+            </span>
+          )}
           {user.subscriptionPlan && user.role !== "doctor" && (
             <PlanIndicator plan={user.subscriptionPlan} variant="badge" size="sm" />
           )}

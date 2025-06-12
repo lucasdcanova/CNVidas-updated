@@ -8,6 +8,13 @@
       "when": 1749592156386,
       "tag": "0000_wakeful_lord_tyger",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1749761252877,
+      "tag": "0001_right_network",
+      "breakpoints": true
     }
   ]
 }

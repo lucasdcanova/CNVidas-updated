@@ -122,6 +122,7 @@ export const partnerServices = pgTable("partner_services", {
   duration: integer("duration"),
   isActive: boolean("is_active").default(true),
   serviceImage: text("service_image"),
+  isNational: boolean("is_national").default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -296,6 +297,26 @@ export const qrAuthLogs = pgTable("qr_auth_logs", {
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
   success: boolean("success").default(true),
+});
+
+export const partnerAddresses = pgTable("partner_addresses", {
+  id: serial("id").primaryKey(),
+  partnerId: integer("partner_id").references(() => partners.id, { onDelete: "cascade" }).notNull(),
+  name: text("name").notNull(), // Nome do endereço (ex: "Filial Centro", "Sede", etc)
+  cep: text("cep").notNull(),
+  address: text("address").notNull(),
+  number: text("number").notNull(),
+  complement: text("complement"),
+  neighborhood: text("neighborhood").notNull(),
+  city: text("city").notNull(),
+  state: text("state").notNull(),
+  isPrimary: boolean("is_primary").default(false).notNull(),
+  isActive: boolean("is_active").default(true).notNull(),
+  phone: text("phone"),
+  email: text("email"),
+  openingHours: text("opening_hours"), // Horário de funcionamento
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const userSettings = pgTable("user_settings", {

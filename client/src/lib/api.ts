@@ -114,8 +114,22 @@ export const updateDoctor = async (id: number, data: any) => {
 };
 
 // Services API
-export const getServices = async (partnerId?: number) => {
-  const url = partnerId ? `/api/services?partnerId=${partnerId}` : "/api/services";
+export const getServices = async (partnerId?: number, userCity?: string) => {
+  let url = "/api/services";
+  const params = new URLSearchParams();
+  
+  if (partnerId) {
+    params.append("partnerId", partnerId.toString());
+  }
+  
+  if (userCity) {
+    params.append("userCity", userCity);
+  }
+  
+  if (params.toString()) {
+    url += `?${params.toString()}`;
+  }
+  
   const res = await apiRequest("GET", url);
   return await res.json();
 };

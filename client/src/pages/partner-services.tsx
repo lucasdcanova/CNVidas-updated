@@ -30,6 +30,7 @@ interface ServiceFormData {
   duration: number;
   isFeatured: boolean;
   isActive: boolean;
+  isNational: boolean;
   category: string;
   serviceImage?: string;
 }
@@ -54,6 +55,7 @@ const serviceSchema = z.object({
   duration: z.number().min(5, { message: "Duração mínima é de 5 minutos" }).default(30),
   isFeatured: z.boolean().default(false),
   isActive: z.boolean().default(true),
+  isNational: z.boolean().default(false),
   category: z.string().min(1, { message: "Selecione uma categoria" }),
   serviceImage: z.string().optional(),
 });
@@ -248,6 +250,7 @@ const PartnerServicesPage: React.FC = () => {
       duration: 30,
       isFeatured: false,
       isActive: true,
+      isNational: false,
       category: "",
       serviceImage: "",
     },
@@ -293,6 +296,7 @@ const PartnerServicesPage: React.FC = () => {
         duration: data.duration || 30,
         isActive: data.isActive !== undefined ? data.isActive : true,
         isFeatured: data.isFeatured !== undefined ? data.isFeatured : false,
+        isNational: data.isNational !== undefined ? data.isNational : false,
         discountPercentage: data.discountPercentage,
         serviceImage: uploadedImage || undefined,
       };
@@ -352,6 +356,7 @@ const PartnerServicesPage: React.FC = () => {
       duration: service.duration || 30,
       isFeatured: service.isFeatured || false,
       isActive: service.isActive !== false, // Se for undefined, mantém como true
+      isNational: service.isNational || false,
       category: service.category,
       serviceImage: service.serviceImage || "",
     });
@@ -374,6 +379,7 @@ const PartnerServicesPage: React.FC = () => {
       duration: 30,
       isFeatured: false,
       isActive: true,
+      isNational: false,
       category: "",
       serviceImage: "",
     });
@@ -449,6 +455,11 @@ const PartnerServicesPage: React.FC = () => {
                       <div>
                         <CardTitle>{service.name}</CardTitle>
                         <CardDescription className="mt-1">{service.category}</CardDescription>
+                        {service.isNational && (
+                          <span className="inline-flex items-center mt-2 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                            🌍 Nacional
+                          </span>
+                        )}
                       </div>
                     </div>
                   </CardHeader>
@@ -921,6 +932,27 @@ const PartnerServicesPage: React.FC = () => {
                   )}
                 />
               </div>
+
+              <FormField
+                control={form.control}
+                name="isNational"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border border-green-200 bg-green-50 p-4">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-base">Abrangência Nacional</FormLabel>
+                      <FormDescription>
+                        Marque se este serviço atende em todo o território nacional
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
               {/* Nota informativa sobre serviços em destaque */}
               <div className="flex flex-row items-center justify-between rounded-lg border border-yellow-200 bg-yellow-50 p-4">

@@ -56,14 +56,29 @@ const Services: React.FC = () => {
   
   // Query para serviços filtrados por localização (padrão)
   const { data: services = [], error, isError } = useQuery<any[]>({
-    queryKey: ["/api/services", showAllServices],
-    queryFn: () => {
-      const url = showAllServices ? "/api/services?searchAll=true" : "/api/services";
-      return fetch(url, {
+    queryKey: ["/api/services", showAllServices, user?.city],
+    queryFn: async () => {
+      // Se o usuário não estiver logado ou não quiser filtrar, busca sem filtro de cidade
+      const params = new URLSearchParams();
+      
+      // Se showAllServices for false e o usuário tiver cidade, envia a cidade para filtrar
+      if (!showAllServices && user?.city) {
+        params.append("userCity", user.city);
+      }
+      
+      const url = `/api/services${params.toString() ? `?${params.toString()}` : ''}`;
+      
+      const response = await fetch(url, {
         headers: {
           'X-Auth-Token': localStorage.getItem('authToken') || '',
         },
-      }).then(res => res.json());
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch services');
+      }
+      
+      return response.json();
     },
     retry: false,
   });
@@ -259,14 +274,22 @@ const Services: React.FC = () => {
                   <CardTitle>{service.name}</CardTitle>
                   <CardDescription>{service.category}</CardDescription>
                   <div className="flex flex-col space-y-1">
-                    <p className="text-xs text-gray-500">
-                      {service.partner && service.partner.neighborhood && service.partner.city ? 
-                        `${service.partner.neighborhood}, ${service.partner.city}` : ''}
-                    </p>
-                    {service.distance !== undefined && service.distance !== null && (
-                      <p className="text-xs font-medium text-blue-600">
-                        📍 {service.distance}km de distância
+                    {service.isNational ? (
+                      <p className="text-xs font-medium text-green-600">
+                        🌍 Atendimento em todo território nacional
                       </p>
+                    ) : (
+                      <>
+                        <p className="text-xs text-gray-500">
+                          {service.partner && service.partner.neighborhood && service.partner.city ? 
+                            `${service.partner.neighborhood}, ${service.partner.city}` : ''}
+                        </p>
+                        {service.distance !== undefined && service.distance !== null && (
+                          <p className="text-xs font-medium text-blue-600">
+                            📍 {service.distance}km de distância
+                          </p>
+                        )}
+                      </>
                     )}
                   </div>
                 </CardHeader>

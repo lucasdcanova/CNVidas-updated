@@ -164,7 +164,7 @@ export default async function setupRoutes(app: express.Express) {
   console.log('Registrando rotas públicas de serviços em /api/services');
   app.get('/api/services', async (req, res) => {
     try {
-      const { partnerId } = req.query;
+      const { partnerId, userCity } = req.query;
       
       if (partnerId) {
         // Se partnerId for fornecido, buscar apenas serviços desse parceiro
@@ -184,13 +184,21 @@ export default async function setupRoutes(app: express.Express) {
         }
         res.json(services);
       } else {
-        // Caso contrário, buscar todos os serviços
-        const services = await (await import('../storage')).storage.getAllPartnerServices();
-        console.log('[API] Total de serviços:', services.length);
+        // Buscar serviços com filtro de localização
+        const services = await (await import('../storage')).storage.getServicesWithLocationFilter(
+          userCity as string | undefined,
+          50 // raio de 50km
+        );
+        console.log('[API] Total de serviços filtrados:', services.length);
+        if (userCity) {
+          console.log(`[API] Serviços filtrados para cidade: ${userCity}`);
+        }
         if (services.length > 0) {
           console.log('[API] Exemplo de serviço:', {
             id: services[0].id,
             name: services[0].name,
+            isNational: services[0].isNational,
+            distance: services[0].distance,
             serviceImage: services[0].serviceImage ? 'Tem imagem' : 'Sem imagem',
             partner: services[0].partner ? 'Tem parceiro' : 'Sem parceiro'
           });

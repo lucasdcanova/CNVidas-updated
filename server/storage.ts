@@ -1,5 +1,6 @@
-import { users, partners, doctors, partnerServices, appointments, claims, notifications, doctorPayments, auditLogs, qrTokens, subscriptionPlans, userSettings, emailVerifications, passwordResets, availabilitySlots, qrAuthLogs, dependents } from '../shared/schema';
+import { users, partners, doctors, partnerServices, appointments, claims, notifications, doctorPayments, auditLogs, qrTokens, subscriptionPlans, userSettings, emailVerifications, passwordResets, availabilitySlots, qrAuthLogs, dependents, partnerAddresses } from '../shared/schema';
 import { User, Partner, Doctor, PartnerService, Appointment, Claim, Notification, DoctorPayment, AuditLog, QrToken, SubscriptionPlan, UserSettings, EmailVerification, PasswordReset, AvailabilitySlot, QrAuthLog, InsertUser, InsertPartner, InsertDoctor, InsertPartnerService, InsertAppointment, InsertClaim, InsertNotification, InsertDoctorPayment, InsertAuditLog, InsertQrToken, InsertSubscriptionPlan, InsertUserSettings, InsertEmailVerification, InsertPasswordReset, InsertAvailabilitySlot, InsertQrAuthLog, Dependent, InsertDependent } from '@shared/types';
+import { PartnerAddress, InsertPartnerAddress } from './interfaces/partner';
 import { db } from "./db";
 import { eq, and, gte, lte, desc, sql, count, or, gt, asc } from "drizzle-orm";
 import session from "express-session";
@@ -16,6 +17,7 @@ import { AppError } from './utils/app-error';
 import { toUserId } from './utils/id-converter';
 import { Request, Response } from 'express';
 import { AuthenticatedRequest } from './types';
+import { getDistanceBetweenCities } from './utils/location-utils';
 
 const PostgresSessionStore = connectPg(session);
 
@@ -114,6 +116,14 @@ export interface IStorage {
   getAllPartners(): Promise<Partner[]>;
   deletePartner(id: number): Promise<void>;
   
+  // Partner Address methods
+  getPartnerAddresses(partnerId: number): Promise<PartnerAddress[]>;
+  getPartnerAddress(id: number): Promise<PartnerAddress | undefined>;
+  createPartnerAddress(address: InsertPartnerAddress): Promise<PartnerAddress>;
+  updatePartnerAddress(id: number, data: Partial<InsertPartnerAddress>): Promise<PartnerAddress>;
+  deletePartnerAddress(id: number): Promise<void>;
+  setPartnerAddressPrimary(partnerId: number, addressId: number): Promise<void>;
+  
   // Doctor methods
   getDoctor(id: number): Promise<Doctor | undefined>;
   getDoctorByUserId(userId: number): Promise<Doctor | undefined>;
@@ -136,6 +146,9 @@ export interface IStorage {
   getService(id: number): Promise<PartnerService | undefined>;
   updateService(id: number, data: Partial<InsertPartnerService>): Promise<PartnerService>;
   getAllServices(): Promise<PartnerService[]>;
+  
+  // Services with location filtering
+  getServicesWithLocationFilter(userCity?: string, maxDistance?: number): Promise<PartnerService[]>;
   
   // Appointment methods
   getAppointment(id: number): Promise<Appointment | null>;
@@ -1221,6 +1234,64 @@ export class DatabaseStorage implements IStorage {
 
   async updateService(id: number, data: Partial<InsertPartnerService>): Promise<PartnerService> {
     return this.updatePartnerService(id, data);
+  }
+
+  async getServicesWithLocationFilter(userCity?: string, maxDistance: number = 50): Promise<PartnerService[]> {
+    const results = await this.db
+      .select({
+        service: partnerServices,
+        partner: partners,
+        user: users
+      })
+      .from(partnerServices)
+      .leftJoin(partners, eq(partnerServices.partnerId, partners.id))
+      .leftJoin(users, eq(partners.userId, users.id))
+      .where(eq(partnerServices.isActive, true));
+    
+    const services = results.map(result => {
+      const serviceImage = result.service.serviceImage || null;
+      
+      return {
+        ...result.service,
+        serviceImage,
+        partner: result.partner ? {
+          ...result.partner,
+          profileImage: result.user?.profileImage || null,
+          phone: result.partner.phone || null,
+          name: result.partner.businessName || result.partner.tradingName || null,
+          city: result.partner.city || null
+        } : null
+      };
+    }) as any[];
+
+    // Se não houver cidade do usuário, retornar apenas serviços nacionais
+    if (!userCity) {
+      return services.filter(service => service.isNational === true);
+    }
+
+    // Filtrar serviços: nacionais + locais dentro do raio
+    return services.filter(service => {
+      // Serviços nacionais sempre aparecem
+      if (service.isNational === true) {
+        return true;
+      }
+
+      // Serviços locais: verificar distância
+      if (!service.partner?.city) {
+        return false;
+      }
+
+      const distance = getDistanceBetweenCities(userCity, service.partner.city);
+      
+      // Se conseguir calcular a distância e ela for menor que o máximo, incluir
+      if (distance !== null && distance <= maxDistance) {
+        // Adicionar a distância ao serviço para uso no frontend
+        service.distance = distance;
+        return true;
+      }
+
+      return false;
+    });
   }
 }
 
