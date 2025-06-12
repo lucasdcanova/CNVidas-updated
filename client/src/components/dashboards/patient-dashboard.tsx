@@ -301,9 +301,10 @@ export const PatientDashboard: React.FC = () => {
                 </Button>
               </div>
             ) : (
-              <ul className="divide-y divide-gray-100/50">
-                {displayedActivities.length > 0 ? (
-                  displayedActivities.map((activity: any, index: number) => (
+              <>
+                <ul className="divide-y divide-gray-100/50">
+                  {displayedActivities.length > 0 ? (
+                    displayedActivities.map((activity: any, index: number) => (
                     <li key={activity.id || index} className="p-5 hover:bg-white/30 transition-colors duration-200">
                       <div className="flex">
                         <div className="mr-4 flex-shrink-0">
@@ -366,32 +367,34 @@ export const PatientDashboard: React.FC = () => {
                       </div>
                     </div>
                   </li>
-                ))
-              ) : (
-                <li className="py-10 text-center text-gray-500">
-                  <div className="flex flex-col items-center justify-center">
-                    <div className="rounded-full bg-blue-100/80 p-3 mb-3">
+                  ))
+                ) : (
+                  <li className="py-10 text-center text-gray-500">
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="rounded-full bg-blue-100/80 p-3 mb-3">
                       <span className="material-icons text-blue-500 text-2xl">timeline</span>
                     </div>
                     <p className="text-base text-gray-600 mb-1">Nenhuma atividade recente.</p>
                     <p className="text-sm text-gray-500">Suas atividades e atualizações aparecerão aqui conforme você usa a plataforma.</p>
                   </div>
                 </li>
-              )}
-            </ul>
-            {recentActivities.length > 2 && (
-              <div className="p-4 text-center border-t border-gray-100/30">
-                <Button 
-                  variant="ghost" 
-                  className="text-primary hover:text-primary/80 hover:bg-primary/10"
-                  onClick={() => setShowAllActivities(!showAllActivities)}
-                >
-                  {showAllActivities ? "Mostrar menos" : "Expandir"}
-                  <span className="material-icons ml-1 text-sm">
-                    {showAllActivities ? "expand_less" : "expand_more"}
-                  </span>
-                </Button>
-              </div>
+                )}
+                </ul>
+                {recentActivities.length > 2 && (
+                  <div className="p-4 text-center border-t border-gray-100/30">
+                    <Button 
+                      variant="ghost" 
+                      className="text-primary hover:text-primary/80 hover:bg-primary/10"
+                      onClick={() => setShowAllActivities(!showAllActivities)}
+                    >
+                      {showAllActivities ? "Mostrar menos" : "Expandir"}
+                      <span className="material-icons ml-1 text-sm">
+                        {showAllActivities ? "expand_less" : "expand_more"}
+                      </span>
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
           </CardContent>
         </Card>

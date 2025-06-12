@@ -219,12 +219,25 @@ import jwt from "jsonwebtoken";
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
-  // Middleware para garantir respostas JSON
-  app.use(ensureJsonResponse);
-
-  // Servir arquivos estáticos do diretório public (incluindo uploads)
+  // Servir arquivos estáticos do diretório public (incluindo uploads) - ANTES do middleware JSON
   console.log('🖼️ Configurando diretório de arquivos estáticos...');
   const publicPath = path.join(process.cwd(), 'public');
+  
+  // Adicionar handler específico para uploads com CORS
+  app.use('/uploads', (req, res, next) => {
+    // Adicionar headers CORS para imagens
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Cache-Control', 'public, max-age=86400'); // Cache de 1 dia
+    
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(200);
+    }
+    
+    next();
+  });
+  
   app.use(express.static(publicPath, {
     maxAge: '1d', // Cache de 1 dia para imagens
     etag: true,
@@ -232,6 +245,9 @@ import jwt from "jsonwebtoken";
     index: false // Não servir index.html automaticamente
   }));
   console.log(`✅ Arquivos estáticos servidos de: ${publicPath}`);
+
+  // Middleware para garantir respostas JSON (APENAS para rotas da API)
+  app.use('/api', ensureJsonResponse);
 
   // Configurar todas as rotas
   await setupRoutes(app);

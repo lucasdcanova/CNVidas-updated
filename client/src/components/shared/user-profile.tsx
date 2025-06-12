@@ -18,6 +18,22 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, compact = false 
     return null;
   }
   
+  
+  // Ajustar URL da imagem se necessário
+  const getImageUrl = (imageUrl: string | null | undefined) => {
+    if (!imageUrl) return null;
+    
+    // Se a imagem começar com /uploads/, é um caminho relativo
+    // O Vite proxy já está configurado para redirecionar essas requisições
+    if (imageUrl.startsWith('/uploads/')) {
+      return imageUrl;
+    }
+    
+    return imageUrl;
+  };
+  
+  const profileImageUrl = getImageUrl(user.profileImage);
+  
   const handleLogout = () => {
     logoutMutation.mutate();
   };
@@ -82,13 +98,15 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, compact = false 
             <div className={`absolute -inset-0.5 rounded-full bg-gradient-to-r ${planColors.gradient} opacity-90 blur-[1px]`}></div>
           )}
           <Avatar className={`relative h-full w-full ${user.subscriptionPlan && user.subscriptionPlan !== "free" ? "" : "ring-2 ring-white/40"} shadow-sm`}>
-            {user.profileImage ? (
-              <AvatarImage src={user.profileImage} alt={user.fullName || "Avatar"} />
-            ) : (
-              <AvatarFallback className={`${getAvatarGradient()} text-sm font-medium`}>
-                {getUserInitials()}
-              </AvatarFallback>
-            )}
+            {profileImageUrl ? (
+              <AvatarImage 
+                src={profileImageUrl} 
+                alt={user.fullName || "Avatar"}
+              />
+            ) : null}
+            <AvatarFallback className={`${getAvatarGradient()} text-sm font-medium`}>
+              {getUserInitials()}
+            </AvatarFallback>
           </Avatar>
           {user.subscriptionPlan && user.subscriptionPlan !== "free" && (
             <div className="absolute -bottom-1 -right-1">
@@ -107,13 +125,15 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, compact = false 
           <div className={`absolute -inset-1 rounded-full bg-gradient-to-r ${planColors.gradient} opacity-80 blur-[1px]`}></div>
         )}
         <Avatar className={`relative h-10 w-10 ${user.subscriptionPlan && user.subscriptionPlan !== "free" ? "" : "ring-2 ring-white/30"} shadow-md`}>
-          {user.profileImage ? (
-            <AvatarImage src={user.profileImage} alt={user.fullName || "Avatar"} />
-          ) : (
-            <AvatarFallback className={`${getAvatarGradient()} text-sm font-medium`}>
-              {getUserInitials()}
-            </AvatarFallback>
-          )}
+          {profileImageUrl ? (
+            <AvatarImage 
+              src={profileImageUrl} 
+              alt={user.fullName || "Avatar"} 
+            />
+          ) : null}
+          <AvatarFallback className={`${getAvatarGradient()} text-sm font-medium`}>
+            {getUserInitials()}
+          </AvatarFallback>
         </Avatar>
         {user.subscriptionPlan && user.subscriptionPlan !== "free" && (
           <div className="absolute -bottom-1 -right-1">

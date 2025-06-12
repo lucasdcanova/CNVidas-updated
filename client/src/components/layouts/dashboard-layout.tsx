@@ -46,13 +46,16 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   
   // Atualizar o objeto do usuário com a imagem de perfil do médico, se disponível
   useEffect(() => {
-    if (user && user.role === "doctor" && doctorData?.profileImage) {
-      setUserWithProfileImage({
-        ...user,
-        profileImage: doctorData.profileImage
-      });
-    } else {
-      setUserWithProfileImage(user);
+    if (user) {
+      if (user.role === "doctor" && doctorData?.profileImage) {
+        setUserWithProfileImage({
+          ...user,
+          profileImage: doctorData.profileImage
+        });
+      } else {
+        // Para pacientes e outros tipos de usuário, usar a imagem do próprio user
+        setUserWithProfileImage(user);
+      }
     }
   }, [user, doctorData]);
   
