@@ -20602,3 +20602,19 @@ Erro: BadRequestError: request aborted
 Buscando consultas próximas para usuário 58
 ✅ Notifications /unread-count - Contagem: 1
 Encontradas 0 consultas próximas
+Erro: BadRequestError: request aborted
+    at IncomingMessage.onAborted (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/raw-body/index.js:245:10)
+    at IncomingMessage.emit (node:events:519:28)
+    at IncomingMessage._destroy (node:_http_incoming:221:10)
+    at _destroy (node:internal/streams/destroy:121:10)
+    at IncomingMessage.destroy (node:internal/streams/destroy:83:5)
+    at abortIncoming (node:_http_server:796:9)
+    at socketOnClose (node:_http_server:790:3)
+    at Socket.emit (node:events:531:35)
+    at TCP.<anonymous> (node:net:339:12) {
+  code: 'ECONNABORTED',
+  expected: 60,
+  length: 60,
+  received: 0,
+  type: 'request.aborted'
+}

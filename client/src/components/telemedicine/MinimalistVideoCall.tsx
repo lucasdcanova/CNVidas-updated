@@ -35,6 +35,7 @@ export default function MinimalistVideoCall({
   const [isPortrait, setIsPortrait] = useState(window.innerHeight > window.innerWidth);
   const callStartTimeRef = useRef<number>(0);
   const [isMounted, setIsMounted] = useState(false);
+  const isJoiningRef = useRef(false);
 
   // Detectar orientação da tela e marcar como montado
   useEffect(() => {
@@ -88,11 +89,18 @@ export default function MinimalistVideoCall({
     }
   }, [isVideoEnabled]);
 
-  const leaveCall = useCallback(() => {
+  const leaveCall = useCallback(async () => {
     if (callFrameRef.current) {
-      callFrameRef.current.leave();
-      callFrameRef.current.destroy();
-      callFrameRef.current = null;
+      try {
+        await callFrameRef.current.leave();
+        await callFrameRef.current.destroy();
+        callFrameRef.current = null;
+      } catch (error) {
+        console.error('Erro ao sair da chamada:', error);
+        // Forçar limpeza mesmo com erro
+        callFrameRef.current = null;
+      }
+      
       setIsCallActive(false);
       setCallDuration(0);
       callStartTimeRef.current = 0;
@@ -102,7 +110,25 @@ export default function MinimalistVideoCall({
 
   const joinCall = useCallback(async () => {
     if (!roomUrl) return;
+    
+    // Evitar múltiplas tentativas simultâneas
+    if (isJoiningRef.current) {
+      console.log('🚫 Já está tentando entrar na sala, ignorando...');
+      return;
+    }
+    
+    // Verificar se já existe uma instância
+    if (callFrameRef.current) {
+      console.log('⚠️ Já existe uma instância do DailyIframe, destruindo...');
+      try {
+        await callFrameRef.current.destroy();
+        callFrameRef.current = null;
+      } catch (error) {
+        console.error('Erro ao destruir instância anterior:', error);
+      }
+    }
 
+    isJoiningRef.current = true;
     setIsConnecting(true);
 
     try {
@@ -207,6 +233,8 @@ export default function MinimalistVideoCall({
     } catch (error) {
       console.error('Erro ao iniciar chamada:', error);
       setIsConnecting(false);
+    } finally {
+      isJoiningRef.current = false;
     }
   }, [roomUrl, token, userName, onJoinCall, onParticipantJoined, onParticipantLeft]);
 
@@ -226,7 +254,13 @@ export default function MinimalistVideoCall({
   useEffect(() => {
     return () => {
       if (callFrameRef.current) {
-        callFrameRef.current.destroy();
+        try {
+          callFrameRef.current.leave();
+          callFrameRef.current.destroy();
+          callFrameRef.current = null;
+        } catch (error) {
+          console.error('Erro ao limpar DailyIframe:', error);
+        }
       }
     };
   }, []);

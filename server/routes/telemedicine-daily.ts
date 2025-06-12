@@ -144,8 +144,45 @@ const generateDailyToken = async (roomName: string, userName: string, isOwner: b
  */
 dailyRouter.post('/room', requireAuth, checkSubscriptionFeature('telemedicine'), async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
+  console.log('🚀 [Daily Room] Recebendo requisição:', {
+    appointmentId: req.body.appointmentId,
+    roomName: req.body.roomName,
+    isEmergency: req.body.isEmergency,
+    userId: authReq.user?.id,
+    userRole: authReq.user?.role
+  });
+  
   try {
-    const { appointmentId } = req.body;
+    const { appointmentId, roomName: customRoomName, isEmergency } = req.body;
+    
+    // Se foi fornecido um roomName customizado (para emergência)
+    if (customRoomName && isEmergency) {
+      console.log('🏠 [Daily Room] Criando sala de emergência:', customRoomName);
+      
+      try {
+        // Tentar criar a sala
+        const roomData = await createDailyRoom(customRoomName);
+        console.log('✅ [Daily Room] Sala criada com sucesso:', roomData.url);
+        
+        return res.json({
+          name: customRoomName,
+          url: roomData.url,
+          status: 'created'
+        });
+      } catch (error: any) {
+        // Se a sala já existe, retornar a URL esperada
+        if (error.message?.includes('already exists') || error.response?.status === 422) {
+          console.log('⚠️ [Daily Room] Sala já existe, retornando URL:', customRoomName);
+          return res.json({
+            name: customRoomName,
+            url: `https://cnvidas.daily.co/${customRoomName}`,
+            status: 'existing'
+          });
+        }
+        throw error;
+      }
+    }
+    
     if (!appointmentId) {
       throw new AppError('ID da consulta é obrigatório', 400);
     }
@@ -180,21 +217,48 @@ dailyRouter.post('/room', requireAuth, checkSubscriptionFeature('telemedicine'),
     // Criar nome da sala
     const roomName = sanitizeRoomName(`appointment-${appointmentId}-${Date.now()}`);
 
-    // Criar sala no Daily.co
-    const roomData = await createDailyRoom(roomName);
+    console.log('🎭 [Daily Room] Criando nova sala:', roomName);
+    
+    try {
+      // Criar sala no Daily.co
+      const roomData = await createDailyRoom(roomName);
+      console.log('✅ [Daily Room] Sala criada com sucesso:', roomData.url);
 
-    // Atualizar consulta com informações da sala
-    await db.update(appointments)
-      .set({
-        telemedRoomName: roomName,
-        telemedLink: roomData.url,
-      })
-      .where(eq(appointments.id, appointmentIdNumber));
+      // Atualizar consulta com informações da sala
+      await db.update(appointments)
+        .set({
+          telemedRoomName: roomName,
+          telemedLink: roomData.url,
+        })
+        .where(eq(appointments.id, appointmentIdNumber));
 
-    res.json({
-      name: roomName,
-      url: roomData.url,
-    });
+      res.json({
+        name: roomName,
+        url: roomData.url,
+        status: 'created'
+      });
+    } catch (error: any) {
+      // Se a sala já existe, ainda assim atualizar no banco
+      if (error.message?.includes('already exists') || error.response?.status === 422) {
+        console.log('⚠️ [Daily Room] Sala já existe, atualizando banco:', roomName);
+        
+        const roomUrl = `https://cnvidas.daily.co/${roomName}`;
+        await db.update(appointments)
+          .set({
+            telemedRoomName: roomName,
+            telemedLink: roomUrl,
+          })
+          .where(eq(appointments.id, appointmentIdNumber));
+
+        res.json({
+          name: roomName,
+          url: roomUrl,
+          status: 'existing'
+        });
+      } else {
+        throw error;
+      }
+    }
   } catch (error) {
     if (error instanceof AppError) {
       res.status(error.statusCode).json({ error: error.message });
@@ -210,8 +274,16 @@ dailyRouter.post('/room', requireAuth, checkSubscriptionFeature('telemedicine'),
  */
 dailyRouter.post('/token', requireAuth, checkSubscriptionFeature('telemedicine'), async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
+  console.log('🔑 [Daily Token] Recebendo requisição:', {
+    roomName: req.body.roomName,
+    appointmentId: req.body.appointmentId,
+    isDoctor: req.body.isDoctor,
+    userId: authReq.user?.id,
+    userName: authReq.user?.fullName || authReq.user?.username
+  });
+  
   try {
-    const { roomName } = req.body;
+    const { roomName, isDoctor } = req.body;
     if (!roomName) {
       throw new AppError('Nome da sala é obrigatório', 400);
     }
@@ -220,8 +292,16 @@ dailyRouter.post('/token', requireAuth, checkSubscriptionFeature('telemedicine')
       throw new AppError('Usuário não autenticado', 401);
     }
 
-    const token = await generateDailyToken(roomName, authReq.user.fullName || authReq.user.username, false);
-    res.json(token);
+    const userName = authReq.user.fullName || authReq.user.username || 'Usuário';
+    const isOwner = isDoctor === true || authReq.user.role === 'doctor';
+    
+    console.log('🎫 [Daily Token] Gerando token:', { roomName, userName, isOwner });
+    
+    const tokenData = await generateDailyToken(roomName, userName, isOwner);
+    
+    console.log('✅ [Daily Token] Token gerado com sucesso');
+    
+    res.json(tokenData);
   } catch (error) {
     console.error('Erro ao gerar token:', error);
     if (error instanceof AppError) {
