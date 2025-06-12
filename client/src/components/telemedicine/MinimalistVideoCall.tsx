@@ -148,6 +148,7 @@ export default function MinimalistVideoCall({
 
       // Eventos
       callFrame.on('joined-meeting', () => {
+        console.log('📞 Evento: joined-meeting');
         setIsConnecting(false);
         setIsCallActive(true);
         callStartTimeRef.current = Date.now();
@@ -155,6 +156,7 @@ export default function MinimalistVideoCall({
       });
 
       callFrame.on('participant-joined', (event: any) => {
+        console.log('👤 Participante entrou:', event.participant?.user_name || 'Desconhecido');
         updateParticipants();
         if (onParticipantJoined) {
           onParticipantJoined(event.participant);
@@ -188,11 +190,19 @@ export default function MinimalistVideoCall({
       };
 
       // Entrar na sala
+      console.log('🚀 Tentando entrar na sala:', {
+        url: roomUrl,
+        hasToken: !!token,
+        userName: userName
+      });
+      
       await callFrame.join({
         url: roomUrl,
         token: token,
         userName: userName
       });
+      
+      console.log('✅ Entrou na sala com sucesso');
 
     } catch (error) {
       console.error('Erro ao iniciar chamada:', error);

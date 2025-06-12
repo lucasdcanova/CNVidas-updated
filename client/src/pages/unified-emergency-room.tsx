@@ -72,7 +72,13 @@ export default function UnifiedEmergencyRoom() {
       }
 
       const data = await response.json();
-      console.log('Dados da consulta:', data);
+      console.log('📊 Dados da consulta:', {
+        appointmentId,
+        roomUrl: data.roomUrl,
+        dailyRoomUrl: data.dailyRoomUrl,
+        telemedRoomName: data.telemedRoomName,
+        hasToken: !!data.token
+      });
 
       // Garantir que temos a URL da sala
       let roomUrl = data.roomUrl || data.dailyRoomUrl;
@@ -123,6 +129,13 @@ export default function UnifiedEmergencyRoom() {
         appointmentId: appointmentId,
         roomName: roomUrl.split('/').pop() || `emergency-${appointmentId}`
       };
+      
+      console.log('🏠 Dados finais da sala:', {
+        roomUrl: roomInfo.roomUrl,
+        roomName: roomInfo.roomName,
+        hasToken: !!roomInfo.token,
+        isDoctor
+      });
       
       // Atualizar estado
       setRoomData(roomInfo);

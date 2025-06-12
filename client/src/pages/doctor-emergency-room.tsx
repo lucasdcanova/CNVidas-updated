@@ -64,7 +64,13 @@ export default function DoctorEmergencyRoom() {
         }
 
         const data = await response.json();
-        console.log('📋 Dados da consulta:', data);
+        console.log('📋 Dados da consulta (Médico):', {
+          appointmentId,
+          roomUrl: data.roomUrl,
+          dailyRoomUrl: data.dailyRoomUrl,
+          telemedRoomName: data.telemedRoomName,
+          hasToken: !!data.token
+        });
 
         // Garantir que temos a URL da sala
         let roomUrl = data.roomUrl || data.dailyRoomUrl;
@@ -91,9 +97,37 @@ export default function DoctorEmergencyRoom() {
           }
         }
 
+        // Obter token para o médico também
+        let token = data.token;
+        
+        if (!token) {
+          console.log('🔑 Obtendo token para o médico...');
+          const tokenResponse = await apiRequest('POST', '/api/telemedicine/daily/token', {
+            appointmentId,
+            roomName: roomUrl.split('/').pop(),
+            isDoctor: true
+          });
+          
+          if (tokenResponse.ok) {
+            try {
+              const tokenData = await tokenResponse.json();
+              token = tokenData.token;
+              console.log('✅ Token obtido com sucesso');
+            } catch (e) {
+              console.log('⚠️ Usando acesso sem token');
+            }
+          }
+        }
+        
+        console.log('🏠 Sala configurada (Médico):', {
+          roomUrl,
+          roomName: roomUrl.split('/').pop(),
+          hasToken: !!token
+        });
+        
         setConsultation({
           roomUrl,
-          token: data.token || null,
+          token: token || null,
           appointmentId: parseInt(appointmentId),
           patientName: data.patientName || 'Paciente',
           patientAge: data.patientAge,
