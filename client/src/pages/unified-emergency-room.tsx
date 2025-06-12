@@ -82,34 +82,26 @@ export default function UnifiedEmergencyRoom() {
 
       // Garantir que temos a URL da sala
       let roomUrl = data.roomUrl || data.dailyRoomUrl;
+      let roomName = data.telemedRoomName; // Usar o nome que já está salvo!
       
-      if (!roomUrl && data.telemedRoomName) {
-        roomUrl = `https://cnvidas.daily.co/${data.telemedRoomName}`;
+      if (!roomUrl && roomName) {
+        roomUrl = `https://cnvidas.daily.co/${roomName}`;
       }
       
-      if (!roomUrl) {
-        // Criar sala se não existir
-        console.log('Criando sala de emergência...');
-        // IMPORTANTE: Usar o ID da consulta, não do paciente!
-        const roomName = `emergency-${appointmentId}`;
-        
-        const createResponse = await apiRequest('POST', '/api/telemedicine/daily/room', {
-          roomName,
-          isEmergency: true
-        });
-        
-        if (createResponse.ok) {
-          const roomData = await createResponse.json();
-          roomUrl = roomData.url || `https://cnvidas.daily.co/${roomName}`;
-        } else {
-          throw new Error('Erro ao criar sala de emergência');
-        }
+      if (!roomUrl || !roomName) {
+        throw new Error('Sala de emergência não encontrada. Certifique-se de que a consulta foi criada corretamente.');
       }
+      
+      console.log('🎯 Usando sala existente:', {
+        roomName,
+        roomUrl,
+        appointmentId
+      });
       
       // Obter token para a sala
       const tokenResponse = await apiRequest('POST', '/api/telemedicine/daily/token', {
         appointmentId,
-        roomName: roomUrl.split('/').pop()
+        roomName: roomName // Usar o nome correto da sala!
       });
       
       let token = data.token;

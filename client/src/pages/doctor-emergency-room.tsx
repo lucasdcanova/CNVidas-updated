@@ -74,28 +74,21 @@ export default function DoctorEmergencyRoom() {
 
         // Garantir que temos a URL da sala
         let roomUrl = data.roomUrl || data.dailyRoomUrl;
+        const roomName = data.telemedRoomName; // Usar o nome que já está salvo!
         
-        if (!roomUrl && data.telemedRoomName) {
-          roomUrl = `https://cnvidas.daily.co/${data.telemedRoomName}`;
+        if (!roomUrl && roomName) {
+          roomUrl = `https://cnvidas.daily.co/${roomName}`;
         }
         
-        if (!roomUrl) {
-          // Criar sala se não existir
-          console.log('🏗️ Criando sala de emergência...');
-          const roomName = `emergency-${appointmentId}`;
-          
-          const createResponse = await apiRequest('POST', '/api/telemedicine/daily/room', {
-            roomName,
-            isEmergency: true
-          });
-          
-          if (createResponse.ok) {
-            const roomData = await createResponse.json();
-            roomUrl = roomData.url || `https://cnvidas.daily.co/${roomName}`;
-          } else {
-            throw new Error('Erro ao criar sala de emergência');
-          }
+        if (!roomUrl || !roomName) {
+          throw new Error('Sala de emergência não encontrada. A consulta precisa ter uma sala criada.');
         }
+        
+        console.log('🎯 Usando sala existente (Médico):', {
+          roomName,
+          roomUrl,
+          appointmentId
+        });
 
         // Obter token para o médico também
         let token = data.token;
@@ -104,7 +97,7 @@ export default function DoctorEmergencyRoom() {
           console.log('🔑 Obtendo token para o médico...');
           const tokenResponse = await apiRequest('POST', '/api/telemedicine/daily/token', {
             appointmentId,
-            roomName: roomUrl.split('/').pop(),
+            roomName: roomName, // Usar o nome correto da sala!
             isDoctor: true
           });
           
