@@ -24,10 +24,14 @@ const storage = multer.diskStorage({
 const fileFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
   const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
   
+  console.log(`Upload tentativa: ${file.originalname}, Tipo: ${file.mimetype}, Tamanho: ${file.size ? (file.size / 1024 / 1024).toFixed(2) + 'MB' : 'desconhecido'}`);
+  
   if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error('Formato de arquivo não suportado. Apenas imagens JPEG, PNG, GIF e WEBP são permitidas.'));
+    const error = new Error(`Formato de arquivo não suportado: ${file.mimetype}. Apenas imagens JPEG, PNG, GIF e WEBP são permitidas.`);
+    console.error('Erro de tipo de arquivo:', error.message);
+    cb(error);
   }
 };
 
@@ -35,7 +39,8 @@ const fileFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCa
 export const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 5 * 1024 * 1024, // Limita a 5MB
+    fileSize: 50 * 1024 * 1024, // 50MB (será comprimido no frontend)
+    files: 1
   },
   fileFilter: fileFilter
 });

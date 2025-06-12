@@ -2,6 +2,12 @@ import express, { Request, Response } from 'express';
 import { storage } from '../storage';
 import { requireAuth, AuthenticatedRequest } from '../middleware/auth';
 import { AppError } from '../utils/app-error';
+import { upload } from '../middleware/upload';
+import { db } from '../db';
+import { users, partners } from '../../shared/schema';
+import { eq } from 'drizzle-orm';
+import path from 'path';
+import fs from 'fs';
 
 const partnerRouter = express.Router();
 
@@ -265,6 +271,147 @@ partnerRouter.put('/me', requireAuth, requirePartner, async (req: AuthenticatedR
     } else {
       res.status(500).json({ error: 'Erro interno do servidor' });
     }
+  }
+});
+
+/**
+ * Upload de imagem de perfil do parceiro
+ * POST /api/partners/profile-image
+ */
+partnerRouter.post('/profile-image', requireAuth, requirePartner, upload.single('profileImage'), async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Nenhum arquivo foi enviado' 
+      });
+    }
+
+    const userId = req.user!.id;
+    const imageUrl = `/uploads/${req.file.filename}`;
+
+    // Buscar parceiro atual
+    const partner = await storage.getPartnerByUserId(userId);
+    if (!partner) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Perfil de parceiro não encontrado' 
+      });
+    }
+
+    const oldImage = partner.profileImage;
+
+    // Atualizar imagem no perfil do usuário
+    await db
+      .update(users)
+      .set({ 
+        profileImage: imageUrl,
+        updatedAt: new Date()
+      })
+      .where(eq(users.id, userId));
+
+    // Atualizar imagem no perfil do parceiro
+    await storage.updatePartner(partner.id, {
+      profileImage: imageUrl,
+      updatedAt: new Date()
+    });
+
+    // Remover imagem antiga se existir
+    if (oldImage && oldImage.startsWith('/uploads/')) {
+      const oldPath = path.join(process.cwd(), 'public', oldImage);
+      if (fs.existsSync(oldPath)) {
+        try {
+          fs.unlinkSync(oldPath);
+          console.log('Imagem antiga removida:', oldPath);
+        } catch (error) {
+          console.error('Erro ao remover imagem antiga:', error);
+        }
+      }
+    }
+
+    res.json({
+      success: true,
+      message: 'Foto de perfil do parceiro atualizada com sucesso',
+      imageUrl,
+      profileImage: imageUrl
+    });
+
+  } catch (error: any) {
+    console.error('Erro ao fazer upload de imagem do parceiro:', error);
+    
+    // Remover arquivo se houve erro
+    if (req.file) {
+      const filePath = req.file.path;
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    }
+
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Erro interno do servidor'
+    });
+  }
+});
+
+/**
+ * Remover imagem de perfil do parceiro
+ * DELETE /api/partners/remove-profile-image
+ */
+partnerRouter.delete('/remove-profile-image', requireAuth, requirePartner, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user!.id;
+
+    // Buscar parceiro atual
+    const partner = await storage.getPartnerByUserId(userId);
+    if (!partner) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Perfil de parceiro não encontrado' 
+      });
+    }
+
+    const oldImage = partner.profileImage;
+
+    // Remover imagem do perfil do usuário
+    await db
+      .update(users)
+      .set({ 
+        profileImage: null,
+        updatedAt: new Date()
+      })
+      .where(eq(users.id, userId));
+
+    // Remover imagem do perfil do parceiro
+    await storage.updatePartner(partner.id, {
+      profileImage: null,
+      updatedAt: new Date()
+    });
+
+    // Remover arquivo físico
+    if (oldImage && oldImage.startsWith('/uploads/')) {
+      const oldPath = path.join(process.cwd(), 'public', oldImage);
+      if (fs.existsSync(oldPath)) {
+        try {
+          fs.unlinkSync(oldPath);
+          console.log('Imagem removida:', oldPath);
+        } catch (error) {
+          console.error('Erro ao remover arquivo:', error);
+        }
+      }
+    }
+
+    res.json({
+      success: true,
+      message: 'Foto de perfil do parceiro removida com sucesso'
+    });
+
+  } catch (error: any) {
+    console.error('Erro ao remover imagem do parceiro:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Erro interno do servidor'
+    });
   }
 });
 

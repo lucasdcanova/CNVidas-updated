@@ -90,9 +90,9 @@ export default async function setupRoutes(app: express.Express) {
   // Rotas de dependentes
   app.use('/api/dependents', dependentsRouter);
   
-  // Rotas de perfil
-  app.use('/api/profile/image', profileImageRouter);
+  // Rotas de perfil (ordem específica para evitar conflitos)
   app.use('/api/profile', profileUploadRouter);
+  app.use('/api/profile/image', profileImageRouter);
   app.use('/api/address', addressRouter);
   
   // Rotas de agendamento

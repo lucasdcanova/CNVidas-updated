@@ -30,16 +30,21 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage,
   limits: { 
-    fileSize: 5 * 1024 * 1024, // 5MB
+    fileSize: 50 * 1024 * 1024, // 50MB (será comprimido no frontend)
     files: 1
   },
   fileFilter: (req, file, cb) => {
     // Aceitar apenas imagens
     const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    
+    console.log(`Upload tentativa: ${file.originalname}, Tipo: ${file.mimetype}, Tamanho: ${file.size ? (file.size / 1024 / 1024).toFixed(2) + 'MB' : 'desconhecido'}`);
+    
     if (allowedMimeTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Formato de arquivo não suportado. Apenas JPEG, PNG, GIF e WEBP são permitidos.'));
+      const error = new Error(`Formato de arquivo não suportado: ${file.mimetype}. Apenas JPEG, PNG, GIF e WEBP são permitidos.`);
+      console.error('Erro de tipo de arquivo:', error.message);
+      cb(error);
     }
   }
 });
@@ -62,33 +67,57 @@ const removeOldImage = (imagePath: string) => {
 // Upload de imagem de perfil geral (paciente)
 router.post('/upload-image', requireAuth, upload.single('profileImage'), async (req: any, res) => {
   try {
+    console.log('=== UPLOAD PROFILE IMAGE (PATIENT) ===');
+    console.log('User ID:', req.user?.id);
+    console.log('File received:', req.file ? {
+      filename: req.file.filename,
+      originalname: req.file.originalname,
+      mimetype: req.file.mimetype,
+      size: `${(req.file.size / 1024 / 1024).toFixed(2)}MB`
+    } : 'No file');
+
     if (!req.file) {
+      console.error('Erro: Nenhum arquivo foi enviado');
       return res.status(400).json({ 
         success: false, 
-        message: 'Nenhum arquivo foi enviado' 
+        message: 'Nenhum arquivo foi enviado',
+        details: 'O campo profileImage é obrigatório'
       });
     }
 
     const userId = req.user.id;
+    if (!userId) {
+      console.error('Erro: Usuário não autenticado');
+      return res.status(401).json({ 
+        success: false,
+        message: 'Usuário não autenticado',
+        details: 'Token de autenticação inválido ou expirado'
+      });
+    }
+
     const imageUrl = `/uploads/profiles/${req.file.filename}`;
+    console.log('Image URL gerada:', imageUrl);
 
     // Buscar imagem atual do usuário
     const currentUser = await db.select().from(users).where(eq(users.id, userId)).limit(1);
     const oldImage = currentUser[0]?.profileImage;
 
     // Atualizar usuário com nova imagem
-    await db.update(users)
+    const updateResult = await db.update(users)
       .set({ 
         profileImage: imageUrl,
         updatedAt: new Date()
       })
       .where(eq(users.id, userId));
 
+    console.log('Update result:', updateResult);
+
     // Remover imagem antiga se existir
-    if (oldImage) {
+    if (oldImage && oldImage !== imageUrl) {
       removeOldImage(oldImage);
     }
 
+    console.log('Upload de paciente concluído com sucesso');
     res.json({
       success: true,
       message: 'Foto de perfil atualizada com sucesso',
@@ -97,19 +126,27 @@ router.post('/upload-image', requireAuth, upload.single('profileImage'), async (
     });
 
   } catch (error: any) {
-    console.error('Erro ao fazer upload de imagem:', error);
+    console.error('Erro detalhado no upload de paciente:', {
+      message: error.message,
+      stack: error.stack,
+      userId: req.user?.id,
+      file: req.file?.filename
+    });
     
     // Remover arquivo se houve erro
     if (req.file) {
       const filePath = req.file.path;
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
+        console.log('Arquivo removido após erro:', filePath);
       }
     }
 
     res.status(500).json({
       success: false,
-      message: error.message || 'Erro interno do servidor'
+      message: error.message || 'Erro interno do servidor',
+      details: 'Erro durante o processamento do upload',
+      error: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 });

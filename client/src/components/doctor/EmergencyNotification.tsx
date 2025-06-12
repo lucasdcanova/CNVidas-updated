@@ -52,7 +52,7 @@ export function EmergencyNotification({ doctorId }: EmergencyNotificationProps) 
 
   const handleJoinEmergency = (alert: EmergencyAlert) => {
     // Redirecionar para a página de emergência do médico com o appointmentId
-    window.location.href = `/doctor-emergency/${alert.appointmentId || alert.id}`;
+    window.location.href = `/doctor-emergency-room/${alert.appointmentId || alert.id}`;
     
     toast({
       title: "Entrando na sala de emergência",

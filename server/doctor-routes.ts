@@ -119,6 +119,10 @@ doctorRouter.post('/profile-image', isDoctor, upload.single('profileImage'), asy
 
     const imageUrl = `/uploads/${req.file.filename}`;
     
+    // Buscar imagem atual para remover depois
+    const [currentDoctor] = await db.select().from(doctors).where(eq(doctors.userId, req.user.id));
+    const oldImage = currentDoctor?.profileImage;
+    
     // Atualizar imagem no perfil do usuário
     await db
       .update(users)
@@ -129,22 +133,92 @@ doctorRouter.post('/profile-image', isDoctor, upload.single('profileImage'), asy
       .where(eq(users.id, req.user.id));
 
     // Atualizar imagem no perfil do médico
-    const [doctorRecord] = await db.select().from(doctors).where(eq(doctors.userId, req.user.id));
-    if (doctorRecord) {
+    if (currentDoctor) {
       await db
         .update(doctors)
-        .set({ profileImage: imageUrl })
-        .where(eq(doctors.id, doctorRecord.id));
+        .set({ 
+          profileImage: imageUrl,
+          updatedAt: new Date()
+        })
+        .where(eq(doctors.id, currentDoctor.id));
+    }
+
+    // Remover imagem antiga se existir
+    if (oldImage && oldImage.startsWith('/uploads/')) {
+      const oldPath = path.join(process.cwd(), 'public', oldImage);
+      if (fs.existsSync(oldPath)) {
+        try {
+          fs.unlinkSync(oldPath);
+          console.log('Imagem antiga removida:', oldPath);
+        } catch (error) {
+          console.error('Erro ao remover imagem antiga:', error);
+        }
+      }
     }
 
     return res.json({ 
       success: true, 
       imageUrl: imageUrl,
+      profileImage: imageUrl,
       message: "Imagem de perfil atualizada com sucesso" 
     });
   } catch (error) {
     console.error("Erro ao fazer upload de imagem:", error);
     return res.status(500).json({ message: "Erro ao processar upload de imagem" });
+  }
+});
+
+// Rota para remover imagem de perfil do médico
+doctorRouter.delete('/remove-profile-image', isDoctor, async (req: AuthenticatedRequest, res: Response) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "Não autorizado" });
+  }
+
+  try {
+    // Buscar imagem atual
+    const [currentDoctor] = await db.select().from(doctors).where(eq(doctors.userId, req.user.id));
+    const oldImage = currentDoctor?.profileImage;
+
+    // Remover imagem do perfil do usuário
+    await db
+      .update(users)
+      .set({ 
+        profileImage: null,
+        updatedAt: new Date()
+      })
+      .where(eq(users.id, req.user.id));
+
+    // Remover imagem do perfil do médico
+    if (currentDoctor) {
+      await db
+        .update(doctors)
+        .set({ 
+          profileImage: null,
+          updatedAt: new Date()
+        })
+        .where(eq(doctors.id, currentDoctor.id));
+    }
+
+    // Remover arquivo físico
+    if (oldImage && oldImage.startsWith('/uploads/')) {
+      const oldPath = path.join(process.cwd(), 'public', oldImage);
+      if (fs.existsSync(oldPath)) {
+        try {
+          fs.unlinkSync(oldPath);
+          console.log('Imagem removida:', oldPath);
+        } catch (error) {
+          console.error('Erro ao remover arquivo:', error);
+        }
+      }
+    }
+
+    return res.json({ 
+      success: true,
+      message: "Imagem de perfil removida com sucesso" 
+    });
+  } catch (error) {
+    console.error("Erro ao remover imagem:", error);
+    return res.status(500).json({ message: "Erro ao remover imagem de perfil" });
   }
 });
 

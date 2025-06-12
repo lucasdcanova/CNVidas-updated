@@ -1,8 +1,9 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Camera, Upload, X, Check, Loader2, User } from 'lucide-react';
+import { Camera, Upload, X, Check, Loader2, User, AlertCircle } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { ImageCropper } from './ImageCropper';
 import { apiRequest } from '@/lib/queryClient';
@@ -48,9 +49,11 @@ export default function ProfilePhotoUploader({
   className = ''
 }: ProfilePhotoUploaderProps) {
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [showCropper, setShowCropper] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(currentImage);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -65,46 +68,135 @@ export default function ProfilePhotoUploader({
       .toUpperCase();
   };
 
+  // Função para comprimir imagem
+  const compressImage = useCallback((file: File, quality: number = 0.8): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+
+      img.onload = () => {
+        // Calcular dimensões mantendo aspect ratio
+        const maxWidth = 1200;
+        const maxHeight = 1200;
+        let { width, height } = img;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        // Desenhar imagem redimensionada
+        ctx?.drawImage(img, 0, 0, width, height);
+
+        // Converter para blob com compressão
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              resolve(blob);
+            } else {
+              reject(new Error('Falha na compressão da imagem'));
+            }
+          },
+          'image/jpeg',
+          quality
+        );
+      };
+
+      img.onerror = () => reject(new Error('Falha ao carregar imagem para compressão'));
+      img.src = URL.createObjectURL(file);
+    });
+  }, []);
+
   // Manipular seleção de arquivo
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    setUploadError(null);
+    setUploadSuccess(false);
+
     // Validação de tipo
     if (!file.type.startsWith('image/')) {
+      const errorMsg = `Tipo de arquivo não suportado: ${file.type}. Use apenas imagens (JPG, PNG, GIF, WEBP).`;
+      setUploadError(errorMsg);
       toast({
-        title: 'Erro',
-        description: 'Por favor, selecione apenas arquivos de imagem.',
+        title: 'Erro - Tipo de arquivo',
+        description: errorMsg,
         variant: 'destructive',
       });
       return;
     }
 
-    // Validação de tamanho (5MB)
-    if (file.size > 5 * 1024 * 1024) {
+    // Validação de tamanho (50MB - será comprimido)
+    if (file.size > 50 * 1024 * 1024) {
+      const errorMsg = `Arquivo muito grande: ${(file.size / 1024 / 1024).toFixed(1)}MB. Máximo permitido: 50MB.`;
+      setUploadError(errorMsg);
       toast({
-        title: 'Erro',
-        description: 'A imagem deve ter no máximo 5MB.',
+        title: 'Erro - Tamanho do arquivo',
+        description: errorMsg,
         variant: 'destructive',
       });
       return;
     }
+
+    console.log(`Arquivo selecionado: ${file.name}, Tamanho: ${(file.size / 1024 / 1024).toFixed(2)}MB, Tipo: ${file.type}`);
 
     // Criar URL para o cropper
     const imageUrl = URL.createObjectURL(file);
     setSelectedImageUrl(imageUrl);
     setShowCropper(true);
-    setUploadSuccess(false);
   }, [toast]);
 
   // Função para fazer upload da imagem cropada
   const handleCropComplete = useCallback(async (croppedImageBlob: Blob) => {
     setShowCropper(false);
     setIsUploading(true);
+    setUploadProgress(0);
+    setUploadError(null);
 
     try {
+      console.log(`Iniciando compressão da imagem. Tamanho original: ${(croppedImageBlob.size / 1024).toFixed(1)}KB`);
+      
+      // Comprimir imagem se for maior que 500KB
+      let finalBlob = croppedImageBlob;
+      if (croppedImageBlob.size > 500 * 1024) {
+        setUploadProgress(10);
+        console.log('Comprimindo imagem...');
+        
+        try {
+          // Tentar diferentes níveis de qualidade até conseguir um tamanho adequado
+          let quality = 0.8;
+          let compressedBlob = await compressImage(new File([croppedImageBlob], 'image.jpg'), quality);
+          
+          // Se ainda estiver muito grande, comprimir mais
+          while (compressedBlob.size > 2 * 1024 * 1024 && quality > 0.3) {
+            quality -= 0.1;
+            compressedBlob = await compressImage(new File([croppedImageBlob], 'image.jpg'), quality);
+          }
+          
+          finalBlob = compressedBlob;
+          console.log(`Compressão concluída. Tamanho final: ${(finalBlob.size / 1024).toFixed(1)}KB (qualidade: ${quality})`);
+        } catch (compressionError) {
+          console.warn('Falha na compressão, usando imagem original:', compressionError);
+          // Continuar com a imagem original se a compressão falhar
+        }
+      }
+
+      setUploadProgress(30);
+
       const formData = new FormData();
-      formData.append('profileImage', croppedImageBlob, 'profile.jpg');
+      formData.append('profileImage', finalBlob, 'profile.jpg');
 
       // Escolher endpoint baseado no tipo de usuário
       let endpoint = '/api/profile/upload-image';
@@ -114,22 +206,65 @@ export default function ProfilePhotoUploader({
         endpoint = '/api/partners/profile-image';
       }
 
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        body: formData,
-        credentials: 'include',
-        headers: {
-          'X-Auth-Token': localStorage.getItem('auth_token') || '',
-          'Authorization': `Bearer ${localStorage.getItem('auth_token') || ''}`
-        }
+      console.log('Fazendo upload para:', endpoint);
+      console.log('Tipo de usuário:', userType);
+      console.log(`Tamanho final do arquivo: ${(finalBlob.size / 1024).toFixed(1)}KB`);
+
+      setUploadProgress(50);
+
+      // Usar XMLHttpRequest para ter controle sobre o progresso
+      const authToken = localStorage.getItem('auth_token') || '';
+      
+      const uploadPromise = new Promise<any>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.upload.addEventListener('progress', (e) => {
+          if (e.lengthComputable) {
+            const progress = 50 + Math.round((e.loaded / e.total) * 40); // 50-90%
+            setUploadProgress(progress);
+          }
+        });
+
+        xhr.addEventListener('load', () => {
+          setUploadProgress(95);
+          if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+              const result = JSON.parse(xhr.responseText);
+              resolve(result);
+            } catch (e) {
+              reject(new Error('Resposta inválida do servidor'));
+            }
+          } else {
+            let errorMessage = `Erro HTTP ${xhr.status}`;
+            try {
+              const errorData = JSON.parse(xhr.responseText);
+              errorMessage = errorData.message || errorMessage;
+            } catch (e) {
+              errorMessage = `${errorMessage}: ${xhr.statusText}`;
+            }
+            reject(new Error(errorMessage));
+          }
+        });
+
+        xhr.addEventListener('error', () => {
+          reject(new Error('Falha na conexão com o servidor'));
+        });
+
+        xhr.addEventListener('timeout', () => {
+          reject(new Error('Timeout - servidor demorou para responder'));
+        });
+
+        xhr.open('POST', endpoint);
+        xhr.setRequestHeader('X-Auth-Token', authToken);
+        xhr.setRequestHeader('Authorization', `Bearer ${authToken}`);
+        xhr.timeout = 30000; // 30 segundos
+        xhr.send(formData);
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: 'Erro desconhecido' }));
-        throw new Error(errorData.message || `Erro ${response.status}`);
-      }
-
-      const result = await response.json();
+      const result = await uploadPromise;
+      setUploadProgress(100);
+      
+      console.log('Resultado do upload:', result);
       const imageUrl = result.imageUrl || result.profileImage || result.url;
 
       if (imageUrl) {
@@ -138,27 +273,44 @@ export default function ProfilePhotoUploader({
 
         // Mostrar sucesso
         setUploadSuccess(true);
-        setTimeout(() => setUploadSuccess(false), 3000);
+        setTimeout(() => {
+          setUploadSuccess(false);
+          setUploadProgress(0);
+        }, 3000);
 
         toast({
           title: 'Sucesso!',
           description: 'Foto de perfil atualizada com sucesso.',
         });
+      } else {
+        throw new Error('Servidor não retornou URL da imagem');
       }
     } catch (error: any) {
-      console.error('Erro ao fazer upload:', error);
+      console.error('Erro detalhado no upload:', {
+        message: error.message,
+        stack: error.stack,
+        userType,
+        endpoint: userType === 'doctor' ? '/api/doctors/profile-image' : 
+                 userType === 'partner' ? '/api/partners/profile-image' : 
+                 '/api/profile/upload-image'
+      });
+      
+      const errorMessage = error.message || 'Erro desconhecido ao fazer upload';
+      setUploadError(errorMessage);
+      
       toast({
-        title: 'Erro ao fazer upload',
-        description: error.message || 'Ocorreu um erro ao atualizar sua foto.',
+        title: 'Erro no Upload',
+        description: errorMessage,
         variant: 'destructive',
       });
     } finally {
       setIsUploading(false);
+      setUploadProgress(0);
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
     }
-  }, [userType, onImageUpdate, toast]);
+  }, [userType, onImageUpdate, toast, compressImage]);
 
   // Função para remover imagem
   const handleRemoveImage = useCallback(async () => {
@@ -238,7 +390,17 @@ export default function ProfilePhotoUploader({
               {/* Overlay de carregamento */}
               {isUploading && (
                 <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
-                  <Loader2 className={`${iconSizes[size]} text-white animate-spin`} />
+                  <div className="text-center">
+                    <div className="text-white text-xs font-medium mb-1">
+                      {uploadProgress}%
+                    </div>
+                    <div className="w-8 h-1 bg-white/30 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-white transition-all duration-300 ease-out"
+                        style={{ width: `${uploadProgress}%` }}
+                      />
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -264,9 +426,17 @@ export default function ProfilePhotoUploader({
             {/* Status e informações */}
             <div className="text-center space-y-2">
               {isUploading && (
-                <p className="text-sm text-muted-foreground font-medium">
-                  Enviando foto...
-                </p>
+                <div className="space-y-2">
+                  <p className="text-sm text-muted-foreground font-medium">
+                    {uploadProgress < 30 ? 'Comprimindo imagem...' :
+                     uploadProgress < 50 ? 'Preparando upload...' :
+                     uploadProgress < 95 ? 'Enviando foto...' :
+                     'Finalizando...'}
+                  </p>
+                  <div className="w-full max-w-xs mx-auto">
+                    <Progress value={uploadProgress} className="h-2" />
+                  </div>
+                </div>
               )}
               
               {uploadSuccess && !isUploading && (
@@ -275,13 +445,25 @@ export default function ProfilePhotoUploader({
                 </p>
               )}
 
-              {!isUploading && !uploadSuccess && (
+              {uploadError && !isUploading && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-center gap-2 text-destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <p className="text-sm font-medium">Erro no upload</p>
+                  </div>
+                  <p className="text-xs text-destructive/80 max-w-xs">
+                    {uploadError}
+                  </p>
+                </div>
+              )}
+
+              {!isUploading && !uploadSuccess && !uploadError && (
                 <div className="space-y-2">
                   <p className="text-sm text-muted-foreground">
                     {previewImage ? 'Clique na câmera para alterar' : 'Adicione uma foto de perfil'}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    JPG, PNG ou GIF. Máximo 5MB
+                    JPG, PNG ou GIF. Máximo 50MB (será comprimido automaticamente)
                   </p>
                 </div>
               )}

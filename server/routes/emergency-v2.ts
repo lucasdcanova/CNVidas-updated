@@ -271,6 +271,89 @@ emergencyV2Router.post('/join/:appointmentId', authenticateToken, async (req: Re
 });
 
 /**
+ * GET /api/emergency/v2/consultation/:appointmentId
+ * Obter informações da consulta de emergência
+ */
+emergencyV2Router.get('/consultation/:appointmentId', authenticateToken, async (req: Request, res: Response) => {
+  try {
+    const appointmentId = parseInt(req.params.appointmentId);
+    const userId = req.user!.id;
+    
+    // Buscar a consulta
+    const appointment = await storage.getAppointmentById(appointmentId);
+    if (!appointment || !appointment.isEmergency) {
+      return res.status(404).json({ error: 'Consulta de emergência não encontrada' });
+    }
+    
+    // Verificar se o usuário é médico
+    const doctor = await storage.getDoctorByUserId(userId);
+    if (!doctor) {
+      // Se não for médico, verificar se é o paciente
+      if (appointment.userId !== userId) {
+        return res.status(403).json({ error: 'Sem permissão para visualizar esta consulta' });
+      }
+    } else {
+      // Se for médico, verificar se é o médico designado
+      if (appointment.doctorId && appointment.doctorId !== doctor.id) {
+        return res.status(403).json({ error: 'Esta consulta está designada para outro médico' });
+      }
+    }
+    
+    // Buscar informações do paciente
+    const patient = await storage.getUser(appointment.userId);
+    const patientName = patient?.fullName || patient?.username || 'Paciente';
+    
+    // Preparar resposta
+    const response: any = {
+      id: appointment.id,
+      roomUrl: appointment.telemedRoomName ? `https://cnvidas.daily.co/${appointment.telemedRoomName}` : null,
+      dailyRoomUrl: appointment.telemedRoomName ? `https://cnvidas.daily.co/${appointment.telemedRoomName}` : null,
+      telemedRoomName: appointment.telemedRoomName,
+      patientName: patientName,
+      patientId: appointment.userId,
+      status: appointment.status,
+      notes: appointment.notes || '',
+      createdAt: appointment.createdAt,
+      updatedAt: appointment.updatedAt
+    };
+    
+    // Se for médico, incluir informações adicionais do paciente
+    if (doctor) {
+      response.patientAge = patient?.birthdate ? 
+        Math.floor((new Date().getTime() - new Date(patient.birthdate).getTime()) / (1000 * 60 * 60 * 24 * 365.25)) : 
+        undefined;
+      response.patientPhone = patient?.phone || undefined;
+      response.patientEmail = patient?.email || undefined;
+      
+      // Criar token para o médico se a consulta ainda estiver ativa
+      if (appointment.status === 'waiting' || appointment.status === 'in_progress') {
+        const doctorUser = await storage.getUser(doctor.userId);
+        const doctorName = doctorUser?.fullName || doctor.name || 'Médico';
+        
+        const tokenResponse = await createToken(appointment.telemedRoomName!, {
+          user_id: userId.toString(),
+          user_name: doctorName,
+          is_owner: true
+        });
+        
+        response.token = tokenResponse.token;
+      }
+    }
+    
+    console.log(`📋 Consulta de emergência ${appointmentId} consultada por ${doctor ? 'médico' : 'paciente'} ${userId}`);
+    
+    return res.json(response);
+    
+  } catch (error) {
+    console.error('Erro ao buscar informações da consulta:', error);
+    return res.status(500).json({ 
+      error: 'Erro ao buscar informações da consulta',
+      details: error instanceof Error ? error.message : 'Erro desconhecido'
+    });
+  }
+});
+
+/**
  * POST /api/emergency/v2/end/:appointmentId
  * Finalizar consulta de emergência
  */
@@ -461,6 +544,55 @@ emergencyV2Router.post('/check-time/:appointmentId', authenticateToken, async (r
     console.error('Erro ao verificar tempo:', error);
     return res.status(500).json({ 
       error: 'Erro ao verificar tempo da consulta',
+      details: error instanceof Error ? error.message : 'Erro desconhecido'
+    });
+  }
+});
+
+/**
+ * POST /api/emergency/v2/complete/:appointmentId
+ * Marcar consulta de emergência como concluída
+ */
+emergencyV2Router.post('/complete/:appointmentId', authenticateToken, async (req: Request, res: Response) => {
+  try {
+    const appointmentId = parseInt(req.params.appointmentId);
+    const { notes } = req.body;
+    
+    // Buscar a consulta
+    const appointment = await storage.getAppointmentById(appointmentId);
+    if (!appointment || !appointment.isEmergency) {
+      return res.status(404).json({ error: 'Consulta de emergência não encontrada' });
+    }
+    
+    // Verificar se o usuário é o médico da consulta
+    const userId = req.user!.id;
+    const doctor = await storage.getDoctorByUserId(userId);
+    
+    if (!doctor || appointment.doctorId !== doctor.id) {
+      return res.status(403).json({ error: 'Apenas o médico responsável pode concluir a consulta' });
+    }
+    
+    // Atualizar status da consulta
+    await storage.updateAppointment(appointmentId, {
+      status: 'completed',
+      notes: notes || appointment.notes,
+      completedAt: new Date()
+    });
+    
+    // Limpar notificações se existirem
+    emergencyNotifications.delete(doctor.id);
+    
+    console.log(`✅ Consulta de emergência ${appointmentId} marcada como concluída pelo médico ${doctor.id}`);
+    
+    return res.json({
+      success: true,
+      message: 'Consulta concluída com sucesso'
+    });
+    
+  } catch (error) {
+    console.error('Erro ao concluir consulta:', error);
+    return res.status(500).json({ 
+      error: 'Erro ao concluir consulta',
       details: error instanceof Error ? error.message : 'Erro desconhecido'
     });
   }
