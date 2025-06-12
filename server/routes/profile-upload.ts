@@ -1,71 +1,31 @@
 import { Router } from 'express';
-import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { db } from '../db';
 import { users, doctors, partners } from '../../shared/schema';
 import { eq } from 'drizzle-orm';
-import { requireAuth } from '../middleware/auth';
+import { requireAuth, requireDoctor, requirePartner, AuthRequest } from '../middleware/auth-unified';
+import { profileImageUpload, removeFile } from '../middleware/multer-config';
 
 const router = Router();
 
-// Configurar diretório de uploads
-const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'profiles');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Configurar multer
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const ext = path.extname(file.originalname);
-    cb(null, `profile-${uniqueSuffix}${ext}`);
-  }
-});
-
-const upload = multer({
-  storage,
-  limits: { 
-    fileSize: 50 * 1024 * 1024, // 50MB (será comprimido no frontend)
-    files: 1
-  },
-  fileFilter: (req, file, cb) => {
-    // Aceitar apenas imagens
-    const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-    
-    console.log(`Upload tentativa: ${file.originalname}, Tipo: ${file.mimetype}, Tamanho: ${file.size ? (file.size / 1024 / 1024).toFixed(2) + 'MB' : 'desconhecido'}`);
-    
-    if (allowedMimeTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      const error = new Error(`Formato de arquivo não suportado: ${file.mimetype}. Apenas JPEG, PNG, GIF e WEBP são permitidos.`);
-      console.error('Erro de tipo de arquivo:', error.message);
-      cb(error);
-    }
-  }
-});
+// Usar a configuração centralizada do multer
+const upload = profileImageUpload;
 
 // Função para remover arquivo antigo
-const removeOldImage = (imagePath: string) => {
+const removeOldImage = async (imagePath: string) => {
   if (imagePath && imagePath.startsWith('/uploads/')) {
-    const fullPath = path.join(process.cwd(), 'public', imagePath);
-    if (fs.existsSync(fullPath)) {
-      try {
-        fs.unlinkSync(fullPath);
-        console.log('Imagem antiga removida:', fullPath);
-      } catch (error) {
-        console.error('Erro ao remover imagem antiga:', error);
-      }
+    try {
+      await removeFile(imagePath);
+      console.log('Imagem antiga removida:', imagePath);
+    } catch (error) {
+      console.error('Erro ao remover imagem antiga:', error);
     }
   }
 };
 
 // Upload de imagem de perfil geral (paciente)
-router.post('/upload-image', requireAuth, upload.single('profileImage'), async (req: any, res) => {
+router.post('/upload-image', requireAuth, upload.single('profileImage'), async (req: AuthRequest, res) => {
   try {
     console.log('=== UPLOAD PROFILE IMAGE (PATIENT) ===');
     console.log('User ID:', req.user?.id);
@@ -114,7 +74,7 @@ router.post('/upload-image', requireAuth, upload.single('profileImage'), async (
 
     // Remover imagem antiga se existir
     if (oldImage && oldImage !== imageUrl) {
-      removeOldImage(oldImage);
+      await removeOldImage(oldImage);
     }
 
     console.log('Upload de paciente concluído com sucesso');
@@ -152,7 +112,7 @@ router.post('/upload-image', requireAuth, upload.single('profileImage'), async (
 });
 
 // Upload de imagem para médicos
-router.post('/doctors/profile-image', requireAuth, upload.single('profileImage'), async (req: any, res) => {
+router.post('/doctors/profile-image', requireDoctor, upload.single('profileImage'), async (req: AuthRequest, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ 
@@ -193,7 +153,7 @@ router.post('/doctors/profile-image', requireAuth, upload.single('profileImage')
 
     // Remover imagem antiga se existir
     if (oldImage) {
-      removeOldImage(oldImage);
+      await removeOldImage(oldImage);
     }
 
     res.json({
@@ -222,7 +182,7 @@ router.post('/doctors/profile-image', requireAuth, upload.single('profileImage')
 });
 
 // Upload de imagem para parceiros
-router.post('/partners/profile-image', requireAuth, upload.single('profileImage'), async (req: any, res) => {
+router.post('/partners/profile-image', requirePartner, upload.single('profileImage'), async (req: AuthRequest, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ 
@@ -263,7 +223,7 @@ router.post('/partners/profile-image', requireAuth, upload.single('profileImage'
 
     // Remover imagem antiga se existir
     if (oldImage) {
-      removeOldImage(oldImage);
+      await removeOldImage(oldImage);
     }
 
     res.json({
@@ -310,7 +270,7 @@ router.delete('/remove-image', requireAuth, async (req: any, res) => {
 
     // Remover arquivo físico
     if (oldImage) {
-      removeOldImage(oldImage);
+      await removeOldImage(oldImage);
     }
 
     res.json({
@@ -360,7 +320,7 @@ router.delete('/doctors/remove-profile-image', requireAuth, async (req: any, res
 
     // Remover arquivo físico
     if (oldImage) {
-      removeOldImage(oldImage);
+      await removeOldImage(oldImage);
     }
 
     res.json({
@@ -410,7 +370,7 @@ router.delete('/partners/remove-profile-image', requireAuth, async (req: any, re
 
     // Remover arquivo físico
     if (oldImage) {
-      removeOldImage(oldImage);
+      await removeOldImage(oldImage);
     }
 
     res.json({

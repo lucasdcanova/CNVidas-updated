@@ -141,7 +141,11 @@ notificationRouter.get("/recent-activities", requireAuth, async (req: Authentica
   try {
     console.log('🔍 Activities - Buscando atividades recentes do usuário ID:', req.user?.id);
     
-    const userId = req.user!.id;
+    if (!req.user) {
+      return res.status(401).json({ error: 'Usuário não autenticado' });
+    }
+    
+    const userId = req.user.id;
     const limit = parseInt(req.query.limit as string) || 10;
     
     // Buscar atividades de múltiplas fontes
@@ -149,7 +153,7 @@ notificationRouter.get("/recent-activities", requireAuth, async (req: Authentica
     
     // 1. Consultas agendadas/realizadas
     try {
-      const appointments = await storage.getUserAppointments(userId);
+      const appointments = await storage.getUserAppointments(userId) || [];
       appointments.slice(0, 5).forEach(appointment => {
         activities.push({
           id: `appointment-${appointment.id}`,
@@ -172,7 +176,7 @@ notificationRouter.get("/recent-activities", requireAuth, async (req: Authentica
     
     // 2. Sinistros submetidos/atualizados
     try {
-      const claims = await storage.getUserClaims(userId);
+      const claims = await storage.getUserClaims(userId) || [];
       claims.slice(0, 5).forEach(claim => {
         activities.push({
           id: `claim-${claim.id}`,
@@ -243,7 +247,7 @@ notificationRouter.get("/recent-activities", requireAuth, async (req: Authentica
 
     // 6. Notificações do sistema
     try {
-      const notifications = await storage.getNotifications(userId);
+      const notifications = await storage.getNotifications(userId) || [];
       notifications.slice(0, 3).forEach(notification => {
         activities.push({
           id: `notification-${notification.id}`,
@@ -287,6 +291,20 @@ notificationRouter.get("/recent-activities", requireAuth, async (req: Authentica
       }
     } catch (error) {
       console.log('Erro ao verificar usuário:', error);
+    }
+    
+    // Se não há atividades, adicionar uma atividade de boas-vindas
+    if (activities.length === 0) {
+      activities.push({
+        id: `welcome-default-${userId}`,
+        type: 'system',
+        title: 'Bem-vindo à CN Vidas!',
+        description: 'Sua jornada de saúde digital começa aqui. Explore nossos serviços e mantenha-se sempre conectado com sua saúde.',
+        date: new Date(),
+        icon: 'celebration',
+        status: 'active',
+        link: '/dashboard'
+      });
     }
     
     // Ordenar por data (mais recente primeiro) e aplicar limite

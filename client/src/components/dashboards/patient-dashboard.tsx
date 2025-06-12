@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { getUpcomingAppointments, getClaims, getServices } from "@/lib/api";
+import { getUpcomingAppointments, getClaims, getServices, getRecentActivities } from "@/lib/api";
 import StatusCard from "@/components/shared/status-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -122,23 +122,12 @@ export const PatientDashboard: React.FC = () => {
   const [showAllActivities, setShowAllActivities] = React.useState(false);
 
   // Buscar atividades recentes do usuário
-  const { data: recentActivities = [] } = useQuery({
+  const { data: recentActivities = [], isLoading: isLoadingActivities, error: activitiesError } = useQuery({
     queryKey: ["/api/notifications/recent-activities"],
-    queryFn: async () => {
-      try {
-        const res = await fetch("/api/notifications/recent-activities?limit=10", {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-            'X-Auth-Token': localStorage.getItem('authToken') || ''
-          }
-        });
-        if (!res.ok) throw new Error("Falha ao buscar atividades recentes");
-        return await res.json();
-      } catch (error) {
-        console.error("Erro ao buscar atividades recentes:", error);
-        return [];
-      }
-    },
+    queryFn: () => getRecentActivities(10),
+    retry: 1,
+    staleTime: 30000, // 30 segundos
+    refetchOnWindowFocus: false,
   });
   
   // Determinar quantas atividades mostrar com base no estado de expansão
@@ -291,12 +280,33 @@ export const PatientDashboard: React.FC = () => {
             <CardTitle className="text-xl font-semibold text-gray-800">Atividade Recente</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
-            <ul className="divide-y divide-gray-100/50">
-              {displayedActivities.length > 0 ? (
-                displayedActivities.map((activity: any, index: number) => (
-                  <li key={activity.id || index} className="p-5 hover:bg-white/30 transition-colors duration-200">
-                    <div className="flex">
-                      <div className="mr-4 flex-shrink-0">
+            {isLoadingActivities ? (
+              <div className="p-6 text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                <p className="mt-2 text-sm text-gray-500">Carregando atividades...</p>
+              </div>
+            ) : activitiesError ? (
+              <div className="p-6 text-center">
+                <div className="text-red-500 mb-2">
+                  <span className="material-icons text-2xl">error_outline</span>
+                </div>
+                <p className="text-sm text-gray-500">Erro ao carregar atividades recentes</p>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="mt-2"
+                  onClick={() => window.location.reload()}
+                >
+                  Tentar novamente
+                </Button>
+              </div>
+            ) : (
+              <ul className="divide-y divide-gray-100/50">
+                {displayedActivities.length > 0 ? (
+                  displayedActivities.map((activity: any, index: number) => (
+                    <li key={activity.id || index} className="p-5 hover:bg-white/30 transition-colors duration-200">
+                      <div className="flex">
+                        <div className="mr-4 flex-shrink-0">
                         <span className={`inline-flex items-center justify-center h-10 w-10 rounded-xl shadow-sm ring-2 ring-white/30 ${
                           activity.type === 'appointment' ? 'bg-gradient-to-br from-green-400/80 to-green-600/80' :
                           activity.type === 'claim' ? 'bg-gradient-to-br from-orange-400/80 to-orange-600/80' :
@@ -368,20 +378,21 @@ export const PatientDashboard: React.FC = () => {
                   </div>
                 </li>
               )}
-            </ul>
-            {recentActivities.length > 2 && (
-              <div className="p-4 text-center border-t border-gray-100/30">
-                <Button 
-                  variant="ghost" 
-                  className="text-primary hover:text-primary/80 hover:bg-primary/10"
-                  onClick={() => setShowAllActivities(!showAllActivities)}
-                >
-                  {showAllActivities ? "Mostrar menos" : "Expandir"}
-                  <span className="material-icons ml-1 text-sm">
-                    {showAllActivities ? "expand_less" : "expand_more"}
-                  </span>
-                </Button>
-              </div>
+              </ul>
+              {recentActivities.length > 2 && (
+                <div className="p-4 text-center border-t border-gray-100/30">
+                  <Button 
+                    variant="ghost" 
+                    className="text-primary hover:text-primary/80 hover:bg-primary/10"
+                    onClick={() => setShowAllActivities(!showAllActivities)}
+                  >
+                    {showAllActivities ? "Mostrar menos" : "Expandir"}
+                    <span className="material-icons ml-1 text-sm">
+                      {showAllActivities ? "expand_less" : "expand_more"}
+                    </span>
+                  </Button>
+                </div>
+              )}
             )}
           </CardContent>
         </Card>
