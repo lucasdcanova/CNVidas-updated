@@ -81,7 +81,7 @@ partnerRouter.post('/services', requireAuth, requirePartner, async (req: Authent
       return res.status(404).json({ error: 'Perfil de parceiro não encontrado' });
     }
 
-    const { name, description, category, price, estimatedDuration } = req.body;
+    const { name, description, category, regularPrice, discountPrice, duration, discountPercentage, isFeatured, isActive, serviceImage } = req.body;
 
     // Validações básicas
     if (!name || !description || !category) {
@@ -93,11 +93,13 @@ partnerRouter.post('/services', requireAuth, requirePartner, async (req: Authent
       name,
       description,
       category,
-      regularPrice: price || 0,
-      discountPrice: price || 0,
-      duration: estimatedDuration || null,
-      isActive: true,
-      isFeatured: false,
+      regularPrice: parseInt(regularPrice) || 0,
+      discountPrice: parseInt(discountPrice) || 0,
+      duration: duration ? parseInt(duration) : null,
+      discountPercentage: parseInt(discountPercentage) || 0,
+      isFeatured: isFeatured || false,
+      isActive: isActive !== undefined ? isActive : true,
+      serviceImage: serviceImage || null,
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -121,6 +123,11 @@ partnerRouter.post('/services', requireAuth, requirePartner, async (req: Authent
  */
 partnerRouter.put('/services/:id', requireAuth, requirePartner, async (req: AuthenticatedRequest, res: Response) => {
   try {
+    console.log('=== UPDATE SERVICE REQUEST ===');
+    console.log('Service ID:', req.params.id);
+    console.log('Request body:', JSON.stringify(req.body, null, 2));
+    console.log('User ID:', req.user!.id);
+    
     const serviceId = parseInt(req.params.id);
     if (isNaN(serviceId)) {
       return res.status(400).json({ error: 'ID do serviço inválido' });
@@ -142,18 +149,39 @@ partnerRouter.put('/services/:id', requireAuth, requirePartner, async (req: Auth
       return res.status(403).json({ error: 'Você só pode editar seus próprios serviços' });
     }
 
-    const { name, description, category, price, estimatedDuration, isActive } = req.body;
+    const { name, description, category, regularPrice, discountPrice, duration, discountPercentage, isFeatured, isActive, serviceImage } = req.body;
+
+    // Garantir que valores numéricos sejam convertidos corretamente
+    const parsePrice = (value: any): number => {
+      if (typeof value === 'string') {
+        // Remove caracteres não numéricos e converte para número
+        const cleaned = value.replace(/[^\d]/g, '');
+        return parseInt(cleaned) || 0;
+      }
+      return parseInt(value) || 0;
+    };
 
     const updateData = {
       name: name || existingService.name,
       description: description || existingService.description,
       category: category || existingService.category,
-      regularPrice: price !== undefined ? price : existingService.regularPrice,
-      discountPrice: price !== undefined ? price : existingService.discountPrice,
-      duration: estimatedDuration !== undefined ? estimatedDuration : existingService.duration,
+      regularPrice: regularPrice !== undefined ? parsePrice(regularPrice) : existingService.regularPrice,
+      discountPrice: discountPrice !== undefined ? parsePrice(discountPrice) : existingService.discountPrice,
+      duration: duration !== undefined ? parseInt(duration) : existingService.duration,
+      discountPercentage: discountPercentage !== undefined ? parseInt(discountPercentage) : existingService.discountPercentage,
+      isFeatured: isFeatured !== undefined ? isFeatured : existingService.isFeatured,
       isActive: isActive !== undefined ? isActive : existingService.isActive,
+      serviceImage: serviceImage !== undefined ? serviceImage : existingService.serviceImage,
       updatedAt: new Date()
     };
+
+    console.log('Update data:', JSON.stringify(updateData, null, 2));
+    console.log('Data types:', {
+      regularPrice: typeof updateData.regularPrice,
+      discountPrice: typeof updateData.discountPrice,
+      duration: typeof updateData.duration,
+      discountPercentage: typeof updateData.discountPercentage
+    });
 
     const updatedService = await storage.updatePartnerService(serviceId, updateData);
     
