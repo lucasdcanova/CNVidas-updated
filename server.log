@@ -1,7 +1,27 @@
-Iniciando servidor na porta 5001...
+
+> rest-express@1.0.0 dev:server
+> tsx watch server/index.ts
+
 AuthRouter carregado - rotas disponíveis:
 - POST /register
 - POST /login
 - POST /test
 - GET /user (verificação de autenticação)
-./start-server-simple.sh: line 9: 63464 Terminated: 15          node --import tsx server/index.ts
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-12 02:53:46.763414+00
+Session table checked/created successfully
+11:53:46 PM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+Configuração de email carregada. Serviço de email disponível.
+11:59:24 PM [tsx] Previous process hasn't exited yet. Force killing...
