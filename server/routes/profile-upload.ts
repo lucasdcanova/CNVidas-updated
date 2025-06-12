@@ -45,7 +45,7 @@ router.post('/upload-image', requireAuth, upload.single('profileImage'), async (
       });
     }
 
-    const userId = req.user.id;
+    const userId = req.user!.id;
     if (!userId) {
       console.error('Erro: Usuário não autenticado');
       return res.status(401).json({ 
@@ -121,19 +121,12 @@ router.post('/doctors/profile-image', requireDoctor, upload.single('profileImage
       });
     }
 
-    const userId = req.user.id;
+    const userId = req.user!.id;
     const imageUrl = `/uploads/profiles/${req.file.filename}`;
 
-    // Verificar se é médico
+    // Buscar dados do médico
     const doctor = await db.select().from(doctors).where(eq(doctors.userId, userId)).limit(1);
-    if (!doctor.length) {
-      return res.status(403).json({ 
-        success: false, 
-        message: 'Acesso negado. Apenas médicos podem usar esta rota.' 
-      });
-    }
-
-    const oldImage = doctor[0].profileImage;
+    const oldImage = doctor[0]?.profileImage;
 
     // Atualizar tabela de médicos
     await db.update(doctors)
@@ -191,19 +184,12 @@ router.post('/partners/profile-image', requirePartner, upload.single('profileIma
       });
     }
 
-    const userId = req.user.id;
+    const userId = req.user!.id;
     const imageUrl = `/uploads/profiles/${req.file.filename}`;
 
-    // Verificar se é parceiro
+    // Buscar dados do parceiro
     const partner = await db.select().from(partners).where(eq(partners.userId, userId)).limit(1);
-    if (!partner.length) {
-      return res.status(403).json({ 
-        success: false, 
-        message: 'Acesso negado. Apenas parceiros podem usar esta rota.' 
-      });
-    }
-
-    const oldImage = partner[0].profileImage;
+    const oldImage = partner[0]?.profileImage;
 
     // Atualizar tabela de parceiros
     await db.update(partners)
@@ -252,9 +238,9 @@ router.post('/partners/profile-image', requirePartner, upload.single('profileIma
 });
 
 // Remover imagem de perfil geral
-router.delete('/remove-image', requireAuth, async (req: any, res) => {
+router.delete('/remove-image', requireAuth, async (req: AuthRequest, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user!.id;
 
     // Buscar imagem atual
     const currentUser = await db.select().from(users).where(eq(users.id, userId)).limit(1);
@@ -288,20 +274,13 @@ router.delete('/remove-image', requireAuth, async (req: any, res) => {
 });
 
 // Remover imagem de médico
-router.delete('/doctors/remove-profile-image', requireAuth, async (req: any, res) => {
+router.delete('/doctors/remove-profile-image', requireDoctor, async (req: AuthRequest, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user!.id;
 
-    // Verificar se é médico
+    // Buscar dados do médico
     const doctor = await db.select().from(doctors).where(eq(doctors.userId, userId)).limit(1);
-    if (!doctor.length) {
-      return res.status(403).json({ 
-        success: false, 
-        message: 'Acesso negado. Apenas médicos podem usar esta rota.' 
-      });
-    }
-
-    const oldImage = doctor[0].profileImage;
+    const oldImage = doctor[0]?.profileImage;
 
     // Remover de ambas as tabelas
     await db.update(doctors)
@@ -338,20 +317,13 @@ router.delete('/doctors/remove-profile-image', requireAuth, async (req: any, res
 });
 
 // Remover imagem de parceiro
-router.delete('/partners/remove-profile-image', requireAuth, async (req: any, res) => {
+router.delete('/partners/remove-profile-image', requirePartner, async (req: AuthRequest, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user!.id;
 
-    // Verificar se é parceiro
+    // Buscar dados do parceiro
     const partner = await db.select().from(partners).where(eq(partners.userId, userId)).limit(1);
-    if (!partner.length) {
-      return res.status(403).json({ 
-        success: false, 
-        message: 'Acesso negado. Apenas parceiros podem usar esta rota.' 
-      });
-    }
-
-    const oldImage = partner[0].profileImage;
+    const oldImage = partner[0]?.profileImage;
 
     // Remover de ambas as tabelas
     await db.update(partners)
