@@ -29,6 +29,7 @@ import notificationRouter from './notification-routes';
 import checkoutTrackingRouter from './checkout-tracking-routes';
 import { adminRoutes } from '../admin-routes';
 import legalDocumentsRouter from './legal-documents-routes';
+import profileUploadRouter from './profile-upload';
 
 export default async function setupRoutes(app: express.Express) {
   // Rotas de autenticação (PRIMEIRO para evitar conflitos)
@@ -91,6 +92,7 @@ export default async function setupRoutes(app: express.Express) {
   
   // Rotas de perfil
   app.use('/api/profile/image', profileImageRouter);
+  app.use('/api/profile', profileUploadRouter);
   app.use('/api/address', addressRouter);
   
   // Rotas de agendamento

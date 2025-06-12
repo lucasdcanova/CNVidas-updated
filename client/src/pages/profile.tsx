@@ -47,6 +47,7 @@ import {
 import Breadcrumb from "@/components/ui/breadcrumb";
 import { AddressFormOptimized as AddressForm, AddressFormValues } from "@/components/forms/address-form-optimized";
 import { ImageCropper } from "@/components/shared/ImageCropper";
+import ProfilePhotoUploader from "@/components/shared/ProfilePhotoUploader";
 import PaymentMethods from "@/components/payment/payment-methods";
 import { useStripeSetup } from '@/hooks/use-stripe-setup';
 
@@ -921,68 +922,19 @@ const Profile: React.FC = () => {
                   </div>
                   
                   {user?.role === "doctor" && (
-                    <div className="flex flex-col items-center">
-                      <div className="relative">
-                        <Avatar className="h-24 w-24 border-2 border-border">
-                          {profileImage ? (
-                            <AvatarImage 
-                              src={profileImage?.startsWith('/') ? profileImage : `/${profileImage}`} 
-                              alt={doctorData?.specialization || "Perfil médico"} 
-                              className="object-cover"
-                            />
-                          ) : (
-                            <AvatarFallback className="text-xl">
-                              {(doctorData?.specialization || "DR").substring(0, 2).toUpperCase()}
-                            </AvatarFallback>
-                          )}
-                        </Avatar>
-                        
-                        <input 
-                          type="file" 
-                          ref={fileInputRef}
-                          onChange={handleFileChange}
-                          accept="image/*"
-                          className="hidden"
-                        />
-                        
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className="absolute -bottom-2 -right-2 rounded-full bg-background border"
-                          onClick={handleFileSelect}
-                          disabled={isUpdatingProfile}
-                        >
-                          <Upload className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      
-                      <div className="flex flex-col space-y-2 mt-2">
-                        {/* Botão de upload de imagem para médicos quando um arquivo foi selecionado */}
-                        {user?.role === "doctor" && selectedFile && (
-                          <Button 
-                            variant="default" 
-                            size="sm" 
-                            className="text-xs"
-                            onClick={uploadProfileImage}
-                            disabled={isUpdatingProfile}
-                          >
-                            {isUpdatingProfile ? "Enviando..." : "Salvar imagem"}
-                          </Button>
-                        )}
-                        
-                        {/* Botão de remover imagem */}
-                        {profileImage && (
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="text-xs text-muted-foreground hover:text-destructive"
-                            onClick={handleRemoveImage}
-                          >
-                            Remover foto
-                          </Button>
-                        )}
-                      </div>
-                    </div>
+                    <ProfilePhotoUploader
+                      currentImage={profileImage}
+                      userName={doctorData?.specialization || user?.fullName || 'Médico'}
+                      userType="doctor"
+                      size="lg"
+                      onImageUpdate={(url) => {
+                        setProfileImage(url);
+                        // Invalidar cache para atualizar dados
+                        queryClient.invalidateQueries({ queryKey: ["/api/doctors/user", user?.id] });
+                        queryClient.invalidateQueries({ queryKey: ["/api/users/profile"] });
+                      }}
+                      className="w-fit"
+                    />
                   )}
                 </div>
               </CardHeader>
@@ -992,6 +944,21 @@ const Profile: React.FC = () => {
                 {(user?.role === "patient" || user?.role === "admin") && (
                   <Form {...patientForm}>
                     <form onSubmit={patientForm.handleSubmit(onPatientSubmit)} className="space-y-4">
+                      {/* Upload de foto de perfil para pacientes */}
+                      <div className="flex justify-center mb-6">
+                        <ProfilePhotoUploader
+                          currentImage={profileImage}
+                          userName={user?.fullName || 'Paciente'}
+                          userType="patient"
+                          size="md"
+                          onImageUpdate={(url) => {
+                            setProfileImage(url);
+                            // Invalidar cache para atualizar dados
+                            queryClient.invalidateQueries({ queryKey: ["/api/users/profile"] });
+                          }}
+                          className="w-fit"
+                        />
+                      </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <FormField
                           control={patientForm.control}
@@ -1345,6 +1312,23 @@ const Profile: React.FC = () => {
                 {user?.role === "partner" && partnerData && (
                   <Form {...partnerForm}>
                     <form onSubmit={partnerForm.handleSubmit(onPartnerSubmit)} className="space-y-4">
+                      {/* Upload de foto de perfil para parceiros */}
+                      <div className="flex justify-center mb-6">
+                        <ProfilePhotoUploader
+                          currentImage={profileImage}
+                          userName={partnerData?.businessName || user?.fullName || 'Parceiro'}
+                          userType="partner"
+                          size="md"
+                          onImageUpdate={(url) => {
+                            setProfileImage(url);
+                            // Invalidar cache para atualizar dados
+                            queryClient.invalidateQueries({ queryKey: ["/api/partners/me"] });
+                            queryClient.invalidateQueries({ queryKey: ["/api/users/profile"] });
+                          }}
+                          className="w-fit"
+                        />
+                      </div>
+                      
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <FormField
                           control={partnerForm.control}

@@ -782,6 +782,19 @@ export class DatabaseStorage implements IStorage {
     return appointment as Appointment || undefined;
   }
 
+  async getAppointmentsByDoctorIdAndDateRange(doctorId: number, startDate: Date, endDate: Date): Promise<Appointment[]> {
+    return this.db.select()
+      .from(appointments)
+      .where(
+        and(
+          eq(appointments.doctorId, doctorId),
+          gte(appointments.date, startDate),
+          lte(appointments.date, endDate)
+        )
+      )
+      .orderBy(desc(appointments.date));
+  }
+
   // Claim methods
   async getClaim(id: number): Promise<Claim | undefined> {
     const [claim] = await this.db.select().from(claims).where(eq(claims.id, id));

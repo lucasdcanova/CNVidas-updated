@@ -50,6 +50,7 @@ import PatientEmergencyRoom from "@/pages/patient-emergency-room";
 import DoctorDirectEmergency from "@/pages/doctor-direct-emergency";
 import DoctorWelcome from "@/pages/doctor/welcome";
 import DoctorFinanceiro from "@/pages/doctor/financeiro";
+import DoctorConsultationHistory from "@/pages/doctor/consultation-history";
 import PartnerDashboard from "@/pages/partner-dashboard";
 import PartnerVerification from "@/pages/partner-verification";
 import PartnerServices from "@/pages/partner-services";
@@ -150,6 +151,7 @@ function Router() {
       <ProtectedRoute path="/doctor" component={DoctorTelemedicine} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor/welcome" component={DoctorWelcome} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor/financeiro" component={DoctorFinanceiro} allowedRoles={["doctor"]} />
+      <ProtectedRoute path="/doctor/consultation-history" component={DoctorConsultationHistory} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor-telemedicine" component={DoctorTelemedicine} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor-availability" component={DoctorAvailability} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor-emergency" component={TelemedicineEmergencyV3} allowedRoles={["doctor", "patient"]} />

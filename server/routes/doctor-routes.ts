@@ -633,4 +633,149 @@ doctorRouter.post('/toggle-availability', requireAuth, requireDoctorRole, async 
   }
 });
 
+/**
+ * Obter histórico de consultas do médico
+ * GET /api/doctors/consultations/history
+ */
+doctorRouter.get('/consultations/history', requireAuth, requireDoctorRole, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    console.log('🔍 Doctor /consultations/history - Buscando histórico do médico ID:', req.user?.id);
+    
+    const { startDate, endDate } = req.query;
+    
+    if (!startDate || !endDate) {
+      return res.status(400).json({ error: 'Datas de início e fim são obrigatórias' });
+    }
+    
+    const doctor = await storage.getDoctorByUserId(req.user!.id);
+    if (!doctor) {
+      return res.status(404).json({ error: 'Perfil de médico não encontrado' });
+    }
+    
+    // Buscar consultas no período
+    const appointments = await storage.getAppointmentsByDoctorIdAndDateRange(
+      doctor.id,
+      new Date(startDate as string),
+      new Date(endDate as string)
+    );
+    
+    // Mapear para o formato esperado pelo frontend
+    const consultations = appointments.map(apt => ({
+      id: apt.id,
+      date: apt.date,
+      patientName: apt.patientName || 'Paciente',
+      patientAge: apt.patientAge,
+      patientEmail: apt.patientEmail,
+      patientPhone: apt.patientPhone,
+      type: apt.type,
+      status: apt.status,
+      duration: apt.duration || 30,
+      amount: apt.consultationFee || 0,
+      paymentStatus: apt.paymentStatus || 'pending',
+      notes: apt.notes,
+      diagnosis: apt.diagnosis,
+      prescription: apt.prescription,
+      isEmergency: apt.isEmergency || false,
+      recordUrl: apt.recordUrl
+    }));
+    
+    // Calcular estatísticas
+    const stats = {
+      totalConsultations: consultations.length,
+      totalEarnings: consultations.reduce((sum, c) => sum + c.amount, 0),
+      averageDuration: consultations.length > 0 
+        ? Math.round(consultations.reduce((sum, c) => sum + c.duration, 0) / consultations.length)
+        : 0,
+      completionRate: consultations.length > 0
+        ? Math.round((consultations.filter(c => c.status === 'completed').length / consultations.length) * 100)
+        : 0,
+      emergencyCount: consultations.filter(c => c.isEmergency).length,
+      telemedicineCount: consultations.filter(c => c.type === 'telemedicine').length
+    };
+    
+    console.log('✅ Doctor /consultations/history - Encontradas', consultations.length, 'consultas');
+    res.json({ consultations, stats });
+  } catch (error) {
+    console.error('❌ Erro ao obter histórico de consultas:', error);
+    if (error instanceof AppError) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  }
+});
+
+/**
+ * Exportar relatório de consultas
+ * GET /api/doctors/consultations/export
+ */
+doctorRouter.get('/consultations/export', requireAuth, requireDoctorRole, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    console.log('🔍 Doctor /consultations/export - Exportando relatório do médico ID:', req.user?.id);
+    
+    const { startDate, endDate, format = 'pdf' } = req.query;
+    
+    if (!startDate || !endDate) {
+      return res.status(400).json({ error: 'Datas de início e fim são obrigatórias' });
+    }
+    
+    const doctor = await storage.getDoctorByUserId(req.user!.id);
+    if (!doctor) {
+      return res.status(404).json({ error: 'Perfil de médico não encontrado' });
+    }
+    
+    // Por enquanto, retornar um erro indicando que a funcionalidade está em desenvolvimento
+    return res.status(501).json({ error: 'Exportação de relatórios em desenvolvimento' });
+    
+    // TODO: Implementar geração de PDF/Excel com as consultas
+  } catch (error) {
+    console.error('❌ Erro ao exportar relatório:', error);
+    if (error instanceof AppError) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  }
+});
+
+/**
+ * Salvar notas de uma consulta
+ * POST /api/appointments/:id/notes
+ */
+doctorRouter.post('/appointments/:id/notes', requireAuth, requireDoctorRole, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const appointmentId = parseInt(req.params.id);
+    const { notes } = req.body;
+    
+    console.log('🔍 Doctor /appointments/:id/notes - Salvando notas da consulta:', appointmentId);
+    
+    const doctor = await storage.getDoctorByUserId(req.user!.id);
+    if (!doctor) {
+      return res.status(404).json({ error: 'Perfil de médico não encontrado' });
+    }
+    
+    // Verificar se a consulta pertence ao médico
+    const appointment = await storage.getAppointmentById(appointmentId);
+    if (!appointment || appointment.doctorId !== doctor.id) {
+      return res.status(404).json({ error: 'Consulta não encontrada' });
+    }
+    
+    // Atualizar notas
+    await storage.updateAppointment(appointmentId, {
+      notes,
+      updatedAt: new Date()
+    });
+    
+    console.log('✅ Doctor /appointments/:id/notes - Notas salvas com sucesso');
+    res.json({ message: 'Notas salvas com sucesso' });
+  } catch (error) {
+    console.error('❌ Erro ao salvar notas:', error);
+    if (error instanceof AppError) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  }
+});
+
 export default doctorRouter; 
