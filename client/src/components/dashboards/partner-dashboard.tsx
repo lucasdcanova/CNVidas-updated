@@ -6,7 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import DataTable from "@/components/ui/data-table";
 import { useAuth } from "@/hooks/use-auth";
-import { List, DollarSign } from "lucide-react";
+import { List, DollarSign, MapPin } from "lucide-react";
+import { CardDescription } from "@/components/ui/card";
 import { Column, Action } from "@/components/ui/data-table";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -233,6 +234,22 @@ export const PartnerDashboard: React.FC = () => {
             </div>
           )}
         </CardContent>
+      </Card>
+
+      {/* Addresses */}
+      <Card>
+        <CardHeader className="flex items-center justify-between">
+          <div>
+            <CardTitle>Endereços</CardTitle>
+            <CardDescription>Gerencie seus endereços de atendimento</CardDescription>
+          </div>
+          <Link href="/partner/addresses">
+            <Button className="inline-flex items-center">
+              <MapPin className="mr-2 h-4 w-4" />
+              Gerenciar Endereços
+            </Button>
+          </Link>
+        </CardHeader>
       </Card>
 
       {/* Recent consultations */}

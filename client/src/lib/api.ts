@@ -395,3 +395,32 @@ export const getAllConsultations = async (partnerId: number): Promise<Consultati
   }
   return response.json();
 };
+
+// Partner Address API
+export const getPartnerAddresses = async () => {
+  const res = await apiRequest("GET", "/api/partners/addresses");
+  return await res.json();
+};
+
+export const createPartnerAddress = async (data: any) => {
+  const res = await apiRequest("POST", "/api/partners/addresses", data);
+  queryClient.invalidateQueries({ queryKey: ["/api/partners/addresses"] });
+  return await res.json();
+};
+
+export const updatePartnerAddress = async (id: number, data: any) => {
+  const res = await apiRequest("PUT", `/api/partners/addresses/${id}`, data);
+  queryClient.invalidateQueries({ queryKey: ["/api/partners/addresses"] });
+  return await res.json();
+};
+
+export const deletePartnerAddress = async (id: number) => {
+  await apiRequest("DELETE", `/api/partners/addresses/${id}`);
+  queryClient.invalidateQueries({ queryKey: ["/api/partners/addresses"] });
+};
+
+export const setPartnerAddressPrimary = async (id: number) => {
+  const res = await apiRequest("PUT", `/api/partners/addresses/${id}/set-primary`);
+  queryClient.invalidateQueries({ queryKey: ["/api/partners/addresses"] });
+  return await res.json();
+};

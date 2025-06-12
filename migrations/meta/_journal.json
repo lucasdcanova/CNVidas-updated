@@ -15,6 +15,13 @@
       "when": 1749761252877,
       "tag": "0001_right_network",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1749764075553,
+      "tag": "0002_melted_photon",
+      "breakpoints": true
     }
   ]
 }

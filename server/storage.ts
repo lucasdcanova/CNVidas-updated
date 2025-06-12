@@ -558,6 +558,76 @@ export class DatabaseStorage implements IStorage {
     return this.db.select().from(partners);
   }
 
+  // Partner Address methods
+  async getPartnerAddresses(partnerId: number): Promise<PartnerAddress[]> {
+    const addresses = await this.db.select()
+      .from(partnerAddresses)
+      .where(eq(partnerAddresses.partnerId, partnerId))
+      .orderBy(desc(partnerAddresses.isPrimary), asc(partnerAddresses.name));
+    return addresses as PartnerAddress[];
+  }
+
+  async getPartnerAddress(id: number): Promise<PartnerAddress | undefined> {
+    const [address] = await this.db.select()
+      .from(partnerAddresses)
+      .where(eq(partnerAddresses.id, id));
+    return address as PartnerAddress | undefined;
+  }
+
+  async createPartnerAddress(addressData: InsertPartnerAddress): Promise<PartnerAddress> {
+    // Se este for o primeiro endereço ou marcado como principal, garantir que seja o único principal
+    if (addressData.isPrimary) {
+      await this.db.update(partnerAddresses)
+        .set({ isPrimary: false })
+        .where(eq(partnerAddresses.partnerId, addressData.partnerId));
+    }
+    
+    const [address] = await this.db.insert(partnerAddresses)
+      .values(addressData)
+      .returning();
+    return address as PartnerAddress;
+  }
+
+  async updatePartnerAddress(id: number, data: Partial<InsertPartnerAddress>): Promise<PartnerAddress> {
+    // Se estiver atualizando para principal, garantir que seja o único
+    if (data.isPrimary) {
+      const [existingAddress] = await this.db.select()
+        .from(partnerAddresses)
+        .where(eq(partnerAddresses.id, id));
+      
+      if (existingAddress) {
+        await this.db.update(partnerAddresses)
+          .set({ isPrimary: false })
+          .where(and(
+            eq(partnerAddresses.partnerId, existingAddress.partnerId),
+            sql`${partnerAddresses.id} != ${id}`
+          ));
+      }
+    }
+    
+    const [address] = await this.db.update(partnerAddresses)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(partnerAddresses.id, id))
+      .returning();
+    return address as PartnerAddress;
+  }
+
+  async deletePartnerAddress(id: number): Promise<void> {
+    await this.db.delete(partnerAddresses).where(eq(partnerAddresses.id, id));
+  }
+
+  async setPartnerAddressPrimary(partnerId: number, addressId: number): Promise<void> {
+    // Primeiro, desmarcar todos como principal
+    await this.db.update(partnerAddresses)
+      .set({ isPrimary: false })
+      .where(eq(partnerAddresses.partnerId, partnerId));
+    
+    // Depois, marcar o específico como principal
+    await this.db.update(partnerAddresses)
+      .set({ isPrimary: true, updatedAt: new Date() })
+      .where(eq(partnerAddresses.id, addressId));
+  }
+
   // Doctor methods
   async getDoctor(id: number): Promise<Doctor | undefined> {
     const [doctor] = await this.db.select().from(doctors).where(eq(doctors.id, id));
@@ -1248,8 +1318,21 @@ export class DatabaseStorage implements IStorage {
       .leftJoin(users, eq(partners.userId, users.id))
       .where(eq(partnerServices.isActive, true));
     
+    // Buscar endereços para cada parceiro
+    const partnerIds = [...new Set(results.map(r => r.partner?.id).filter(Boolean))];
+    const addressesByPartner = new Map<number, PartnerAddress[]>();
+    
+    for (const partnerId of partnerIds) {
+      const addresses = await this.getPartnerAddresses(partnerId);
+      addressesByPartner.set(partnerId, addresses);
+    }
+    
     const services = results.map(result => {
       const serviceImage = result.service.serviceImage || null;
+      
+      // Buscar endereços do parceiro
+      const partnerAddresses = result.partner ? addressesByPartner.get(result.partner.id) || [] : [];
+      const primaryAddress = partnerAddresses.find(addr => addr.isPrimary) || partnerAddresses[0];
       
       return {
         ...result.service,
@@ -1259,7 +1342,8 @@ export class DatabaseStorage implements IStorage {
           profileImage: result.user?.profileImage || null,
           phone: result.partner.phone || null,
           name: result.partner.businessName || result.partner.tradingName || null,
-          city: result.partner.city || null
+          city: primaryAddress?.city || result.partner.city || null,
+          addresses: partnerAddresses
         } : null
       };
     }) as any[];
@@ -1276,20 +1360,45 @@ export class DatabaseStorage implements IStorage {
         return true;
       }
 
-      // Serviços locais: verificar distância
-      if (!service.partner?.city) {
+      // Serviços locais: verificar distância de qualquer endereço ativo
+      if (!service.partner?.addresses || service.partner.addresses.length === 0) {
+        // Se não tem endereços cadastrados, usar cidade do parceiro como fallback
+        if (!service.partner?.city) {
+          return false;
+        }
+        
+        const distance = getDistanceBetweenCities(userCity, service.partner.city);
+        if (distance !== null && distance <= maxDistance) {
+          service.distance = distance;
+          return true;
+        }
         return false;
       }
 
-      const distance = getDistanceBetweenCities(userCity, service.partner.city);
+      // Verificar se algum endereço ativo está dentro do raio
+      let minDistance: number | null = null;
       
-      // Se conseguir calcular a distância e ela for menor que o máximo, incluir
-      if (distance !== null && distance <= maxDistance) {
-        // Adicionar a distância ao serviço para uso no frontend
-        service.distance = distance;
-        return true;
+      for (const address of service.partner.addresses) {
+        // Considerar apenas endereços ativos
+        if (!address.isActive) continue;
+        
+        const distance = getDistanceBetweenCities(userCity, address.city);
+        
+        if (distance !== null) {
+          if (minDistance === null || distance < minDistance) {
+            minDistance = distance;
+          }
+          
+          // Se encontrou um endereço dentro do raio, incluir o serviço
+          if (distance <= maxDistance) {
+            service.distance = distance;
+            service.closestAddressCity = address.city;
+            service.closestAddressName = address.name;
+            return true;
+          }
+        }
       }
-
+      
       return false;
     });
   }

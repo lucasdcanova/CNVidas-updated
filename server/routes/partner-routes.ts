@@ -443,4 +443,191 @@ partnerRouter.delete('/remove-profile-image', requireAuth, requirePartner, async
   }
 });
 
+/**
+ * Rotas de gerenciamento de endereços do parceiro
+ */
+
+/**
+ * Obter todos os endereços do parceiro logado
+ * GET /api/partners/addresses
+ */
+partnerRouter.get('/addresses', requireAuth, requirePartner, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const partner = await storage.getPartnerByUserId(req.user!.id);
+    if (!partner) {
+      return res.status(404).json({ error: 'Perfil de parceiro não encontrado' });
+    }
+
+    const addresses = await storage.getPartnerAddresses(partner.id);
+    res.json(addresses);
+  } catch (error) {
+    console.error('Erro ao obter endereços:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+/**
+ * Criar novo endereço para o parceiro
+ * POST /api/partners/addresses
+ */
+partnerRouter.post('/addresses', requireAuth, requirePartner, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const partner = await storage.getPartnerByUserId(req.user!.id);
+    if (!partner) {
+      return res.status(404).json({ error: 'Perfil de parceiro não encontrado' });
+    }
+
+    const {
+      name,
+      cep,
+      address,
+      number,
+      complement,
+      neighborhood,
+      city,
+      state,
+      isPrimary,
+      phone,
+      email,
+      openingHours
+    } = req.body;
+
+    // Validação básica
+    if (!name || !cep || !address || !number || !neighborhood || !city || !state) {
+      return res.status(400).json({ error: 'Campos obrigatórios faltando' });
+    }
+
+    const addressData = {
+      partnerId: partner.id,
+      name,
+      cep,
+      address,
+      number,
+      complement,
+      neighborhood,
+      city,
+      state,
+      isPrimary: isPrimary || false,
+      isActive: true,
+      phone,
+      email,
+      openingHours
+    };
+
+    const newAddress = await storage.createPartnerAddress(addressData);
+    res.status(201).json(newAddress);
+  } catch (error) {
+    console.error('Erro ao criar endereço:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+/**
+ * Atualizar endereço do parceiro
+ * PUT /api/partners/addresses/:id
+ */
+partnerRouter.put('/addresses/:id', requireAuth, requirePartner, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const addressId = parseInt(req.params.id);
+    if (isNaN(addressId)) {
+      return res.status(400).json({ error: 'ID do endereço inválido' });
+    }
+
+    const partner = await storage.getPartnerByUserId(req.user!.id);
+    if (!partner) {
+      return res.status(404).json({ error: 'Perfil de parceiro não encontrado' });
+    }
+
+    // Verificar se o endereço pertence ao parceiro
+    const existingAddress = await storage.getPartnerAddress(addressId);
+    if (!existingAddress) {
+      return res.status(404).json({ error: 'Endereço não encontrado' });
+    }
+
+    if (existingAddress.partnerId !== partner.id) {
+      return res.status(403).json({ error: 'Você só pode editar seus próprios endereços' });
+    }
+
+    const updatedAddress = await storage.updatePartnerAddress(addressId, req.body);
+    res.json(updatedAddress);
+  } catch (error) {
+    console.error('Erro ao atualizar endereço:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+/**
+ * Excluir endereço do parceiro
+ * DELETE /api/partners/addresses/:id
+ */
+partnerRouter.delete('/addresses/:id', requireAuth, requirePartner, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const addressId = parseInt(req.params.id);
+    if (isNaN(addressId)) {
+      return res.status(400).json({ error: 'ID do endereço inválido' });
+    }
+
+    const partner = await storage.getPartnerByUserId(req.user!.id);
+    if (!partner) {
+      return res.status(404).json({ error: 'Perfil de parceiro não encontrado' });
+    }
+
+    // Verificar se o endereço pertence ao parceiro
+    const existingAddress = await storage.getPartnerAddress(addressId);
+    if (!existingAddress) {
+      return res.status(404).json({ error: 'Endereço não encontrado' });
+    }
+
+    if (existingAddress.partnerId !== partner.id) {
+      return res.status(403).json({ error: 'Você só pode excluir seus próprios endereços' });
+    }
+
+    // Não permitir excluir se for o único endereço
+    const allAddresses = await storage.getPartnerAddresses(partner.id);
+    if (allAddresses.length === 1) {
+      return res.status(400).json({ error: 'Você deve manter pelo menos um endereço cadastrado' });
+    }
+
+    await storage.deletePartnerAddress(addressId);
+    res.json({ message: 'Endereço excluído com sucesso' });
+  } catch (error) {
+    console.error('Erro ao excluir endereço:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+/**
+ * Definir endereço como principal
+ * PUT /api/partners/addresses/:id/set-primary
+ */
+partnerRouter.put('/addresses/:id/set-primary', requireAuth, requirePartner, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const addressId = parseInt(req.params.id);
+    if (isNaN(addressId)) {
+      return res.status(400).json({ error: 'ID do endereço inválido' });
+    }
+
+    const partner = await storage.getPartnerByUserId(req.user!.id);
+    if (!partner) {
+      return res.status(404).json({ error: 'Perfil de parceiro não encontrado' });
+    }
+
+    // Verificar se o endereço pertence ao parceiro
+    const existingAddress = await storage.getPartnerAddress(addressId);
+    if (!existingAddress) {
+      return res.status(404).json({ error: 'Endereço não encontrado' });
+    }
+
+    if (existingAddress.partnerId !== partner.id) {
+      return res.status(403).json({ error: 'Você só pode gerenciar seus próprios endereços' });
+    }
+
+    await storage.setPartnerAddressPrimary(partner.id, addressId);
+    res.json({ message: 'Endereço definido como principal' });
+  } catch (error) {
+    console.error('Erro ao definir endereço principal:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
 export default partnerRouter; 

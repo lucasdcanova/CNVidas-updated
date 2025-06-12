@@ -281,8 +281,14 @@ const Services: React.FC = () => {
                     ) : (
                       <>
                         <p className="text-xs text-gray-500">
-                          {service.partner && service.partner.neighborhood && service.partner.city ? 
-                            `${service.partner.neighborhood}, ${service.partner.city}` : ''}
+                          {service.closestAddressName ? (
+                            <>
+                              {service.closestAddressName} - {service.closestAddressCity}
+                            </>
+                          ) : (
+                            service.partner && service.partner.neighborhood && service.partner.city ? 
+                              `${service.partner.neighborhood}, ${service.partner.city}` : ''
+                          )}
                         </p>
                         {service.distance !== undefined && service.distance !== null && (
                           <p className="text-xs font-medium text-blue-600">
