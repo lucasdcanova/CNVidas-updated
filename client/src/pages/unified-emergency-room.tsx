@@ -90,6 +90,7 @@ export default function UnifiedEmergencyRoom() {
       if (!roomUrl) {
         // Criar sala se não existir
         console.log('Criando sala de emergência...');
+        // IMPORTANTE: Usar o ID da consulta, não do paciente!
         const roomName = `emergency-${appointmentId}`;
         
         const createResponse = await apiRequest('POST', '/api/telemedicine/daily/room', {
