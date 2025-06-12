@@ -165,24 +165,25 @@ export default function ProfilePhotoUploader({
     setUploadProgress(0);
     setUploadError(null);
 
-    try {
-      console.log(`Iniciando compressão da imagem. Tamanho original: ${(croppedImageBlob.size / 1024).toFixed(1)}KB`);
+    // Função auxiliar para fazer o upload com retry
+    const performUpload = async (blob: Blob, retryCount = 0): Promise<any> => {
+      console.log(`Tentativa de upload ${retryCount + 1}/3`);
       
       // Comprimir imagem se for maior que 500KB
-      let finalBlob = croppedImageBlob;
-      if (croppedImageBlob.size > 500 * 1024) {
+      let finalBlob = blob;
+      if (blob.size > 500 * 1024) {
         setUploadProgress(10);
         console.log('Comprimindo imagem...');
         
         try {
           // Tentar diferentes níveis de qualidade até conseguir um tamanho adequado
           let quality = 0.8;
-          let compressedBlob = await compressImage(new File([croppedImageBlob], 'image.jpg'), quality);
+          let compressedBlob = await compressImage(new File([blob], 'image.jpg'), quality);
           
           // Se ainda estiver muito grande, comprimir mais
           while (compressedBlob.size > 2 * 1024 * 1024 && quality > 0.3) {
             quality -= 0.1;
-            compressedBlob = await compressImage(new File([croppedImageBlob], 'image.jpg'), quality);
+            compressedBlob = await compressImage(new File([blob], 'image.jpg'), quality);
           }
           
           finalBlob = compressedBlob;
@@ -215,7 +216,7 @@ export default function ProfilePhotoUploader({
       // Usar XMLHttpRequest para ter controle sobre o progresso
       const authToken = localStorage.getItem('auth_token') || '';
       
-      const uploadPromise = new Promise<any>((resolve, reject) => {
+      return new Promise<any>((resolve, reject) => {
         const xhr = new XMLHttpRequest();
 
         xhr.upload.addEventListener('progress', (e) => {
@@ -251,17 +252,47 @@ export default function ProfilePhotoUploader({
         });
 
         xhr.addEventListener('timeout', () => {
-          reject(new Error('Timeout - servidor demorou para responder'));
+          reject(new Error('Timeout - O upload demorou mais que 60 segundos. Tente com uma imagem menor ou verifique sua conexão.'));
         });
 
         xhr.open('POST', endpoint);
         xhr.setRequestHeader('X-Auth-Token', authToken);
         xhr.setRequestHeader('Authorization', `Bearer ${authToken}`);
-        xhr.timeout = 30000; // 30 segundos
+        xhr.timeout = 60000; // 60 segundos para arquivos grandes
         xhr.send(formData);
       });
+    };
 
-      const result = await uploadPromise;
+    try {
+      // Tentar upload com retry em caso de timeout
+      let result;
+      let lastError;
+      
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          result = await performUpload(croppedImageBlob, attempt);
+          break; // Sucesso, sair do loop
+        } catch (error: any) {
+          lastError = error;
+          console.warn(`Tentativa ${attempt + 1} falhou:`, error.message);
+          
+          // Se for timeout e ainda há tentativas, tentar novamente
+          if (error.message.includes('Timeout') && attempt < 2) {
+            console.log('Tentando novamente em 2 segundos...');
+            setUploadProgress(0);
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            continue;
+          }
+          
+          // Se não for timeout ou já esgotou tentativas, lançar erro
+          throw error;
+        }
+      }
+      
+      if (!result) {
+        throw lastError || new Error('Falha em todas as tentativas de upload');
+      }
+      
       setUploadProgress(100);
       
       console.log('Resultado do upload:', result);

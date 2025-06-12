@@ -11,12 +11,7 @@ import { apiRequest } from '@/lib/queryClient';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useQuery } from '@tanstack/react-query';
-
-declare global {
-  interface Window {
-    DailyIframe: any;
-  }
-}
+import MinimalistVideoCall from '@/components/telemedicine/MinimalistVideoCall';
 
 interface CallState {
   roomUrl: string | null;
@@ -46,11 +41,10 @@ export default function PatientEmergencyRoom() {
   const { toast } = useToast();
   const [, navigate] = useLocation();
   
-  const callFrameRef = useRef<any>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
   const callTimerRef = useRef<NodeJS.Timeout | null>(null);
   const waitingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const statusCheckRef = useRef<NodeJS.Timeout | null>(null);
+  const [showVideoCall, setShowVideoCall] = useState(false);
   
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [showDoctorSelection, setShowDoctorSelection] = useState(true);
@@ -80,38 +74,9 @@ export default function PatientEmergencyRoom() {
     },
   });
 
-  // Carregar script do Daily.co
+  // Limpar timers ao desmontar
   useEffect(() => {
-    const loadDailyScript = () => {
-      if (window.DailyIframe) {
-        console.log('Daily.co já carregado');
-        return;
-      }
-
-      const script = document.createElement('script');
-      script.src = 'https://unpkg.com/@daily-co/daily-js';
-      script.async = true;
-      script.onload = () => {
-        console.log('✅ Daily.co script carregado');
-      };
-      script.onerror = () => {
-        console.error('❌ Erro ao carregar Daily.co');
-        setCallState(prev => ({ ...prev, error: 'Erro ao carregar sistema de vídeo' }));
-      };
-      document.head.appendChild(script);
-    };
-
-    loadDailyScript();
-
     return () => {
-      // Limpar recursos ao desmontar
-      if (callFrameRef.current) {
-        try {
-          callFrameRef.current.destroy();
-        } catch (error) {
-          console.error('Erro ao destruir call frame:', error);
-        }
-      }
       if (callTimerRef.current) clearInterval(callTimerRef.current);
       if (waitingTimerRef.current) clearInterval(waitingTimerRef.current);
       if (statusCheckRef.current) clearInterval(statusCheckRef.current);
@@ -227,81 +192,23 @@ export default function PatientEmergencyRoom() {
       const data = await response.json();
       console.log('Consulta criada:', data);
 
-      // Aguardar Daily.co carregar
-      if (!window.DailyIframe) {
-        throw new Error('Sistema de vídeo não está pronto');
-      }
-
-      // Criar call frame
-      const callFrame = window.DailyIframe.createFrame(containerRef.current, {
-        iframeStyle: {
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          border: 'none',
-          borderRadius: '8px',
-        },
-        showLeaveButton: false,
-        showFullscreenButton: true,
-        showLocalVideo: true,
-        showParticipantsBar: false,
-      });
-
-      callFrameRef.current = callFrame;
-
-      // Configurar eventos
-      callFrame
-        .on('joined-meeting', () => {
-          console.log('✅ Conectado à sala');
-          setCallState(prev => ({
-            ...prev,
-            isCallActive: true,
-            isConnecting: false,
-          }));
-          toast({
-            title: 'Conectado!',
-            description: 'Aguardando um médico entrar na sala...',
-          });
-        })
-        .on('participant-joined', (event: any) => {
-          console.log('Participante entrou:', event.participant);
-          if (event.participant.user_id !== user?.id.toString()) {
-            setCallState(prev => ({ ...prev, doctorJoined: true }));
-          }
-        })
-        .on('participant-left', (event: any) => {
-          console.log('Participante saiu:', event.participant);
-          if (event.participant.user_id !== user?.id.toString() && callState.doctorJoined) {
-            toast({
-              title: 'Médico desconectou',
-              description: 'O médico saiu da consulta',
-              variant: 'destructive',
-            });
-            endCall();
-          }
-        })
-        .on('error', (event: any) => {
-          console.error('Erro na chamada:', event);
-          setCallState(prev => ({
-            ...prev,
-            error: event.errorMsg || 'Erro na conexão',
-            isConnecting: false,
-          }));
-        });
-
-      // Entrar na sala
-      await callFrame.join({
-        url: data.roomUrl,
-        token: data.token,
-      });
-
       // Salvar informações da consulta
       setCallState(prev => ({
         ...prev,
         roomUrl: data.roomUrl,
         token: data.token,
         appointmentId: data.appointmentId,
+        isCallActive: true,
+        isConnecting: false,
       }));
+
+      // Mostrar componente de vídeo
+      setShowVideoCall(true);
+
+      toast({
+        title: 'Conectado!',
+        description: 'Aguardando um médico entrar na sala...',
+      });
 
     } catch (error: any) {
       console.error('Erro ao iniciar consulta:', error);
@@ -328,11 +235,8 @@ export default function PatientEmergencyRoom() {
         });
       }
 
-      // Destruir call frame
-      if (callFrameRef.current) {
-        callFrameRef.current.destroy();
-        callFrameRef.current = null;
-      }
+      // Esconder componente de vídeo
+      setShowVideoCall(false);
 
       // Limpar timers
       if (callTimerRef.current) clearInterval(callTimerRef.current);
@@ -367,19 +271,18 @@ export default function PatientEmergencyRoom() {
     }
   };
 
-  // Controles de áudio/vídeo
-  const toggleAudio = () => {
-    if (callFrameRef.current) {
-      callFrameRef.current.setLocalAudio(!callState.isAudioMuted);
-      setCallState(prev => ({ ...prev, isAudioMuted: !prev.isAudioMuted }));
-    }
+  // Callbacks para o componente de vídeo
+  const handleJoinCall = () => {
+    console.log('Paciente entrou na sala');
+    toast({
+      title: 'Conectado!',
+      description: 'Aguardando um médico entrar na sala...',
+    });
   };
 
-  const toggleVideo = () => {
-    if (callFrameRef.current) {
-      callFrameRef.current.setLocalVideo(!callState.isVideoMuted);
-      setCallState(prev => ({ ...prev, isVideoMuted: !prev.isVideoMuted }));
-    }
+  const handleLeaveCall = () => {
+    console.log('Paciente saiu da sala');
+    endCall();
   };
 
   // Formatar duração
@@ -581,34 +484,21 @@ export default function PatientEmergencyRoom() {
                 </Alert>
               )}
 
-              <div className="relative aspect-video bg-gray-900 rounded-lg overflow-hidden" ref={containerRef}>
-                {/* O Daily.co iframe será inserido aqui */}
-              </div>
-
-              <div className="flex justify-center gap-2">
-                <Button
-                  variant={callState.isAudioMuted ? "destructive" : "secondary"}
-                  size="icon"
-                  onClick={toggleAudio}
-                >
-                  {callState.isAudioMuted ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-                </Button>
-                
-                <Button
-                  variant={callState.isVideoMuted ? "destructive" : "secondary"}
-                  size="icon"
-                  onClick={toggleVideo}
-                >
-                  {callState.isVideoMuted ? <VideoOffIcon className="h-4 w-4" /> : <VideoIcon className="h-4 w-4" />}
-                </Button>
-                
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  onClick={endCall}
-                >
-                  <PhoneOff className="h-4 w-4" />
-                </Button>
+              <div className="relative aspect-video bg-gray-900 rounded-lg overflow-hidden">
+                {showVideoCall && callState.roomUrl && callState.token ? (
+                  <MinimalistVideoCall
+                    roomUrl={callState.roomUrl}
+                    token={callState.token}
+                    onJoinCall={handleJoinCall}
+                    onLeaveCall={handleLeaveCall}
+                    userName={user?.fullName || user?.username || 'Paciente'}
+                    isDoctor={false}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full">
+                    <Loader2 className="h-8 w-8 animate-spin text-white" />
+                  </div>
+                )}
               </div>
             </div>
           )}

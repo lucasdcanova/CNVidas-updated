@@ -21,8 +21,21 @@ import jwt from "jsonwebtoken";
 
   // Configurações básicas
   app.use(express.json({ limit: '50mb' }));
-  app.use(express.urlencoded({ extended: true }));
+  app.use(express.urlencoded({ extended: true, limit: '50mb' }));
   app.use(cookieParser());
+
+  // Configurar timeout para uploads
+  app.use('/api/*/profile-image', (req, res, next) => {
+    req.setTimeout(120000); // 2 minutos para uploads
+    res.setTimeout(120000);
+    next();
+  });
+
+  app.use('/api/profile/upload-image', (req, res, next) => {
+    req.setTimeout(120000); // 2 minutos para uploads
+    res.setTimeout(120000);
+    next();
+  });
 
 
   // Middleware global para processamento de tokens JWT

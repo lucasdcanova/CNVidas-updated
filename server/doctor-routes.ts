@@ -108,23 +108,43 @@ doctorRouter.get('/profile', isDoctor, async (req: AuthenticatedRequest, res: Re
 
 // Rota para upload de imagem de perfil do médico
 doctorRouter.post('/profile-image', isDoctor, upload.single('profileImage'), async (req: AuthenticatedRequest, res: Response) => {
+  console.log('=== UPLOAD PROFILE IMAGE (DOCTOR) ===');
+  console.log('User ID:', req.user?.id);
+  console.log('File received:', req.file ? {
+    filename: req.file.filename,
+    originalname: req.file.originalname,
+    mimetype: req.file.mimetype,
+    size: `${(req.file.size / 1024 / 1024).toFixed(2)}MB`
+  } : 'No file');
+
   if (!req.user) {
-    return res.status(401).json({ message: "Não autorizado" });
+    console.error('Erro: Usuário não autenticado');
+    return res.status(401).json({ 
+      success: false,
+      message: "Não autorizado",
+      details: "Token de autenticação inválido ou expirado"
+    });
   }
 
   try {
     if (!req.file) {
-      return res.status(400).json({ message: "Nenhuma imagem enviada" });
+      console.error('Erro: Nenhum arquivo foi enviado');
+      return res.status(400).json({ 
+        success: false,
+        message: "Nenhuma imagem enviada",
+        details: "O campo profileImage é obrigatório"
+      });
     }
 
-    const imageUrl = `/uploads/${req.file.filename}`;
+    const imageUrl = `/uploads/profiles/${req.file.filename}`;
+    console.log('Image URL gerada:', imageUrl);
     
     // Buscar imagem atual para remover depois
     const [currentDoctor] = await db.select().from(doctors).where(eq(doctors.userId, req.user.id));
     const oldImage = currentDoctor?.profileImage;
     
     // Atualizar imagem no perfil do usuário
-    await db
+    const userUpdateResult = await db
       .update(users)
       .set({ 
         profileImage: imageUrl,
@@ -132,19 +152,23 @@ doctorRouter.post('/profile-image', isDoctor, upload.single('profileImage'), asy
       })
       .where(eq(users.id, req.user.id));
 
+    console.log('User update result:', userUpdateResult);
+
     // Atualizar imagem no perfil do médico
     if (currentDoctor) {
-      await db
+      const doctorUpdateResult = await db
         .update(doctors)
         .set({ 
           profileImage: imageUrl,
           updatedAt: new Date()
         })
         .where(eq(doctors.id, currentDoctor.id));
+      
+      console.log('Doctor update result:', doctorUpdateResult);
     }
 
     // Remover imagem antiga se existir
-    if (oldImage && oldImage.startsWith('/uploads/')) {
+    if (oldImage && oldImage !== imageUrl && oldImage.startsWith('/uploads/')) {
       const oldPath = path.join(process.cwd(), 'public', oldImage);
       if (fs.existsSync(oldPath)) {
         try {
@@ -156,15 +180,36 @@ doctorRouter.post('/profile-image', isDoctor, upload.single('profileImage'), asy
       }
     }
 
+    console.log('Upload de médico concluído com sucesso');
     return res.json({ 
       success: true, 
       imageUrl: imageUrl,
       profileImage: imageUrl,
       message: "Imagem de perfil atualizada com sucesso" 
     });
-  } catch (error) {
-    console.error("Erro ao fazer upload de imagem:", error);
-    return res.status(500).json({ message: "Erro ao processar upload de imagem" });
+  } catch (error: any) {
+    console.error('Erro detalhado no upload de médico:', {
+      message: error.message,
+      stack: error.stack,
+      userId: req.user?.id,
+      file: req.file?.filename
+    });
+    
+    // Remover arquivo se houve erro
+    if (req.file) {
+      const filePath = req.file.path;
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        console.log('Arquivo removido após erro:', filePath);
+      }
+    }
+
+    return res.status(500).json({ 
+      success: false,
+      message: error.message || "Erro ao processar upload de imagem",
+      details: "Erro durante o processamento do upload",
+      error: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 
