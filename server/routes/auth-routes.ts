@@ -9,6 +9,7 @@ import { eq } from 'drizzle-orm';
 import { hash, compare } from 'bcrypt';
 import { scrypt, timingSafeEqual } from 'crypto';
 import { promisify } from 'util';
+import { NotificationService } from '../utils/notification-service';
 
 const scryptAsync = promisify(scrypt);
 import jwt from 'jsonwebtoken';
@@ -189,6 +190,9 @@ authRouter.post('/register', async (req: Request, res: Response) => {
     await db.insert(legalAcceptances).values(acceptances);
     
     console.log(`Salvas ${acceptances.length} aceitações de documentos legais para usuário ${newUser.id}`);
+
+    // Criar notificação de boas-vindas
+    await NotificationService.createWelcomeNotification(newUser.id, newUser.fullName);
 
     // Fazer login automático após registro bem-sucedido
     const jwtSecret = process.env.JWT_SECRET || 'cnvidas-secret-key-2024';

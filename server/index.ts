@@ -207,6 +207,17 @@ import jwt from "jsonwebtoken";
   // Middleware para garantir respostas JSON
   app.use(ensureJsonResponse);
 
+  // Servir arquivos estáticos do diretório public (incluindo uploads)
+  console.log('🖼️ Configurando diretório de arquivos estáticos...');
+  const publicPath = path.join(process.cwd(), 'public');
+  app.use(express.static(publicPath, {
+    maxAge: '1d', // Cache de 1 dia para imagens
+    etag: true,
+    lastModified: true,
+    index: false // Não servir index.html automaticamente
+  }));
+  console.log(`✅ Arquivos estáticos servidos de: ${publicPath}`);
+
   // Configurar todas as rotas
   await setupRoutes(app);
 

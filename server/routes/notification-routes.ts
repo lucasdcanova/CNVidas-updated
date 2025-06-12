@@ -133,4 +133,143 @@ notificationRouter.put("/read-all", requireAuth, async (req: AuthenticatedReques
   }
 });
 
+/**
+ * Buscar atividades recentes do usuário
+ * GET /api/notifications/recent-activities
+ */
+notificationRouter.get("/recent-activities", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    console.log('🔍 Activities - Buscando atividades recentes do usuário ID:', req.user?.id);
+    
+    const userId = req.user!.id;
+    const limit = parseInt(req.query.limit as string) || 10;
+    
+    // Buscar atividades de múltiplas fontes
+    const activities: any[] = [];
+    
+    // 1. Consultas agendadas/realizadas
+    try {
+      const appointments = await storage.getUserAppointments(userId);
+      appointments.slice(0, 5).forEach(appointment => {
+        activities.push({
+          id: `appointment-${appointment.id}`,
+          type: 'appointment',
+          title: appointment.status === 'completed' ? 'Consulta Realizada' : 
+                 appointment.status === 'scheduled' ? 'Consulta Agendada' :
+                 appointment.isEmergency ? 'Consulta de Emergência' : 'Consulta',
+          description: appointment.isEmergency ? 
+            'Consulta de emergência realizada com sucesso' :
+            `Consulta ${appointment.status === 'completed' ? 'concluída' : 'agendada'} - ${appointment.specialization || 'Clínico Geral'}`,
+          date: new Date(appointment.createdAt),
+          icon: appointment.isEmergency ? 'emergency' : 'videocam',
+          status: appointment.status,
+          link: '/appointments'
+        });
+      });
+    } catch (error) {
+      console.log('Erro ao buscar consultas:', error);
+    }
+    
+    // 2. Sinistros submetidos/atualizados
+    try {
+      const claims = await storage.getUserClaims(userId);
+      claims.slice(0, 5).forEach(claim => {
+        activities.push({
+          id: `claim-${claim.id}`,
+          type: 'claim',
+          title: claim.status === 'em análise' ? 'Sinistro em Análise' :
+                 claim.status === 'aprovado' ? 'Sinistro Aprovado' :
+                 claim.status === 'rejeitado' ? 'Sinistro Rejeitado' : 'Sinistro Enviado',
+          description: `${claim.type || 'Sinistro'} - ${claim.description ? claim.description.substring(0, 100) + '...' : 'Aguardando análise'}`,
+          date: new Date(claim.createdAt),
+          icon: 'description',
+          status: claim.status,
+          link: '/claims'
+        });
+      });
+    } catch (error) {
+      console.log('Erro ao buscar sinistros:', error);
+    }
+    
+    // 3. Atualizações de plano (verificar histórico na tabela users)
+    try {
+      const user = await storage.getUser(userId);
+      if (user?.subscriptionPlan && user.subscriptionPlan !== 'free') {
+        activities.push({
+          id: `subscription-${userId}`,
+          type: 'subscription',
+          title: 'Plano Ativado',
+          description: `Plano ${user.subscriptionPlan.charAt(0).toUpperCase() + user.subscriptionPlan.slice(1)} ativado com sucesso`,
+          date: new Date(user.updatedAt || user.createdAt),
+          icon: 'verified_user',
+          status: user.subscriptionStatus || 'active',
+          link: '/subscription'
+        });
+      }
+    } catch (error) {
+      console.log('Erro ao buscar dados de plano:', error);
+    }
+    
+    // 4. Notificações do sistema
+    try {
+      const notifications = await storage.getNotifications(userId);
+      notifications.slice(0, 3).forEach(notification => {
+        activities.push({
+          id: `notification-${notification.id}`,
+          type: notification.type,
+          title: notification.title,
+          description: notification.message,
+          date: new Date(notification.createdAt),
+          icon: notification.type === 'appointment' ? 'videocam' :
+                notification.type === 'claim' ? 'description' :
+                notification.type === 'subscription' ? 'verified_user' :
+                notification.type === 'payment' ? 'payment' :
+                notification.type === 'system' ? 'info' : 'notifications',
+          status: 'active',
+          link: notification.link || '/'
+        });
+      });
+    } catch (error) {
+      console.log('Erro ao buscar notificações:', error);
+    }
+    
+    // 5. Adicionar atividades de welcome para novos usuários
+    try {
+      const user = await storage.getUser(userId);
+      const userCreatedRecently = user && new Date(user.createdAt).getTime() > (Date.now() - 7 * 24 * 60 * 60 * 1000); // 7 dias
+      
+      if (userCreatedRecently) {
+        activities.push({
+          id: `welcome-${userId}`,
+          type: 'system',
+          title: 'Bem-vindo à CN Vidas!',
+          description: 'Sua conta foi criada com sucesso. Explore nossos serviços de saúde digital.',
+          date: new Date(user.createdAt),
+          icon: 'celebration',
+          status: 'active',
+          link: '/dashboard'
+        });
+      }
+    } catch (error) {
+      console.log('Erro ao verificar usuário:', error);
+    }
+    
+    // Ordenar por data (mais recente primeiro) e aplicar limite
+    const sortedActivities = activities
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, limit);
+    
+    console.log('✅ Activities - Atividades encontradas:', sortedActivities.length);
+    res.json(sortedActivities);
+    
+  } catch (error) {
+    console.error("❌ Erro ao buscar atividades recentes:", error);
+    if (error instanceof AppError) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: "Erro ao buscar atividades recentes" });
+    }
+  }
+});
+
 export default notificationRouter; 

@@ -255,6 +255,12 @@ export const markAllNotificationsAsRead = async () => {
   return await res.json();
 };
 
+export const getRecentActivities = async (limit?: number) => {
+  const params = limit ? `?limit=${limit}` : '';
+  const res = await apiRequest("GET", `/api/notifications/recent-activities${params}`);
+  return await res.json();
+};
+
 // Telemedicine API
 export const integrateTelemedAppointment = async (appointmentId: number, provider: string) => {
   const res = await apiRequest("POST", "/api/telemedicine/integrate", { appointmentId, provider });

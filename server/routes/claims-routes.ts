@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import multer from 'multer';
 import { storage } from '../storage';
 import { AuthenticatedRequest, requireAuth } from '../middleware/auth';
+import { NotificationService } from '../utils/notification-service';
 
 const claimsRouter = Router();
 
@@ -106,6 +107,9 @@ claimsRouter.post('/', upload.array('documents'), requireAuth, async (req: Authe
     }
     
     const newClaim = await storage.createClaim(claimData, documents);
+    
+    // Criar notificação de sinistro submetido
+    await NotificationService.createClaimSubmittedNotification(userId, newClaim.id);
     
     console.log(`✅ Claim criado com sucesso: ${newClaim.id}`);
     

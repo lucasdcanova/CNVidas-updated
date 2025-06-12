@@ -192,7 +192,7 @@ const PartnerServicesPage: React.FC = () => {
   const updateServiceMutation = useMutation<PartnerService, Error, ServiceMutationVariables>({
     mutationFn: async ({ id, data }) => {
       console.log(`Updating service with ID: ${id}, data:`, data);
-      const res = await apiRequest("PATCH", `/api/partners/services/${id}`, data);
+      const res = await apiRequest("PUT", `/api/partners/services/${id}`, data);
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
         throw new Error(errorData.message || `Error updating service: ${res.status}`);
