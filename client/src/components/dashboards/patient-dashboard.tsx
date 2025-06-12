@@ -378,21 +378,20 @@ export const PatientDashboard: React.FC = () => {
                   </div>
                 </li>
               )}
-              </ul>
-              {recentActivities.length > 2 && (
-                <div className="p-4 text-center border-t border-gray-100/30">
-                  <Button 
-                    variant="ghost" 
-                    className="text-primary hover:text-primary/80 hover:bg-primary/10"
-                    onClick={() => setShowAllActivities(!showAllActivities)}
-                  >
-                    {showAllActivities ? "Mostrar menos" : "Expandir"}
-                    <span className="material-icons ml-1 text-sm">
-                      {showAllActivities ? "expand_less" : "expand_more"}
-                    </span>
-                  </Button>
-                </div>
-              )}
+            </ul>
+            {recentActivities.length > 2 && (
+              <div className="p-4 text-center border-t border-gray-100/30">
+                <Button 
+                  variant="ghost" 
+                  className="text-primary hover:text-primary/80 hover:bg-primary/10"
+                  onClick={() => setShowAllActivities(!showAllActivities)}
+                >
+                  {showAllActivities ? "Mostrar menos" : "Expandir"}
+                  <span className="material-icons ml-1 text-sm">
+                    {showAllActivities ? "expand_less" : "expand_more"}
+                  </span>
+                </Button>
+              </div>
             )}
           </CardContent>
         </Card>
