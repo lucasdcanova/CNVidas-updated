@@ -207,6 +207,9 @@ export default function ProfilePhotoUploader({
         endpoint = '/api/partners/profile-image';
       }
 
+      // Obter token de autenticação
+      const authToken = localStorage.getItem('auth_token') || '';
+
       console.log('=== INICIANDO UPLOAD ===');
       console.log('Endpoint:', endpoint);
       console.log('Tipo de usuário:', userType);
@@ -218,7 +221,6 @@ export default function ProfilePhotoUploader({
 
       // Usar XMLHttpRequest para ter controle sobre o progresso
       return new Promise<any>((resolve, reject) => {
-        const authToken = localStorage.getItem('auth_token') || '';
         const xhr = new XMLHttpRequest();
 
         xhr.upload.addEventListener('progress', (e) => {

@@ -19932,3 +19932,48 @@ Encontrados 0 claims
 ✅ requireAuth - Usuário autenticado: 58 (patient)
 🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
 🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /unread-count
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+✅ Notifications /unread-count - Contagem: 1
+Encontradas 0 consultas próximas
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /profile
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para PUT /profile
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔄 Atualizando perfil do usuário 58 com campos: [
+  'phone',
+  'birthDate',
+  'city',
+  'state',
+  'zipcode',
+  'number',
+  'complement',
+  'neighborhood'
+]
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /profile
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /profile
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
