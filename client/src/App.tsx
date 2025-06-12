@@ -57,6 +57,7 @@ import PartnerServices from "@/pages/partner-services";
 import QRCodePage from "@/pages/qr-code";
 import PatientSettings from "@/pages/patient/settings";
 import DependentsPage from "@/pages/dependents-page-responsive";
+import RecentActivitiesPage from "@/pages/recent-activities";
 import VerificarEmail from "@/pages/verificar-email";
 import RedefinirSenha from "@/pages/redefinir-senha";
 import ReenviarVerificacao from "@/pages/reenviar-verificacao";
@@ -138,6 +139,7 @@ function Router() {
       <ProtectedRoute path="/address" component={Address} />
       <ProtectedRoute path="/settings" component={PatientSettings} allowedRoles={["patient"]} />
       <ProtectedRoute path="/dependents" component={DependentsPage} allowedRoles={["patient"]} />
+      <ProtectedRoute path="/recent-activities" component={RecentActivitiesPage} allowedRoles={["patient"]} />
       <ProtectedRoute path="/qr-code" component={QRCodePage} allowedRoles={["patient", "partner"]} />
       <ProtectedRoute path="/help" component={HelpPage} />
       <ProtectedRoute path="/checkout" component={Checkout} />

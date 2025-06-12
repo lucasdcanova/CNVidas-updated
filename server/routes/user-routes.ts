@@ -4,6 +4,7 @@ import { requireAuth, AuthenticatedRequest } from '../middleware/auth';
 import { AppError } from '../utils/app-error.js';
 import { sendEmail } from '../utils/email';
 import { compare, hash } from 'bcrypt';
+import { NotificationService } from '../utils/notification-service';
 
 const userRouter = express.Router();
 
@@ -192,6 +193,13 @@ userRouter.post('/verify-qr', async (req: Request, res: Response) => {
       console.error('Erro ao registrar log de autenticação QR:', logError);
       // Continue mesmo se o log falhar
     }
+
+    // Criar notificação de QR Code escaneado
+    await NotificationService.createQrCodeScanNotification(
+      user.id,
+      'Parceiro CN Vidas', // Nome genérico, pode ser melhorado com dados do scanner
+      req.ip || 'Local desconhecido'
+    );
 
     res.json({
       user: {

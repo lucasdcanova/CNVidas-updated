@@ -195,4 +195,110 @@ export class NotificationService {
       console.error('❌ Erro ao criar notificação de sistema:', error);
     }
   }
+
+  /**
+   * Criar notificação de QR Code escaneado
+   */
+  static async createQrCodeScanNotification(userId: number, partnerName: string, scanLocation?: string) {
+    try {
+      const notification: InsertNotification = {
+        userId,
+        type: 'qr_scan',
+        title: 'QR Code Verificado',
+        message: `Seu QR Code foi escaneado por ${partnerName}${scanLocation ? ` em ${scanLocation}` : ''}. Sua identidade foi verificada com sucesso.`,
+        read: false,
+        data: { partnerName, scanLocation, scanTime: new Date().toISOString() }
+      };
+      
+      await storage.createNotification(notification);
+      console.log('✅ Notificação de QR Code criada para usuário:', userId);
+    } catch (error) {
+      console.error('❌ Erro ao criar notificação de QR Code:', error);
+    }
+  }
+
+  /**
+   * Criar notificação de checkout iniciado
+   */
+  static async createCheckoutStartedNotification(userId: number, productName: string, amount: number) {
+    try {
+      const notification: InsertNotification = {
+        userId,
+        type: 'checkout',
+        title: 'Checkout Iniciado',
+        message: `Você iniciou o processo de compra de "${productName}" no valor de R$ ${(amount / 100).toFixed(2).replace('.', ',')}.`,
+        read: false,
+        data: { productName, amount, checkoutTime: new Date().toISOString() }
+      };
+      
+      await storage.createNotification(notification);
+      console.log('✅ Notificação de checkout criada para usuário:', userId);
+    } catch (error) {
+      console.error('❌ Erro ao criar notificação de checkout:', error);
+    }
+  }
+
+  /**
+   * Criar notificação de checkout concluído
+   */
+  static async createCheckoutCompletedNotification(userId: number, productName: string, amount: number, paymentMethod: string) {
+    try {
+      const notification: InsertNotification = {
+        userId,
+        type: 'checkout',
+        title: 'Compra Realizada',
+        message: `Sua compra de "${productName}" foi concluída com sucesso! Pagamento de R$ ${(amount / 100).toFixed(2).replace('.', ',')} processado via ${paymentMethod}.`,
+        read: false,
+        data: { productName, amount, paymentMethod, completedTime: new Date().toISOString() }
+      };
+      
+      await storage.createNotification(notification);
+      console.log('✅ Notificação de checkout concluído criada para usuário:', userId);
+    } catch (error) {
+      console.error('❌ Erro ao criar notificação de checkout concluído:', error);
+    }
+  }
+
+  /**
+   * Criar notificação de dependente adicionado
+   */
+  static async createDependentAddedNotification(userId: number, dependentName: string) {
+    try {
+      const notification: InsertNotification = {
+        userId,
+        type: 'dependent',
+        title: 'Dependente Adicionado',
+        message: `${dependentName} foi adicionado(a) como dependente em seu plano familiar. Agora tem acesso aos benefícios da CN Vidas.`,
+        read: false,
+        data: { dependentName, addedTime: new Date().toISOString() }
+      };
+      
+      await storage.createNotification(notification);
+      console.log('✅ Notificação de dependente criada para usuário:', userId);
+    } catch (error) {
+      console.error('❌ Erro ao criar notificação de dependente:', error);
+    }
+  }
+
+  /**
+   * Criar notificação de perfil atualizado
+   */
+  static async createProfileUpdatedNotification(userId: number, updatedFields: string[]) {
+    try {
+      const fieldsText = updatedFields.join(', ');
+      const notification: InsertNotification = {
+        userId,
+        type: 'profile',
+        title: 'Perfil Atualizado',
+        message: `Seu perfil foi atualizado com sucesso. Campos alterados: ${fieldsText}.`,
+        read: false,
+        data: { updatedFields, updateTime: new Date().toISOString() }
+      };
+      
+      await storage.createNotification(notification);
+      console.log('✅ Notificação de perfil atualizado criada para usuário:', userId);
+    } catch (error) {
+      console.error('❌ Erro ao criar notificação de perfil:', error);
+    }
+  }
 } 

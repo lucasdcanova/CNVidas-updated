@@ -2,6 +2,7 @@ import 'dotenv/config'; // Garantir que as variáveis de ambiente sejam carregad
 import express, { type Request, Response, NextFunction } from "express";
 import { createServer } from 'http';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import setupRoutes from './routes/index';
 import { setupVite, serveStatic, log } from "./vite";
 import { setupSubscriptionPlans } from "./migrations/plans-setup";
@@ -18,6 +19,20 @@ import jwt from "jsonwebtoken";
 (async () => {
   const app = express();
   const server = createServer(app);
+
+  // Configuração de CORS
+  const corsOptions = {
+    origin: process.env.NODE_ENV === 'production' 
+      ? ['https://cnvidas.com', 'https://www.cnvidas.com']
+      : ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Auth-Token', 'X-Session-ID'],
+    exposedHeaders: ['Content-Range', 'X-Content-Range'],
+    maxAge: 86400 // 24 horas
+  };
+  
+  app.use(cors(corsOptions));
 
   // Configurações básicas
   app.use(express.json({ limit: '50mb' }));

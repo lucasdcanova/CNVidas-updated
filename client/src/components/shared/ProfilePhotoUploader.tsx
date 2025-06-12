@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { ImageCropper } from './ImageCropper';
-import { apiRequest } from '@/lib/queryClient';
+import { apiRequest, queryClient } from '@/lib/queryClient';
 
 interface ProfilePhotoUploaderProps {
   currentImage?: string | null;
@@ -202,9 +202,9 @@ export default function ProfilePhotoUploader({
       // Escolher endpoint baseado no tipo de usuário
       let endpoint = '/api/profile/upload-image';
       if (userType === 'doctor') {
-        endpoint = '/api/doctors/profile-image';
+        endpoint = '/api/profile/doctors/profile-image';
       } else if (userType === 'partner') {
-        endpoint = '/api/partners/profile-image';
+        endpoint = '/api/profile/partners/profile-image';
       }
 
       // Obter token de autenticação
@@ -321,6 +321,23 @@ export default function ProfilePhotoUploader({
         setPreviewImage(imageUrl);
         onImageUpdate?.(imageUrl);
 
+        // Invalidar todas as queries relacionadas ao usuário para forçar atualização
+        queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
+        queryClient.invalidateQueries({ queryKey: ['/api/users/profile'] });
+        queryClient.invalidateQueries({ queryKey: ['/api/user'] });
+        
+        // Para médicos
+        if (userType === 'doctor') {
+          queryClient.invalidateQueries({ queryKey: ['/api/doctors/profile'] });
+          queryClient.invalidateQueries({ queryKey: ['/api/doctors/user'] });
+        }
+        
+        // Para parceiros
+        if (userType === 'partner') {
+          queryClient.invalidateQueries({ queryKey: ['/api/partners/me'] });
+          queryClient.invalidateQueries({ queryKey: ['/api/partners/profile'] });
+        }
+
         // Mostrar sucesso
         setUploadSuccess(true);
         setTimeout(() => {
@@ -340,8 +357,8 @@ export default function ProfilePhotoUploader({
         message: error.message,
         stack: error.stack,
         userType,
-        endpoint: userType === 'doctor' ? '/api/doctors/profile-image' : 
-                 userType === 'partner' ? '/api/partners/profile-image' : 
+        endpoint: userType === 'doctor' ? '/api/profile/doctors/profile-image' : 
+                 userType === 'partner' ? '/api/profile/partners/profile-image' : 
                  '/api/profile/upload-image'
       });
       
@@ -369,9 +386,9 @@ export default function ProfilePhotoUploader({
 
       let endpoint = '/api/profile/remove-image';
       if (userType === 'doctor') {
-        endpoint = '/api/doctors/remove-profile-image';
+        endpoint = '/api/profile/doctors/remove-profile-image';
       } else if (userType === 'partner') {
-        endpoint = '/api/partners/remove-profile-image';
+        endpoint = '/api/profile/partners/remove-profile-image';
       }
 
       const response = await apiRequest('DELETE', endpoint);

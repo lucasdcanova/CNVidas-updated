@@ -210,7 +210,38 @@ notificationRouter.get("/recent-activities", requireAuth, async (req: Authentica
       console.log('Erro ao buscar dados de plano:', error);
     }
     
-    // 4. Notificações do sistema
+    // 4. Leituras de QR Code (buscar logs de autenticação)
+    try {
+      const qrLogs = await storage.getQrAuthLogs(5, 0);
+      qrLogs.filter(log => log.tokenUserName && log.tokenUserName.includes(user?.fullName || '')).forEach(log => {
+        activities.push({
+          id: `qr-scan-${log.id}`,
+          type: 'qr_scan',
+          title: 'QR Code Verificado',
+          description: `Seu QR Code foi escaneado por ${log.scannerName || 'Parceiro'} para verificação de identidade`,
+          date: new Date(log.createdAt),
+          icon: 'qr_code_scanner',
+          status: 'verified',
+          link: '/qr-code'
+        });
+      });
+    } catch (error) {
+      console.log('Erro ao buscar logs de QR Code:', error);
+    }
+
+    // 5. Dependentes adicionados
+    try {
+      // Buscar dependentes recentes (últimos 30 dias)
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      
+      // Aqui você pode implementar uma query para buscar dependentes recentes
+      // Por enquanto, vamos simular baseado na data de criação do usuário
+    } catch (error) {
+      console.log('Erro ao buscar dependentes:', error);
+    }
+
+    // 6. Notificações do sistema
     try {
       const notifications = await storage.getNotifications(userId);
       notifications.slice(0, 3).forEach(notification => {
@@ -224,6 +255,10 @@ notificationRouter.get("/recent-activities", requireAuth, async (req: Authentica
                 notification.type === 'claim' ? 'description' :
                 notification.type === 'subscription' ? 'verified_user' :
                 notification.type === 'payment' ? 'payment' :
+                notification.type === 'qr_scan' ? 'qr_code_scanner' :
+                notification.type === 'checkout' ? 'shopping_cart' :
+                notification.type === 'dependent' ? 'family_restroom' :
+                notification.type === 'profile' ? 'person' :
                 notification.type === 'system' ? 'info' : 'notifications',
           status: 'active',
           link: notification.link || '/'

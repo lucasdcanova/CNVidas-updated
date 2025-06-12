@@ -7,6 +7,7 @@ import { eq, and } from 'drizzle-orm';
 import { DatabaseStorage } from '../storage.js';
 import { toNumberOrThrow } from '../utils/id-converter.js';
 import { AuthenticatedRequest } from '../types/authenticated-request.js';
+import { NotificationService } from '../utils/notification-service';
 
 const dependentsRouter = Router();
 
@@ -141,6 +142,12 @@ dependentsRouter.post('/', requireAuth, async (req: Request, res: Response) => {
     const newDependent = await db.insert(dependents)
       .values(dependentData)
       .returning();
+      
+    // Criar notificação de dependente adicionado
+    await NotificationService.createDependentAddedNotification(
+      authReq.user.id,
+      dependentData.fullName
+    );
       
     console.log('Dependente criado com sucesso:', newDependent[0]);
     res.status(201).json(newDependent[0]);

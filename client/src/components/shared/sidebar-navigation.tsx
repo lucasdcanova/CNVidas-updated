@@ -17,7 +17,8 @@ import {
   CreditCard,
   UserPlus,
   ShoppingCart,
-  History
+  History,
+  Activity
 } from "lucide-react";
 
 interface SidebarNavigationProps {
@@ -114,6 +115,16 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({ userRole =
               }`}>
                 <CreditCard className="w-5 h-5 mr-3" />
                 Planos
+            </Link>
+            
+            <Link href="/recent-activities"
+              className={`${linkBaseClass} ${
+                isLinkActive("/recent-activities") 
+                  ? linkActiveClass 
+                  : linkInactiveClass
+              }`}>
+                <Activity className="w-5 h-5 mr-3" />
+                Atividades Recentes
             </Link>
           </>
         )}

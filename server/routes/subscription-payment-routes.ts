@@ -11,6 +11,7 @@ import { isAuthenticated } from '../middleware/auth.js';
 import { AppError } from '../utils/app-error';
 import { DatabaseStorage } from '../storage';
 import { AuthenticatedRequest } from '../types/authenticated-request';
+import { NotificationService } from '../utils/notification-service';
 
 const subscriptionPaymentRouter = Router();
 
@@ -116,6 +117,13 @@ subscriptionPaymentRouter.post("/create-session", requireAuth, async (req: Reque
       })
       .where(eq(users.id, user.id));
     
+    // Criar notificação de checkout iniciado
+    await NotificationService.createCheckoutStartedNotification(
+      user.id,
+      `Plano ${plan.displayName || plan.name}`,
+      plan.price
+    );
+    
     // Retornar a resposta com os dados específicos do método de pagamento
     return res.json(paymentSession);
     
@@ -176,6 +184,14 @@ subscriptionPaymentRouter.post("/confirm-payment", requireAuth, async (req: Requ
           emergencyConsultationsLeft: emergencyConsultations
         })
         .where(eq(users.id, user.id));
+      
+      // Criar notificação de checkout concluído
+      await NotificationService.createCheckoutCompletedNotification(
+        user.id,
+        `Plano ${plan.displayName || plan.name}`,
+        paymentIntent.amount,
+        paymentIntent.payment_method_types[0] || 'card'
+      );
       
       return res.json({
         success: true,

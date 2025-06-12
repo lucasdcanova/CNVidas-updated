@@ -12,6 +12,7 @@ import { AuthenticatedRequest } from '../types/authenticated-request';
 import { UserId } from '../types';
 import { storage } from '../storage';
 import { toNumberOrThrow } from '../utils/id-converter';
+import { NotificationService } from '../utils/notification-service';
 
 const telemedicineRouter = Router();
 
@@ -118,6 +119,13 @@ telemedicineRouter.post('/appointments', requireAuth, async (req: Request, res: 
       type: validatedData.type,
       status: 'scheduled'
     }).returning();
+
+    // Criar notificação de consulta agendada
+    await NotificationService.createAppointmentNotification(
+      authReq.user.id, 
+      appointment.id, 
+      validatedData.type === 'emergency'
+    );
 
     res.status(201).json(appointment);
   } catch (error) {
@@ -233,6 +241,13 @@ telemedicineRouter.post('/emergency', requireAuth, checkEmergencyConsultationLim
       type: 'emergency',
       status: 'scheduled'
     }).returning();
+
+    // Criar notificação de consulta de emergência
+    await NotificationService.createAppointmentNotification(
+      Number(userId), 
+      appointment.id, 
+      true
+    );
 
     res.status(201).json(appointment);
   } catch (error) {
