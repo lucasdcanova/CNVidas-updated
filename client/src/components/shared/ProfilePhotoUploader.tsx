@@ -217,9 +217,8 @@ export default function ProfilePhotoUploader({
       setUploadProgress(50);
 
       // Usar XMLHttpRequest para ter controle sobre o progresso
-      const authToken = localStorage.getItem('auth_token') || '';
-      
       return new Promise<any>((resolve, reject) => {
+        const authToken = localStorage.getItem('auth_token') || '';
         const xhr = new XMLHttpRequest();
 
         xhr.upload.addEventListener('progress', (e) => {
