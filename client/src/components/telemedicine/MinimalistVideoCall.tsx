@@ -218,15 +218,29 @@ export default function MinimalistVideoCall({
       // Entrar na sala
       console.log('🚀 Tentando entrar na sala:', {
         url: roomUrl,
+        token: token,
+        tokenType: typeof token,
         hasToken: !!token,
         userName: userName
       });
       
-      await callFrame.join({
+      // Garantir que o token seja uma string ou undefined
+      const joinOptions: any = {
         url: roomUrl,
-        token: token,
         userName: userName
-      });
+      };
+      
+      // Só adicionar token se for uma string válida
+      if (token && typeof token === 'string') {
+        joinOptions.token = token;
+      } else if (token && typeof token === 'object' && 'token' in token) {
+        // Se token for um objeto com propriedade 'token'
+        joinOptions.token = token.token;
+      }
+      
+      console.log('🎯 Opções de join finais:', joinOptions);
+      
+      await callFrame.join(joinOptions);
       
       console.log('✅ Entrou na sala com sucesso');
 

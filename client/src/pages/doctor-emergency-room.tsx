@@ -111,10 +111,18 @@ export default function DoctorEmergencyRoom() {
           if (tokenResponse.ok) {
             try {
               const tokenData = await tokenResponse.json();
-              token = tokenData.token;
-              console.log('✅ Token obtido com sucesso');
+              console.log('🎫 Token recebido (Médico):', tokenData);
+              
+              // Extrair o token do objeto retornado
+              if (typeof tokenData === 'object' && tokenData.token) {
+                token = tokenData.token;
+              } else if (typeof tokenData === 'string') {
+                token = tokenData;
+              }
+              
+              console.log('✅ Token processado:', typeof token);
             } catch (e) {
-              console.log('⚠️ Usando acesso sem token');
+              console.log('⚠️ Erro ao processar token:', e);
             }
           }
         }
@@ -122,6 +130,8 @@ export default function DoctorEmergencyRoom() {
         console.log('🏠 Sala configurada (Médico):', {
           roomUrl,
           roomName: roomUrl.split('/').pop(),
+          token,
+          tokenType: typeof token,
           hasToken: !!token
         });
         

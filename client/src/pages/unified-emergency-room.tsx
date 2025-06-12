@@ -116,9 +116,16 @@ export default function UnifiedEmergencyRoom() {
       if (tokenResponse.ok) {
         try {
           const tokenData = await tokenResponse.json();
-          token = tokenData.token || token;
+          console.log('🎫 Token recebido:', tokenData);
+          
+          // Extrair o token do objeto retornado
+          if (typeof tokenData === 'object' && tokenData.token) {
+            token = tokenData.token;
+          } else if (typeof tokenData === 'string') {
+            token = tokenData;
+          }
         } catch (e) {
-          console.log('Usando token existente');
+          console.log('⚠️ Erro ao processar token:', e);
         }
       }
       
@@ -133,6 +140,8 @@ export default function UnifiedEmergencyRoom() {
       console.log('🏠 Dados finais da sala:', {
         roomUrl: roomInfo.roomUrl,
         roomName: roomInfo.roomName,
+        token: roomInfo.token,
+        tokenType: typeof roomInfo.token,
         hasToken: !!roomInfo.token,
         isDoctor
       });
