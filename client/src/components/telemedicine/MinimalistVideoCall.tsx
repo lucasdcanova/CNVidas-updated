@@ -8,6 +8,8 @@ interface MinimalistVideoCallProps {
   token?: string;
   onJoinCall?: () => void;
   onLeaveCall?: () => void;
+  onParticipantJoined?: (participant: any) => void;
+  onParticipantLeft?: (participant: any) => void;
   userName?: string;
   isDoctor?: boolean;
 }
@@ -17,6 +19,8 @@ export default function MinimalistVideoCall({
   token,
   onJoinCall,
   onLeaveCall,
+  onParticipantJoined,
+  onParticipantLeft,
   userName = 'Você',
   isDoctor = false
 }: MinimalistVideoCallProps) {
@@ -139,10 +143,16 @@ export default function MinimalistVideoCall({
 
       callFrame.on('participant-joined', (event: any) => {
         updateParticipants();
+        if (onParticipantJoined) {
+          onParticipantJoined(event.participant);
+        }
       });
 
       callFrame.on('participant-left', (event: any) => {
         updateParticipants();
+        if (onParticipantLeft) {
+          onParticipantLeft(event.participant);
+        }
       });
 
       callFrame.on('error', (error: any) => {
@@ -171,7 +181,7 @@ export default function MinimalistVideoCall({
       console.error('Erro ao iniciar chamada:', error);
       setIsConnecting(false);
     }
-  }, [roomUrl, token, userName, onJoinCall]);
+  }, [roomUrl, token, userName, onJoinCall, onParticipantJoined, onParticipantLeft]);
 
   // Auto-iniciar se tiver URL
   useEffect(() => {

@@ -285,6 +285,29 @@ export default function PatientEmergencyRoom() {
     endCall();
   };
 
+  const handleParticipantJoined = (participant: any) => {
+    console.log('Participante entrou:', participant);
+    if (participant.user_id !== user?.id.toString()) {
+      setCallState(prev => ({ ...prev, doctorJoined: true }));
+      toast({
+        title: 'Médico conectado!',
+        description: `Dr. ${participant.user_name || 'Médico'} entrou na consulta`,
+      });
+    }
+  };
+
+  const handleParticipantLeft = (participant: any) => {
+    console.log('Participante saiu:', participant);
+    if (participant.user_id !== user?.id.toString() && callState.doctorJoined) {
+      toast({
+        title: 'Médico desconectou',
+        description: 'O médico saiu da consulta',
+        variant: 'destructive',
+      });
+      endCall();
+    }
+  };
+
   // Formatar duração
   const formatDuration = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -491,6 +514,8 @@ export default function PatientEmergencyRoom() {
                     token={callState.token}
                     onJoinCall={handleJoinCall}
                     onLeaveCall={handleLeaveCall}
+                    onParticipantJoined={handleParticipantJoined}
+                    onParticipantLeft={handleParticipantLeft}
                     userName={user?.fullName || user?.username || 'Paciente'}
                     isDoctor={false}
                   />
