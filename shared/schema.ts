@@ -159,6 +159,7 @@ export const claims = pgTable("claims", {
   type: text("type").notNull(),
   occurrenceDate: date("occurrence_date").notNull(),
   description: text("description").notNull(),
+  daysHospitalized: integer("days_hospitalized").default(0),
   documents: json("documents").$type<string[]>(),
   status: text("status").default('pending').notNull(),
   reviewNotes: text("review_notes"),

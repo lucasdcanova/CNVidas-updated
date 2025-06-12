@@ -70,12 +70,14 @@ claimsRouter.post('/', upload.array('documents'), requireAuth, async (req: Authe
     console.log('📁 Arquivos recebidos:', req.files);
     
     // Suportar tanto FormData quanto JSON
-    const { type, description, occurrenceDate, title, amount, category } = req.body;
+    const { type, description, occurrenceDate, title, amount, category, daysHospitalized, amountRequested } = req.body;
     
     // Determinar o tipo e descrição baseado nos dados recebidos
     const claimType = type || category || 'medical';
     const claimDescription = description || title;
     const claimDate = occurrenceDate || new Date().toISOString().split('T')[0];
+    const hospitalDays = parseInt(daysHospitalized) || 0;
+    const requestedAmount = parseInt(amountRequested) || parseInt(amount) || 0;
     
     if (!claimDescription) {
       return res.status(400).json({ message: 'Descrição é obrigatória' });
@@ -84,7 +86,9 @@ claimsRouter.post('/', upload.array('documents'), requireAuth, async (req: Authe
     console.log(`Criando claim para usuário ${userId}:`, {
       type: claimType,
       description: claimDescription,
-      date: claimDate
+      date: claimDate,
+      daysHospitalized: hospitalDays,
+      amountRequested: requestedAmount
     });
     
     // Criar o claim
@@ -92,7 +96,8 @@ claimsRouter.post('/', upload.array('documents'), requireAuth, async (req: Authe
       userId: userId,
       type: claimType,
       description: claimDescription,
-      amountRequested: amount ? parseFloat(amount) : 0,
+      amountRequested: requestedAmount,
+      daysHospitalized: hospitalDays,
       occurrenceDate: claimDate,
       status: 'pending'
     };

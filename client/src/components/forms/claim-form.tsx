@@ -33,6 +33,7 @@ const claimFormSchema = z.object({
   type: z.string(),
   occurrenceDate: z.string(),
   description: z.string(),
+  daysHospitalized: z.number().min(0, "Número de dias deve ser maior ou igual a 0").optional(),
   documents: z.array(z.string()).optional(),
   termsAgreed: z.boolean().refine(val => val === true, {
     message: "Você precisa concordar com os termos para enviar o sinistro",
@@ -48,6 +49,35 @@ export const ClaimForm: React.FC = () => {
   const [, navigate] = useLocation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [calculatedAmount, setCalculatedAmount] = useState<number>(0);
+
+  // Função para calcular o valor do sinistro baseado no plano e dias internado
+  const calculateClaimAmount = (plan: string, days: number, claimType: string): number => {
+    // Valores base por dia de internação por plano
+    const dailyRates = {
+      basic: 100, // R$ 100/dia
+      premium: 200, // R$ 200/dia
+      ultra: 300, // R$ 300/dia
+      'ultra-familia': 300, // R$ 300/dia
+    };
+
+    // Multiplicadores por tipo de sinistro
+    const typeMultipliers = {
+      'Cirurgia': 2.0,
+      'Internação': 1.0,
+      'Diária Hospitalar': 1.0,
+      'Diagnóstico de Doença Grave': 1.5,
+      'Acidente Pessoal': 1.2,
+      'Tratamento Médico': 0.8,
+      'Outro': 1.0,
+    };
+
+    const planKey = plan?.toLowerCase() || 'basic';
+    const dailyRate = dailyRates[planKey as keyof typeof dailyRates] || dailyRates.basic;
+    const multiplier = typeMultipliers[claimType as keyof typeof typeMultipliers] || 1.0;
+
+    return Math.round(dailyRate * days * multiplier * 100); // Valor em centavos
+  };
 
   // Default form values
   const defaultValues: Partial<ClaimFormValues> = {
@@ -55,6 +85,7 @@ export const ClaimForm: React.FC = () => {
     type: "",
     occurrenceDate: new Date().toISOString().split('T')[0],
     description: "",
+    daysHospitalized: 0,
     termsAgreed: false,
   };
 
@@ -62,6 +93,19 @@ export const ClaimForm: React.FC = () => {
     resolver: zodResolver(claimFormSchema),
     defaultValues,
   });
+
+  // Observar mudanças nos campos para recalcular o valor
+  const watchedFields = form.watch(['type', 'daysHospitalized']);
+  
+  React.useEffect(() => {
+    const [type, days] = watchedFields;
+    if (user?.subscriptionPlan && type && days !== undefined && days > 0) {
+      const amount = calculateClaimAmount(user.subscriptionPlan, days, type);
+      setCalculatedAmount(amount);
+    } else {
+      setCalculatedAmount(0);
+    }
+  }, [watchedFields, user?.subscriptionPlan]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -91,6 +135,8 @@ export const ClaimForm: React.FC = () => {
       formData.append("type", data.type);
       formData.append("occurrenceDate", data.occurrenceDate);
       formData.append("description", data.description);
+      formData.append("daysHospitalized", String(data.daysHospitalized || 0));
+      formData.append("amountRequested", String(calculatedAmount));
       
       // Add files if any
       if (uploadedFiles.length > 0) {
@@ -172,6 +218,56 @@ export const ClaimForm: React.FC = () => {
               </FormItem>
             )}
           />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="daysHospitalized"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Dias Internado</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    min="0"
+                    placeholder="0"
+                    disabled={isSubmitting}
+                    {...field}
+                    onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                  />
+                </FormControl>
+                <FormMessage />
+                <p className="text-xs text-gray-500">
+                  Informe o número de dias que ficou internado (0 se não houve internação)
+                </p>
+              </FormItem>
+            )}
+          />
+
+          {calculatedAmount > 0 && (
+            <div className="flex items-center">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 w-full">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <span className="material-icons text-green-500">paid</span>
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-green-800">Valor Calculado</h3>
+                    <div className="mt-1 text-lg font-bold text-green-900">
+                      {new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      }).format(calculatedAmount / 100)}
+                    </div>
+                    <p className="text-xs text-green-700">
+                      Baseado no seu plano {user?.subscriptionPlan?.toUpperCase()}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         
         <FormField
