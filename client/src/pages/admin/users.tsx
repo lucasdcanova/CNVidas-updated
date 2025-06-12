@@ -145,6 +145,7 @@ const AdminUsersPage: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<UserWithDoctor | null>(null);
   const [currentDoctor, setCurrentDoctor] = useState<Doctor | null>(null);
   const [filterRole, setFilterRole] = useState<string | null>(null);
+  const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
 
   // Buscar lista de usuários
   const { data: users = [], isLoading } = useQuery<UserWithDoctor[], Error>({
@@ -183,6 +184,16 @@ const AdminUsersPage: React.FC = () => {
     const matchesRole = filterRole === null || user.role === filterRole;
     
     return matchesSearch && matchesRole;
+  }).sort((a, b) => {
+    // Ordenação cronológica baseada na data de criação
+    const dateA = new Date(a.createdAt).getTime();
+    const dateB = new Date(b.createdAt).getTime();
+    
+    if (sortOrder === 'newest') {
+      return dateB - dateA; // Mais recente primeiro
+    } else {
+      return dateA - dateB; // Mais antigo primeiro
+    }
   }) : [];
 
   // Form para criar novo usuário
@@ -600,6 +611,20 @@ const AdminUsersPage: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
+            <div className="lg:w-64">
+              <Select onValueChange={(value: 'newest' | 'oldest') => setSortOrder(value)} defaultValue="newest">
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Ordenar por data" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Ordenação</SelectLabel>
+                    <SelectItem value="newest">Mais recente primeiro</SelectItem>
+                    <SelectItem value="oldest">Mais antigo primeiro</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -632,6 +657,7 @@ const AdminUsersPage: React.FC = () => {
                     <ResponsiveTableHead>Perfil</ResponsiveTableHead>
                     <ResponsiveTableHead>Plano</ResponsiveTableHead>
                     <ResponsiveTableHead>Status Assinatura</ResponsiveTableHead>
+                    <ResponsiveTableHead>Data de Cadastro</ResponsiveTableHead>
                     <ResponsiveTableHead>Verificado</ResponsiveTableHead>
                     <ResponsiveTableHead className="text-right">Ações</ResponsiveTableHead>
                   </TableRow>
@@ -684,6 +710,17 @@ const AdminUsersPage: React.FC = () => {
                           ) : (
                             <Badge variant="outline">N/A</Badge>
                           )}
+                        </ResponsiveTableCell>
+                        <ResponsiveTableCell header="Data de Cadastro">
+                          <span className="text-sm text-gray-600">
+                            {new Date(user.createdAt).toLocaleDateString('pt-BR', {
+                              day: '2-digit',
+                              month: '2-digit',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </span>
                         </ResponsiveTableCell>
                         <ResponsiveTableCell header="Verificado">
                           {user.emailVerified ? (
