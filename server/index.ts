@@ -214,8 +214,10 @@ import jwt from "jsonwebtoken";
   // setupSubscriptionPlans().catch(console.error); // Temporariamente desabilitado devido ao timeout
 
   // Iniciar servidor
-  const PORT = process.env.PORT || 3000;
-  server.listen(PORT, () => {
+  const PORT = process.env.PORT || 8080;
+  server.listen(PORT, '0.0.0.0', () => {
     log(`Servidor rodando na porta ${PORT}`, 'server');
+    console.log(`Acesse: http://localhost:${PORT}`);
+    console.log(`Ou: http://127.0.0.1:${PORT}`);
   });
 })();
