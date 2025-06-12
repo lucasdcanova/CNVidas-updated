@@ -3,7 +3,7 @@ import path from 'path';
 import fs from 'fs';
 
 // Certifique-se de que o diretório de uploads existe
-const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'profiles');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }

@@ -207,9 +207,12 @@ export default function ProfilePhotoUploader({
         endpoint = '/api/partners/profile-image';
       }
 
-      console.log('Fazendo upload para:', endpoint);
+      console.log('=== INICIANDO UPLOAD ===');
+      console.log('Endpoint:', endpoint);
       console.log('Tipo de usuário:', userType);
       console.log(`Tamanho final do arquivo: ${(finalBlob.size / 1024).toFixed(1)}KB`);
+      console.log('Auth token presente:', !!authToken);
+      console.log('FormData criado:', formData.has('profileImage'));
 
       setUploadProgress(50);
 
@@ -222,17 +225,24 @@ export default function ProfilePhotoUploader({
         xhr.upload.addEventListener('progress', (e) => {
           if (e.lengthComputable) {
             const progress = 50 + Math.round((e.loaded / e.total) * 40); // 50-90%
+            const percentComplete = Math.round((e.loaded / e.total) * 100);
+            console.log(`Upload progress: ${percentComplete}% (${e.loaded}/${e.total} bytes)`);
             setUploadProgress(progress);
           }
         });
 
         xhr.addEventListener('load', () => {
+          console.log('=== UPLOAD LOAD EVENT ===');
+          console.log('Status:', xhr.status);
+          console.log('Response:', xhr.responseText.substring(0, 200) + '...');
           setUploadProgress(95);
           if (xhr.status >= 200 && xhr.status < 300) {
             try {
               const result = JSON.parse(xhr.responseText);
+              console.log('Upload bem-sucedido:', result);
               resolve(result);
             } catch (e) {
+              console.error('Erro ao parsear resposta:', e);
               reject(new Error('Resposta inválida do servidor'));
             }
           } else {
@@ -243,22 +253,30 @@ export default function ProfilePhotoUploader({
             } catch (e) {
               errorMessage = `${errorMessage}: ${xhr.statusText}`;
             }
+            console.error('Erro HTTP:', errorMessage);
             reject(new Error(errorMessage));
           }
         });
 
         xhr.addEventListener('error', () => {
+          console.error('=== UPLOAD ERROR EVENT ===');
+          console.error('ReadyState:', xhr.readyState);
+          console.error('Status:', xhr.status);
           reject(new Error('Falha na conexão com o servidor'));
         });
 
         xhr.addEventListener('timeout', () => {
-          reject(new Error('Timeout - O upload demorou mais que 60 segundos. Tente com uma imagem menor ou verifique sua conexão.'));
+          console.error('=== UPLOAD TIMEOUT EVENT ===');
+          console.error('ReadyState:', xhr.readyState);
+          console.error('Status:', xhr.status);
+          console.error('Timeout após 3 minutos');
+          reject(new Error('Timeout - O upload demorou mais que 3 minutos. Tente com uma imagem menor ou verifique sua conexão.'));
         });
 
         xhr.open('POST', endpoint);
         xhr.setRequestHeader('X-Auth-Token', authToken);
         xhr.setRequestHeader('Authorization', `Bearer ${authToken}`);
-        xhr.timeout = 60000; // 60 segundos para arquivos grandes
+        xhr.timeout = 180000; // 3 minutos para arquivos grandes
         xhr.send(formData);
       });
     };

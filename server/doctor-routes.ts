@@ -4,7 +4,7 @@ import { Router } from 'express';
 import { Request, Response, NextFunction } from 'express';
 import { db } from './db';
 import { eq, and } from 'drizzle-orm';
-import { upload } from './middleware/upload';
+import { doctorUploadMiddleware } from './middleware/doctor-upload';
 import path from 'path';
 import fs from 'fs';
 import { users, doctors } from '../shared/schema';
@@ -107,7 +107,7 @@ doctorRouter.get('/profile', isDoctor, async (req: AuthenticatedRequest, res: Re
 });
 
 // Rota para upload de imagem de perfil do médico
-doctorRouter.post('/profile-image', isDoctor, upload.single('profileImage'), async (req: AuthenticatedRequest, res: Response) => {
+doctorRouter.post('/profile-image', isDoctor, ...doctorUploadMiddleware, async (req: AuthenticatedRequest, res: Response) => {
   console.log('=== UPLOAD PROFILE IMAGE (DOCTOR) ===');
   console.log('User ID:', req.user?.id);
   console.log('File received:', req.file ? {
