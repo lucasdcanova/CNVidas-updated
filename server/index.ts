@@ -15,6 +15,7 @@ import { pool, db } from "./db";
 import { users } from "../shared/schema";
 import { eq } from "drizzle-orm";
 import jwt from "jsonwebtoken";
+import fs from 'fs';
 
 (async () => {
   const app = express();
@@ -233,6 +234,34 @@ import jwt from "jsonwebtoken";
     
     if (req.method === 'OPTIONS') {
       return res.sendStatus(200);
+    }
+    
+    next();
+  });
+  
+  // Middleware específico para verificar se arquivos de upload existem
+  app.use('/uploads', (req, res, next) => {
+    const filePath = path.join(publicPath, req.url);
+    
+    // Verificar se o arquivo existe
+    if (!fs.existsSync(filePath)) {
+      console.log(`⚠️ Arquivo de upload não encontrado: ${req.url}`);
+      
+      // Se for uma imagem de perfil, retornar 404 com informação útil
+      if (req.url.includes('profile-')) {
+        return res.status(404).json({
+          error: 'Imagem de perfil não encontrada',
+          message: 'A imagem solicitada não existe no servidor',
+          path: req.url,
+          timestamp: new Date().toISOString()
+        });
+      }
+      
+      // Para outros arquivos, retornar 404 padrão
+      return res.status(404).json({
+        error: 'Arquivo não encontrado',
+        path: req.url
+      });
     }
     
     next();

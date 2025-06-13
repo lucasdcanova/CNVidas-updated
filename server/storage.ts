@@ -65,6 +65,7 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | null>;
   getUserByCPF(cpf: string): Promise<User | undefined>;
   getUserBySessionId(sessionId: string): Promise<User | undefined>;
+  getUsersWithProfileImages(): Promise<User[]>;
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: number, data: Partial<InsertUser>): Promise<User>;
   deleteUser(id: number): Promise<boolean>;
@@ -375,6 +376,16 @@ export class DatabaseStorage implements IStorage {
         resolve(user || undefined);
       });
     });
+  }
+
+  async getUsersWithProfileImages(): Promise<User[]> {
+    const result = await this.db.select().from(users).where(
+      and(
+        sql`${users.profileImage} IS NOT NULL`,
+        sql`${users.profileImage} != ''`
+      )
+    );
+    return result;
   }
 
   async createUser(userData: InsertUser): Promise<User> {

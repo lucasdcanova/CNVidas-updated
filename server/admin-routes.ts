@@ -1,6 +1,8 @@
 import { Router, Request, Response } from 'express';
 import { requireAuth, requireAdmin } from './middleware/auth';
 import { AuthenticatedRequest } from './types';
+import fs from 'fs';
+import path from 'path';
 
 const router = Router();
 
@@ -1029,6 +1031,79 @@ router.post('/users/:id/grant-plan', async (req, res) => {
   } catch (error) {
     console.error('Error granting plan to user:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Rota para limpar imagens inexistentes
+router.post('/cleanup-missing-images', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    console.log('🧹 Iniciando limpeza de imagens inexistentes...');
+
+    const { storage } = await import('./storage');
+    
+    // Buscar todos os usuários com imagem de perfil
+    const usersWithImages = await storage.getUsersWithProfileImages();
+    console.log(`📋 Encontrados ${usersWithImages.length} usuários com imagem de perfil`);
+
+    const publicPath = path.join(process.cwd(), 'public');
+    let cleanedCount = 0;
+    let errorCount = 0;
+    const cleanedUsers = [];
+
+    for (const user of usersWithImages) {
+      const imagePath = user.profileImage;
+      
+      if (!imagePath || !imagePath.startsWith('/uploads/')) {
+        continue;
+      }
+
+      // Construir caminho completo do arquivo
+      const fullPath = path.join(publicPath, imagePath);
+      
+      // Verificar se o arquivo existe
+      if (!fs.existsSync(fullPath)) {
+        console.log(`❌ Imagem não encontrada: ${imagePath} (${user.email})`);
+        
+        try {
+          // Remover referência do banco de dados
+          await storage.updateUser(user.id, { profileImage: null });
+          
+          cleanedUsers.push({
+            id: user.id,
+            email: user.email,
+            imagePath: imagePath
+          });
+          
+          console.log(`✅ Referência removida do banco de dados para ${user.email}`);
+          cleanedCount++;
+        } catch (error) {
+          console.error(`❌ Erro ao limpar referência para usuário ${user.id}:`, error);
+          errorCount++;
+        }
+      }
+    }
+
+    const result = {
+      success: true,
+      message: 'Limpeza de imagens concluída',
+      summary: {
+        totalChecked: usersWithImages.length,
+        cleaned: cleanedCount,
+        errors: errorCount
+      },
+      cleanedUsers
+    };
+
+    console.log('📊 RESUMO DA LIMPEZA:', result.summary);
+    res.json(result);
+
+  } catch (error) {
+    console.error('❌ Erro durante a limpeza:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Erro durante a limpeza de imagens',
+      error: error instanceof Error ? error.message : 'Erro desconhecido'
+    });
   }
 });
 
