@@ -75,25 +75,25 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title = "Painel Adm
         )}
         onClick={onClick}
       >
-        <Icon className="h-4 w-4" />
-        <div className="flex flex-col">
-          <span>{label}</span>
-          <span className="text-xs text-muted-foreground hidden lg:block">{description}</span>
+        <Icon className="h-4 w-4 flex-shrink-0" />
+        <div className="flex flex-col min-w-0 flex-1">
+          <span className="truncate">{label}</span>
+          <span className="text-xs text-muted-foreground hidden lg:block truncate">{description}</span>
         </div>
       </div>
     </Link>
   );
 
   const SidebarContent = ({ onLinkClick }: { onLinkClick?: () => void }) => (
-    <div className="flex h-full flex-col">
-      <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-        <Link href="/admin/dashboard" className="flex items-center gap-2 font-semibold">
-          <img src={logo} alt="CN Vidas" className="h-8 w-auto" />
-          <span className="hidden lg:block">Admin</span>
+    <div className="flex h-full flex-col min-h-0">
+      <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6 flex-shrink-0">
+        <Link href="/admin/dashboard" className="flex items-center gap-2 font-semibold min-w-0">
+          <img src={logo} alt="CN Vidas" className="h-8 w-auto flex-shrink-0" />
+          <span className="hidden lg:block truncate">Admin</span>
         </Link>
       </div>
-      <div className="flex-1 overflow-auto py-2">
-        <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+      <div className="flex-1 overflow-y-auto py-2 min-h-0">
+        <nav className="grid items-start px-2 text-sm font-medium lg:px-4 gap-1">
           {navLinks.map((link) => (
             <NavigationItem
               key={link.href}
@@ -107,38 +107,39 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title = "Painel Adm
           ))}
         </nav>
       </div>
-      <div className="mt-auto p-4">
-        <div className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2">
-          <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+      <div className="mt-auto p-4 flex-shrink-0 border-t bg-muted/20">
+        <div className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 mb-3">
+          <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary flex-shrink-0">
             <User size={16} />
           </div>
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1 overflow-hidden min-w-0">
             <p className="text-sm font-medium truncate">{user?.fullName}</p>
             <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
           </div>
         </div>
         <Button 
           variant="outline" 
-          className="w-full mt-3 justify-start" 
+          className="w-full justify-start" 
           onClick={handleLogout}
+          size="sm"
         >
-          <LogOut className="mr-2 h-4 w-4" />
-          Sair
+          <LogOut className="mr-2 h-4 w-4 flex-shrink-0" />
+          <span className="truncate">Sair</span>
         </Button>
       </div>
     </div>
   );
 
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div className="grid min-h-screen w-full md:grid-cols-[240px_1fr] lg:grid-cols-[280px_1fr] xl:grid-cols-[320px_1fr]">
       {/* Desktop Sidebar */}
       <div className="hidden border-r bg-muted/40 md:block">
         <SidebarContent />
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col min-w-0">
         {/* Mobile Header */}
-        <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6 md:hidden">
+        <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6 md:hidden flex-shrink-0">
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="shrink-0">
@@ -146,7 +147,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title = "Painel Adm
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="flex flex-col w-64">
+            <SheetContent side="left" className="flex flex-col w-64 p-0">
               <SheetHeader className="sr-only">
                 <SheetTitle>Menu de Navegação</SheetTitle>
               </SheetHeader>
@@ -154,31 +155,31 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title = "Painel Adm
             </SheetContent>
           </Sheet>
           
-          <div className="flex-1">
-            <h1 className="text-lg font-semibold">{title}</h1>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-lg font-semibold truncate">{title}</h1>
           </div>
           
-          <Button variant="outline" size="icon" onClick={handleLogout}>
+          <Button variant="outline" size="icon" onClick={handleLogout} className="flex-shrink-0">
             <LogOut className="h-4 w-4" />
             <span className="sr-only">Logout</span>
           </Button>
         </header>
 
         {/* Desktop Header */}
-        <header className="hidden md:flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
-          <div className="flex-1">
-            <h1 className="text-xl font-semibold">{title}</h1>
+        <header className="hidden md:flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6 flex-shrink-0">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-xl font-semibold truncate">{title}</h1>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">
+          <div className="flex items-center gap-4 flex-shrink-0">
+            <span className="text-sm text-muted-foreground hidden lg:block truncate">
               Olá, {user?.fullName?.split(' ')[0]}!
             </span>
           </div>
         </header>
 
         {/* Main Content */}
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 overflow-auto">
-          <div className="w-full max-w-none">
+        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 overflow-hidden min-h-0">
+          <div className="w-full max-w-none overflow-auto flex-1">
             {children}
           </div>
         </main>

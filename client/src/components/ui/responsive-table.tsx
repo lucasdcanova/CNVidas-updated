@@ -28,16 +28,16 @@ const ResponsiveTable = ({ children, className, ...props }: ResponsiveTableProps
   return (
     <>
       {/* Desktop Table */}
-      <div className="hidden md:block">
-        <ScrollArea className="w-full">
-          <table className={cn("w-full caption-bottom text-sm", className)}>
+      <div className="hidden md:block w-full">
+        <div className="overflow-x-auto border rounded-md">
+          <table className={cn("w-full caption-bottom text-sm min-w-max", className)}>
             {children}
           </table>
-        </ScrollArea>
+        </div>
       </div>
       
       {/* Mobile Cards */}
-      <div className="md:hidden space-y-3">
+      <div className="md:hidden space-y-3 p-4">
         {React.Children.map(children, (child) => {
           if (React.isValidElement(child) && child.type === ResponsiveTableBody) {
             return React.cloneElement(child as React.ReactElement<any>, { 
@@ -53,7 +53,7 @@ const ResponsiveTable = ({ children, className, ...props }: ResponsiveTableProps
 
 const ResponsiveTableHeader = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return (
-    <thead className={cn("[&_tr]:border-b", className)}>
+    <thead className={cn("[&_tr]:border-b bg-muted/50", className)}>
       {children}
     </thead>
   );
@@ -100,9 +100,9 @@ const ResponsiveTableRow = ({
 }: ResponsiveTableRowProps & { isMobile?: boolean; index?: number }) => {
   if (isMobile) {
     return (
-      <Card className="p-0">
+      <Card className="p-0 w-full">
         <CardContent className="p-4">
-          <div className="space-y-2">
+          <div className="space-y-3">
             {React.Children.map(children, (child, cellIndex) => {
               if (React.isValidElement(child) && child.type === ResponsiveTableCell) {
                 return React.cloneElement(child as React.ReactElement<any>, { 
@@ -134,7 +134,7 @@ const ResponsiveTableHead = ({
 }) => {
   return (
     <th className={cn(
-      "h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
+      "h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 whitespace-nowrap",
       className
     )}>
       {children}
@@ -155,17 +155,17 @@ const ResponsiveTableCell = ({
     
     // Se for uma célula especial (sem header), renderizar diretamente
     if (!header) {
-      return <div className={className}>{children}</div>;
+      return <div className={cn("w-full", className)}>{children}</div>;
     }
     
     return (
-      <div className="flex justify-between items-center py-1">
-        <span className="text-sm font-medium text-muted-foreground min-w-0 flex-shrink-0 mr-2">
+      <div className="flex justify-between items-start py-1 gap-2">
+        <span className="text-sm font-medium text-muted-foreground min-w-0 flex-shrink-0">
           {header}:
         </span>
-        <span className="text-sm text-right flex-1 min-w-0">
+        <div className="text-sm text-right flex-1 min-w-0">
           {children}
-        </span>
+        </div>
       </div>
     );
   }
