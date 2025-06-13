@@ -37,6 +37,7 @@ export default function FaceTimeVideoCall({
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   const [isPipMode, setIsPipMode] = useState(false);
   const [callDuration, setCallDuration] = useState(0);
+  const [remoteParticipantName, setRemoteParticipantName] = useState<string>('');
   const callStartTimeRef = useRef<number>(0);
   const hasAutoStartedRef = useRef(false);
 
@@ -77,17 +78,22 @@ export default function FaceTimeVideoCall({
 
     // Atualizar vídeo remoto (primeiro participante que não seja local)
     const remoteParticipant = Object.values(participants).find(p => p.session_id !== 'local');
-    if (remoteParticipant?.tracks?.video?.persistentTrack && remoteVideoRef.current) {
-      const track = remoteParticipant.tracks.video.persistentTrack;
-      const stream = new MediaStream([track]);
+    if (remoteParticipant) {
+      // Atualizar nome do participante remoto
+      setRemoteParticipantName(remoteParticipant.user_name || 'Participante');
       
-      // Adicionar áudio se disponível
-      if (remoteParticipant.tracks?.audio?.persistentTrack) {
-        stream.addTrack(remoteParticipant.tracks.audio.persistentTrack);
+      if (remoteParticipant.tracks?.video?.persistentTrack && remoteVideoRef.current) {
+        const track = remoteParticipant.tracks.video.persistentTrack;
+        const stream = new MediaStream([track]);
+        
+        // Adicionar áudio se disponível
+        if (remoteParticipant.tracks?.audio?.persistentTrack) {
+          stream.addTrack(remoteParticipant.tracks.audio.persistentTrack);
+        }
+        
+        setRemoteStream(stream);
+        remoteVideoRef.current.srcObject = stream;
       }
-      
-      setRemoteStream(stream);
-      remoteVideoRef.current.srcObject = stream;
     }
   }, []);
 
@@ -257,7 +263,7 @@ export default function FaceTimeVideoCall({
                 <div className="w-32 h-32 rounded-full bg-gray-800 flex items-center justify-center mx-auto mb-4">
                   <Video className="w-16 h-16 text-gray-600" />
                 </div>
-                <p className="text-white/60 text-lg">Aguardando {isDoctor ? 'paciente' : 'médico'}...</p>
+                <p className="text-white/60 text-lg">Aguardando {isDoctor ? 'paciente' : 'médico'} entrar na sala...</p>
               </div>
             </div>
           )}
@@ -268,7 +274,9 @@ export default function FaceTimeVideoCall({
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="text-white text-lg font-medium">
-                    {isDoctor ? 'Consulta de Emergência' : 'Consulta Médica'}
+                    {isDoctor 
+                      ? remoteParticipantName || 'Aguardando paciente...'
+                      : remoteParticipantName ? `Dr. ${remoteParticipantName}` : 'Aguardando médico...'}
                   </h3>
                   <p className="text-white/70 text-sm">
                     {formatDuration(callDuration)}
