@@ -195,22 +195,17 @@ appointmentJoinRouter.post('/:id/join', requireAuth, async (req: AuthenticatedRe
       const sanitizedRoomName = roomName.replace(/[^a-zA-Z0-9-]/g, '-').toLowerCase();
       
       // Criar/verificar a sala no Daily.co com delay de propagação
-      const room = await createRoom({
-        name: sanitizedRoomName,
-        properties: {
-          enable_chat: true,
-          enable_screenshare: true,
-          enable_recording: false,
-          max_participants: 2,
-          exp: Math.floor(Date.now() / 1000) + 3600, // 1 hora
-          eject_at_room_exp: true
-        }
-      }, true); // waitForPropagation = true
+      const room = await createRoom(sanitizedRoomName, 60, true); // 60 minutos, waitForPropagation = true
       
       // Criar token para o usuário (médico ou paciente)
       const isOwner = userRole === 'doctor';
       const displayName = userData.fullName || (userRole === 'doctor' ? 'Médico' : 'Paciente');
-      const token = await createToken(sanitizedRoomName, displayName, isOwner);
+      const tokenResponse = await createToken(sanitizedRoomName, {
+        user_id: userId.toString(),
+        user_name: displayName,
+        is_owner: isOwner
+      });
+      const token = tokenResponse.token;
       
       console.log(`Sala e token criados com sucesso: ${sanitizedRoomName}`);
       
