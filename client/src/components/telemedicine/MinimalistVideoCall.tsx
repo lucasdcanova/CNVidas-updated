@@ -99,6 +99,14 @@ export default function MinimalistVideoCall({
       try {
         await callFrameRef.current.leave();
         await callFrameRef.current.destroy();
+        
+        // Remover da lista global
+        if ((window as any).__dailyInstances) {
+          (window as any).__dailyInstances = (window as any).__dailyInstances.filter(
+            (instance: any) => instance !== callFrameRef.current
+          );
+        }
+        
         callFrameRef.current = null;
       } catch (error) {
         console.error('Erro ao sair da chamada:', error);
@@ -114,15 +122,32 @@ export default function MinimalistVideoCall({
   }, [onLeaveCall]);
 
   const joinCall = useCallback(async () => {
-    if (!roomUrl) return;
-    
-    // Evitar múltiplas tentativas simultâneas
-    if (isJoiningRef.current) {
-      console.log('🚫 Já está tentando entrar na sala, ignorando...');
+    if (!roomUrl) {
+      console.log('🚫 Sem roomUrl, cancelando joinCall');
       return;
     }
     
-    // Verificar se já existe uma instância
+    // Evitar múltiplas tentativas simultâneas
+    if (isJoiningRef.current || isCallActive) {
+      console.log('🚫 Já está tentando entrar na sala ou já está ativo, ignorando...');
+      return;
+    }
+    
+    // Verificar se já existe uma instância global do Daily
+    const existingInstances = (window as any).__dailyInstances || [];
+    if (existingInstances.length > 0) {
+      console.log('⚠️ Destruindo instâncias antigas do Daily...');
+      for (const instance of existingInstances) {
+        try {
+          await instance.destroy();
+        } catch (e) {
+          console.error('Erro ao destruir instância:', e);
+        }
+      }
+      (window as any).__dailyInstances = [];
+    }
+    
+    // Verificar se já existe uma instância local
     if (callFrameRef.current) {
       console.log('⚠️ Já existe uma instância do DailyIframe, destruindo...');
       try {
@@ -194,10 +219,7 @@ export default function MinimalistVideoCall({
         showFullscreenButton: false,
         showLocalVideo: true,
         showParticipantsBar: false,
-        showChat: false,
-        showScreenShareButton: false,
-        showSettingsButton: false,
-        showLocalVideoAlways: true,
+        // Removido showChat - não é uma propriedade válida
         // Configurações importantes para prevenir erros de captura
         audioSource: true, // Usar fonte de áudio padrão
         videoSource: true, // Usar fonte de vídeo padrão
@@ -240,6 +262,12 @@ export default function MinimalistVideoCall({
       );
 
       callFrameRef.current = callFrame;
+      
+      // Adicionar à lista global para rastreamento
+      if (!(window as any).__dailyInstances) {
+        (window as any).__dailyInstances = [];
+      }
+      (window as any).__dailyInstances.push(callFrame);
 
       // Eventos
       callFrame.on('joining-meeting', () => {
@@ -367,7 +395,7 @@ export default function MinimalistVideoCall({
       // Entrar na sala
       console.log('🚀 Tentando entrar na sala:', {
         url: roomUrl,
-        token: token,
+        token: token ? '***REDACTED***' : 'NO_TOKEN',
         tokenType: typeof token,
         hasToken: !!token,
         userName: userName
@@ -415,9 +443,16 @@ export default function MinimalistVideoCall({
     }
   }, [roomUrl, token, userName, onJoinCall, onParticipantJoined, onParticipantLeft]);
 
-  // Auto-iniciar se tiver URL
+  // Auto-iniciar se tiver URL (removido joinCall das dependências para evitar loop)
   useEffect(() => {
-    if (roomUrl && !isCallActive && !isConnecting && isMounted && !connectionError) {
+    if (roomUrl && !isCallActive && !isConnecting && isMounted && !connectionError && !isJoiningRef.current) {
+      // Verificar se já existe uma instância ativa
+      const existingInstances = (window as any).__dailyInstances || [];
+      if (existingInstances.length > 0) {
+        console.log('🚫 Já existe uma instância do Daily, cancelando auto-start');
+        return;
+      }
+      
       // Aguardar um tempo maior para garantir que a sala esteja propagada
       const timer = setTimeout(() => {
         console.log('🎬 Auto-iniciando videochamada após delay de segurança');
@@ -426,7 +461,7 @@ export default function MinimalistVideoCall({
       
       return () => clearTimeout(timer);
     }
-  }, [roomUrl, isCallActive, isConnecting, isMounted, connectionError, joinCall]);
+  }, [roomUrl, isCallActive, isConnecting, isMounted, connectionError]); // Removido joinCall para evitar loop infinito
 
   // Limpar ao desmontar
   useEffect(() => {
