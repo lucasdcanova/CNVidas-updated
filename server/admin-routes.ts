@@ -182,18 +182,7 @@ router.delete('/users/:id', async (req: AuthenticatedRequest, res: Response) => 
   }
 });
 
-router.get('/claims', async (req, res) => {
-  try {
-    res.json({ 
-      message: 'Admin claims endpoint', 
-      claims: [],
-      total: 0 
-    });
-  } catch (error) {
-    console.error('Error in admin claims route:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+// Rota duplicada removida - implementação correta está na linha 440
 
 router.put('/claims/:id', async (req, res) => {
   try {
@@ -728,16 +717,7 @@ router.get('/recent-appointments', async (req, res) => {
   }
 });
 
-// Rota para sinistros pendentes
-router.get('/pending-claims', async (req, res) => {
-  try {
-    // TODO: Implement actual pending claims retrieval
-    res.json([]);
-  } catch (error) {
-    console.error('Error in admin pending claims route:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+// Rota duplicada removida - implementação correta está na linha 429
 
 router.get('/qr-auth-logs', async (req, res) => {
   try {
