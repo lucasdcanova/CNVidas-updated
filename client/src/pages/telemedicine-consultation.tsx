@@ -139,57 +139,76 @@ export default function TelemedicineConsultation() {
       // ETAPA 2: Verificar se a sala realmente existe
       logEvent('Verificando existência da sala...');
       
-      // Dar um tempo para propagação da sala
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Dar um tempo inicial para propagação da sala
+      logEvent('Aguardando 3 segundos para propagação inicial...');
+      await new Promise(resolve => setTimeout(resolve, 3000));
       
-      const verifyResponse = await apiRequest('GET', 
-        `/api/telemedicine/daily-direct/room-exists?roomName=${roomName}`);
+      // Verificar com retry automático
+      let roomExists = false;
+      let verifyAttempts = 0;
+      const maxVerifyAttempts = 3;
       
-      const verifyData = await verifyResponse.json();
-      logEvent('Verificação de sala:', verifyData);
-      
-      if (!verifyData.exists) {
-        logEvent('Sala não está pronta. Aguardando propagação...');
-        // Aguardar propagação extra
-        await new Promise(resolve => setTimeout(resolve, 5000));
+      while (!roomExists && verifyAttempts < maxVerifyAttempts) {
+        verifyAttempts++;
+        logEvent(`Tentativa ${verifyAttempts} de verificação da sala...`);
         
-        // Verificar novamente
-        const retryVerify = await apiRequest('GET', 
-          `/api/telemedicine/daily-direct/room-exists?roomName=${roomName}`);
-        
-        const retryData = await retryVerify.json();
-        if (!retryData.exists) {
-          logEvent('Sala ainda não propagada após tempo extra');
-        } else {
-          logEvent('Sala propagada com sucesso após tempo extra');
+        try {
+          const verifyResponse = await apiRequest('GET', 
+            `/api/telemedicine/daily-direct/room-exists?roomName=${roomName}`);
+          
+          const verifyData = await verifyResponse.json();
+          logEvent(`Resultado da verificação ${verifyAttempts}:`, verifyData);
+          
+          if (verifyData.exists) {
+            roomExists = true;
+            logEvent('✅ Sala confirmada e pronta!');
+          } else if (verifyAttempts < maxVerifyAttempts) {
+            logEvent(`Sala ainda não propagada. Aguardando mais ${3 * verifyAttempts} segundos...`);
+            await new Promise(resolve => setTimeout(resolve, 3000 * verifyAttempts));
+          }
+        } catch (error) {
+          logEvent(`Erro na verificação ${verifyAttempts}:`, error);
         }
+      }
+      
+      if (!roomExists) {
+        logEvent('⚠️ Sala não foi confirmada após todas as tentativas, prosseguindo mesmo assim...');
       }
       
       // ETAPA 3: Gerar token de acesso
       logEvent('Gerando token de acesso...');
       const userName = user?.fullName || user?.username || 'Usuário CN Vidas';
       
-      const tokenResponse = await apiRequest('POST', '/api/telemedicine/daily-direct/token', {
-        roomName,
-        userName,
-        isOwner: false
-      });
-      
-      if (!tokenResponse.ok) {
-        logEvent('Falha ao gerar token, tentando sem token');
+      try {
+        const tokenResponse = await apiRequest('POST', '/api/telemedicine/daily-direct/token', {
+          roomName,
+          userName,
+          isOwner: false
+        });
+        
+        if (!tokenResponse.ok) {
+          logEvent('Falha ao gerar token, prosseguindo sem token');
+          setRoomInfo({
+            name: roomName,
+            url: `https://cnvidas.daily.co/${roomName}`,
+            token: undefined
+          });
+        } else {
+          const tokenData = await tokenResponse.json();
+          logEvent('✅ Token gerado com sucesso');
+          
+          setRoomInfo({
+            name: roomName,
+            url: `https://cnvidas.daily.co/${roomName}`,
+            token: tokenData.token || undefined
+          });
+        }
+      } catch (tokenError) {
+        logEvent('⚠️ Erro ao gerar token, continuando sem autenticação:', tokenError);
         setRoomInfo({
           name: roomName,
           url: `https://cnvidas.daily.co/${roomName}`,
           token: undefined
-        });
-      } else {
-        const tokenData = await tokenResponse.json();
-        logEvent('Token gerado com sucesso');
-        
-        setRoomInfo({
-          name: roomName,
-          url: `https://cnvidas.daily.co/${roomName}`,
-          token: tokenData.token || undefined
         });
       }
       

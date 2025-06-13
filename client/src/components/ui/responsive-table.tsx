@@ -30,7 +30,7 @@ const ResponsiveTable = ({ children, className, ...props }: ResponsiveTableProps
       {/* Desktop Table */}
       <div className="hidden md:block w-full">
         <div className="overflow-x-auto border rounded-md">
-          <table className={cn("w-full caption-bottom text-sm min-w-max", className)}>
+          <table className={cn("w-full caption-bottom text-sm min-w-max", className)} style={{ minWidth: '800px' }}>
             {children}
           </table>
         </div>

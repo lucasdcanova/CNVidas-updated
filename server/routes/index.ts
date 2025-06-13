@@ -66,6 +66,7 @@ export default async function setupRoutes(app: express.Express) {
   app.use('/api/telemedicine', dailyRouter);
   app.use('/api/telemedicine/v2', telemedicineDailyV2Router);
   app.use('/api/telemedicine/direct', dailyDirectRouter);
+  app.use('/api/telemedicine/daily-direct', dailyDirectRouter); // Compatibilidade com frontend
   app.use('/api/telemedicine/errors', telemedicineErrorLogsRouter);
   
   // Rotas de consulta

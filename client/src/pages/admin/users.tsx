@@ -682,7 +682,8 @@ const AdminUsersPage: React.FC = () => {
               </div>
             ) : (
               <div className="w-full overflow-auto">
-                <ResponsiveTable>
+                <div className="pr-4">
+                  <ResponsiveTable>
                   <ResponsiveTableHeader>
                     <TableRow>
                       <ResponsiveTableHead className="min-w-[200px]">Nome</ResponsiveTableHead>
@@ -693,7 +694,7 @@ const AdminUsersPage: React.FC = () => {
                       <ResponsiveTableHead className="min-w-[120px] hidden md:table-cell">Status</ResponsiveTableHead>
                       <ResponsiveTableHead className="min-w-[150px] hidden xl:table-cell">Cadastro</ResponsiveTableHead>
                       <ResponsiveTableHead className="min-w-[100px] hidden lg:table-cell text-center">Verificado</ResponsiveTableHead>
-                      <ResponsiveTableHead className="min-w-[120px] text-right">Ações</ResponsiveTableHead>
+                      <ResponsiveTableHead className="min-w-[80px] w-[80px] text-right">Ações</ResponsiveTableHead>
                     </TableRow>
                   </ResponsiveTableHeader>
                   <ResponsiveTableBody>
@@ -781,8 +782,8 @@ const AdminUsersPage: React.FC = () => {
                               )}
                             </div>
                           </ResponsiveTableCell>
-                          <ResponsiveTableCell header="Ações" className="text-right">
-                            <div className="flex items-center justify-end gap-2">
+                          <ResponsiveTableCell header="Ações" className="text-right w-[80px]">
+                            <div className="flex items-center justify-end gap-2 min-w-[80px]">
                               {/* Mobile quick actions */}
                               <div className="flex sm:hidden gap-1">
                                 {user.role === 'patient' && user.subscriptionPlan && (
@@ -798,7 +799,11 @@ const AdminUsersPage: React.FC = () => {
                               </div>
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                  <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0">
+                                  <Button 
+                                    variant="ghost" 
+                                    size="icon" 
+                                    className="h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 relative z-10"
+                                  >
                                     <Settings className="h-4 w-4" />
                                     <span className="sr-only">Ações</span>
                                   </Button>
@@ -940,8 +945,9 @@ const AdminUsersPage: React.FC = () => {
                         </ResponsiveTableCell>
                       </ResponsiveTableRow>
                     )}
-                  </ResponsiveTableBody>
-                </ResponsiveTable>
+                    </ResponsiveTableBody>
+                  </ResponsiveTable>
+                </div>
               </div>
             )}
           </CardContent>

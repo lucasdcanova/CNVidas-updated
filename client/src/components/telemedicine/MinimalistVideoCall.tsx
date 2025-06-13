@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import DailyIframe from '@daily-co/daily-js';
-import { Mic, MicOff, Video, VideoOff, Phone } from 'lucide-react';
+import { Mic, MicOff, Video, VideoOff, Phone, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface MinimalistVideoCallProps {
@@ -36,6 +36,9 @@ export default function MinimalistVideoCall({
   const callStartTimeRef = useRef<number>(0);
   const [isMounted, setIsMounted] = useState(false);
   const isJoiningRef = useRef(false);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
+  const retryCountRef = useRef(0);
+  const maxRetries = 3;
 
   // Detectar orientação da tela e marcar como montado
   useEffect(() => {
@@ -196,12 +199,39 @@ export default function MinimalistVideoCall({
         }
       });
 
-      callFrame.on('error', (error: any) => {
+      callFrame.on('error', async (error: any) => {
         console.error('Erro na chamada:', error);
-        setIsConnecting(false);
+        
         // Não propagar erros 429 (rate limit) pois são do Sentry
         if (error?.errorMsg?.includes('429')) {
           return;
+        }
+        
+        // Tratar erro de sala não encontrada
+        if (error?.error?.type === 'no-room' || error?.errorMsg?.includes('meeting does not exist')) {
+          console.log('🚨 Sala não encontrada, tentando recriar...');
+          
+          if (retryCountRef.current < maxRetries) {
+            retryCountRef.current++;
+            setConnectionError(`Preparando sala... Tentativa ${retryCountRef.current}/${maxRetries}`);
+            
+            // Aguardar um tempo maior para propagação
+            await new Promise(resolve => setTimeout(resolve, 5000 * retryCountRef.current));
+            
+            // Tentar conectar novamente
+            setIsConnecting(false);
+            setTimeout(() => {
+              if (!isCallActive && roomUrl) {
+                joinCall();
+              }
+            }, 1000);
+          } else {
+            setConnectionError('Não foi possível conectar à sala após várias tentativas.');
+            setIsConnecting(false);
+          }
+        } else {
+          setConnectionError(error?.errorMsg || 'Erro ao conectar');
+          setIsConnecting(false);
         }
       });
 
@@ -254,15 +284,16 @@ export default function MinimalistVideoCall({
 
   // Auto-iniciar se tiver URL
   useEffect(() => {
-    if (roomUrl && !isCallActive && !isConnecting && isMounted) {
-      // Aguardar o componente estar montado antes de iniciar a chamada
+    if (roomUrl && !isCallActive && !isConnecting && isMounted && !connectionError) {
+      // Aguardar um tempo maior para garantir que a sala esteja propagada
       const timer = setTimeout(() => {
+        console.log('🎬 Auto-iniciando videochamada após delay de segurança');
         joinCall();
-      }, 500);
+      }, 3000); // Aumentado para 3 segundos
       
       return () => clearTimeout(timer);
     }
-  }, [roomUrl, isCallActive, isConnecting, isMounted, joinCall]);
+  }, [roomUrl, isCallActive, isConnecting, isMounted, connectionError, joinCall]);
 
   // Limpar ao desmontar
   useEffect(() => {
@@ -403,7 +434,37 @@ export default function MinimalistVideoCall({
           <div className="text-center p-4">
             <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 border-4 sm:border-4 border-white/20 border-t-white rounded-full animate-spin mb-3 sm:mb-4 mx-auto" />
             <p className="text-white text-base sm:text-lg md:text-xl">Conectando...</p>
-            <p className="text-white/60 text-xs sm:text-sm mt-2">Preparando sua consulta</p>
+            <p className="text-white/60 text-xs sm:text-sm mt-2">
+              {connectionError || 'Preparando sua consulta'}
+            </p>
+            {retryCountRef.current > 0 && (
+              <p className="text-white/40 text-xs mt-1">
+                Tentativa {retryCountRef.current} de {maxRetries}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+      
+      {/* Estado de erro */}
+      {!isConnecting && connectionError && !isCallActive && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black z-40">
+          <div className="text-center p-4 max-w-md">
+            <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
+              <X className="w-8 h-8 text-red-500" />
+            </div>
+            <p className="text-white text-lg mb-2">Erro de Conexão</p>
+            <p className="text-white/60 text-sm mb-4">{connectionError}</p>
+            <button
+              onClick={() => {
+                setConnectionError(null);
+                retryCountRef.current = 0;
+                joinCall();
+              }}
+              className="px-6 py-2 bg-white/20 hover:bg-white/30 rounded-full text-white transition-all"
+            >
+              Tentar Novamente
+            </button>
           </div>
         </div>
       )}
