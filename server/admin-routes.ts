@@ -438,6 +438,61 @@ router.get('/claims', async (req, res) => {
   }
 });
 
+router.patch('/claims/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+    const { storage } = await import('./storage');
+    
+    // Verificar se o claim existe
+    const claim = await storage.getClaim(parseInt(id));
+    if (!claim) {
+      return res.status(404).json({ error: 'Claim not found' });
+    }
+    
+    // Processar valor aprovado se fornecido
+    if (updateData.amountApproved) {
+      updateData.amountApproved = Math.round(parseFloat(updateData.amountApproved) * 100);
+    }
+    
+    // Atualizar o claim
+    const updatedClaim = await storage.updateClaim(parseInt(id), {
+      ...updateData,
+      reviewedAt: new Date(),
+    });
+    
+    res.json(updatedClaim);
+  } catch (error) {
+    console.error('Error updating claim:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.delete('/claims/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { storage } = await import('./storage');
+    
+    // Verificar se o claim existe
+    const claim = await storage.getClaim(parseInt(id));
+    if (!claim) {
+      return res.status(404).json({ error: 'Claim not found' });
+    }
+    
+    // Deletar o claim
+    const success = await storage.deleteClaim(parseInt(id));
+    
+    if (success) {
+      res.json({ message: 'Claim deleted successfully' });
+    } else {
+      res.status(500).json({ error: 'Failed to delete claim' });
+    }
+  } catch (error) {
+    console.error('Error deleting claim:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 router.get('/analytics/overview', async (req, res) => {
   try {
     const { storage } = await import('./storage');

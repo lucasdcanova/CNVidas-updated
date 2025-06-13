@@ -244,6 +244,13 @@ export const updateClaim = async (id: number, data: any) => {
   return await res.json();
 };
 
+export const deleteClaim = async (id: number) => {
+  const res = await apiRequest("DELETE", `/api/admin/claims/${id}`);
+  queryClient.invalidateQueries({ queryKey: ["/api/admin/claims"] });
+  queryClient.invalidateQueries({ queryKey: ["/api/admin/pending-claims"] });
+  return await res.json();
+};
+
 // Notifications API
 export const getNotifications = async () => {
   const res = await apiRequest("GET", "/api/notifications");

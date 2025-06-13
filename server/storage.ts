@@ -167,6 +167,7 @@ export interface IStorage {
   getPendingClaims(): Promise<Claim[]>;
   createClaim(claim: InsertClaim, documents: string[]): Promise<Claim>;
   updateClaim(id: number, data: Partial<Claim>): Promise<Claim>;
+  deleteClaim(id: number): Promise<boolean>;
   
   // Notification methods
   getNotifications(userId: number): Promise<Notification[]>;
@@ -915,6 +916,17 @@ export class DatabaseStorage implements IStorage {
       .where(eq(claims.id, id))
       .returning();
     return claim as Claim;
+  }
+
+  async deleteClaim(id: number): Promise<boolean> {
+    try {
+      const result = await this.db.delete(claims)
+        .where(eq(claims.id, id));
+      return true;
+    } catch (error) {
+      console.error('Error deleting claim:', error);
+      return false;
+    }
   }
 
   // Notification methods

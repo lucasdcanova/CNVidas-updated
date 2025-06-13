@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import AdminLayout from "@/components/layouts/admin-layout";
-import { getAllClaims, getPendingClaims, updateClaim } from "@/lib/api";
+import { getAllClaims, getPendingClaims, updateClaim, deleteClaim } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,8 @@ import {
   Filter,
   ThumbsUp,
   ThumbsDown,
-  AlertCircle
+  AlertCircle,
+  Trash2
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -72,6 +73,7 @@ const AdminClaims: React.FC = () => {
   const [selectedClaim, setSelectedClaim] = useState<Claim | null>(null);
   const [showReviewDialog, setShowReviewDialog] = useState(false);
   const [showDetailsDialog, setShowDetailsDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   
   const { data: allClaimsData = [], refetch: refetchAllClaims } = useQuery({
     queryKey: ["/api/admin/claims"],
@@ -94,6 +96,28 @@ const AdminClaims: React.FC = () => {
       status: "approved",
       reviewNotes: "",
       amountApproved: "",
+    },
+  });
+
+  // Delete mutation
+  const deleteMutation = useMutation({
+    mutationFn: deleteClaim,
+    onSuccess: () => {
+      toast({
+        title: "Sucesso",
+        description: "Sinistro excluído com sucesso",
+      });
+      refetchAllClaims();
+      refetchPendingClaims();
+      setShowDeleteDialog(false);
+      setSelectedClaim(null);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Erro",
+        description: error.message || "Erro ao excluir sinistro",
+        variant: "destructive",
+      });
     },
   });
   
@@ -198,6 +222,19 @@ const AdminClaims: React.FC = () => {
     });
     
     setShowReviewDialog(true);
+  };
+
+  // Handle delete claim
+  const handleDeleteClaim = (claim: Claim) => {
+    setSelectedClaim(claim);
+    setShowDeleteDialog(true);
+  };
+
+  // Confirm delete claim
+  const confirmDeleteClaim = () => {
+    if (selectedClaim) {
+      deleteMutation.mutate(selectedClaim.id);
+    }
   };
   
   // Submit claim review
@@ -328,6 +365,7 @@ const AdminClaims: React.FC = () => {
               columns={claimColumns}
               onViewClaim={handleViewClaim}
               onReviewClaim={handleReviewClaim}
+              onDeleteClaim={handleDeleteClaim}
               showReviewAction={false}
             />
           </TabsContent>
@@ -338,6 +376,7 @@ const AdminClaims: React.FC = () => {
               columns={claimColumns}
               onViewClaim={handleViewClaim}
               onReviewClaim={handleReviewClaim}
+              onDeleteClaim={handleDeleteClaim}
               showReviewAction={true}
             />
           </TabsContent>
@@ -348,6 +387,7 @@ const AdminClaims: React.FC = () => {
               columns={claimColumns}
               onViewClaim={handleViewClaim}
               onReviewClaim={handleReviewClaim}
+              onDeleteClaim={handleDeleteClaim}
               showReviewAction={false}
             />
           </TabsContent>
@@ -358,6 +398,7 @@ const AdminClaims: React.FC = () => {
               columns={claimColumns}
               onViewClaim={handleViewClaim}
               onReviewClaim={handleReviewClaim}
+              onDeleteClaim={handleDeleteClaim}
               showReviewAction={false}
             />
           </TabsContent>
@@ -557,6 +598,61 @@ const AdminClaims: React.FC = () => {
           </Form>
         </DialogContent>
       </Dialog>
+
+      {/* Delete confirmation dialog */}
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-red-500" />
+              Confirmar Exclusão
+            </DialogTitle>
+            <DialogDescription>
+              Tem certeza que deseja excluir o sinistro #{selectedClaim?.id}?
+              <br />
+              <strong>Esta ação não pode ser desfeita.</strong>
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="bg-red-50 border border-red-200 rounded-md p-3 mt-4">
+            <div className="flex">
+              <AlertCircle className="h-5 w-5 text-red-400 mr-2 flex-shrink-0 mt-0.5" />
+              <div className="text-sm text-red-700">
+                <p className="font-medium">Atenção:</p>
+                <p>Ao excluir este sinistro, todos os dados relacionados serão permanentemente removidos do sistema.</p>
+              </div>
+            </div>
+          </div>
+          
+          <DialogFooter className="gap-2">
+            <Button 
+              variant="outline" 
+              onClick={() => setShowDeleteDialog(false)}
+              disabled={deleteMutation.isPending}
+            >
+              Cancelar
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={confirmDeleteClaim}
+              disabled={deleteMutation.isPending}
+              className="flex items-center gap-2"
+            >
+              {deleteMutation.isPending ? (
+                <>
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  Excluindo...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="h-4 w-4" />
+                  Excluir Sinistro
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AdminLayout>
   );
 };
@@ -567,6 +663,7 @@ interface ClaimsListProps {
   columns: Column<Claim>[];
   onViewClaim: (claim: Claim) => void;
   onReviewClaim: (claim: Claim) => void;
+  onDeleteClaim: (claim: Claim) => void;
   showReviewAction: boolean;
 }
 
@@ -575,6 +672,7 @@ const ClaimsList: React.FC<ClaimsListProps> = ({
   columns, 
   onViewClaim, 
   onReviewClaim,
+  onDeleteClaim,
   showReviewAction 
 }) => {
   const actions: Action<Claim>[] = showReviewAction
@@ -587,11 +685,21 @@ const ClaimsList: React.FC<ClaimsListProps> = ({
           label: "Analisar",
           onClick: (row) => onReviewClaim(row),
         },
+        {
+          label: "Excluir",
+          onClick: (row) => onDeleteClaim(row),
+          variant: "destructive",
+        },
       ]
     : [
         {
           label: "Ver detalhes",
           onClick: (row) => onViewClaim(row),
+        },
+        {
+          label: "Excluir",
+          onClick: (row) => onDeleteClaim(row),
+          variant: "destructive",
         },
       ];
 

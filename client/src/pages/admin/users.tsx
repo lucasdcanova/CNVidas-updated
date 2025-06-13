@@ -500,16 +500,16 @@ const AdminUsersPage: React.FC = () => {
   return (
     <AdminLayout title="Gerenciamento de Usuários">
       <Card className="mb-4 lg:mb-6">
-        <CardHeader className="flex flex-col space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 pb-3 lg:pb-2">
-          <CardTitle className="text-base lg:text-lg font-medium">Filtros e Busca</CardTitle>
+        <CardHeader className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 pb-3 sm:pb-2">
+          <CardTitle className="text-lg sm:text-xl font-medium">Filtros e Busca</CardTitle>
           <Dialog open={openNewDialog} onOpenChange={setOpenNewDialog}>
             <DialogTrigger asChild>
-              <Button className="w-full lg:w-auto lg:ml-auto">
+              <Button className="w-full sm:w-auto sm:ml-auto" size="sm">
                 <UserPlus className="mr-2 h-4 w-4" />
-                <span className="lg:inline">Novo Usuário</span>
+                <span>Novo Usuário</span>
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="w-[95vw] max-w-[425px]">
               <DialogHeader>
                 <DialogTitle>Criar Novo Usuário</DialogTitle>
                 <DialogDescription>
@@ -607,67 +607,74 @@ const AdminUsersPage: React.FC = () => {
             </DialogContent>
           </Dialog>
         </CardHeader>
-        <CardContent className="p-4 lg:p-6">
-          <div className="flex flex-col space-y-3 lg:space-y-0 lg:flex-row lg:gap-4">
+        <CardContent className="p-3 sm:p-4 lg:p-6">
+          <div className="flex flex-col space-y-3 sm:space-y-3 lg:space-y-0 lg:flex-row lg:gap-4">
             <div className="flex-1">
               <div className="relative">
                 <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
                 <Input
-                  className="pl-9"
-                  placeholder="Buscar por nome, email ou usuário..."
+                  className="pl-9 h-9 sm:h-10 text-sm sm:text-base"
+                  placeholder="Buscar..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
             </div>
-            <div className="lg:w-64">
-              <Select onValueChange={(value) => setFilterRole(value === "all" ? null : value)}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Filtrar por perfil" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Perfil</SelectLabel>
-                    <SelectItem value="all">Todos</SelectItem>
-                    <SelectItem value="patient">Pacientes</SelectItem>
-                    <SelectItem value="doctor">Médicos</SelectItem>
-                    <SelectItem value="partner">Parceiros</SelectItem>
-                    <SelectItem value="admin">Administradores</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="lg:w-64">
-              <Select onValueChange={(value: 'newest' | 'oldest') => setSortOrder(value)} defaultValue="newest">
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Ordenar por data" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Ordenação</SelectLabel>
-                    <SelectItem value="newest">Mais recente primeiro</SelectItem>
-                    <SelectItem value="oldest">Mais antigo primeiro</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-3">
+              <div className="sm:w-40 lg:w-48">
+                <Select onValueChange={(value) => setFilterRole(value === "all" ? null : value)}>
+                  <SelectTrigger className="w-full h-9 sm:h-10 text-sm sm:text-base">
+                    <SelectValue placeholder="Filtrar perfil" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Perfil</SelectLabel>
+                      <SelectItem value="all">Todos</SelectItem>
+                      <SelectItem value="patient">Pacientes</SelectItem>
+                      <SelectItem value="doctor">Médicos</SelectItem>
+                      <SelectItem value="partner">Parceiros</SelectItem>
+                      <SelectItem value="admin">Admins</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="sm:w-40 lg:w-48">
+                <Select onValueChange={(value: 'newest' | 'oldest') => setSortOrder(value)} defaultValue="newest">
+                  <SelectTrigger className="w-full h-9 sm:h-10 text-sm sm:text-base">
+                    <SelectValue placeholder="Ordenar" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Ordenação</SelectLabel>
+                      <SelectItem value="newest">Mais recentes</SelectItem>
+                      <SelectItem value="oldest">Mais antigos</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
         </CardContent>
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Lista de Usuários</CardTitle>
+        <CardHeader className="px-3 py-4 sm:px-6">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg sm:text-xl">Lista de Usuários</CardTitle>
+            <Badge variant="secondary" className="text-xs sm:text-sm">
+              {filteredUsers.length} usuário{filteredUsers.length !== 1 ? 's' : ''}
+            </Badge>
+          </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0 sm:p-6">
           {isLoading ? (
-            <div className="space-y-4">
+            <div className="space-y-4 p-4">
               {[...Array(5)].map((_, i) => (
                 <div key={i} className="flex items-center space-x-4">
-                  <Skeleton className="h-12 w-12 rounded-full" />
-                  <div className="space-y-2">
-                    <Skeleton className="h-4 w-[250px]" />
-                    <Skeleton className="h-4 w-[200px]" />
+                  <Skeleton className="h-10 w-10 sm:h-12 sm:w-12 rounded-full" />
+                  <div className="space-y-2 flex-1">
+                    <Skeleton className="h-4 w-full max-w-[250px]" />
+                    <Skeleton className="h-4 w-full max-w-[200px]" />
                   </div>
                 </div>
               ))}
@@ -692,73 +699,106 @@ const AdminUsersPage: React.FC = () => {
                   {filteredUsers?.length > 0 ? (
                     filteredUsers.map((user) => (
                       <ResponsiveTableRow key={user.id}>
-                        <ResponsiveTableCell header="Nome" className="font-medium">{user.fullName}</ResponsiveTableCell>
-                        <ResponsiveTableCell header="Email">{user.email}</ResponsiveTableCell>
-                        <ResponsiveTableCell header="Usuário">{user.username}</ResponsiveTableCell>
-                        <ResponsiveTableCell header="Perfil">
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            user.role === 'patient' ? 'bg-green-100 text-green-800' :
-                            user.role === 'doctor' ? 'bg-purple-100 text-purple-800' :
-                            user.role === 'partner' ? 'bg-orange-100 text-orange-800' :
-                            'bg-blue-100 text-blue-800'
-                          }`}>
-                            {user.role === 'patient' ? 'Paciente' :
-                             user.role === 'doctor' ? 'Médico' :
-                             user.role === 'partner' ? 'Parceiro' : 'Admin'}
-                          </span>
+                        <ResponsiveTableCell header="Nome" className="font-medium">
+                          <div className="flex items-center gap-2">
+                            <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-primary/10 text-xs sm:text-sm font-semibold">
+                              {user.fullName?.charAt(0).toUpperCase() || 'U'}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="truncate font-medium text-sm sm:text-base">{user.fullName}</p>
+                              <p className="text-xs sm:text-sm text-muted-foreground truncate sm:hidden">{user.email}</p>
+                            </div>
+                          </div>
                         </ResponsiveTableCell>
-                        <ResponsiveTableCell header="Plano">
+                        <ResponsiveTableCell header="Email" className="hidden sm:table-cell">{user.email}</ResponsiveTableCell>
+                        <ResponsiveTableCell header="Usuário" className="hidden lg:table-cell">{user.username}</ResponsiveTableCell>
+                        <ResponsiveTableCell header="Perfil">
+                          <Badge className={`text-xs sm:text-sm ${
+                            user.role === 'patient' ? 'bg-green-100 text-green-800 hover:bg-green-100' :
+                            user.role === 'doctor' ? 'bg-purple-100 text-purple-800 hover:bg-purple-100' :
+                            user.role === 'partner' ? 'bg-orange-100 text-orange-800 hover:bg-orange-100' :
+                            'bg-blue-100 text-blue-800 hover:bg-blue-100'
+                          }`}>
+                            <span className="flex items-center gap-1">
+                              {user.role === 'patient' ? <Users className="h-3 w-3" /> :
+                               user.role === 'doctor' ? <Stethoscope className="h-3 w-3" /> :
+                               user.role === 'partner' ? <Building2 className="h-3 w-3" /> : 
+                               <Shield className="h-3 w-3" />}
+                              {user.role === 'patient' ? 'Paciente' :
+                               user.role === 'doctor' ? 'Médico' :
+                               user.role === 'partner' ? 'Parceiro' : 'Admin'}
+                            </span>
+                          </Badge>
+                        </ResponsiveTableCell>
+                        <ResponsiveTableCell header="Plano" className="hidden sm:table-cell">
                           {user.role === 'patient' ? (
                             user.subscriptionPlan ? (
-                              <Badge className={`
-                                ${user.subscriptionPlan === 'premium' ? 'bg-yellow-500 hover:bg-yellow-600' : 
-                                  user.subscriptionPlan === 'basic' ? 'bg-blue-500 hover:bg-blue-600' : 
-                                  'bg-slate-500 hover:bg-slate-600'
-                                }
-                              `}>
+                              <Badge className={`text-xs sm:text-sm ${
+                                user.subscriptionPlan === 'premium' ? 'bg-yellow-500 hover:bg-yellow-600' : 
+                                user.subscriptionPlan === 'basic' ? 'bg-blue-500 hover:bg-blue-600' : 
+                                'bg-slate-500 hover:bg-slate-600'
+                              }`}>
                                 {user.subscriptionPlan.charAt(0).toUpperCase() + user.subscriptionPlan.slice(1)}
                               </Badge>
                             ) : (
-                              <Badge variant="outline">Gratuito</Badge>
+                              <Badge variant="outline" className="text-xs sm:text-sm">Gratuito</Badge>
                             )
                           ) : (
-                            <Badge variant="outline">N/A</Badge>
+                            <span className="text-xs sm:text-sm text-muted-foreground">-</span>
                           )}
                         </ResponsiveTableCell>
-                        <ResponsiveTableCell header="Status">
+                        <ResponsiveTableCell header="Status" className="hidden md:table-cell">
                           {user.role === 'patient' ? (
-                            <Badge variant={user.subscriptionStatus === 'active' ? 'default' : 'destructive'}>
+                            <Badge 
+                              variant={user.subscriptionStatus === 'active' ? 'default' : 'destructive'}
+                              className="text-xs sm:text-sm"
+                            >
                               {user.subscriptionStatus === 'active' ? 'Ativo' : 
                                user.subscriptionStatus === 'inactive' ? 'Inativo' : 
                                user.subscriptionStatus === 'pending' ? 'Pendente' : 
                                user.subscriptionStatus || 'N/A'}
                             </Badge>
                           ) : (
-                            <Badge variant="outline">N/A</Badge>
+                            <span className="text-xs sm:text-sm text-muted-foreground">-</span>
                           )}
                         </ResponsiveTableCell>
-                        <ResponsiveTableCell header="Data de Cadastro">
-                          <span className="text-sm text-gray-600">
+                        <ResponsiveTableCell header="Cadastro" className="hidden xl:table-cell">
+                          <span className="text-xs sm:text-sm text-muted-foreground">
                             {formatDate(user.createdAt)}
                           </span>
                         </ResponsiveTableCell>
-                        <ResponsiveTableCell header="Verificado">
-                          {user.emailVerified ? (
-                            <Check size={18} className="text-green-500" />
-                          ) : (
-                            <X size={18} className="text-red-500" />
-                          )}
+                        <ResponsiveTableCell header="Verificado" className="hidden lg:table-cell">
+                          <div className="flex justify-center">
+                            {user.emailVerified ? (
+                              <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-500" />
+                            ) : (
+                              <X className="h-4 w-4 sm:h-5 sm:w-5 text-red-500" />
+                            )}
+                          </div>
                         </ResponsiveTableCell>
                         <ResponsiveTableCell header="Ações" className="text-right">
-                          <div className="flex justify-end">
+                          <div className="flex items-center justify-end gap-2">
+                            {/* Mobile quick actions */}
+                            <div className="flex sm:hidden gap-1">
+                              {user.role === 'patient' && user.subscriptionPlan && (
+                                <Badge className="text-xs" variant={user.subscriptionStatus === 'active' ? 'default' : 'outline'}>
+                                  {user.subscriptionPlan}
+                                </Badge>
+                              )}
+                              {user.emailVerified ? (
+                                <Check className="h-4 w-4 text-green-500" />
+                              ) : (
+                                <X className="h-4 w-4 text-red-500" />
+                              )}
+                            </div>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                  <Settings size={16} />
+                                <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-9 sm:w-9">
+                                  <Settings className="h-4 w-4" />
                                   <span className="sr-only">Ações</span>
                                 </Button>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end" className="w-56">
+                              <DropdownMenuContent align="end" className="w-48 sm:w-56">
                                 <DropdownMenuLabel>Ações</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuGroup>
@@ -787,7 +827,7 @@ const AdminUsersPage: React.FC = () => {
                                         setOpenPlanDialog(true);
                                       }}>
                                         <CreditCard className="mr-2 h-4 w-4" />
-                                        <span>Alterar Plano</span>
+                                        <span className="text-sm">Alterar Plano</span>
                                       </DropdownMenuItem>
                                       
                                       {/* Conceder acesso premium */}
@@ -796,7 +836,7 @@ const AdminUsersPage: React.FC = () => {
                                         setOpenPremiumAccessDialog(true);
                                       }}>
                                         <Star className="mr-2 h-4 w-4" />
-                                        <span>Conceder Plano Gratuito</span>
+                                        <span className="text-sm">Conceder Plano</span>
                                       </DropdownMenuItem>
                                       
                                       {/* Cancelar assinatura */}
@@ -810,7 +850,7 @@ const AdminUsersPage: React.FC = () => {
                                           }
                                         }}>
                                           <X className="mr-2 h-4 w-4" />
-                                          <span>Cancelar Assinatura</span>
+                                          <span className="text-sm">Cancelar Assinatura</span>
                                         </DropdownMenuItem>
                                       )}
                                     </>
@@ -822,11 +862,11 @@ const AdminUsersPage: React.FC = () => {
                                       <DropdownMenuSeparator />
                                       <DropdownMenuItem onClick={() => handleEditDoctor(user)}>
                                         <Stethoscope className="mr-2 h-4 w-4" />
-                                        <span>Editar Perfil Médico</span>
+                                        <span className="text-sm">Perfil Médico</span>
                                       </DropdownMenuItem>
                                       <DropdownMenuItem onClick={() => window.open(`/admin/doctors/${user.id}/availability`, '_blank')}>
                                         <Calendar className="mr-2 h-4 w-4" />
-                                        <span>Gerenciar Agenda</span>
+                                        <span className="text-sm">Gerenciar Agenda</span>
                                       </DropdownMenuItem>
                                     </>
                                   )}
@@ -840,7 +880,7 @@ const AdminUsersPage: React.FC = () => {
                                     }}
                                   >
                                     <Trash2 className="mr-2 h-4 w-4" />
-                                    <span>Excluir Usuário</span>
+                                    <span className="text-sm">Excluir Usuário</span>
                                   </DropdownMenuItem>
                                 </DropdownMenuGroup>
                               </DropdownMenuContent>
@@ -883,18 +923,15 @@ const AdminUsersPage: React.FC = () => {
                     ))
                   ) : (
                     <ResponsiveTableRow>
-                      <ResponsiveTableCell header="" className="text-center py-6 text-gray-500" style={{ gridColumn: '1 / -1' }}>
-                        {searchQuery || filterRole ? (
-                          <div className="flex flex-col items-center">
-                            <AlertCircle className="h-8 w-8 mb-2" />
-                            <p>Nenhum usuário encontrado com os filtros selecionados.</p>
-                          </div>
-                        ) : (
-                          <div className="flex flex-col items-center">
-                            <AlertCircle className="h-8 w-8 mb-2" />
-                            <p>Nenhum usuário cadastrado no sistema.</p>
-                          </div>
-                        )}
+                      <ResponsiveTableCell colSpan={9} className="h-24">
+                        <div className="flex flex-col items-center justify-center py-8">
+                          <AlertCircle className="h-8 w-8 mb-2 text-muted-foreground" />
+                          <p className="text-sm sm:text-base text-muted-foreground text-center">
+                            {searchQuery || filterRole ? 
+                              'Nenhum usuário encontrado com os filtros selecionados.' : 
+                              'Nenhum usuário cadastrado no sistema.'}
+                          </p>
+                        </div>
                       </ResponsiveTableCell>
                     </ResponsiveTableRow>
                   )}
@@ -907,7 +944,7 @@ const AdminUsersPage: React.FC = () => {
       
       {/* Diálogo para gerenciar plano de assinatura */}
       <Dialog open={openPlanDialog} onOpenChange={setOpenPlanDialog}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="w-[95vw] max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Gerenciar Plano de Assinatura</DialogTitle>
             <DialogDescription>
@@ -961,7 +998,7 @@ const AdminUsersPage: React.FC = () => {
       
       {/* Diálogo para conceder acesso premium gratuito */}
       <Dialog open={openPremiumAccessDialog} onOpenChange={setOpenPremiumAccessDialog}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="w-[95vw] max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Conceder Acesso Premium Gratuito</DialogTitle>
             <DialogDescription>
@@ -1024,7 +1061,7 @@ const AdminUsersPage: React.FC = () => {
 
       {/* Diálogo para editar usuário */}
       <Dialog open={openEditDialog} onOpenChange={setOpenEditDialog}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="w-[95vw] max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Editar Usuário</DialogTitle>
             <DialogDescription>
@@ -1145,7 +1182,7 @@ const AdminUsersPage: React.FC = () => {
       
       {/* Diálogo para editar perfil médico */}
       <Dialog open={openDoctorDialog} onOpenChange={setOpenDoctorDialog}>
-        <DialogContent className="sm:max-w-[550px]">
+        <DialogContent className="w-[95vw] max-w-[550px]">
           <DialogHeader>
             <DialogTitle>Editar Perfil Médico</DialogTitle>
             <DialogDescription>

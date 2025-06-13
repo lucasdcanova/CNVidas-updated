@@ -21,6 +21,7 @@ interface ResponsiveTableCellProps {
   className?: string;
   header?: string;
   hideOnMobile?: boolean;
+  colSpan?: number;
 }
 
 const ResponsiveTable = ({ children, className, ...props }: ResponsiveTableProps) => {
@@ -146,19 +147,23 @@ const ResponsiveTableCell = ({
   className, 
   header, 
   hideOnMobile = false,
+  colSpan,
   isMobile = false
 }: ResponsiveTableCellProps & { isMobile?: boolean }) => {
   if (isMobile) {
     if (hideOnMobile) return null;
     
+    // Se for uma célula especial (sem header), renderizar diretamente
+    if (!header) {
+      return <div className={className}>{children}</div>;
+    }
+    
     return (
       <div className="flex justify-between items-center py-1">
-        {header && (
-          <span className="text-sm font-medium text-muted-foreground min-w-0 flex-shrink-0 mr-2">
-            {header}:
-          </span>
-        )}
-        <span className="text-sm text-right flex-1 min-w-0 truncate">
+        <span className="text-sm font-medium text-muted-foreground min-w-0 flex-shrink-0 mr-2">
+          {header}:
+        </span>
+        <span className="text-sm text-right flex-1 min-w-0">
           {children}
         </span>
       </div>
@@ -166,7 +171,7 @@ const ResponsiveTableCell = ({
   }
 
   return (
-    <td className={cn("p-4 align-middle [&:has([role=checkbox])]:pr-0", className)}>
+    <td className={cn("p-4 align-middle [&:has([role=checkbox])]:pr-0", className)} colSpan={colSpan}>
       {children}
     </td>
   );
