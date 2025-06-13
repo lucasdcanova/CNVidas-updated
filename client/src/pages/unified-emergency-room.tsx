@@ -101,37 +101,12 @@ export default function UnifiedEmergencyRoom() {
       // Use the token from the consultation data if available
       let token = data.token;
       
-      // Only request a new token if we don't have one
+      // For emergency rooms, we'll work without tokens (public mode)
+      // Daily.co allows public rooms without authentication
       if (!token) {
-        console.log('🔑 Token não encontrado nos dados da consulta, solicitando novo token...');
-        try {
-          const tokenResponse = await apiRequest('POST', '/api/telemedicine/token', {
-            roomName: roomName,
-            isDoctor: isDoctor
-          });
-          
-          if (tokenResponse.ok) {
-            try {
-              const tokenData = await tokenResponse.json();
-              console.log('🎫 Token recebido:', tokenData);
-              
-              // Extract the token from the response
-              if (typeof tokenData === 'object' && tokenData.token) {
-                token = tokenData.token;
-              } else if (typeof tokenData === 'string') {
-                token = tokenData;
-              }
-            } catch (parseError) {
-              console.error('⚠️ Erro ao processar token:', parseError);
-              // Continue without token
-            }
-          } else {
-            console.warn('⚠️ Falha ao obter token:', tokenResponse.status);
-          }
-        } catch (e) {
-          console.warn('⚠️ Erro ao solicitar token:', e);
-          // Continue without token - the video component may handle this
-        }
+        console.log('🔓 Sala de emergência funcionará em modo público (sem token)');
+        // No need to request a token for emergency rooms
+        // The room was created with the emergency consultation
       } else {
         console.log('✅ Usando token existente da consulta');
       }
