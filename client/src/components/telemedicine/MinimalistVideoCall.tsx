@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import DailyIframe from '@daily-co/daily-js';
 import { Mic, MicOff, Video, VideoOff, Phone, X, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import { TelemedicineDiagnostics } from '@/utils/telemedicine-diagnostics';
 
 interface MinimalistVideoCallProps {
@@ -136,8 +137,43 @@ export default function MinimalistVideoCall({
     setIsConnecting(true);
 
     try {
-      // Solicitar permissões de mídia
-      await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+      // Solicitar permissões de mídia com tratamento de erro específico
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+        // Importante: manter a stream ativa até o Daily assumir o controle
+        // Não chamar track.stop() aqui!
+        console.log('✅ Permissões de mídia obtidas com sucesso');
+        
+        // Guardar referência da stream para limpeza posterior se necessário
+        const tracks = stream.getTracks();
+        
+        // Adicionar listener para detectar falha na captura
+        tracks.forEach(track => {
+          track.onended = () => {
+            console.error('❌ MediaStreamTrack ended unexpectedly:', track.kind);
+            if (track.readyState === 'ended') {
+              setConnectionError(`Falha na captura de ${track.kind === 'video' ? 'vídeo' : 'áudio'}. Por favor, verifique suas configurações.`);
+            }
+          };
+        });
+      } catch (mediaError: any) {
+        console.error('❌ Erro ao obter permissões de mídia:', mediaError);
+        
+        let errorMessage = 'Erro ao acessar câmera/microfone. ';
+        
+        if (mediaError.name === 'NotFoundError') {
+          errorMessage += 'Nenhum dispositivo de mídia encontrado.';
+        } else if (mediaError.name === 'NotAllowedError' || mediaError.name === 'PermissionDeniedError') {
+          errorMessage += 'Permissão negada. Por favor, permita o acesso.';
+        } else if (mediaError.name === 'NotReadableError' || mediaError.name === 'TrackStartError') {
+          errorMessage += 'Dispositivo em uso por outro aplicativo.';
+        } else {
+          errorMessage += mediaError.message || 'Erro desconhecido.';
+        }
+        
+        setConnectionError(errorMessage);
+        throw new Error(errorMessage);
+      }
 
       // Aguardar um pouco para garantir que o container esteja renderizado
       await new Promise(resolve => setTimeout(resolve, 100));
@@ -152,7 +188,7 @@ export default function MinimalistVideoCall({
         }
       }
 
-      // Configuração minimalista do Daily.co
+      // Configuração minimalista do Daily.co com prevenção de erros de captura
       const dailyOptions = {
         showLeaveButton: false,
         showFullscreenButton: false,
@@ -162,6 +198,30 @@ export default function MinimalistVideoCall({
         showScreenShareButton: false,
         showSettingsButton: false,
         showLocalVideoAlways: true,
+        // Configurações importantes para prevenir erros de captura
+        audioSource: true, // Usar fonte de áudio padrão
+        videoSource: true, // Usar fonte de vídeo padrão
+        dailyConfig: {
+          experimentalChromeVideoMuteLightOff: true,
+          // Evitar problemas de captura em navegadores específicos
+          avoidEchoCancellationConstraints: false,
+          camSimulcastEncodings: [
+            { maxBitrate: 100000, scaleResolutionDownBy: 4 },
+            { maxBitrate: 300000, scaleResolutionDownBy: 2 },
+            { maxBitrate: 1000000, scaleResolutionDownBy: 1 }
+          ],
+          // Configurações de mídia mais tolerantes
+          userMediaVideoConstraints: {
+            width: { ideal: 1280, max: 1920 },
+            height: { ideal: 720, max: 1080 },
+            frameRate: { ideal: 24, max: 30 }
+          },
+          userMediaAudioConstraints: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+          }
+        },
         iframeStyle: {
           position: 'absolute',
           top: '0',
@@ -224,6 +284,15 @@ export default function MinimalistVideoCall({
           return;
         }
         
+        // Tratar erro de captura de mídia
+        if (error?.errorMsg?.includes('MediaStreamTrack') || error?.errorMsg?.includes('capture failure')) {
+          console.error('❌ Falha na captura de mídia detectada');
+          setConnectionError('Falha na captura de câmera/microfone. Possíveis soluções:\n1. Recarregue a página (F5)\n2. Verifique se outro app está usando a câmera\n3. Tente desabilitar temporariamente o vídeo\n4. Use outro navegador (Chrome/Edge recomendado)');
+          setIsConnecting(false);
+          isJoiningRef.current = false;
+          return;
+        }
+        
         // Tratar erro de sala não encontrada
         if (error?.error?.type === 'no-room' || error?.errorMsg?.includes('meeting does not exist')) {
           console.log('🚨 Sala não encontrada');
@@ -276,6 +345,25 @@ export default function MinimalistVideoCall({
         }
       };
 
+      // Verificar dispositivos de mídia antes de entrar
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const hasVideo = devices.some(device => device.kind === 'videoinput');
+        const hasAudio = devices.some(device => device.kind === 'audioinput');
+        
+        console.log('📹 Dispositivos disponíveis:', {
+          video: hasVideo,
+          audio: hasAudio,
+          devices: devices.map(d => ({ kind: d.kind, label: d.label || 'Sem nome' }))
+        });
+        
+        if (!hasVideo && !hasAudio) {
+          throw new Error('Nenhum dispositivo de mídia encontrado');
+        }
+      } catch (devicesError) {
+        console.error('❌ Erro ao verificar dispositivos:', devicesError);
+      }
+      
       // Entrar na sala
       console.log('🚀 Tentando entrar na sala:', {
         url: roomUrl,

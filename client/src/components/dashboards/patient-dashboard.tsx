@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
 import { format } from "date-fns";
+import { ptBR } from "date-fns/locale/pt-BR";
 import { ArrowRight, Calendar, Clock, MapPin, Phone, Star, Heart, Activity, Shield, Users, Stethoscope, Building2, CreditCard, FileText, AlertTriangle, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { getPlanColor, getPlanName } from "@/components/shared/plan-indicator";
 import { useToast } from "@/hooks/use-toast";
@@ -305,79 +306,80 @@ export const PatientDashboard: React.FC = () => {
                 <ul className="divide-y divide-gray-100/50">
                   {displayedActivities.length > 0 ? (
                     displayedActivities.map((activity: any, index: number) => (
-                    <li key={activity.id || index} className="p-5 hover:bg-white/30 transition-colors duration-200">
-                      <div className="flex">
-                        <div className="mr-4 flex-shrink-0">
-                        <span className={`inline-flex items-center justify-center h-10 w-10 rounded-xl shadow-sm ring-2 ring-white/30 ${
-                          activity.type === 'appointment' ? 'bg-gradient-to-br from-green-400/80 to-green-600/80' :
-                          activity.type === 'claim' ? 'bg-gradient-to-br from-orange-400/80 to-orange-600/80' :
-                          activity.type === 'subscription' ? 'bg-gradient-to-br from-purple-400/80 to-purple-600/80' :
-                          activity.type === 'payment' ? 'bg-gradient-to-br from-red-400/80 to-red-600/80' :
-                          'bg-gradient-to-br from-blue-400/80 to-blue-600/80'
-                        }`}>
-                          <span className="material-icons text-white text-lg">{activity.icon}</span>
-                        </span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <p className="text-sm font-medium text-gray-800">{activity.title}</p>
-                            <p className="text-sm text-gray-600 mt-0.5 line-clamp-2">{activity.description}</p>
-                          </div>
-                          {activity.status && (
-                            <span className={`ml-2 px-2 py-1 text-xs font-medium rounded-full flex-shrink-0 ${
-                              activity.status === 'completed' || activity.status === 'aprovado' || activity.status === 'active' ? 
-                                'bg-green-100 text-green-800' :
-                              activity.status === 'scheduled' || activity.status === 'em análise' ? 
-                                'bg-yellow-100 text-yellow-800' :
-                              activity.status === 'cancelled' || activity.status === 'rejeitado' ? 
-                                'bg-red-100 text-red-800' :
-                                'bg-gray-100 text-gray-800'
+                      <li key={activity.id || index} className="p-5 hover:bg-white/30 transition-colors duration-200">
+                        <div className="flex">
+                          <div className="mr-4 flex-shrink-0">
+                            <span className={`inline-flex items-center justify-center h-10 w-10 rounded-xl shadow-sm ring-2 ring-white/30 ${
+                              activity.type === 'appointment' ? 'bg-gradient-to-br from-green-400/80 to-green-600/80' :
+                              activity.type === 'claim' ? 'bg-gradient-to-br from-orange-400/80 to-orange-600/80' :
+                              activity.type === 'subscription' ? 'bg-gradient-to-br from-purple-400/80 to-purple-600/80' :
+                              activity.type === 'payment' ? 'bg-gradient-to-br from-red-400/80 to-red-600/80' :
+                              'bg-gradient-to-br from-blue-400/80 to-blue-600/80'
                             }`}>
-                              {activity.status === 'completed' ? 'Concluído' :
-                               activity.status === 'scheduled' ? 'Agendado' :
-                               activity.status === 'em análise' ? 'Em análise' :
-                               activity.status === 'aprovado' ? 'Aprovado' :
-                               activity.status === 'rejeitado' ? 'Rejeitado' :
-                               activity.status === 'active' ? 'Ativo' :
-                               activity.status}
+                              <span className="material-icons text-white text-lg">{activity.icon}</span>
                             </span>
-                          )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <p className="text-sm font-medium text-gray-800">{activity.title}</p>
+                                <p className="text-sm text-gray-600 mt-0.5 line-clamp-2">{activity.description}</p>
+                              </div>
+                              {activity.status && (
+                                <span className={`ml-2 px-2 py-1 text-xs font-medium rounded-full flex-shrink-0 ${
+                                  activity.status === 'completed' || activity.status === 'aprovado' || activity.status === 'active' ? 
+                                    'bg-green-100 text-green-800' :
+                                  activity.status === 'scheduled' || activity.status === 'em análise' ? 
+                                    'bg-yellow-100 text-yellow-800' :
+                                  activity.status === 'cancelled' || activity.status === 'rejeitado' ? 
+                                    'bg-red-100 text-red-800' :
+                                    'bg-gray-100 text-gray-800'
+                                }`}>
+                                  {activity.status === 'completed' ? 'Concluído' :
+                                   activity.status === 'scheduled' ? 'Agendado' :
+                                   activity.status === 'em análise' ? 'Em análise' :
+                                   activity.status === 'aprovado' ? 'Aprovado' :
+                                   activity.status === 'rejeitado' ? 'Rejeitado' :
+                                   activity.status === 'active' ? 'Ativo' :
+                                   activity.status}
+                                </span>
+                              )}
+                            </div>
+                            <div className="mt-2 flex items-center justify-between">
+                              <p className="text-xs text-gray-400 flex items-center">
+                                <span className="material-icons text-gray-400 mr-1 text-xs">schedule</span>
+                                {new Date(activity.date).toLocaleDateString('pt-BR', { 
+                                  day: '2-digit', 
+                                  month: '2-digit', 
+                                  year: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </p>
+                              {activity.link && activity.link !== '/' && (
+                                <Link href={activity.link}>
+                                  <Button variant="ghost" size="sm" className="text-xs text-primary hover:text-primary/80 h-6 px-2">
+                                    Ver detalhes
+                                    <span className="material-icons ml-1 text-xs">arrow_forward</span>
+                                  </Button>
+                                </Link>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                        <div className="mt-2 flex items-center justify-between">
-                          <p className="text-xs text-gray-400 flex items-center">
-                            <span className="material-icons text-gray-400 mr-1 text-xs">schedule</span>
-                            {new Date(activity.date).toLocaleDateString('pt-BR', { 
-                              day: '2-digit', 
-                              month: '2-digit', 
-                              year: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}
-                          </p>
-                          {activity.link && activity.link !== '/' && (
-                            <Link href={activity.link}>
-                              <Button variant="ghost" size="sm" className="text-xs text-primary hover:text-primary/80 h-6 px-2">
-                                Ver detalhes
-                                <span className="material-icons ml-1 text-xs">arrow_forward</span>
-                              </Button>
-                            </Link>
-                          )}
+                      </li>
+                    ))
+                  ) : (
+                    <li className="py-10 text-center text-gray-500">
+                      <div className="flex flex-col items-center justify-center">
+                        <div className="rounded-full bg-blue-100/80 p-3 mb-3">
+                          <span className="material-icons text-blue-500 text-2xl">timeline</span>
                         </div>
+                        <p className="text-base text-gray-600 mb-1">Nenhuma atividade recente.</p>
+                        <p className="text-sm text-gray-500">Suas atividades e atualizações aparecerão aqui conforme você usa a plataforma.</p>
                       </div>
                     </li>
-                  ))
-                ) : (
-                  <li className="py-10 text-center text-gray-500">
-                    <div className="flex flex-col items-center justify-center">
-                      <div className="rounded-full bg-blue-100/80 p-3 mb-3">
-                        <span className="material-icons text-blue-500 text-2xl">timeline</span>
-                      </div>
-                      <p className="text-base text-gray-600 mb-1">Nenhuma atividade recente.</p>
-                      <p className="text-sm text-gray-500">Suas atividades e atualizações aparecerão aqui conforme você usa a plataforma.</p>
-                    </div>
-                  </li>
-                )}
+                  )}
                 </ul>
                 {recentActivities.length > 2 && (
                   <div className="p-4 text-center border-t border-gray-100/30">
