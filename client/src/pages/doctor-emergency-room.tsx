@@ -95,7 +95,7 @@ export default function DoctorEmergencyRoom() {
         
         if (!token) {
           console.log('🔑 Obtendo token para o médico...');
-          const tokenResponse = await apiRequest('POST', '/api/telemedicine/daily/token', {
+          const tokenResponse = await apiRequest('POST', '/api/telemedicine/token', {
             appointmentId,
             roomName: roomName, // Usar o nome correto da sala!
             isDoctor: true

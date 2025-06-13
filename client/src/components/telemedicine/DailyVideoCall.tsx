@@ -104,7 +104,7 @@ export default function DailyVideoCall({
   const createRoomOnServer = async (roomName: string): Promise<boolean> => {
     try {
       console.log(`Criando sala ${roomName} no servidor...`);
-      const prepareResponse = await fetch('/api/telemedicine/daily/room', {
+      const prepareResponse = await fetch('/api/telemedicine/room', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -252,7 +252,7 @@ export default function DailyVideoCall({
               
               // Criar sala novamente com parâmetros de força
               console.log(`RECUPERAÇÃO PASSO 1: Tentativa ${retryAttempts + 1} - Forçando criação da sala com tempo extendido`);
-              const response = await fetch('/api/telemedicine/daily/room', {
+              const response = await fetch('/api/telemedicine/room', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

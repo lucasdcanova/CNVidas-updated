@@ -90,7 +90,11 @@ export function serveStatic(app: Express) {
   if (fs.existsSync(publicPath)) {
     console.log('✅ Usando diretório public compilado');
     app.use(express.static(publicPath));
-    app.use("*", (_req, res) => {
+    app.use("*", (req, res, next) => {
+      // Não interceptar rotas da API
+      if (req.originalUrl.startsWith('/api/')) {
+        return next();
+      }
       res.sendFile(path.resolve(publicPath, "index.html"));
     });
   } 
@@ -98,7 +102,11 @@ export function serveStatic(app: Express) {
   else if (fs.existsSync(clientPath)) {
     console.log('✅ Usando diretório client diretamente');
     app.use(express.static(clientPath));
-    app.use("*", (_req, res) => {
+    app.use("*", (req, res, next) => {
+      // Não interceptar rotas da API
+      if (req.originalUrl.startsWith('/api/')) {
+        return next();
+      }
       res.sendFile(path.resolve(clientPath, "index.html"));
     });
   }

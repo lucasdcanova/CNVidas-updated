@@ -105,7 +105,7 @@ export default function UnifiedEmergencyRoom() {
       if (!token) {
         console.log('🔑 Token não encontrado nos dados da consulta, solicitando novo token...');
         try {
-          const tokenResponse = await apiRequest('POST', '/api/telemedicine/daily/token', {
+          const tokenResponse = await apiRequest('POST', '/api/telemedicine/token', {
             roomName: roomName,
             isDoctor: isDoctor
           });

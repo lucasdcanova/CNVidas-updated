@@ -56,7 +56,7 @@ export default function DailyTelemedicinePage() {
       console.log('Verificando se a sala existe para a consulta:', appointmentId);
       
       // Criar ou verificar a sala primeiro
-      const roomResponse = await apiRequest('POST', '/api/telemedicine/daily/room', {
+      const roomResponse = await apiRequest('POST', '/api/telemedicine/room', {
         appointmentId,
       });
       
@@ -86,7 +86,7 @@ export default function DailyTelemedicinePage() {
       
       // Vamos usar a API de criação de sala de emergência diretamente
       // Esta rota garante que a sala seja criada no Daily.co
-      const emergencyResponse = await apiRequest('POST', '/api/telemedicine/daily/room', {
+      const emergencyResponse = await apiRequest('POST', '/api/telemedicine/room', {
         roomName: finalRoomName
       });
       
@@ -118,7 +118,7 @@ export default function DailyTelemedicinePage() {
       
       // Agora obter o token para a sala que acabamos de garantir que existe
       console.log('Requisitando token para a sala:', finalRoomName);
-      const response = await apiRequest('POST', '/api/telemedicine/daily/token', {
+      const response = await apiRequest('POST', '/api/telemedicine/token', {
         appointmentId,
         roomName: finalRoomName
       });
