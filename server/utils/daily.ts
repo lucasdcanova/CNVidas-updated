@@ -87,6 +87,9 @@ export async function createRoom(roomName: string, expiryMinutes = 60, waitForPr
           start_video_off: false,
           enable_chat: true,
           enable_screenshare: true,
+          enable_knocking: false, // Desabilitar "knocking" para acesso direto
+          enable_network_ui: true, // Habilitar UI de rede
+          enable_prejoin_ui: false, // Desabilitar tela de pre-join
           exp: Math.floor(Date.now() / 1000) + expiryMinutes * 60 // expiração em timestamp unix
         }
       };

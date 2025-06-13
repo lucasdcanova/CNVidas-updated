@@ -98,6 +98,21 @@ export default function UnifiedEmergencyRoom() {
         appointmentId
       });
       
+      // Verificar se a sala existe no Daily.co antes de tentar entrar
+      console.log('🔍 Verificando se a sala existe no Daily.co...');
+      const verifyResponse = await apiRequest('GET', `/api/emergency/v2/verify-room/${roomName}`);
+      
+      if (verifyResponse.ok) {
+        const verifyData = await verifyResponse.json();
+        if (!verifyData.exists) {
+          console.error('❌ Sala não existe no Daily.co, aguardando propagação...');
+          // Aguardar mais tempo para propagação
+          await new Promise(resolve => setTimeout(resolve, 5000));
+        } else {
+          console.log('✅ Sala confirmada no Daily.co:', verifyData.room);
+        }
+      }
+      
       // Use the token from the consultation data if available
       let token = data.token;
       

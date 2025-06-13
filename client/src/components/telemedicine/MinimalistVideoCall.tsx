@@ -236,7 +236,11 @@ export default function MinimalistVideoCall({
             echoCancellation: true,
             noiseSuppression: true,
             autoGainControl: true
-          }
+          },
+          // Desabilitar recursos que podem causar delay
+          enableKnocking: false, // Não exigir "bater" para entrar
+          enablePreJoinUI: false, // Não mostrar UI de pré-entrada
+          enableNetworkUI: true // Mostrar indicadores de conexão
         },
         iframeStyle: {
           position: 'absolute',
@@ -332,7 +336,7 @@ export default function MinimalistVideoCall({
             }
             
             // Aguardar um tempo exponencial para propagação
-            const waitTime = Math.min(3000 * Math.pow(2, retryCountRef.current - 1), 15000);
+            const waitTime = Math.min(5000 * Math.pow(2, retryCountRef.current - 1), 20000);
             console.log(`⏳ Aguardando ${waitTime}ms antes da próxima tentativa...`);
             await new Promise(resolve => setTimeout(resolve, waitTime));
             
@@ -414,9 +418,10 @@ export default function MinimalistVideoCall({
       // Adicionar timeout para a tentativa de conexão
       const joinTimeout = setTimeout(() => {
         console.error('⏱️ Timeout ao tentar entrar na sala');
-        setConnectionError('Tempo limite excedido ao tentar conectar. Por favor, verifique sua conexão.');
+        setConnectionError('A conexão está demorando mais que o esperado. Por favor, aguarde mais alguns instantes ou clique em "Tentar Novamente".');
         setIsConnecting(false);
-      }, 30000); // 30 segundos de timeout
+        isJoiningRef.current = false;
+      }, 60000); // 60 segundos de timeout - aumentado para dar mais tempo
       
       try {
         await callFrame.join(joinOptions);
@@ -456,7 +461,7 @@ export default function MinimalistVideoCall({
       const timer = setTimeout(() => {
         console.log('🎬 Auto-iniciando videochamada após delay de segurança');
         joinCall();
-      }, 5000); // Aumentado para 5 segundos para garantir propagação
+      }, 8000); // Aumentado para 8 segundos para garantir propagação completa
       
       return () => clearTimeout(timer);
     }

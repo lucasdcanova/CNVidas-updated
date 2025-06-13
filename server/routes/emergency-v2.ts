@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { storage } from '../storage.js';
-import { createRoom, createToken } from '../utils/daily.js';
+import { createRoom, createToken, getRoomDetails } from '../utils/daily.js';
 import { authenticateToken } from '../middleware/auth.js';
 
 const emergencyV2Router = Router();
@@ -66,7 +66,12 @@ emergencyV2Router.post('/start', authenticateToken, async (req: Request, res: Re
     // Criar sala Daily.co com nome único
     const roomName = `emergency-${userId}-${Date.now()}`;
     // IMPORTANTE: Passar true como terceiro parâmetro para aguardar propagação
+    console.log(`🚀 Criando sala de emergência: ${roomName}`);
     const roomData = await createRoom(roomName, 60, true); // 60 minutos, aguardar propagação
+    
+    // Aguardar um tempo adicional para garantir propagação completa
+    console.log('⏳ Aguardando propagação adicional da sala...');
+    await new Promise(resolve => setTimeout(resolve, 3000));
 
     // Criar token para o paciente
     const tokenResponse = await createToken(roomName, {
@@ -419,6 +424,39 @@ emergencyV2Router.post('/end/:appointmentId', authenticateToken, async (req: Req
 });
 
 /**
+ * GET /api/emergency/v2/verify-room/:roomName
+ * Verificar se a sala existe no Daily.co
+ */
+emergencyV2Router.get('/verify-room/:roomName', authenticateToken, async (req: Request, res: Response) => {
+  try {
+    const roomName = req.params.roomName;
+    
+    try {
+      const roomDetails = await getRoomDetails(roomName);
+      return res.json({
+        exists: true,
+        room: {
+          name: roomDetails.name,
+          url: roomDetails.url,
+          created_at: roomDetails.created_at
+        }
+      });
+    } catch (error) {
+      return res.json({
+        exists: false,
+        error: 'Room not found'
+      });
+    }
+  } catch (error) {
+    console.error('Error verifying room:', error);
+    return res.status(500).json({ 
+      error: 'Error verifying room',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+/**
  * GET /api/emergency/v2/status/:appointmentId
  * Verificar status da consulta
  */
@@ -585,6 +623,51 @@ emergencyV2Router.post('/complete/:appointmentId', authenticateToken, async (req
     console.error('Erro ao concluir consulta:', error);
     return res.status(500).json({ 
       error: 'Erro ao concluir consulta',
+      details: error instanceof Error ? error.message : 'Erro desconhecido'
+    });
+  }
+});
+
+/**
+ * GET /api/emergency/v2/verify-room/:roomName
+ * Verificar se uma sala existe no Daily.co
+ */
+emergencyV2Router.get('/verify-room/:roomName', authenticateToken, async (req: Request, res: Response) => {
+  try {
+    const { roomName } = req.params;
+    
+    // Tentar obter detalhes da sala
+    try {
+      const axios = require('axios');
+      const response = await axios.get(
+        `https://api.daily.co/v1/rooms/${roomName}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${process.env.DAILY_API_KEY}`
+          }
+        }
+      );
+      
+      if (response.status === 200) {
+        return res.json({ 
+          exists: true, 
+          roomUrl: response.data.url || `https://cnvidas.daily.co/${roomName}`,
+          message: 'Sala encontrada e pronta'
+        });
+      }
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        return res.json({ 
+          exists: false, 
+          message: 'Sala não encontrada'
+        });
+      }
+      throw error;
+    }
+  } catch (error) {
+    console.error('Erro ao verificar sala:', error);
+    return res.status(500).json({ 
+      error: 'Erro ao verificar sala',
       details: error instanceof Error ? error.message : 'Erro desconhecido'
     });
   }
