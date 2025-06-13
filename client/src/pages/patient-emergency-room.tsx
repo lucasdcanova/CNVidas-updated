@@ -191,6 +191,8 @@ export default function PatientEmergencyRoom() {
 
       const data = await response.json();
       console.log('Consulta criada:', data);
+      console.log('Token recebido:', data.token ? 'Token presente' : 'SEM TOKEN');
+      console.log('Tipo do token:', typeof data.token);
 
       // Salvar informações da consulta
       setCallState(prev => ({
@@ -508,10 +510,10 @@ export default function PatientEmergencyRoom() {
               )}
 
               <div className="relative aspect-video bg-gray-900 rounded-lg overflow-hidden">
-                {showVideoCall && callState.roomUrl && callState.token ? (
+                {showVideoCall && callState.roomUrl ? (
                   <MinimalistVideoCall
                     roomUrl={callState.roomUrl}
-                    token={callState.token}
+                    token={callState.token || undefined}
                     onJoinCall={handleJoinCall}
                     onLeaveCall={handleLeaveCall}
                     onParticipantJoined={handleParticipantJoined}
