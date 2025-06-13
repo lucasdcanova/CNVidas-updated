@@ -54,6 +54,37 @@ import {
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
+// Função utilitária para formatar datas de forma segura
+const formatDateSafe = (dateValue: string | Date | null | undefined, formatString: string = "dd/MM/yyyy"): string => {
+  if (!dateValue) return 'Não informado';
+  
+  try {
+    const date = new Date(dateValue);
+    if (isNaN(date.getTime())) {
+      return 'Data inválida';
+    }
+    
+    return format(date, formatString, { locale: ptBR });
+  } catch (error) {
+    return 'Data inválida';
+  }
+};
+
+const formatTimeSafe = (dateValue: string | Date | null | undefined): string => {
+  if (!dateValue) return 'Não informado';
+  
+  try {
+    const date = new Date(dateValue);
+    if (isNaN(date.getTime())) {
+      return 'Hora inválida';
+    }
+    
+    return format(date, "HH:mm", { locale: ptBR });
+  } catch (error) {
+    return 'Hora inválida';
+  }
+};
+
 interface CheckoutTracking {
   id: number;
   user_id: number;
@@ -472,10 +503,10 @@ const CheckoutTrackingPage: React.FC = () => {
                           </TableCell>
                           <TableCell>
                             <div className="text-sm">
-                              {format(new Date(checkout.initiated_at), "dd/MM/yyyy", { locale: ptBR })}
+                              {formatDateSafe(checkout.initiated_at)}
                             </div>
                             <div className="text-xs text-muted-foreground">
-                              {format(new Date(checkout.initiated_at), "HH:mm", { locale: ptBR })}
+                              {formatTimeSafe(checkout.initiated_at)}
                             </div>
                           </TableCell>
                           <TableCell className="text-right">
@@ -574,10 +605,10 @@ const CheckoutTrackingPage: React.FC = () => {
                           </TableCell>
                           <TableCell>
                             <div className="text-sm">
-                              {format(new Date(user.last_checkout_attempt), "dd/MM/yyyy", { locale: ptBR })}
+                              {formatDateSafe(user.last_checkout_attempt)}
                             </div>
                             <div className="text-xs text-muted-foreground">
-                              {format(new Date(user.last_checkout_attempt), "HH:mm", { locale: ptBR })}
+                              {formatTimeSafe(user.last_checkout_attempt)}
                             </div>
                           </TableCell>
                           <TableCell className="text-right">
