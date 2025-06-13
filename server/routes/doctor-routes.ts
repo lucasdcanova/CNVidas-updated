@@ -180,6 +180,104 @@ doctorRouter.put('/profile', requireAuth, requireDoctorRole, async (req: Authent
 });
 
 /**
+ * Obter disponibilidade de um médico específico por data
+ * GET /api/doctors/:id/availability
+ */
+doctorRouter.get('/:id/availability', async (req: any, res: Response) => {
+  try {
+    const doctorId = parseInt(req.params.id);
+    const { date } = req.query;
+    
+    console.log(`🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: ${doctorId} para data: ${date}`);
+    
+    if (isNaN(doctorId)) {
+      return res.status(400).json({ error: 'ID de médico inválido' });
+    }
+    
+    // Verificar se o médico existe
+    const doctor = await storage.getDoctor(doctorId);
+    if (!doctor) {
+      return res.status(404).json({ error: 'Médico não encontrado' });
+    }
+    
+    // Buscar slots de disponibilidade do médico
+    const availabilitySlots = await storage.getDoctorAvailabilitySlots(doctorId);
+    
+    if (!date) {
+      // Se não foi fornecida uma data específica, retornar todos os slots
+      console.log(`✅ Doctor /:id/availability - Retornando ${availabilitySlots.length} slots de disponibilidade`);
+      return res.json({ availability: availabilitySlots });
+    }
+    
+    // Converter a data fornecida para objeto Date
+    const requestedDate = new Date(date as string);
+    const dayOfWeek = requestedDate.getDay(); // 0 = domingo, 1 = segunda, etc.
+    
+    // Filtrar slots para o dia da semana específico
+    const daySlots = availabilitySlots.filter(slot => 
+      slot.dayOfWeek === dayOfWeek && slot.isAvailable
+    );
+    
+    if (daySlots.length === 0) {
+      console.log(`ℹ️ Doctor /:id/availability - Nenhum slot disponível para o dia ${dayOfWeek}`);
+      return res.json({ times: [] });
+    }
+    
+    // Buscar agendamentos existentes para esta data
+    const startOfDay = new Date(requestedDate);
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(requestedDate);
+    endOfDay.setHours(23, 59, 59, 999);
+    
+    const existingAppointments = await storage.getDoctorAppointments(doctorId, startOfDay, endOfDay);
+    const bookedTimes = existingAppointments.map(apt => {
+      const aptDate = new Date(apt.date);
+      return `${aptDate.getHours().toString().padStart(2, '0')}:${aptDate.getMinutes().toString().padStart(2, '0')}`;
+    });
+    
+    // Gerar horários disponíveis baseados nos slots
+    const availableTimes: string[] = [];
+    
+    daySlots.forEach(slot => {
+      const startTime = slot.startTime;
+      const endTime = slot.endTime;
+      
+      // Converter horários para minutos para facilitar o cálculo
+      const [startHour, startMin] = startTime.split(':').map(Number);
+      const [endHour, endMin] = endTime.split(':').map(Number);
+      
+      const startMinutes = startHour * 60 + startMin;
+      const endMinutes = endHour * 60 + endMin;
+      
+      // Gerar slots de 30 minutos
+      for (let minutes = startMinutes; minutes < endMinutes; minutes += 30) {
+        const hour = Math.floor(minutes / 60);
+        const min = minutes % 60;
+        const timeSlot = `${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
+        
+        // Verificar se este horário não está ocupado
+        if (!bookedTimes.includes(timeSlot)) {
+          // Verificar se o horário não é no passado (se for hoje)
+          const now = new Date();
+          const isToday = requestedDate.toDateString() === now.toDateString();
+          
+          if (!isToday || (hour * 60 + min) > (now.getHours() * 60 + now.getMinutes())) {
+            availableTimes.push(timeSlot);
+          }
+        }
+      }
+    });
+    
+    console.log(`✅ Doctor /:id/availability - ${availableTimes.length} horários disponíveis para ${date}`);
+    res.json({ times: availableTimes });
+    
+  } catch (error) {
+    console.error('❌ Erro ao obter disponibilidade do médico:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+/**
  * Obter consultas do médico
  * GET /api/doctors/appointments
  */
