@@ -322,21 +322,28 @@ export default function ProfilePhotoUploader({
         onImageUpdate?.(imageUrl);
 
         // Invalidar todas as queries relacionadas ao usuário para forçar atualização
+        queryClient.invalidateQueries({ queryKey: ['/api/user'] }); // Query principal do useAuth
         queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
         queryClient.invalidateQueries({ queryKey: ['/api/users/profile'] });
-        queryClient.invalidateQueries({ queryKey: ['/api/user'] });
         
         // Para médicos
         if (userType === 'doctor') {
           queryClient.invalidateQueries({ queryKey: ['/api/doctors/profile'] });
           queryClient.invalidateQueries({ queryKey: ['/api/doctors/user'] });
+          queryClient.invalidateQueries({ queryKey: ['/api/doctors'] });
         }
         
         // Para parceiros
         if (userType === 'partner') {
           queryClient.invalidateQueries({ queryKey: ['/api/partners/me'] });
           queryClient.invalidateQueries({ queryKey: ['/api/partners/profile'] });
+          queryClient.invalidateQueries({ queryKey: ['/api/partners'] });
         }
+
+        // Forçar refetch da query principal após um pequeno delay para garantir atualização
+        setTimeout(() => {
+          queryClient.refetchQueries({ queryKey: ['/api/user'] });
+        }, 500);
 
         // Mostrar sucesso
         setUploadSuccess(true);
@@ -464,126 +471,4 @@ export default function ProfilePhotoUploader({
                     <div className="w-8 h-1 bg-white/30 rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-white transition-all duration-300 ease-out"
-                        style={{ width: `${uploadProgress}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Overlay de sucesso */}
-              {uploadSuccess && !isUploading && (
-                <div className="absolute inset-0 bg-green-500/20 rounded-full flex items-center justify-center animate-in zoom-in-50 duration-300">
-                  <Check className={`${iconSizes[size]} text-green-600`} />
-                </div>
-              )}
-
-              {/* Botão de câmera */}
-              <Button
-                size="icon"
-                variant="secondary"
-                className={`absolute bottom-0 right-0 rounded-full shadow-lg ${buttonSizes[size]}`}
-                onClick={triggerFileInput}
-                disabled={isUploading}
-              >
-                <Camera className={iconSizes[size]} />
-              </Button>
-            </div>
-
-            {/* Status e informações */}
-            <div className="text-center space-y-2">
-              {isUploading && (
-                <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground font-medium">
-                    {uploadProgress < 30 ? 'Comprimindo imagem...' :
-                     uploadProgress < 50 ? 'Preparando upload...' :
-                     uploadProgress < 95 ? 'Enviando foto...' :
-                     'Finalizando...'}
-                  </p>
-                  <div className="w-full max-w-xs mx-auto">
-                    <Progress value={uploadProgress} className="h-2" />
-                  </div>
-                </div>
-              )}
-              
-              {uploadSuccess && !isUploading && (
-                <p className="text-sm text-green-600 font-medium">
-                  Foto atualizada com sucesso!
-                </p>
-              )}
-
-              {uploadError && !isUploading && (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-center gap-2 text-destructive">
-                    <AlertCircle className="h-4 w-4" />
-                    <p className="text-sm font-medium">Erro no upload</p>
-                  </div>
-                  <p className="text-xs text-destructive/80 max-w-xs">
-                    {uploadError}
-                  </p>
-                </div>
-              )}
-
-              {!isUploading && !uploadSuccess && !uploadError && (
-                <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">
-                    {previewImage ? 'Clique na câmera para alterar' : 'Adicione uma foto de perfil'}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    JPG, PNG ou GIF. Máximo 50MB (será comprimido automaticamente)
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* Botões de ação */}
-            <div className="flex gap-2 w-full">
-              <Button 
-                variant="outline" 
-                onClick={triggerFileInput}
-                disabled={isUploading}
-                className="flex-1"
-              >
-                <Upload className="h-4 w-4 mr-2" />
-                {previewImage ? 'Alterar' : 'Adicionar'}
-              </Button>
-
-              {previewImage && showRemoveButton && (
-                <Button
-                  variant="outline"
-                  onClick={handleRemoveImage}
-                  disabled={isUploading}
-                  className="text-destructive hover:text-destructive"
-                >
-                  <X className="h-4 w-4 mr-2" />
-                  Remover
-                </Button>
-              )}
-            </div>
-
-            {/* Input de arquivo oculto */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileSelect}
-              className="hidden"
-              disabled={isUploading}
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Cropper Modal */}
-      {showCropper && selectedImageUrl && (
-        <ImageCropper
-          imageUrl={selectedImageUrl}
-          onCropComplete={handleCropComplete}
-          onCancel={handleCropCancel}
-          aspectRatio={1}
-          isOpen={showCropper}
-        />
-      )}
-    </>
-  );
-} 
+                        style={{ width: `${uploadProgress}%`

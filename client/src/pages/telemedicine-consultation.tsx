@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent } from '@/components/ui/card';
 import MinimalistVideoCall from '@/components/telemedicine/MinimalistVideoCall';
+import { TelemedicineDebugger } from '@/components/telemedicine/TelemedicineDebugger';
 import {
   Video,
   RefreshCw,
@@ -42,6 +43,7 @@ export default function TelemedicineConsultation() {
     name: string;
   } | null>(null);
   const [showVideoCall, setShowVideoCall] = useState(false);
+  const [showDebugger, setShowDebugger] = useState(false);
   
   const mountedRef = useRef(true);
 
@@ -240,6 +242,12 @@ export default function TelemedicineConsultation() {
     navigate('/');
   };
   
+  const retryConnection = () => {
+    setError(null);
+    setLoading(true);
+    window.location.reload();
+  };
+  
   // Renderizar estados diferentes
   if (loading || preparingRoom) {
     return (
@@ -284,6 +292,9 @@ export default function TelemedicineConsultation() {
             </Button>
             <Button variant="ghost" onClick={() => navigate('/')} className="mt-2 w-full">
               Voltar para início
+            </Button>
+            <Button variant="outline" onClick={() => setShowDebugger(true)} className="mt-2 w-full">
+              Diagnóstico Avançado
             </Button>
           </CardContent>
         </Card>
@@ -345,6 +356,16 @@ export default function TelemedicineConsultation() {
               </Button>
             </div>
           )}
+        </div>
+      )}
+      
+      {/* Modal de Debug */}
+      {showDebugger && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <TelemedicineDebugger 
+            roomName={roomInfo?.name} 
+            onClose={() => setShowDebugger(false)} 
+          />
         </div>
       )}
     </div>

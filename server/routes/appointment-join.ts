@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { storage } from '../storage';
-import { createEmergencyRoom, createEmergencyToken } from '../utils/emergency-utils';
+import { createRoom, createToken } from '../utils/daily';
 import { AuthenticatedRequest, requireAuth } from '../middleware/auth';
 
 const appointmentJoinRouter = Router();
@@ -194,13 +194,23 @@ appointmentJoinRouter.post('/:id/join', requireAuth, async (req: AuthenticatedRe
       // Verificar se o nome da sala está no formato válido para Daily.co
       const sanitizedRoomName = roomName.replace(/[^a-zA-Z0-9-]/g, '-').toLowerCase();
       
-      // Criar/verificar a sala no Daily.co
-      const room = await createEmergencyRoom(sanitizedRoomName);
+      // Criar/verificar a sala no Daily.co com delay de propagação
+      const room = await createRoom({
+        name: sanitizedRoomName,
+        properties: {
+          enable_chat: true,
+          enable_screenshare: true,
+          enable_recording: false,
+          max_participants: 2,
+          exp: Math.floor(Date.now() / 1000) + 3600, // 1 hora
+          eject_at_room_exp: true
+        }
+      }, true); // waitForPropagation = true
       
       // Criar token para o usuário (médico ou paciente)
       const isOwner = userRole === 'doctor';
       const displayName = userData.fullName || (userRole === 'doctor' ? 'Médico' : 'Paciente');
-      const token = await createEmergencyToken(sanitizedRoomName, displayName, isOwner);
+      const token = await createToken(sanitizedRoomName, displayName, isOwner);
       
       console.log(`Sala e token criados com sucesso: ${sanitizedRoomName}`);
       

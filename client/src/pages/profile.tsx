@@ -133,10 +133,10 @@ const Profile: React.FC = () => {
   const { data: profileData, isLoading: profileLoading } = useQuery({
     queryKey: ["/api/users/profile"],
     queryFn: getUserProfile,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    cacheTime: 10 * 60 * 1000, // 10 minutes
-    refetchOnWindowFocus: false, // Avoid refetch on window focus
-    refetchOnMount: false, // Don't refetch if data is already in cache
+    staleTime: 1 * 60 * 1000, // 1 minute (reduzido de 5)
+    cacheTime: 3 * 60 * 1000, // 3 minutes (reduzido de 10)
+    refetchOnWindowFocus: true, // Reativar refetch on focus para garantir dados atualizados
+    refetchOnMount: true, // Sempre refetch ao montar
   });
   
   // Use useEffect to handle profile data changes - only for profile image
@@ -152,10 +152,10 @@ const Profile: React.FC = () => {
     queryKey: ["/api/partners/me"],
     queryFn: getCurrentPartner,
     enabled: !!user?.id && user?.role === "partner",
-    staleTime: 5 * 60 * 1000,
-    cacheTime: 10 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    staleTime: 1 * 60 * 1000, // 1 minute
+    cacheTime: 3 * 60 * 1000, // 3 minutes
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
   });
   
   // Fetch doctor data if user is a doctor
@@ -166,10 +166,10 @@ const Profile: React.FC = () => {
       return getDoctorByUserId(user?.id || 0);
     },
     enabled: !!user?.id && user?.role === "doctor",
-    staleTime: 5 * 60 * 1000,
-    cacheTime: 10 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    staleTime: 1 * 60 * 1000, // 1 minute
+    cacheTime: 3 * 60 * 1000, // 3 minutes
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
   });
   
   // Patient profile form
@@ -813,9 +813,14 @@ const Profile: React.FC = () => {
       
       // Atualizar o cache de consultas
       console.log("Invalidando consultas para atualizar a UI");
-      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/user"] }); // Query principal do useAuth
       queryClient.invalidateQueries({ queryKey: ["/api/users/profile"] });
       queryClient.invalidateQueries({ queryKey: ["/api/doctors/user", user?.id] });
+      
+      // Forçar refetch da query principal para garantir atualização imediata
+      setTimeout(() => {
+        queryClient.refetchQueries({ queryKey: ["/api/user"] });
+      }, 300);
       
     } catch (error) {
       console.error("Erro ao fazer upload de imagem:", error);
@@ -927,12 +932,17 @@ const Profile: React.FC = () => {
                       userName={doctorData?.specialization || user?.fullName || 'Médico'}
                       userType="doctor"
                       size="lg"
-                      onImageUpdate={(url) => {
-                        setProfileImage(url);
-                        // Invalidar cache para atualizar dados
-                        queryClient.invalidateQueries({ queryKey: ["/api/doctors/user", user?.id] });
-                        queryClient.invalidateQueries({ queryKey: ["/api/users/profile"] });
-                      }}
+                                              onImageUpdate={(url) => {
+                          setProfileImage(url);
+                          // Invalidar cache para atualizar dados
+                          queryClient.invalidateQueries({ queryKey: ["/api/user"] }); // Query principal
+                          queryClient.invalidateQueries({ queryKey: ["/api/doctors/user", user?.id] });
+                          queryClient.invalidateQueries({ queryKey: ["/api/users/profile"] });
+                          // Forçar refetch para garantir atualização
+                          setTimeout(() => {
+                            queryClient.refetchQueries({ queryKey: ["/api/user"] });
+                          }, 300);
+                        }}
                       className="w-fit"
                     />
                   )}
@@ -954,7 +964,12 @@ const Profile: React.FC = () => {
                           onImageUpdate={(url) => {
                             setProfileImage(url);
                             // Invalidar cache para atualizar dados
+                            queryClient.invalidateQueries({ queryKey: ["/api/user"] }); // Query principal
                             queryClient.invalidateQueries({ queryKey: ["/api/users/profile"] });
+                            // Forçar refetch para garantir atualização
+                            setTimeout(() => {
+                              queryClient.refetchQueries({ queryKey: ["/api/user"] });
+                            }, 300);
                           }}
                           className="w-fit"
                         />
@@ -1322,8 +1337,13 @@ const Profile: React.FC = () => {
                           onImageUpdate={(url) => {
                             setProfileImage(url);
                             // Invalidar cache para atualizar dados
+                            queryClient.invalidateQueries({ queryKey: ["/api/user"] }); // Query principal
                             queryClient.invalidateQueries({ queryKey: ["/api/partners/me"] });
                             queryClient.invalidateQueries({ queryKey: ["/api/users/profile"] });
+                            // Forçar refetch para garantir atualização
+                            setTimeout(() => {
+                              queryClient.refetchQueries({ queryKey: ["/api/user"] });
+                            }, 300);
                           }}
                           className="w-fit"
                         />
