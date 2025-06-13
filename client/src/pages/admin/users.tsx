@@ -136,6 +136,28 @@ const userFormSchema = z.object({
 
 type UserFormData = z.infer<typeof userFormSchema>;
 
+// Função utilitária para formatar datas de forma segura
+const formatDate = (dateValue: string | Date | null | undefined): string => {
+  if (!dateValue) return 'Não informado';
+  
+  try {
+    const date = new Date(dateValue);
+    if (isNaN(date.getTime())) {
+      return 'Data inválida';
+    }
+    
+    return date.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  } catch (error) {
+    return 'Data inválida';
+  }
+};
+
 const AdminUsersPage: React.FC = () => {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -186,13 +208,17 @@ const AdminUsersPage: React.FC = () => {
     return matchesSearch && matchesRole;
   }).sort((a, b) => {
     // Ordenação cronológica baseada na data de criação
-    const dateA = new Date(a.createdAt).getTime();
-    const dateB = new Date(b.createdAt).getTime();
+    const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    
+    // Verificar se as datas são válidas
+    const validDateA = !isNaN(dateA) ? dateA : 0;
+    const validDateB = !isNaN(dateB) ? dateB : 0;
     
     if (sortOrder === 'newest') {
-      return dateB - dateA; // Mais recente primeiro
+      return validDateB - validDateA; // Mais recente primeiro
     } else {
-      return dateA - dateB; // Mais antigo primeiro
+      return validDateA - validDateB; // Mais antigo primeiro
     }
   }) : [];
 
@@ -713,13 +739,7 @@ const AdminUsersPage: React.FC = () => {
                         </ResponsiveTableCell>
                         <ResponsiveTableCell header="Data de Cadastro">
                           <span className="text-sm text-gray-600">
-                            {new Date(user.createdAt).toLocaleDateString('pt-BR', {
-                              day: '2-digit',
-                              month: '2-digit',
-                              year: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}
+                            {formatDate(user.createdAt)}
                           </span>
                         </ResponsiveTableCell>
                         <ResponsiveTableCell header="Verificado">
