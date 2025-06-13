@@ -223,25 +223,31 @@ export default function MinimalistVideoCall({
         // Configurações importantes para prevenir erros de captura
         audioSource: true, // Usar fonte de áudio padrão
         videoSource: true, // Usar fonte de vídeo padrão
-        dailyConfig: {
-          experimentalChromeVideoMuteLightOff: true,
-          // Evitar problemas de captura em navegadores específicos
-          avoidEchoCancellationConstraints: false,
-          camSimulcastEncodings: [
-            { maxBitrate: 100000, scaleResolutionDownBy: 4 },
-            { maxBitrate: 300000, scaleResolutionDownBy: 2 },
-            { maxBitrate: 1000000, scaleResolutionDownBy: 1 }
-          ],
-          // Configurações de mídia mais tolerantes
-          userMediaVideoConstraints: {
-            width: { ideal: 1280, max: 1920 },
-            height: { ideal: 720, max: 1080 },
-            frameRate: { ideal: 24, max: 30 }
+        // Configurações modernas do Daily.co (sem opções deprecadas)
+        inputSettings: {
+          audio: {
+            settings: {
+              echoCancellation: true,
+              noiseSuppression: true,
+              autoGainControl: true
+            }
           },
-          userMediaAudioConstraints: {
-            echoCancellation: true,
-            noiseSuppression: true,
-            autoGainControl: true
+          video: {
+            settings: {
+              width: { ideal: 1280, max: 1920 },
+              height: { ideal: 720, max: 1080 },
+              frameRate: { ideal: 24, max: 30 }
+            }
+          }
+        },
+        sendSettings: {
+          video: {
+            maxQuality: 'high',
+            encodings: {
+              low: { maxBitrate: 100000, scaleResolutionDownBy: 4 },
+              medium: { maxBitrate: 300000, scaleResolutionDownBy: 2 },
+              high: { maxBitrate: 1000000, scaleResolutionDownBy: 1 }
+            }
           }
         },
         iframeStyle: {

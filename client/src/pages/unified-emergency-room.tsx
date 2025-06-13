@@ -98,28 +98,42 @@ export default function UnifiedEmergencyRoom() {
         appointmentId
       });
       
-      // Obter token para a sala
-      const tokenResponse = await apiRequest('POST', '/api/telemedicine/daily/token', {
-        appointmentId,
-        roomName: roomName // Usar o nome correto da sala!
-      });
-      
+      // Use the token from the consultation data if available
       let token = data.token;
       
-      if (tokenResponse.ok) {
+      // Only request a new token if we don't have one
+      if (!token) {
+        console.log('🔑 Token não encontrado nos dados da consulta, solicitando novo token...');
         try {
-          const tokenData = await tokenResponse.json();
-          console.log('🎫 Token recebido:', tokenData);
+          const tokenResponse = await apiRequest('POST', '/api/telemedicine/daily/token', {
+            roomName: roomName,
+            isDoctor: isDoctor
+          });
           
-          // Extrair o token do objeto retornado
-          if (typeof tokenData === 'object' && tokenData.token) {
-            token = tokenData.token;
-          } else if (typeof tokenData === 'string') {
-            token = tokenData;
+          if (tokenResponse.ok) {
+            try {
+              const tokenData = await tokenResponse.json();
+              console.log('🎫 Token recebido:', tokenData);
+              
+              // Extract the token from the response
+              if (typeof tokenData === 'object' && tokenData.token) {
+                token = tokenData.token;
+              } else if (typeof tokenData === 'string') {
+                token = tokenData;
+              }
+            } catch (parseError) {
+              console.error('⚠️ Erro ao processar token:', parseError);
+              // Continue without token
+            }
+          } else {
+            console.warn('⚠️ Falha ao obter token:', tokenResponse.status);
           }
         } catch (e) {
-          console.log('⚠️ Erro ao processar token:', e);
+          console.warn('⚠️ Erro ao solicitar token:', e);
+          // Continue without token - the video component may handle this
         }
+      } else {
+        console.log('✅ Usando token existente da consulta');
       }
       
       // Configurar dados da sala

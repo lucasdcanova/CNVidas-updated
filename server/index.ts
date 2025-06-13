@@ -247,14 +247,32 @@ import fs from 'fs';
     if (!fs.existsSync(filePath)) {
       console.log(`⚠️ Arquivo de upload não encontrado: ${req.url}`);
       
-      // Se for uma imagem de perfil, retornar 404 com informação útil
+      // Se for uma imagem de perfil, retornar imagem padrão
       if (req.url.includes('profile-')) {
-        return res.status(404).json({
-          error: 'Imagem de perfil não encontrada',
-          message: 'A imagem solicitada não existe no servidor',
-          path: req.url,
-          timestamp: new Date().toISOString()
-        });
+        console.log(`🔄 Redirecionando para imagem padrão: ${req.url}`);
+        
+        // Tentar servir a imagem padrão do CN Vidas
+        const defaultImagePath = path.join(publicPath, 'logo_cn_vidas_white_bg.svg');
+        
+        if (fs.existsSync(defaultImagePath)) {
+          res.setHeader('Content-Type', 'image/svg+xml');
+          res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache de 1 hora para fallback
+          return res.sendFile(defaultImagePath);
+        } else {
+          // Se nem a imagem padrão existir, retornar um SVG simples
+          const fallbackSvg = `
+            <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+              <rect width="100" height="100" fill="#e5e7eb"/>
+              <circle cx="50" cy="35" r="15" fill="#9ca3af"/>
+              <path d="M25 75 Q25 60 50 60 Q75 60 75 75 Z" fill="#9ca3af"/>
+              <text x="50" y="90" text-anchor="middle" font-family="Arial" font-size="8" fill="#6b7280">CN Vidas</text>
+            </svg>
+          `;
+          
+          res.setHeader('Content-Type', 'image/svg+xml');
+          res.setHeader('Cache-Control', 'public, max-age=3600');
+          return res.send(fallbackSvg);
+        }
       }
       
       // Para outros arquivos, retornar 404 padrão
