@@ -237,7 +237,7 @@ export default function FaceTimeVideoCall({
   }, []);
 
   return (
-    <div className="relative w-full h-full min-h-screen bg-black overflow-hidden">
+    <div className="fixed inset-0 w-full h-full bg-black overflow-hidden">
       {/* Layout vertical estilo FaceTime */}
       <div className="relative w-full h-full flex flex-col">
         {/* Vídeo remoto (tela principal) */}

@@ -509,8 +509,9 @@ export default function PatientEmergencyRoom() {
                 </Alert>
               )}
 
-              <div className="relative aspect-video bg-gray-900 rounded-lg overflow-hidden">
-                {showVideoCall && callState.roomUrl ? (
+              {/* Mostrar vídeo em tela cheia quando ativo */}
+              {showVideoCall && callState.roomUrl && (
+                <div className="fixed inset-0 z-50 bg-black">
                   <FaceTimeVideoCall
                     roomUrl={callState.roomUrl}
                     token={callState.token || undefined}
@@ -521,12 +522,15 @@ export default function PatientEmergencyRoom() {
                     userName={user?.fullName || user?.username || 'Paciente'}
                     isDoctor={false}
                   />
-                ) : (
-                  <div className="flex items-center justify-center h-full">
-                    <Loader2 className="h-8 w-8 animate-spin text-white" />
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
+              
+              {/* Placeholder quando aguardando */}
+              {!showVideoCall && (
+                <div className="relative aspect-video bg-gray-900 rounded-lg overflow-hidden flex items-center justify-center">
+                  <Loader2 className="h-8 w-8 animate-spin text-white" />
+                </div>
+              )}
             </div>
           )}
         </CardContent>

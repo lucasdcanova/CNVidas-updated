@@ -227,16 +227,14 @@ export default function UnifiedEmergencyRoom() {
           )}
           
           {!loading && !error && roomData && (
-            <div className="bg-card rounded-xl shadow-lg overflow-hidden">
-              <div className="aspect-video md:aspect-[16/9] lg:aspect-[16/9] w-full" style={{ minHeight: '500px' }}>
-                <FaceTimeVideoCall
-                  roomUrl={roomData.roomUrl}
-                  token={roomData.token}
-                  userName={user?.fullName || (isDoctor ? 'Médico' : 'Paciente')}
-                  isDoctor={isDoctor}
-                  onLeaveCall={handleLeaveCall}
-                />
-              </div>
+            <div className="fixed inset-0 z-50 bg-black">
+              <FaceTimeVideoCall
+                roomUrl={roomData.roomUrl}
+                token={roomData.token}
+                userName={user?.fullName || (isDoctor ? 'Médico' : 'Paciente')}
+                isDoctor={isDoctor}
+                onLeaveCall={handleLeaveCall}
+              />
             </div>
           )}
         </div>
