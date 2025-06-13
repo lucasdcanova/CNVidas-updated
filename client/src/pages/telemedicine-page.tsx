@@ -694,6 +694,17 @@ export default function TelemedicinePage() {
               doctorId={selectedDoctor.id}
               doctorName={formatDoctorName(selectedDoctor.name || 'Médico')}
               onSelectDateTime={async (date, time) => {
+                // Verificar se time está definido
+                if (!time) {
+                  console.error('Horário não definido:', { date, time });
+                  toast({
+                    title: "Erro ao agendar consulta",
+                    description: "Horário não foi selecionado corretamente. Tente novamente.",
+                    variant: "destructive",
+                  });
+                  return;
+                }
+                
                 // Combinar data e hora
                 const [hours, minutes] = time.split(':');
                 const appointmentDate = new Date(date);

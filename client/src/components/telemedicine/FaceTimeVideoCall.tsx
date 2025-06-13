@@ -66,25 +66,35 @@ export default function FaceTimeVideoCall({
     if (!callRef.current) return;
 
     const participants = callRef.current.participants();
+    console.log('Atualizando streams. Participantes:', Object.keys(participants));
+    
     const localParticipant = participants.local;
 
     // Atualizar vídeo local
     if (localParticipant?.tracks?.video?.persistentTrack && localVideoRef.current) {
+      console.log('Atualizando vídeo local');
       const track = localParticipant.tracks.video.persistentTrack;
       const stream = new MediaStream([track]);
       setLocalStream(stream);
       localVideoRef.current.srcObject = stream;
     }
 
-    // Atualizar vídeo remoto (primeiro participante que não seja local)
-    const remoteParticipant = Object.values(participants).find(p => p.session_id !== 'local');
-    if (remoteParticipant) {
+    // Atualizar vídeo remoto - encontrar participante que não seja local
+    const remoteParticipants = Object.entries(participants).filter(([id, p]) => id !== 'local');
+    console.log('Participantes remotos encontrados:', remoteParticipants.length);
+    
+    if (remoteParticipants.length > 0) {
+      const [remoteId, remoteParticipant] = remoteParticipants[0];
+      console.log('Usando participante remoto:', remoteId, remoteParticipant.user_name);
+      
       // Atualizar nome do participante remoto
       setRemoteParticipantName(remoteParticipant.user_name || 'Participante');
       
+      // Usar o track de vídeo do participante remoto
       if (remoteParticipant.tracks?.video?.persistentTrack && remoteVideoRef.current) {
-        const track = remoteParticipant.tracks.video.persistentTrack;
-        const stream = new MediaStream([track]);
+        console.log('Atualizando vídeo remoto com track do participante:', remoteId);
+        const videoTrack = remoteParticipant.tracks.video.persistentTrack;
+        const stream = new MediaStream([videoTrack]);
         
         // Adicionar áudio se disponível
         if (remoteParticipant.tracks?.audio?.persistentTrack) {
@@ -93,7 +103,17 @@ export default function FaceTimeVideoCall({
         
         setRemoteStream(stream);
         remoteVideoRef.current.srcObject = stream;
+      } else {
+        console.log('Participante remoto sem vídeo track');
       }
+    } else {
+      console.log('Nenhum participante remoto, limpando vídeo');
+      // Limpar vídeo remoto se não há participantes
+      if (remoteVideoRef.current) {
+        remoteVideoRef.current.srcObject = null;
+      }
+      setRemoteStream(null);
+      setRemoteParticipantName('');
     }
   }, []);
 
@@ -130,13 +150,14 @@ export default function FaceTimeVideoCall({
       });
 
       callInstance.on('participant-joined', (event: DailyEventObject) => {
-        console.log('Participante entrou:', event.participant?.user_name);
+        console.log('Participante entrou:', event.participant?.user_name, 'ID:', event.participant?.session_id);
         setParticipants(callInstance.participants());
-        updateVideoStreams();
+        setTimeout(() => updateVideoStreams(), 100); // Pequeno delay para garantir que os tracks estejam prontos
         if (onParticipantJoined) onParticipantJoined(event.participant);
       });
 
       callInstance.on('participant-updated', (event: DailyEventObject) => {
+        console.log('Participante atualizado:', event.participant?.session_id);
         setParticipants(callInstance.participants());
         updateVideoStreams();
       });
@@ -148,11 +169,13 @@ export default function FaceTimeVideoCall({
         if (onParticipantLeft) onParticipantLeft(event.participant);
       });
 
-      callInstance.on('track-started', () => {
-        updateVideoStreams();
+      callInstance.on('track-started', (event: DailyEventObject) => {
+        console.log('Track iniciado:', event.participant?.session_id, 'Tipo:', event.track);
+        setTimeout(() => updateVideoStreams(), 100);
       });
 
-      callInstance.on('track-stopped', () => {
+      callInstance.on('track-stopped', (event: DailyEventObject) => {
+        console.log('Track parado:', event.participant?.session_id);
         updateVideoStreams();
       });
 

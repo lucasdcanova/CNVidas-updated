@@ -58,16 +58,25 @@ export function AppointmentScheduler({
           const response = await apiRequest('GET', `/api/doctors/${doctorId}/availability?date=${formattedDate}`);
           const data = await response.json();
           
-          if (data.times && data.times.length > 0) {
-            days.push({
-              date,
-              slots: data.times.map((time: string) => ({
-                time,
-                available: true
-              })),
-              dayOfWeek: format(date, 'EEEE', { locale: ptBR }),
-              formattedDate: format(date, "d 'de' MMMM", { locale: ptBR })
-            });
+          console.log(`Dados de disponibilidade para ${formattedDate}:`, data);
+          
+          if (data.times && Array.isArray(data.times) && data.times.length > 0) {
+            // Validar se todos os horários são strings válidas
+            const validTimes = data.times.filter((time: any) => 
+              typeof time === 'string' && time.includes(':')
+            );
+            
+            if (validTimes.length > 0) {
+              days.push({
+                date,
+                slots: validTimes.map((time: string) => ({
+                  time,
+                  available: true
+                })),
+                dayOfWeek: format(date, 'EEEE', { locale: ptBR }),
+                formattedDate: format(date, "d 'de' MMMM", { locale: ptBR })
+              });
+            }
           }
         } catch (error) {
           console.error(`Error fetching availability for ${formattedDate}:`, error);
@@ -88,12 +97,16 @@ export function AppointmentScheduler({
   };
 
   const handleTimeSelect = (time: string) => {
+    console.log('Horário selecionado:', time);
     setSelectedTime(time);
   };
 
   const handleConfirm = () => {
+    console.log('Confirmando agendamento:', { selectedDate, selectedTime });
     if (selectedDate && selectedTime) {
       onSelectDateTime(selectedDate, selectedTime);
+    } else {
+      console.error('Data ou horário não selecionado:', { selectedDate, selectedTime });
     }
   };
 
