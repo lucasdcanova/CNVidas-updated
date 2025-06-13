@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, Link } from "wouter";
+import cnvidasLogo from "@/assets/cnvidas-logo-transparent.png";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -17,7 +18,7 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
         <div className="max-w-md w-full relative z-10">
           <div className="flex justify-center mb-8">
             <img 
-              src="/assets/cnvidas-logo-transparent.png" 
+              src={cnvidasLogo} 
               alt="CN Vidas" 
               className="h-16 w-auto" 
             />

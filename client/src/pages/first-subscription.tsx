@@ -4,14 +4,15 @@ import { useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Check, CreditCard, User, Users, AlertTriangle } from "lucide-react";
+import { Loader2, Check, CreditCard, User, Users, AlertTriangle, Star, Crown, Heart, Shield, Zap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
-import { getSubscriptionPlans, getUserSubscription } from "@/lib/api";
+import { getSubscriptionPlans, getUserSubscription, updateUserSubscription } from "@/lib/api";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { apiRequest } from "@/lib/queryClient";
 import CheckoutModal from "@/components/checkout/checkout-modal-fix";
+import cnvidasLogo from "@/assets/cnvidas-logo-transparent.png";
 
 // Definição do tipo de plano de assinatura
 interface SubscriptionPlan {
@@ -237,7 +238,7 @@ const FirstSubscriptionPage: React.FC = () => {
             <div className="flex items-center justify-center mb-4">
               <h1 className="text-4xl font-bold mr-2">Bem-vindo ao</h1>
               <img 
-                src="/assets/cnvidas-logo-transparent.png" 
+                src={cnvidasLogo} 
                 alt="CN Vidas" 
                 style={{ height: "100px" }} 
                 className="w-auto" 

@@ -1,17 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { getUpcomingAppointments, getClaims, getServices, getRecentActivities } from "@/lib/api";
 import StatusCard from "@/components/shared/status-card";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
 import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Calendar, Clock, MapPin, Phone, Star, Heart, Activity, Shield, Users, Stethoscope, Building2, CreditCard, FileText, AlertTriangle, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { getPlanColor, getPlanName } from "@/components/shared/plan-indicator";
 import { useToast } from "@/hooks/use-toast";
 import { Claim, Service, Notification, Partner } from "@/shared/types";
+import logoFallback from "@/assets/logo_cn_vidas_white_bg.svg";
 
 interface Activity {
   icon: string;
@@ -49,7 +49,7 @@ const getServiceImage = (service: ServiceWithPartner) => {
   }
   
   // Caso não tenha nenhuma imagem, retorna o logo do CN Vidas com fundo branco
-  return "/logo_cn_vidas_white_bg.svg";
+  return logoFallback;
 };
 
 export const PatientDashboard: React.FC = () => {
@@ -365,19 +365,18 @@ export const PatientDashboard: React.FC = () => {
                           )}
                         </div>
                       </div>
-                    </div>
-                  </li>
+                    </li>
                   ))
                 ) : (
                   <li className="py-10 text-center text-gray-500">
                     <div className="flex flex-col items-center justify-center">
                       <div className="rounded-full bg-blue-100/80 p-3 mb-3">
-                      <span className="material-icons text-blue-500 text-2xl">timeline</span>
+                        <span className="material-icons text-blue-500 text-2xl">timeline</span>
+                      </div>
+                      <p className="text-base text-gray-600 mb-1">Nenhuma atividade recente.</p>
+                      <p className="text-sm text-gray-500">Suas atividades e atualizações aparecerão aqui conforme você usa a plataforma.</p>
                     </div>
-                    <p className="text-base text-gray-600 mb-1">Nenhuma atividade recente.</p>
-                    <p className="text-sm text-gray-500">Suas atividades e atualizações aparecerão aqui conforme você usa a plataforma.</p>
-                  </div>
-                </li>
+                  </li>
                 )}
                 </ul>
                 {recentActivities.length > 2 && (
@@ -501,7 +500,7 @@ export const PatientDashboard: React.FC = () => {
                   className="w-full h-48 object-cover hover:scale-105 transition-transform duration-700"
                   onError={(e) => {
                     // Se falhar ao carregar a imagem, mostre um plano de fundo genérico
-                    e.currentTarget.src = "https://placehold.co/600x400/e2e8f0/64748b?text=CN+Vidas";
+                    e.currentTarget.src = logoFallback;
                   }}
                 />
                 <div className="absolute top-0 right-0 mt-3 mr-3">

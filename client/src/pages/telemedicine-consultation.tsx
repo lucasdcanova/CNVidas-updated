@@ -142,8 +142,8 @@ export default function TelemedicineConsultation() {
       logEvent('Verificando existência da sala...');
       
       // Dar um tempo inicial para propagação da sala
-      logEvent('Aguardando 3 segundos para propagação inicial...');
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      logEvent('Aguardando 5 segundos para propagação inicial...');
+      await new Promise(resolve => setTimeout(resolve, 5000));
       
       // Verificar com retry automático
       let roomExists = false;

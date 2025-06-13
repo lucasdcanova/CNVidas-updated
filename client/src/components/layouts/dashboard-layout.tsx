@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "wouter";
+import { useAuth } from "@/hooks/use-auth";
+import { Button } from "@/components/ui/button";
+import { LogOut, Menu, X, Home, FileText, Users, Calendar, Stethoscope, Building2, Settings, CreditCard, Bell, User, Shield, Activity, Heart, Phone, MessageSquare, Briefcase, BarChart3, UserCheck, ClipboardList, DollarSign, MapPin, Clock, Star, HelpCircle, ChevronDown, ChevronRight } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { UserProfile } from "@/components/shared/user-profile";
+import { PlanIndicator } from "@/components/shared/plan-indicator";
+import { cn } from "@/lib/utils";
+import cnvidasLogo from "@/assets/cnvidas-logo-transparent.png";
 import SidebarNavigation from "@/components/shared/sidebar-navigation";
 import MobileNavigation from "@/components/shared/mobile-navigation";
-import UserProfile from "@/components/shared/user-profile";
-import { useAuth } from "@/hooks/use-auth";
-import { Bell, HelpCircle, Settings, Menu, X, MessageSquareText } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { getUnreadNotificationsCount, markAllNotificationsAsRead, getDoctorByUserId } from "@/lib/api";
-import { PlanIndicator, getPlanColor } from "@/components/shared/plan-indicator";
-import { Link } from "wouter";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
-} from "@/components/ui/dropdown-menu";
+import { getPlanColor } from "@/components/shared/plan-indicator";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -91,7 +89,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <div className="flex items-center space-x-2">
             {/* Logo */}
             <img 
-              src="/assets/cnvidas-logo-transparent.png" 
+              src={cnvidasLogo} 
               alt="CN Vidas" 
               className="h-9 w-auto" 
             />
@@ -133,7 +131,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               </button>
               <div className="ml-3 flex items-center space-x-2">
                 <img 
-                  src="/assets/cnvidas-logo-transparent.png" 
+                  src={cnvidasLogo} 
                   alt="CN Vidas" 
                   className="h-8 w-auto" 
                 />

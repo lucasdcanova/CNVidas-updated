@@ -22,7 +22,9 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, "dist/client"),
     emptyOutDir: true,
+    copyPublicDir: true,
   },
+  publicDir: path.resolve(__dirname, "public"),
   server: {
     proxy: {
       '/api': {

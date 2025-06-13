@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import DailyIframe from '@daily-co/daily-js';
-import { Mic, MicOff, Video, VideoOff, Phone, X } from 'lucide-react';
+import { Mic, MicOff, Video, VideoOff, Phone, X, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { TelemedicineDiagnostics } from '@/utils/telemedicine-diagnostics';
 
 interface MinimalistVideoCallProps {
   roomUrl?: string;
@@ -157,6 +158,10 @@ export default function MinimalistVideoCall({
         showFullscreenButton: false,
         showLocalVideo: true,
         showParticipantsBar: false,
+        showChat: false,
+        showScreenShareButton: false,
+        showSettingsButton: false,
+        showLocalVideoAlways: true,
         iframeStyle: {
           position: 'absolute',
           top: '0',
@@ -164,7 +169,8 @@ export default function MinimalistVideoCall({
           width: '100%',
           height: '100%',
           border: 'none',
-          background: '#000'
+          background: '#000',
+          zIndex: 1
         }
       };
 
@@ -176,12 +182,23 @@ export default function MinimalistVideoCall({
       callFrameRef.current = callFrame;
 
       // Eventos
+      callFrame.on('joining-meeting', () => {
+        console.log('🔄 Evento: joining-meeting - Conectando...');
+        setConnectionError('Conectando à sala...');
+      });
+      
       callFrame.on('joined-meeting', () => {
-        console.log('📞 Evento: joined-meeting');
+        console.log('📞 Evento: joined-meeting - Conectado com sucesso!');
         setIsConnecting(false);
         setIsCallActive(true);
+        setConnectionError(null);
+        retryCountRef.current = 0; // Reset retry count on success
         callStartTimeRef.current = Date.now();
         if (onJoinCall) onJoinCall();
+      });
+      
+      callFrame.on('left-meeting', () => {
+        console.log('👋 Evento: left-meeting - Saiu da reunião');
       });
 
       callFrame.on('participant-joined', (event: any) => {
@@ -209,29 +226,43 @@ export default function MinimalistVideoCall({
         
         // Tratar erro de sala não encontrada
         if (error?.error?.type === 'no-room' || error?.errorMsg?.includes('meeting does not exist')) {
-          console.log('🚨 Sala não encontrada, tentando recriar...');
+          console.log('🚨 Sala não encontrada');
           
           if (retryCountRef.current < maxRetries) {
             retryCountRef.current++;
-            setConnectionError(`Preparando sala... Tentativa ${retryCountRef.current}/${maxRetries}`);
+            setConnectionError(`Sala ainda não está pronta. Tentativa ${retryCountRef.current}/${maxRetries}`);
             
-            // Aguardar um tempo maior para propagação
-            await new Promise(resolve => setTimeout(resolve, 5000 * retryCountRef.current));
+            // Destruir o frame atual antes de tentar novamente
+            try {
+              await callFrame.destroy();
+              callFrameRef.current = null;
+            } catch (destroyError) {
+              console.error('Erro ao destruir frame:', destroyError);
+            }
             
-            // Tentar conectar novamente
+            // Aguardar um tempo exponencial para propagação
+            const waitTime = Math.min(3000 * Math.pow(2, retryCountRef.current - 1), 15000);
+            console.log(`⏳ Aguardando ${waitTime}ms antes da próxima tentativa...`);
+            await new Promise(resolve => setTimeout(resolve, waitTime));
+            
+            // Resetar estados e tentar novamente
             setIsConnecting(false);
-            setTimeout(() => {
-              if (!isCallActive && roomUrl) {
-                joinCall();
-              }
-            }, 1000);
+            isJoiningRef.current = false;
+            
+            // Tentar conectar novamente apenas se ainda estivermos montados
+            if (isMounted && !isCallActive && roomUrl) {
+              console.log('🔄 Tentando reconectar...');
+              joinCall();
+            }
           } else {
-            setConnectionError('Não foi possível conectar à sala após várias tentativas.');
+            setConnectionError('A sala de videoconferência ainda não está disponível. Por favor, aguarde alguns instantes e clique em "Tentar Novamente".');
             setIsConnecting(false);
+            isJoiningRef.current = false;
           }
         } else {
-          setConnectionError(error?.errorMsg || 'Erro ao conectar');
+          setConnectionError(error?.errorMsg || 'Erro ao conectar à videoconferência');
           setIsConnecting(false);
+          isJoiningRef.current = false;
         }
       });
 
@@ -257,20 +288,34 @@ export default function MinimalistVideoCall({
       // Garantir que o token seja uma string ou undefined
       const joinOptions: any = {
         url: roomUrl,
-        userName: userName
+        userName: userName || 'Participante'
       };
       
       // Só adicionar token se for uma string válida
-      if (token && typeof token === 'string') {
+      if (token && typeof token === 'string' && token.trim() !== '') {
         joinOptions.token = token;
-      } else if (token && typeof token === 'object' && 'token' in token) {
-        // Se token for um objeto com propriedade 'token'
-        joinOptions.token = token.token;
+        console.log('✅ Token adicionado às opções de join');
+      } else {
+        console.log('⚠️ Entrando sem token (modo público)');
       }
       
       console.log('🎯 Opções de join finais:', joinOptions);
       
-      await callFrame.join(joinOptions);
+      // Adicionar timeout para a tentativa de conexão
+      const joinTimeout = setTimeout(() => {
+        console.error('⏱️ Timeout ao tentar entrar na sala');
+        setConnectionError('Tempo limite excedido ao tentar conectar. Por favor, verifique sua conexão.');
+        setIsConnecting(false);
+      }, 30000); // 30 segundos de timeout
+      
+      try {
+        await callFrame.join(joinOptions);
+        clearTimeout(joinTimeout);
+      } catch (joinError) {
+        clearTimeout(joinTimeout);
+        console.error('❌ Erro ao fazer join:', joinError);
+        throw joinError;
+      }
       
       console.log('✅ Entrou na sala com sucesso');
 
@@ -289,7 +334,7 @@ export default function MinimalistVideoCall({
       const timer = setTimeout(() => {
         console.log('🎬 Auto-iniciando videochamada após delay de segurança');
         joinCall();
-      }, 3000); // Aumentado para 3 segundos
+      }, 5000); // Aumentado para 5 segundos para garantir propagação
       
       return () => clearTimeout(timer);
     }
@@ -455,16 +500,30 @@ export default function MinimalistVideoCall({
             </div>
             <p className="text-white text-lg mb-2">Erro de Conexão</p>
             <p className="text-white/60 text-sm mb-4">{connectionError}</p>
-            <button
-              onClick={() => {
-                setConnectionError(null);
-                retryCountRef.current = 0;
-                joinCall();
-              }}
-              className="px-6 py-2 bg-white/20 hover:bg-white/30 rounded-full text-white transition-all"
-            >
-              Tentar Novamente
-            </button>
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={() => {
+                  setConnectionError(null);
+                  retryCountRef.current = 0;
+                  joinCall();
+                }}
+                className="px-6 py-2 bg-white/20 hover:bg-white/30 rounded-full text-white transition-all"
+              >
+                Tentar Novamente
+              </button>
+              <button
+                onClick={async () => {
+                  const roomName = roomUrl?.split('/').pop();
+                  const results = await TelemedicineDiagnostics.runFullDiagnostic(roomName);
+                  console.log(TelemedicineDiagnostics.formatResults(results));
+                  alert('Diagnóstico completo no console (F12)');
+                }}
+                className="px-6 py-2 bg-white/10 hover:bg-white/20 rounded-full text-white/80 transition-all flex items-center gap-2"
+              >
+                <AlertCircle className="w-4 h-4" />
+                Diagnóstico
+              </button>
+            </div>
           </div>
         </div>
       )}
