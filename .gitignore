@@ -65,3 +65,4 @@ test-*.cjs
 server-fixed.js
 server-simple.js
 server-working.js
+public/uploads/
