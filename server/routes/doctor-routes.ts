@@ -99,6 +99,11 @@ doctorRouter.put('/profile', requireAuth, requireDoctorRole, async (req: Authent
       availableForEmergency,
       consultationFee,
       profileImage,
+      welcomeCompleted,
+      pixKeyType,
+      pixKey,
+      bankName,
+      accountType,
       // Campos alternativos para compatibilidade
       specialty, 
       crm, 
@@ -141,6 +146,21 @@ doctorRouter.put('/profile', requireAuth, requireDoctorRole, async (req: Authent
     }
     if (profileImage !== undefined) {
       updateData.profileImage = profileImage;
+    }
+    if (welcomeCompleted !== undefined) {
+      updateData.welcomeCompleted = Boolean(welcomeCompleted);
+    }
+    if (pixKeyType !== undefined) {
+      updateData.pixKeyType = pixKeyType;
+    }
+    if (pixKey !== undefined) {
+      updateData.pixKey = pixKey;
+    }
+    if (bankName !== undefined) {
+      updateData.bankName = bankName;
+    }
+    if (accountType !== undefined) {
+      updateData.accountType = accountType;
     }
     
     console.log('🔍 Doctor PUT /profile - Dados para atualização:', updateData);

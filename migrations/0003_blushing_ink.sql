@@ -1,0 +1,1 @@
+ALTER TABLE "claims" ADD COLUMN "days_hospitalized" integer DEFAULT 0;

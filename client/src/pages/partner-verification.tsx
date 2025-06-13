@@ -7,6 +7,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
 import { QrCode, Camera, CheckCircle, XCircle, User } from 'lucide-react';
 import DashboardLayout from '@/components/layouts/dashboard-layout';
+import { PartnerOnboardingGuard } from '@/components/partner/partner-onboarding-guard';
 
 export default function PartnerVerification() {
   const [isScanning, setIsScanning] = useState(false);
@@ -111,7 +112,8 @@ export default function PartnerVerification() {
   };
 
   return (
-    <DashboardLayout>
+    <PartnerOnboardingGuard>
+      <DashboardLayout>
       <div className="container mx-auto py-4 md:py-8 px-4 max-w-6xl">
         <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 flex items-center gap-2 md:gap-3">
           <QrCode className="h-6 w-6 md:h-8 md:w-8" />
@@ -260,5 +262,6 @@ export default function PartnerVerification() {
         </Card>
       </div>
     </DashboardLayout>
+    </PartnerOnboardingGuard>
   );
 }

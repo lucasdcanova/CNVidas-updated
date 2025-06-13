@@ -44,6 +44,7 @@ import AdminUserDependents from "@/pages/admin/users/dependents";
 import SellerStats from "@/pages/admin/seller-stats";
 import CheckoutTrackingPage from "@/pages/admin/checkout-tracking";
 import DoctorTelemedicine from "@/pages/doctor-telemedicine";
+import DoctorOnboarding from "@/pages/doctor-onboarding";
 import DoctorAvailability from "@/pages/doctor-availability";
 import DoctorEmergencyRoom from "@/pages/doctor-emergency-room";
 import PatientEmergencyRoom from "@/pages/patient-emergency-room";
@@ -52,6 +53,7 @@ import DoctorWelcome from "@/pages/doctor/welcome";
 import DoctorFinanceiro from "@/pages/doctor/financeiro";
 import DoctorConsultationHistory from "@/pages/doctor/consultation-history";
 import PartnerDashboard from "@/pages/partner-dashboard";
+import PartnerOnboarding from "@/pages/partner-onboarding";
 import PartnerVerification from "@/pages/partner-verification";
 import PartnerServices from "@/pages/partner-services";
 import QRCodePage from "@/pages/qr-code";
@@ -154,6 +156,7 @@ function Router() {
       <ProtectedRoute path="/doctor/welcome" component={DoctorWelcome} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor/financeiro" component={DoctorFinanceiro} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor/consultation-history" component={DoctorConsultationHistory} allowedRoles={["doctor"]} />
+      <ProtectedRoute path="/doctor-onboarding" component={DoctorOnboarding} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor-telemedicine" component={DoctorTelemedicine} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor-availability" component={DoctorAvailability} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor-emergency" component={TelemedicineEmergencyV3} allowedRoles={["doctor", "patient"]} />
@@ -178,6 +181,7 @@ function Router() {
       <ProtectedRoute path="/doctor-emergency-room/:id" component={DoctorEmergencyRoom} allowedRoles={["doctor"]} />
       
       {/* Partner Routes */}
+      <ProtectedRoute path="/partner-onboarding" component={PartnerOnboarding} allowedRoles={["partner"]} />
       <ProtectedRoute path="/partner/dashboard" component={PartnerDashboard} allowedRoles={["partner"]} />
       <ProtectedRoute path="/partner/verification" component={PartnerVerification} allowedRoles={["partner"]} />
       <ProtectedRoute path="/partner/services" component={PartnerServices} allowedRoles={["partner"]} />

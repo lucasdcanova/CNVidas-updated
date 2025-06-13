@@ -18,6 +18,7 @@ import { format, isPast, isToday, addMinutes, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { WaitingPatientIndicator } from '@/components/doctor/WaitingPatientIndicator';
+import { DoctorOnboardingGuard } from '@/components/doctor/doctor-onboarding-guard';
 import {
   Dialog,
   DialogContent,
@@ -505,10 +506,11 @@ export default function DoctorTelemedicinePage() {
   );
 
   return (
-    <DashboardLayout title="Telemedicina">
-      {/* Indicador de pacientes aguardando em emergência */}
-      {/* Componente de paciente em espera removido conforme solicitado */}
-      <div className="space-y-6">
+    <DoctorOnboardingGuard>
+      <DashboardLayout title="Telemedicina">
+        {/* Indicador de pacientes aguardando em emergência */}
+        {/* Componente de paciente em espera removido conforme solicitado */}
+        <div className="space-y-6">
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold tracking-tight">Teleconsultas</h1>
           <p className="text-muted-foreground">
@@ -576,5 +578,6 @@ export default function DoctorTelemedicinePage() {
         )}
       </div>
     </DashboardLayout>
+    </DoctorOnboardingGuard>
   );
 }

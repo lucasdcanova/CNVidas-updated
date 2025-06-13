@@ -2,6 +2,7 @@ import { useAuth } from "@/hooks/use-auth";
 import DashboardLayout from "@/components/layouts/dashboard-layout";
 import { Loader2 } from "lucide-react";
 import PartnerDashboard from "@/components/dashboards/partner-dashboard";
+import { PartnerOnboardingGuard } from "@/components/partner/partner-onboarding-guard";
 
 export default function PartnerDashboardPage() {
   const { user, isLoading } = useAuth();
@@ -30,8 +31,10 @@ export default function PartnerDashboardPage() {
   }
 
   return (
-    <DashboardLayout>
-      <PartnerDashboard />
-    </DashboardLayout>
+    <PartnerOnboardingGuard>
+      <DashboardLayout>
+        <PartnerDashboard />
+      </DashboardLayout>
+    </PartnerOnboardingGuard>
   );
 }

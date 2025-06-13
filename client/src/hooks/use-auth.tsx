@@ -330,11 +330,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.log("Usuário é administrador, redirecionando para /admin/users");
         window.location.href = "/admin/users";
       } else if (userData.role === "doctor") {
-        console.log("Usuário é médico, redirecionando para /doctor-telemedicine");
-        window.location.href = "/doctor-telemedicine";
+        console.log("Usuário é médico, redirecionando para /doctor-onboarding");
+        window.location.href = "/doctor-onboarding";
       } else if (userData.role === "partner") {
-        console.log("Usuário é parceiro, redirecionando para /partner/dashboard");
-        window.location.href = "/partner/dashboard";
+        console.log("Usuário é parceiro, redirecionando para /partner-onboarding");
+        window.location.href = "/partner-onboarding";
       } else if (userData.role === "patient") {
         // Novos pacientes vão direto para a página de seleção obrigatória de plano
         console.log("Usuário é paciente, redirecionando para /first-subscription");
