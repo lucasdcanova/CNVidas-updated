@@ -223,31 +223,19 @@ export default function MinimalistVideoCall({
         // Configurações importantes para prevenir erros de captura
         audioSource: true, // Usar fonte de áudio padrão
         videoSource: true, // Usar fonte de vídeo padrão
-        // Configurações modernas do Daily.co (sem opções deprecadas)
-        inputSettings: {
-          audio: {
-            settings: {
-              echoCancellation: true,
-              noiseSuppression: true,
-              autoGainControl: true
-            }
+        // Configurações do Daily.co (formato correto)
+        dailyConfig: {
+          // Configurações de vídeo e áudio sem usar APIs deprecadas
+          useDevicePreferenceCookies: true,
+          userMediaVideoConstraints: {
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+            frameRate: { ideal: 24 }
           },
-          video: {
-            settings: {
-              width: { ideal: 1280, max: 1920 },
-              height: { ideal: 720, max: 1080 },
-              frameRate: { ideal: 24, max: 30 }
-            }
-          }
-        },
-        sendSettings: {
-          video: {
-            maxQuality: 'high',
-            encodings: {
-              low: { maxBitrate: 100000, scaleResolutionDownBy: 4 },
-              medium: { maxBitrate: 300000, scaleResolutionDownBy: 2 },
-              high: { maxBitrate: 1000000, scaleResolutionDownBy: 1 }
-            }
+          userMediaAudioConstraints: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
           }
         },
         iframeStyle: {
@@ -450,14 +438,19 @@ export default function MinimalistVideoCall({
   }, [roomUrl, token, userName, onJoinCall, onParticipantJoined, onParticipantLeft]);
 
   // Auto-iniciar se tiver URL (removido joinCall das dependências para evitar loop)
+  const hasAutoStartedRef = useRef(false);
+  
   useEffect(() => {
-    if (roomUrl && !isCallActive && !isConnecting && isMounted && !connectionError && !isJoiningRef.current) {
+    if (roomUrl && !isCallActive && !isConnecting && isMounted && !connectionError && !isJoiningRef.current && !hasAutoStartedRef.current) {
       // Verificar se já existe uma instância ativa
       const existingInstances = (window as any).__dailyInstances || [];
       if (existingInstances.length > 0) {
         console.log('🚫 Já existe uma instância do Daily, cancelando auto-start');
         return;
       }
+      
+      // Marcar que já tentamos auto-iniciar
+      hasAutoStartedRef.current = true;
       
       // Aguardar um tempo maior para garantir que a sala esteja propagada
       const timer = setTimeout(() => {

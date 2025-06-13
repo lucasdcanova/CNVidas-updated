@@ -273,6 +273,9 @@ dailyRouter.post('/room', requireAuth, checkSubscriptionFeature('telemedicine'),
  * POST /api/telemedicine/daily/token
  */
 dailyRouter.post('/token', requireAuth, checkSubscriptionFeature('telemedicine'), async (req: Request, res: Response) => {
+  // Garantir que a resposta será JSON
+  res.setHeader('Content-Type', 'application/json');
+  
   const authReq = req as AuthenticatedRequest;
   console.log('🔑 [Daily Token] Recebendo requisição:', {
     roomName: req.body.roomName,
@@ -285,11 +288,11 @@ dailyRouter.post('/token', requireAuth, checkSubscriptionFeature('telemedicine')
   try {
     const { roomName, isDoctor } = req.body;
     if (!roomName) {
-      throw new AppError('Nome da sala é obrigatório', 400);
+      return res.status(400).json({ error: 'Nome da sala é obrigatório' });
     }
 
     if (!authReq.user) {
-      throw new AppError('Usuário não autenticado', 401);
+      return res.status(401).json({ error: 'Usuário não autenticado' });
     }
 
     const userName = authReq.user.fullName || authReq.user.username || 'Usuário';
@@ -301,13 +304,13 @@ dailyRouter.post('/token', requireAuth, checkSubscriptionFeature('telemedicine')
     
     console.log('✅ [Daily Token] Token gerado com sucesso');
     
-    res.json(tokenData);
+    return res.json(tokenData);
   } catch (error) {
     console.error('Erro ao gerar token:', error);
     if (error instanceof AppError) {
-      res.status(error.statusCode).json({ error: error.message });
+      return res.status(error.statusCode).json({ error: error.message });
     } else {
-      res.status(500).json({ error: 'Erro ao gerar token de videoconferência' });
+      return res.status(500).json({ error: 'Erro ao gerar token de videoconferência' });
     }
   }
 });
