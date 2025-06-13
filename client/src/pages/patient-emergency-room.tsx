@@ -11,7 +11,7 @@ import { apiRequest } from '@/lib/queryClient';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useQuery } from '@tanstack/react-query';
-import MinimalistVideoCall from '@/components/telemedicine/MinimalistVideoCall';
+import FaceTimeVideoCall from '@/components/telemedicine/FaceTimeVideoCall';
 
 interface CallState {
   roomUrl: string | null;
@@ -511,7 +511,7 @@ export default function PatientEmergencyRoom() {
 
               <div className="relative aspect-video bg-gray-900 rounded-lg overflow-hidden">
                 {showVideoCall && callState.roomUrl ? (
-                  <MinimalistVideoCall
+                  <FaceTimeVideoCall
                     roomUrl={callState.roomUrl}
                     token={callState.token || undefined}
                     onJoinCall={handleJoinCall}
