@@ -65,16 +65,8 @@ emergencyV2Router.post('/start', authenticateToken, async (req: Request, res: Re
 
     // Criar sala Daily.co com nome único
     const roomName = `emergency-${userId}-${Date.now()}`;
-    const roomData = await createRoom(roomName, {
-      properties: {
-        enable_recording: false,
-        enable_chat: true,
-        enable_screenshare: true,
-        lang: 'pt',
-        max_participants: 2,
-        exp: Math.floor(Date.now() / 1000) + 3600 // Expira em 1 hora
-      }
-    });
+    // IMPORTANTE: Passar true como terceiro parâmetro para aguardar propagação
+    const roomData = await createRoom(roomName, 60, true); // 60 minutos, aguardar propagação
 
     // Criar token para o paciente
     const tokenResponse = await createToken(roomName, {
