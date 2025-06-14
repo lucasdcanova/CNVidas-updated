@@ -18,8 +18,8 @@ appointmentJoinRouter.get('/upcoming', requireAuth, async (req: AuthenticatedReq
     const userId = req.user.id;
     console.log(`Buscando consultas próximas para usuário ${userId}`);
     
-    // Buscar consultas próximas do usuário
-    const upcomingAppointments = await storage.getUpcomingAppointments(userId);
+    // Buscar consultas próximas do usuário com dados completos do médico
+    const upcomingAppointments = await storage.getUpcomingAppointmentsWithDoctorInfo(userId);
     
     console.log(`Encontradas ${upcomingAppointments.length} consultas próximas`);
     

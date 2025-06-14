@@ -156,6 +156,7 @@ export interface IStorage {
   getAppointmentById(id: number): Promise<Appointment | null>;
   getUserAppointments(userId: number): Promise<Appointment[]>;
   getUpcomingAppointments(userId: number): Promise<Appointment[]>;
+  getUpcomingAppointmentsWithDoctorInfo(userId: number): Promise<any[]>;
   getPartnerAppointments(partnerId: number): Promise<Appointment[]>;
   createAppointment(appointment: InsertAppointment): Promise<Appointment>;
   updateAppointment(id: number, data: Partial<InsertAppointment>): Promise<Appointment>;
@@ -846,6 +847,44 @@ export class DatabaseStorage implements IStorage {
         )
       )
       .orderBy(asc(appointments.date));
+  }
+
+  async getUpcomingAppointmentsWithDoctorInfo(userId: number): Promise<any[]> {
+    const now = new Date();
+    const result = await this.db.select({
+      // Dados do appointment
+      id: appointments.id,
+      userId: appointments.userId,
+      doctorId: appointments.doctorId,
+      date: appointments.date,
+      duration: appointments.duration,
+      status: appointments.status,
+      notes: appointments.notes,
+      type: appointments.type,
+      isEmergency: appointments.isEmergency,
+      telemedRoomName: appointments.telemedRoomName,
+      createdAt: appointments.createdAt,
+      updatedAt: appointments.updatedAt,
+      // Dados do médico
+      doctorName: users.fullName,
+      doctorEmail: users.email,
+      doctorProfileImage: doctors.profileImage,
+      specialization: doctors.specialization,
+      consultationFee: doctors.consultationFee,
+      availableForEmergency: doctors.availableForEmergency
+    })
+    .from(appointments)
+    .leftJoin(doctors, eq(appointments.doctorId, doctors.id))
+    .leftJoin(users, eq(doctors.userId, users.id))
+    .where(
+      and(
+        eq(appointments.userId, userId),
+        gte(appointments.date, now)
+      )
+    )
+    .orderBy(asc(appointments.date));
+    
+    return result;
   }
 
   async getPartnerAppointments(partnerId: number): Promise<Appointment[]> {

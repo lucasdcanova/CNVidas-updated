@@ -48,11 +48,17 @@ type Appointment = {
   userId: number;
   doctorId: number;
   doctorName: string;
+  doctorEmail?: string;
+  doctorProfileImage?: string;
   specialization: string;
+  consultationFee?: number;
+  availableForEmergency?: boolean;
   date: string;
   duration: number;
   status: string;
   notes?: string;
+  type?: string;
+  isEmergency?: boolean;
 };
 
 
@@ -669,29 +675,73 @@ export default function TelemedicinePage() {
                       </div>
                     ) : upcomingAppointments.length > 0 ? (
                       <ul className="divide-y divide-gray-100">
-                        {upcomingAppointments.map((appointment: Appointment) => (
-                          <li key={appointment.id} className="p-4 hover:bg-gray-50">
-                            <div className="flex items-center justify-between">
-                              <div className="min-w-0 flex-1">
-                                <p className="font-medium text-sm text-gray-900">{formatDoctorName(appointment.doctorName)}</p>
-                                <div className="mt-1 flex items-center text-xs text-gray-500">
-                                  <CalendarIcon className="mr-1.5 h-3.5 w-3.5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-                                  <p>
-                                    {format(new Date(appointment.date), "dd 'de' MMMM 'às' HH:mm", { locale: ptBR })}
-                                  </p>
+                        {upcomingAppointments.map((appointment: Appointment) => {
+                          const priceInfo = getScheduledConsultationPriceInfo({
+                            consultationFee: appointment.consultationFee,
+                            availableForEmergency: appointment.availableForEmergency
+                          } as Doctor);
+                          
+                          return (
+                            <li key={appointment.id} className="p-4 hover:bg-gray-50 transition-colors">
+                              <div className="flex items-center space-x-4">
+                                {/* Foto do médico */}
+                                <div className="flex-shrink-0">
+                                  <Avatar className="h-12 w-12 border-2 border-white shadow-md ring-2 ring-blue-100">
+                                    <AvatarImage 
+                                      src={appointment.doctorProfileImage} 
+                                      alt={appointment.doctorName}
+                                      className="object-cover w-full h-full"
+                                    />
+                                    <AvatarFallback className="bg-gradient-to-br from-primary/80 to-primary text-white text-sm font-semibold">
+                                      {appointment.doctorName?.split(' ').map(n => n[0]).join('').toUpperCase() || 'MD'}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                </div>
+                                
+                                {/* Informações da consulta */}
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-start justify-between">
+                                    <div className="min-w-0 flex-1">
+                                      <p className="font-semibold text-sm text-gray-900 truncate">
+                                        {formatDoctorName(appointment.doctorName)}
+                                      </p>
+                                      <p className="text-xs text-primary font-medium mt-0.5">
+                                        {appointment.specialization}
+                                      </p>
+                                      <div className="mt-2 flex items-center text-xs text-gray-500">
+                                        <CalendarIcon className="mr-1.5 h-3.5 w-3.5 flex-shrink-0 text-gray-400" aria-hidden="true" />
+                                        <p>
+                                          {format(new Date(appointment.date), "dd 'de' MMMM 'às' HH:mm", { locale: ptBR })}
+                                        </p>
+                                      </div>
+                                      {/* Informação de preço */}
+                                      <div className="mt-1">
+                                        <span className={`text-xs ${priceInfo.color} font-medium`}>
+                                          {priceInfo.text}
+                                        </span>
+                                      </div>
+                                    </div>
+                                    
+                                    {/* Badge de preço e botão */}
+                                    <div className="ml-3 flex flex-col items-end space-y-2">
+                                      <div className="flex-shrink-0">
+                                        {priceInfo.badge}
+                                      </div>
+                                      <Button 
+                                        size="sm" 
+                                        variant="default"
+                                        className="text-xs px-3 py-1 h-7"
+                                        onClick={() => navigate(`/telemedicine/${appointment.id}`)}
+                                      >
+                                        Entrar
+                                      </Button>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                              <Button 
-                                size="sm" 
-                                variant="default"
-                                className="text-xs"
-                                onClick={() => navigate(`/telemedicine/${appointment.id}`)}
-                              >
-                                Entrar
-                              </Button>
-                            </div>
-                          </li>
-                        ))}
+                            </li>
+                          );
+                        })}
                       </ul>
                     ) : (
                       <div className="p-4 text-center">
