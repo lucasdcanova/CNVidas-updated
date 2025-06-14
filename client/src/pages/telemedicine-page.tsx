@@ -721,9 +721,9 @@ export default function TelemedicinePage() {
               doctorId={selectedDoctor.id}
               doctorName={formatDoctorName(selectedDoctor.name || 'Médico')}
               onSelectDateTime={async (date, time) => {
-                // Verificar se time está definido
-                if (!time) {
-                  console.error('Horário não definido:', { date, time });
+                // Verificar se time está definido e é uma string válida
+                if (!time || typeof time !== 'string' || !time.includes(':')) {
+                  console.error('Horário inválido:', { date, time, type: typeof time });
                   toast({
                     title: "Erro ao agendar consulta",
                     description: "Horário não foi selecionado corretamente. Tente novamente.",
@@ -733,12 +733,21 @@ export default function TelemedicinePage() {
                 }
                 
                 // Combinar data e hora
-                const [hours, minutes] = time.split(':');
-                const appointmentDate = new Date(date);
-                appointmentDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-                
-                // Criar agendamento
                 try {
+                  const [hours, minutes] = time.split(':');
+                  
+                  // Validar se hours e minutes são números válidos
+                  const hoursNum = parseInt(hours);
+                  const minutesNum = parseInt(minutes);
+                  
+                  if (isNaN(hoursNum) || isNaN(minutesNum) || hoursNum < 0 || hoursNum > 23 || minutesNum < 0 || minutesNum > 59) {
+                    throw new Error('Horário inválido');
+                  }
+                  
+                  const appointmentDate = new Date(date);
+                  appointmentDate.setHours(hoursNum, minutesNum, 0, 0);
+                  
+                  // Criar agendamento
                   await createAppointmentMutation.mutateAsync({
                     doctorId: selectedDoctor.id,
                     date: appointmentDate.toISOString(),
@@ -754,6 +763,11 @@ export default function TelemedicinePage() {
                   });
                 } catch (error) {
                   console.error('Erro ao agendar consulta:', error);
+                  toast({
+                    title: "Erro ao agendar consulta",
+                    description: error instanceof Error ? error.message : "Ocorreu um erro ao agendar sua consulta. Tente novamente.",
+                    variant: "destructive",
+                  });
                 }
               }}
               onCancel={() => setIsBookingDialogOpen(false)}
