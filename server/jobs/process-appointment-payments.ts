@@ -53,7 +53,7 @@ export async function processAppointmentPayments() {
             type: 'payment',
             title: 'Pagamento Processado',
             message: `O pagamento da sua consulta foi processado com sucesso. A consulta está confirmada para ${new Date(appointment.date).toLocaleString('pt-BR')}.`,
-            read: false,
+            isRead: false,
             data: { appointmentId: appointment.id }
           });
         }

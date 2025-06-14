@@ -132,10 +132,30 @@ export function calculateDistance(lat1: number, lng1: number, lat2: number, lng2
 }
 
 /**
- * Remove acentos de uma string
+ * Remove acentos de uma string e corrige problemas de encoding
  */
 function removeAccents(str: string): string {
-  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  // Primeiro, tentar corrigir encoding UTF-8 incorreto
+  let cleaned = str;
+  
+  // Corrigir alguns casos comuns de encoding incorreto
+  cleaned = cleaned.replace(/TrÃªs/gi, 'três');
+  cleaned = cleaned.replace(/Ã¡/gi, 'á');
+  cleaned = cleaned.replace(/Ã /gi, 'à');
+  cleaned = cleaned.replace(/Ã©/gi, 'é');
+  cleaned = cleaned.replace(/Ã­/gi, 'í');
+  cleaned = cleaned.replace(/Ã³/gi, 'ó');
+  cleaned = cleaned.replace(/Ãº/gi, 'ú');
+  cleaned = cleaned.replace(/Ã§/gi, 'ç');
+  cleaned = cleaned.replace(/Ã±/gi, 'ñ');
+  cleaned = cleaned.replace(/Ã¢/gi, 'â');
+  cleaned = cleaned.replace(/Ãª/gi, 'ê');
+  cleaned = cleaned.replace(/Ã´/gi, 'ô');
+  cleaned = cleaned.replace(/Ã£/gi, 'ã');
+  cleaned = cleaned.replace(/Ãµ/gi, 'õ');
+  
+  // Depois, remover os acentos
+  return cleaned.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
 /**

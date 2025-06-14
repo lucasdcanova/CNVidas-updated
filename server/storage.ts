@@ -2,7 +2,7 @@ import { users, partners, doctors, partnerServices, appointments, claims, notifi
 import { User, Partner, Doctor, PartnerService, Appointment, Claim, Notification, DoctorPayment, AuditLog, QrToken, SubscriptionPlan, UserSettings, EmailVerification, PasswordReset, AvailabilitySlot, QrAuthLog, InsertUser, InsertPartner, InsertDoctor, InsertPartnerService, InsertAppointment, InsertClaim, InsertNotification, InsertDoctorPayment, InsertAuditLog, InsertQrToken, InsertSubscriptionPlan, InsertUserSettings, InsertEmailVerification, InsertPasswordReset, InsertAvailabilitySlot, InsertQrAuthLog, Dependent, InsertDependent } from '@shared/types';
 import { PartnerAddress, InsertPartnerAddress } from './interfaces/partner';
 import { db } from "./db";
-import { eq, and, gte, lte, desc, sql, count, or, gt, asc } from "drizzle-orm";
+import { eq, and, gte, lte, desc, sql, count, or, gt, asc, inArray } from "drizzle-orm";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
 import { pool } from "./db";
@@ -1397,104 +1397,153 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getServicesWithLocationFilter(userCity?: string, maxDistance: number = 50): Promise<PartnerService[]> {
-    const results = await this.db
-      .select({
-        service: partnerServices,
-        partner: partners,
-        user: users
-      })
-      .from(partnerServices)
-      .leftJoin(partners, eq(partnerServices.partnerId, partners.id))
-      .leftJoin(users, eq(partners.userId, users.id))
-      .where(eq(partnerServices.isActive, true));
-    
-    // Buscar endereços para cada parceiro
-    const partnerIds = [...new Set(results.map(r => r.partner?.id).filter(Boolean))] as number[];
-    const addressesByPartner = new Map<number, PartnerAddress[]>();
-    
-    for (const partnerId of partnerIds) {
-      const addresses = await this.getPartnerAddresses(partnerId);
-      addressesByPartner.set(partnerId, addresses);
-    }
-    
-    const services = results.map(result => {
-      const serviceImage = result.service.serviceImage || null;
+    try {
+      // Buscar serviços ativos
+      const services = await this.db
+        .select()
+        .from(partnerServices)
+        .where(eq(partnerServices.isActive, true));
       
-      // Buscar endereços do parceiro
-      const partnerAddresses = result.partner ? addressesByPartner.get(result.partner.id) || [] : [];
-      const primaryAddress = partnerAddresses.find(addr => addr.isPrimary) || partnerAddresses[0];
+      // Buscar parceiros relacionados
+      const partnerIds = [...new Set(services.map(s => s.partnerId).filter(Boolean))] as number[];
+      const partnersMap = new Map();
       
-      return {
-        ...result.service,
-        serviceImage,
-        partner: result.partner ? {
-          ...result.partner,
-          profileImage: result.user?.profileImage || null,
-          phone: result.partner.phone || null,
-          name: result.partner.businessName || result.partner.tradingName || null,
-          city: primaryAddress?.city || result.partner.city || null,
-          addresses: partnerAddresses
-        } : null
-      };
-    }) as any[];
+      if (partnerIds.length > 0) {
+        const partnersData = await this.db
+          .select({
+            id: partners.id,
+            userId: partners.userId,
+            businessName: partners.businessName,
+            tradingName: partners.tradingName,
+            businessType: partners.businessType,
+            description: partners.description,
+            website: partners.website,
+            address: partners.address,
+            zipcode: partners.zipcode,
+            postalCode: partners.postalCode,
+            street: partners.street,
+            number: partners.number,
+            complement: partners.complement,
+            neighborhood: partners.neighborhood,
+            city: partners.city,
+            state: partners.state,
+            phone: partners.phone,
+            cnpj: partners.cnpj,
+            nationwideService: partners.nationwideService,
+            status: partners.status,
+            createdAt: partners.createdAt,
+            updatedAt: partners.updatedAt
+          })
+          .from(partners)
+          .where(inArray(partners.id, partnerIds));
+        
+        partnersData.forEach(partner => {
+          partnersMap.set(partner.id, partner);
+        });
+      }
+      
+      // Buscar endereços para cada parceiro
+      const addressesByPartner = new Map<number, PartnerAddress[]>();
+      
+      for (const partnerId of partnerIds) {
+        try {
+          const addresses = await this.getPartnerAddresses(partnerId);
+          addressesByPartner.set(partnerId, addresses);
+        } catch (addressError) {
+          console.error(`[getServicesWithLocationFilter] Erro ao buscar endereços do parceiro ${partnerId}:`, addressError);
+          addressesByPartner.set(partnerId, []);
+        }
+      }
+      
+      const enrichedServices = services.map((service) => {
+        const partner = partnersMap.get(service.partnerId);
+        const partnerAddresses = partner ? addressesByPartner.get(partner.id) || [] : [];
+        const primaryAddress = partnerAddresses.find(addr => addr.isPrimary) || partnerAddresses[0];
+        
+        return {
+          ...service,
+          serviceImage: service.serviceImage || null,
+          partner: partner ? {
+            ...partner,
+            profileImage: null,
+            phone: partner.phone || null,
+            name: partner.businessName || partner.tradingName || null,
+            city: primaryAddress?.city || partner.city || null,
+            addresses: partnerAddresses
+          } : null
+        };
+      }) as any[];
 
-    // Se não houver cidade do usuário, retornar todos os serviços ativos
-    if (!userCity) {
-      return services;
-    }
-
-    // Filtrar serviços: nacionais + locais dentro do raio
-    
-    const filteredServices = services.filter(service => {
-      // Serviços nacionais sempre aparecem
-      if (service.isNational === true) {
-        return true;
+      // Se não houver cidade do usuário, retornar todos os serviços ativos
+      if (!userCity) {
+        return enrichedServices;
       }
 
-      // Serviços locais: verificar distância de qualquer endereço ativo
-      if (!service.partner?.addresses || service.partner.addresses.length === 0) {
-        // Se não tem endereços cadastrados, usar cidade do parceiro como fallback
-        if (!service.partner?.city) {
-          return false;
-        }
-        
-        const distance = getDistanceBetweenCities(userCity, service.partner.city);
-        
-        if (distance !== null && distance <= maxDistance) {
-          service.distance = distance;
-          return true;
-        }
-        return false;
-      }
-
-      // Verificar se algum endereço ativo está dentro do raio
-      let minDistance: number | null = null;
-      
-      for (const address of service.partner.addresses) {
-        // Considerar apenas endereços ativos
-        if (!address.isActive) continue;
-        
-        const distance = getDistanceBetweenCities(userCity, address.city);
-        
-        if (distance !== null) {
-          if (minDistance === null || distance < minDistance) {
-            minDistance = distance;
-          }
-          
-          // Se encontrou um endereço dentro do raio, incluir o serviço
-          if (distance <= maxDistance) {
-            service.distance = distance;
-            service.closestAddressCity = address.city;
-            service.closestAddressName = address.name;
+      // Filtrar serviços: nacionais + locais dentro do raio
+      const filteredServices = enrichedServices.filter(service => {
+        try {
+          // Serviços nacionais sempre aparecem
+          if (service.isNational === true) {
             return true;
           }
+
+          // Serviços locais: verificar distância de qualquer endereço ativo
+          if (!service.partner?.addresses || service.partner.addresses.length === 0) {
+            // Se não tem endereços cadastrados, usar cidade do parceiro como fallback
+            if (!service.partner?.city) {
+              return false;
+            }
+            
+            const distance = getDistanceBetweenCities(userCity, service.partner.city);
+            
+            if (distance !== null && distance <= maxDistance) {
+              service.distance = distance;
+              return true;
+            }
+            return false;
+          }
+
+          // Verificar se algum endereço ativo está dentro do raio
+          let minDistance: number | null = null;
+          
+          for (const address of service.partner.addresses) {
+            // Considerar apenas endereços ativos
+            if (!address.isActive) continue;
+            
+            const distance = getDistanceBetweenCities(userCity, address.city);
+            
+            if (distance !== null) {
+              if (minDistance === null || distance < minDistance) {
+                minDistance = distance;
+              }
+              
+              // Se encontrou um endereço dentro do raio, incluir o serviço
+              if (distance <= maxDistance) {
+                service.distance = distance;
+                service.closestAddressCity = address.city;
+                service.closestAddressName = address.name;
+                return true;
+              }
+            }
+          }
+          
+          return false;
+        } catch (filterError) {
+          console.error(`[getServicesWithLocationFilter] Erro ao filtrar serviço:`, filterError);
+          return false;
         }
-      }
+      });
       
-      return false;
-    });
-    
-    return filteredServices;
+      return filteredServices;
+      
+    } catch (error) {
+      console.error('[getServicesWithLocationFilter] Erro geral na função:', error);
+      // Retornar erro mais específico
+      if (error instanceof Error) {
+        throw new Error(`Erro ao buscar serviços: ${error.message}`);
+      }
+      throw new Error('Erro desconhecido ao buscar serviços');
+    }
   }
 }
 

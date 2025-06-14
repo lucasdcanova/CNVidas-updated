@@ -15,7 +15,7 @@ export class NotificationService {
         message: isEmergency ? 
           'Sua consulta de emergência foi agendada com sucesso. Você será conectado com um médico em breve.' :
           'Sua consulta foi agendada com sucesso. Você receberá um lembrete antes do horário.',
-        read: false,
+        isRead: false,
         data: { appointmentId }
       };
       
@@ -36,7 +36,7 @@ export class NotificationService {
         type: 'appointment',
         title: 'Consulta Concluída',
         message: 'Sua consulta foi concluída com sucesso. Obrigado por usar nossos serviços de telemedicina.',
-        read: false,
+        isRead: false,
         data: { appointmentId }
       };
       
@@ -57,7 +57,7 @@ export class NotificationService {
         type: 'claim',
         title: 'Sinistro Enviado',
         message: 'Seu sinistro foi enviado com sucesso e está sendo analisado por nossa equipe. Você será notificado sobre atualizações.',
-        read: false,
+        isRead: false,
         data: { claimId }
       };
       
@@ -96,7 +96,7 @@ export class NotificationService {
         type: 'claim',
         title,
         message,
-        read: false,
+        isRead: false,
         data: { claimId, status }
       };
       
@@ -117,7 +117,7 @@ export class NotificationService {
         type: 'subscription',
         title: 'Plano Ativado',
         message: `Seu plano ${planType} foi ativado com sucesso! Agora você tem acesso a todos os benefícios inclusos.`,
-        read: false,
+        isRead: false,
         data: { planType }
       };
       
@@ -143,7 +143,7 @@ export class NotificationService {
         type: 'payment',
         title,
         message,
-        read: false,
+        isRead: false,
         data: { success, amount, planType }
       };
       
@@ -164,7 +164,7 @@ export class NotificationService {
         type: 'system',
         title: 'Bem-vindo à CN Vidas!',
         message: `Olá ${fullName}! Seja bem-vindo à CN Vidas. Explore nossos serviços de saúde digital e cuide bem de você.`,
-        read: false,
+        isRead: false,
         data: { isWelcome: true }
       };
       
@@ -185,7 +185,7 @@ export class NotificationService {
         type: 'system',
         title,
         message,
-        read: false,
+        isRead: false,
         data
       };
       
@@ -206,7 +206,7 @@ export class NotificationService {
         type: 'qr_scan',
         title: 'QR Code Verificado',
         message: `Seu QR Code foi escaneado por ${partnerName}${scanLocation ? ` em ${scanLocation}` : ''}. Sua identidade foi verificada com sucesso.`,
-        read: false,
+        isRead: false,
         data: { partnerName, scanLocation, scanTime: new Date().toISOString() }
       };
       
@@ -227,7 +227,7 @@ export class NotificationService {
         type: 'checkout',
         title: 'Checkout Iniciado',
         message: `Você iniciou o processo de compra de "${productName}" no valor de R$ ${(amount / 100).toFixed(2).replace('.', ',')}.`,
-        read: false,
+        isRead: false,
         data: { productName, amount, checkoutTime: new Date().toISOString() }
       };
       
@@ -248,7 +248,7 @@ export class NotificationService {
         type: 'checkout',
         title: 'Compra Realizada',
         message: `Sua compra de "${productName}" foi concluída com sucesso! Pagamento de R$ ${(amount / 100).toFixed(2).replace('.', ',')} processado via ${paymentMethod}.`,
-        read: false,
+        isRead: false,
         data: { productName, amount, paymentMethod, completedTime: new Date().toISOString() }
       };
       
@@ -269,7 +269,7 @@ export class NotificationService {
         type: 'dependent',
         title: 'Dependente Adicionado',
         message: `${dependentName} foi adicionado(a) como dependente em seu plano familiar. Agora tem acesso aos benefícios da CN Vidas.`,
-        read: false,
+        isRead: false,
         data: { dependentName, addedTime: new Date().toISOString() }
       };
       
@@ -291,7 +291,7 @@ export class NotificationService {
         type: 'profile',
         title: 'Perfil Atualizado',
         message: `Seu perfil foi atualizado com sucesso. Campos alterados: ${fieldsText}.`,
-        read: false,
+        isRead: false,
         data: { updatedFields, updateTime: new Date().toISOString() }
       };
       

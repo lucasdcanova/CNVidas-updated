@@ -192,7 +192,12 @@ authRouter.post('/register', async (req: Request, res: Response) => {
     console.log(`Salvas ${acceptances.length} aceitações de documentos legais para usuário ${newUser.id}`);
 
     // Criar notificação de boas-vindas
-    await NotificationService.createWelcomeNotification(newUser.id, newUser.fullName);
+    try {
+      await NotificationService.createWelcomeNotification(newUser.id, newUser.fullName);
+    } catch (notificationError) {
+      console.error('Erro ao criar notificação de boas-vindas:', notificationError);
+      // Não falhar o registro se a notificação falhar
+    }
 
     // Fazer login automático após registro bem-sucedido
     const jwtSecret = process.env.JWT_SECRET || 'cnvidas-secret-key-2024';
@@ -262,12 +267,14 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
   // Buscar usuário diretamente no banco usando SQL
   try {
     console.log('Buscando usuário no banco:', email);
+    console.log('Iniciando query no banco de dados...');
     
     // Usar select() sem campos específicos para evitar erro do Drizzle
     const result = await db.select()
     .from(users)
     .where(eq(users.email, email));
     
+    console.log('Query executada, resultado:', result.length, 'usuários encontrados');
     const user = result[0];
     console.log('Usuário encontrado:', !!user);
     
@@ -282,20 +289,33 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     // Verificar a senha (suporte para scrypt e bcrypt)
     let isPasswordValid = false;
     
-    if (user.password.startsWith('$2b$') || user.password.startsWith('$2a$') || user.password.startsWith('$2y$')) {
-      // Formato bcrypt
-      isPasswordValid = await compare(password, user.password);
-    } else if (user.password.includes('.') && !user.password.startsWith('$')) {
-      // Formato scrypt (hash.salt)
-      const [hashed, salt] = user.password.split(".");
-      if (hashed && salt) {
-        const hashedBuf = Buffer.from(hashed, "hex");
-        const suppliedBuf = (await scryptAsync(password, salt, 64)) as Buffer;
-        isPasswordValid = timingSafeEqual(hashedBuf, suppliedBuf);
+    try {
+      if (!user.password) {
+        console.error('User password is null or undefined');
+        return res.status(500).json({ error: 'Erro na configuração da conta' });
       }
-    } else {
-      // Formato bcrypt como fallback
-      isPasswordValid = await compare(password, user.password);
+      
+      if (user.password.startsWith('$2b$') || user.password.startsWith('$2a$') || user.password.startsWith('$2y$')) {
+        // Formato bcrypt
+        console.log('Verificando senha com bcrypt');
+        isPasswordValid = await compare(password, user.password);
+      } else if (user.password.includes('.') && !user.password.startsWith('$')) {
+        // Formato scrypt (hash.salt)
+        console.log('Verificando senha com scrypt');
+        const [hashed, salt] = user.password.split(".");
+        if (hashed && salt) {
+          const hashedBuf = Buffer.from(hashed, "hex");
+          const suppliedBuf = (await scryptAsync(password, salt, 64)) as Buffer;
+          isPasswordValid = timingSafeEqual(hashedBuf, suppliedBuf);
+        }
+      } else {
+        // Formato bcrypt como fallback
+        console.log('Verificando senha com bcrypt (fallback)');
+        isPasswordValid = await compare(password, user.password);
+      }
+    } catch (passwordError) {
+      console.error('Erro ao verificar senha:', passwordError);
+      return res.status(500).json({ error: 'Erro ao verificar credenciais' });
     }
     
     if (!isPasswordValid) {
@@ -343,7 +363,11 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
 
   } catch (error) {
     console.error('Erro no login:', error);
-    res.status(500).json({ error: 'Erro interno do servidor' });
+    console.error('Stack trace:', error instanceof Error ? error.stack : 'No stack trace');
+    res.status(500).json({ 
+      error: 'Erro interno do servidor',
+      details: process.env.NODE_ENV === 'development' && error instanceof Error ? error.message : undefined
+    });
   }
 });
 

@@ -31,6 +31,7 @@ import profileUploadRouter from './profile-upload';
 import chatRouter from '../chat-routes';
 
 export default async function setupRoutes(app: express.Express) {
+  
   // Rotas de autenticação (PRIMEIRO para evitar conflitos)
   console.log('Registrando authRouter em /api/auth');
   app.use('/api/auth', authRouter);
@@ -175,15 +176,6 @@ export default async function setupRoutes(app: express.Express) {
           return res.status(400).json({ error: 'partnerId deve ser um número válido' });
         }
         const services = await (await import('../storage')).storage.getPartnerServicesByPartnerId(partnerIdNumber);
-        console.log(`[API] Serviços do parceiro ${partnerIdNumber}:`, services.length, 'encontrados');
-        if (services.length > 0) {
-          console.log('[API] Exemplo de serviço:', {
-            id: services[0].id,
-            name: services[0].name,
-            serviceImage: services[0].serviceImage ? 'Tem imagem' : 'Sem imagem',
-            partner: services[0].partner ? 'Tem parceiro' : 'Sem parceiro'
-          });
-        }
         res.json(services);
       } else {
         // Buscar serviços com filtro de localização
@@ -191,20 +183,6 @@ export default async function setupRoutes(app: express.Express) {
           userCity as string | undefined,
           50 // raio de 50km
         );
-        console.log('[API] Total de serviços filtrados:', services.length);
-        if (userCity) {
-          console.log(`[API] Serviços filtrados para cidade: ${userCity}`);
-        }
-        if (services.length > 0) {
-          console.log('[API] Exemplo de serviço:', {
-            id: services[0].id,
-            name: services[0].name,
-            isNational: services[0].isNational,
-            distance: services[0].distance,
-            serviceImage: services[0].serviceImage ? 'Tem imagem' : 'Sem imagem',
-            partner: services[0].partner ? 'Tem parceiro' : 'Sem parceiro'
-          });
-        }
         res.json(services);
       }
     } catch (error) {

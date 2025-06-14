@@ -43,4 +43,6 @@ export const testConnection = async () => {
 };
 
 // Testar a conexão durante a inicialização
-testConnection();
+testConnection().catch(err => {
+  console.error('Falha no teste inicial de conexão:', err);
+});
