@@ -801,3 +801,322 @@ Upload de paciente concluído com sucesso
 === ROTA /api/user INTERCEPTADA ===
 🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
 === ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+[API] Total de serviços filtrados: 8
+[API] Serviços filtrados para cidade: Três Passos
+[API] Exemplo de serviço: {
+  id: 6,
+  name: 'Atendimento psicológico',
+  isNational: false,
+  distance: 0,
+  serviceImage: 'Tem imagem',
+  partner: 'Tem parceiro'
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+GET /api/dependents - Request received: {
+  user: {
+    id: 58,
+    email: 'lucas.canova@hotmail.com',
+    role: 'patient',
+    fullName: 'Lucas Dickel Canova',
+    username: 'p03474256076',
+    emailVerified: true,
+    subscriptionPlan: 'ultra_family',
+    subscriptionStatus: 'active',
+    emergencyConsultationsLeft: 8,
+    emergencyConsultationsResetAt: undefined,
+    profileImage: '/uploads/profiles/profile-1749869106047-332006128.jpg',
+    phone: '',
+    cpf: null,
+    cnpj: undefined,
+    city: 'Três Passos',
+    state: 'RS',
+    address: '',
+    zipcode: '98600000'
+  },
+  url: '/',
+  headers: {
+    host: 'localhost:8080',
+    connection: 'close',
+    'cache-control': 'no-cache, no-store, must-revalidate',
+    expires: '0',
+    'sec-ch-ua-platform': '"macOS"',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+    pragma: 'no-cache',
+    'sec-ch-ua': '"Google Chrome";v="137", "Chromium";v="137", "Not/A)Brand";v="24"',
+    'sec-ch-ua-mobile': '?0',
+    accept: '*/*',
+    'sec-fetch-site': 'same-origin',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-dest': 'empty',
+    referer: 'http://localhost:5173/dependents',
+    'accept-encoding': 'gzip, deflate, br, zstd',
+    'accept-language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+    cookie: '__stripe_mid=1861aef6-543f-4483-ab4b-09818dff49e4c5183e; auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34; __stripe_sid=7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+  }
+}
+Buscando dependentes para usuário ID: 58
+Dependentes encontrados: 1
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+Retornando planos de assinatura para usuário (rota pública): [
+  {
+    id: 4,
+    name: 'free',
+    displayName: 'Gratuito',
+    price: 0,
+    emergencyConsultations: '0',
+    specialistDiscount: 0,
+    insuranceCoverage: false,
+    features: [
+      'Acesso ao marketplace',
+      'Pagamento integral pelos serviços',
+      '0 teleconsultas de emergência por mês',
+      'Sem descontos e sem cobertura de seguro'
+    ],
+    isDefault: true,
+    createdAt: 2025-05-19T14:54:18.234Z,
+    updatedAt: 2025-05-19T14:54:18.234Z
+  },
+  {
+    id: 5,
+    name: 'basic',
+    displayName: 'Básico',
+    price: 8990,
+    emergencyConsultations: '2',
+    specialistDiscount: 30,
+    insuranceCoverage: true,
+    features: [
+      '2 teleconsultas de emergência por mês',
+      '30% de desconto com especialistas',
+      'Acesso completo aos descontos de parceiros',
+      'Cobertura de seguro: R$ 300/dia de internação',
+      'Suporte 24/7'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-19T14:54:18.234Z,
+    updatedAt: 2025-05-19T14:54:18.234Z
+  },
+  {
+    id: 6,
+    name: 'premium',
+    displayName: 'Premium',
+    price: 12990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 50,
+    insuranceCoverage: true,
+    features: [
+      'Teleconsultas de emergência ilimitadas',
+      '50% de desconto com especialistas',
+      'Prioridade de agendamento',
+      'Cobertura de seguro: R$ 300/dia de internação',
+      'Suporte prioritário 24/7'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-19T14:54:18.234Z,
+    updatedAt: 2025-05-19T14:54:18.234Z
+  },
+  {
+    id: 7,
+    name: 'basic_family',
+    displayName: 'Básico Familiar',
+    price: 14990,
+    emergencyConsultations: '2',
+    specialistDiscount: 30,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Básico para cada dependente',
+      'Até 4 CPFs',
+      '2 teleconsultas de emergência por mês',
+      '30% de desconto com especialistas',
+      'Acesso completo aos descontos de parceiros',
+      'Cobertura de seguro: R$ 300/dia de internação',
+      'Suporte 24/7'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  },
+  {
+    id: 8,
+    name: 'premium_family',
+    displayName: 'Premium Familiar',
+    price: 19990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 50,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Premium para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '50% de desconto com especialistas',
+      'Prioridade de agendamento',
+      'Cobertura de seguro: R$ 300/dia de internação',
+      'Suporte prioritário 24/7'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  },
+  {
+    id: 9,
+    name: 'ultra',
+    displayName: 'Ultra',
+    price: 16990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  },
+  {
+    id: 10,
+    name: 'ultra_family',
+    displayName: 'Ultra Familiar',
+    price: 23990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Ultra para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  }
+]
+✅ Assinatura encontrada: {
+  subscription: {
+    id: 1,
+    userId: 58,
+    planId: 10,
+    status: 'active',
+    startDate: 2025-06-08T23:10:30.449Z,
+    endDate: 2026-06-08T23:10:30.449Z,
+    paymentMethod: 'admin_grant',
+    price: 23990,
+    createdAt: 2025-06-08T23:10:30.449Z,
+    updatedAt: 2025-06-08T23:10:30.449Z
+  },
+  plan: {
+    id: 10,
+    name: 'ultra_family',
+    displayName: 'Ultra Familiar',
+    price: 23990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Ultra para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  }
+}
+✅ Assinatura encontrada: {
+  subscription: {
+    id: 1,
+    userId: 58,
+    planId: 10,
+    status: 'active',
+    startDate: 2025-06-08T23:10:30.449Z,
+    endDate: 2026-06-08T23:10:30.449Z,
+    paymentMethod: 'admin_grant',
+    price: 23990,
+    createdAt: 2025-06-08T23:10:30.449Z,
+    updatedAt: 2025-06-08T23:10:30.449Z
+  },
+  plan: {
+    id: 10,
+    name: 'ultra_family',
+    displayName: 'Ultra Familiar',
+    price: 23990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Ultra para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  }
+}

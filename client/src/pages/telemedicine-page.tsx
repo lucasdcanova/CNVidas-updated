@@ -463,7 +463,7 @@ export default function TelemedicinePage() {
                   <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="space-y-4">
                   {upcomingAppointments.map((appointment: Appointment) => {
                     const priceInfo = getScheduledConsultationPriceInfo({
                       consultationFee: appointment.consultationFee,
@@ -471,67 +471,112 @@ export default function TelemedicinePage() {
                     } as Doctor);
                     
                     return (
-                      <div key={appointment.id} className="bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition-all duration-200 border border-blue-100 hover:border-blue-300">
-                        <div className="space-y-4">
-                          {/* Header com foto e nome do médico */}
-                          <div className="flex items-center space-x-4">
-                            <Avatar className="h-14 w-14 border-3 border-blue-200 shadow-md ring-2 ring-blue-100">
+                      <div key={appointment.id} className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-blue-100 hover:border-blue-300">
+                        <div className="flex flex-col lg:flex-row items-start lg:items-center gap-8">
+                          {/* Seção do Médico - Esquerda */}
+                          <div className="flex items-center space-x-6 flex-shrink-0">
+                            <Avatar className="h-20 w-20 border-4 border-blue-200 shadow-lg ring-4 ring-blue-100">
                               <AvatarImage 
                                 src={appointment.doctorProfileImage} 
                                 alt={appointment.doctorName}
                                 className="object-cover w-full h-full"
                               />
-                              <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white text-lg font-semibold">
+                              <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white text-2xl font-bold">
                                 {appointment.doctorName?.split(' ').map(n => n[0]).join('').toUpperCase() || 'MD'}
                               </AvatarFallback>
                             </Avatar>
-                            <div className="flex-1 min-w-0">
-                              <p className="font-bold text-lg text-gray-900 truncate">
+                            <div className="space-y-2">
+                              <h3 className="font-bold text-2xl text-gray-900">
                                 {formatDoctorName(appointment.doctorName)}
-                              </p>
-                              <p className="text-sm text-blue-600 font-medium">
+                              </h3>
+                              <p className="text-lg text-blue-600 font-semibold">
                                 {appointment.specialization}
                               </p>
-                            </div>
-                          </div>
-
-                          {/* Data e hora em destaque */}
-                          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center text-gray-700">
-                                <CalendarIcon className="mr-2 h-5 w-5 text-blue-500" />
-                                <span className="font-semibold text-base">
-                                  {format(new Date(appointment.date), "dd 'de' MMMM", { locale: ptBR })}
-                                </span>
-                              </div>
-                              <div className="flex items-center text-gray-700">
-                                <Clock className="mr-2 h-5 w-5 text-blue-500" />
-                                <span className="font-semibold text-base">
-                                  {format(new Date(appointment.date), "HH:mm", { locale: ptBR })}
-                                </span>
+                              <div className="flex items-center space-x-2">
+                                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                <span className="text-sm text-green-600 font-medium">Disponível</span>
                               </div>
                             </div>
                           </div>
 
-                          {/* Badge de preço e botão */}
-                          <div className="flex items-center justify-between">
-                            <div className="flex-shrink-0">
+                          {/* Seção Data/Hora - Centro */}
+                          <div className="flex-1 lg:mx-8">
+                            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-200">
+                              <h4 className="text-lg font-bold text-gray-800 mb-4 text-center">Data e Horário da Consulta</h4>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex items-center justify-center space-x-3 bg-white rounded-lg p-4 shadow-sm">
+                                  <CalendarIcon className="h-6 w-6 text-blue-500" />
+                                  <div className="text-center">
+                                    <p className="text-sm text-gray-600 font-medium">Data</p>
+                                    <p className="text-xl font-bold text-gray-800">
+                                      {format(new Date(appointment.date), "dd 'de' MMMM", { locale: ptBR })}
+                                    </p>
+                                    <p className="text-sm text-gray-500">
+                                      {format(new Date(appointment.date), "EEEE", { locale: ptBR })}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="flex items-center justify-center space-x-3 bg-white rounded-lg p-4 shadow-sm">
+                                  <Clock className="h-6 w-6 text-blue-500" />
+                                  <div className="text-center">
+                                    <p className="text-sm text-gray-600 font-medium">Horário</p>
+                                    <p className="text-xl font-bold text-gray-800">
+                                      {format(new Date(appointment.date), "HH:mm", { locale: ptBR })}
+                                    </p>
+                                    <p className="text-sm text-gray-500">30 minutos</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Seção Preço e Ação - Direita */}
+                          <div className="flex flex-col items-center space-y-4 flex-shrink-0 min-w-[200px]">
+                            <div className="text-center space-y-2">
                               {priceInfo.badge}
+                              <p className={`text-sm ${priceInfo.color} font-semibold`}>
+                                {priceInfo.text}
+                              </p>
                             </div>
+                            
                             <Button 
-                              size="default" 
-                              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 font-medium"
+                              size="lg" 
+                              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 font-bold text-lg w-full"
                               onClick={() => navigate(`/telemedicine/${appointment.id}`)}
                             >
-                              Entrar na Consulta
+                              <div className="flex items-center space-x-2">
+                                <span>Entrar na Consulta</span>
+                                <ArrowRight className="h-5 w-5" />
+                              </div>
                             </Button>
+                            
+                            {/* Informações adicionais */}
+                            <div className="text-center space-y-1 pt-2 border-t border-gray-200 w-full">
+                              <p className="text-xs text-gray-500">ID da Consulta</p>
+                              <p className="text-sm font-mono text-gray-700">#{appointment.id}</p>
+                            </div>
                           </div>
-
-                          {/* Informação de preço */}
-                          <div className="text-center pt-2 border-t border-blue-100">
-                            <span className={`text-sm ${priceInfo.color} font-medium`}>
-                              {priceInfo.text}
-                            </span>
+                        </div>
+                        
+                        {/* Barra de status na parte inferior */}
+                        <div className="mt-6 pt-4 border-t border-blue-100">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <CheckCircle className="h-4 w-4 text-green-500" />
+                                <span className="text-sm text-gray-600">Consulta Confirmada</span>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Clock3 className="h-4 w-4 text-blue-500" />
+                                <span className="text-sm text-gray-600">Duração: 30 minutos</span>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-xs text-gray-500">Agendado em</p>
+                              <p className="text-sm text-gray-700">
+                                {format(new Date(), "dd/MM/yyyy", { locale: ptBR })}
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
