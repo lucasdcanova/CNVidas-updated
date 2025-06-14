@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs/promises';
 import OpenAI from 'openai';
 import { PrismaClient } from '@prisma/client';
-import { isAuthenticated } from '../middleware/auth-middleware';
+import { isAuthenticated } from '../middleware/auth';
 import { uploadToS3 } from '../utils/s3-upload';
 
 const router = express.Router();
