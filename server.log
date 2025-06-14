@@ -1529,3 +1529,13 @@ Registrando legalDocumentsRouter em /api/legal-documents
 Registrando chatRouter em /api/chat
 Conexão com o banco de dados testada com sucesso: 2025-06-14 02:51:32.564279+00
 Session table checked/created successfully
+11:51:32 PM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+Configuração de email carregada. Serviço de email disponível.
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===

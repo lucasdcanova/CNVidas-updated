@@ -471,60 +471,60 @@ export default function TelemedicinePage() {
                     } as Doctor);
                     
                     return (
-                      <div key={appointment.id} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-blue-100 hover:border-blue-300">
+                      <div key={appointment.id} className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-blue-100 hover:border-blue-300">
                         {/* Header Principal */}
-                        <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center space-x-4">
-                            <Avatar className="h-16 w-16 border-3 border-blue-200 shadow-md ring-2 ring-blue-100">
+                            <Avatar className="h-14 w-14 border-2 border-blue-200 shadow-md ring-2 ring-blue-100">
                               <AvatarImage 
                                 src={appointment.doctorProfileImage} 
                                 alt={appointment.doctorName}
                                 className="object-cover w-full h-full"
                               />
-                              <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white text-lg font-bold">
+                              <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white text-base font-bold">
                                 {appointment.doctorName?.split(' ').map(n => n[0]).join('').toUpperCase() || 'MD'}
                               </AvatarFallback>
                             </Avatar>
                             <div>
-                              <h3 className="font-bold text-xl text-gray-900">
+                              <h3 className="font-bold text-lg text-gray-900">
                                 {formatDoctorName(appointment.doctorName)}
                               </h3>
-                              <p className="text-blue-600 font-semibold">
+                              <p className="text-blue-600 font-semibold text-sm">
                                 {appointment.specialization}
                               </p>
                               <div className="flex items-center space-x-2 mt-1">
                                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                <span className="text-sm text-green-600 font-medium">Disponível</span>
+                                <span className="text-xs text-green-600 font-medium">Disponível</span>
                               </div>
                             </div>
                           </div>
                           
                           <div className="text-right">
                             {priceInfo.badge}
-                            <p className={`text-sm ${priceInfo.color} font-medium mt-1`}>
+                            <p className={`text-xs ${priceInfo.color} font-medium mt-1`}>
                               {priceInfo.text}
                             </p>
                           </div>
                         </div>
 
                         {/* Seção Data e Hora */}
-                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 mb-6 border border-blue-200">
-                          <h4 className="font-bold text-gray-800 mb-3 text-center">Data e Horário da Consulta</h4>
-                          <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-white rounded-lg p-3 text-center shadow-sm">
-                              <CalendarIcon className="h-5 w-5 text-blue-500 mx-auto mb-2" />
-                              <p className="text-sm text-gray-600 font-medium">Data</p>
-                              <p className="text-lg font-bold text-gray-800">
+                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-3 mb-4 border border-blue-200">
+                          <h4 className="font-bold text-gray-800 mb-2 text-center text-sm">Data e Horário da Consulta</h4>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="bg-white rounded-lg p-2 text-center shadow-sm">
+                              <CalendarIcon className="h-4 w-4 text-blue-500 mx-auto mb-1" />
+                              <p className="text-xs text-gray-600 font-medium">Data</p>
+                              <p className="text-sm font-bold text-gray-800">
                                 {format(new Date(appointment.date), "dd 'de' MMMM", { locale: ptBR })}
                               </p>
                               <p className="text-xs text-gray-500">
                                 {format(new Date(appointment.date), "EEEE", { locale: ptBR })}
                               </p>
                             </div>
-                            <div className="bg-white rounded-lg p-3 text-center shadow-sm">
-                              <Clock className="h-5 w-5 text-blue-500 mx-auto mb-2" />
-                              <p className="text-sm text-gray-600 font-medium">Horário</p>
-                              <p className="text-lg font-bold text-gray-800">
+                            <div className="bg-white rounded-lg p-2 text-center shadow-sm">
+                              <Clock className="h-4 w-4 text-blue-500 mx-auto mb-1" />
+                              <p className="text-xs text-gray-600 font-medium">Horário</p>
+                              <p className="text-sm font-bold text-gray-800">
                                 {format(new Date(appointment.date), "HH:mm", { locale: ptBR })}
                               </p>
                               <p className="text-xs text-gray-500">30 minutos</p>
@@ -536,22 +536,22 @@ export default function TelemedicinePage() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
                             <div className="flex items-center space-x-2">
-                              <CheckCircle className="h-4 w-4 text-green-500" />
-                              <span className="text-sm text-gray-600">Consulta Confirmada</span>
+                              <CheckCircle className="h-3 w-3 text-green-500" />
+                              <span className="text-xs text-gray-600">Consulta Confirmada</span>
                             </div>
                             <div className="flex items-center space-x-2">
-                              <span className="text-sm text-gray-500">ID: #{appointment.id}</span>
+                              <span className="text-xs text-gray-500">ID: #{appointment.id}</span>
                             </div>
                           </div>
                           
                           <Button 
-                            size="lg" 
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 font-semibold"
+                            size="default" 
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 font-semibold text-sm"
                             onClick={() => navigate(`/telemedicine/${appointment.id}`)}
                           >
                             <div className="flex items-center space-x-2">
                               <span>Entrar na Consulta</span>
-                              <ArrowRight className="h-4 w-4" />
+                              <ArrowRight className="h-3 w-3" />
                             </div>
                           </Button>
                         </div>

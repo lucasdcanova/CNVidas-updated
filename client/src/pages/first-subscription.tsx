@@ -115,6 +115,9 @@ const FirstSubscriptionPage: React.FC = () => {
             description: "Você será redirecionado para o dashboard.",
           });
           
+          // Marcar que estamos vindo de first-subscription para evitar loops
+          sessionStorage.setItem('coming-from-first-subscription', 'true');
+          
           // Aguardar um momento para mostrar o toast e depois redirecionar
           setTimeout(() => {
             console.log("🔄 Redirecionando para dashboard...");
@@ -202,6 +205,10 @@ const FirstSubscriptionPage: React.FC = () => {
       title: "Plano selecionado com sucesso!",
       description: "Você será redirecionado para o dashboard.",
     });
+    
+    // Marcar que estamos vindo de first-subscription para evitar loops
+    sessionStorage.setItem('coming-from-first-subscription', 'true');
+    
     setTimeout(() => {
       setLocation('/dashboard');
     }, 1500);

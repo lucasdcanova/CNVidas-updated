@@ -63,22 +63,42 @@ const Dashboard: React.FC = () => {
       
       setIsFirstLogin(!hasActiveSubscription);
       
+      // Verificar se já processamos este usuário recentemente
+      const lastCheck = sessionStorage.getItem('subscription-check-timestamp');
+      const lastCheckTime = lastCheck ? parseInt(lastCheck) : 0;
+      const now = Date.now();
+      const fiveMinutes = 5 * 60 * 1000;
+      
+      // Se verificamos há menos de 5 minutos e tinha assinatura ativa, não redirecionar
+      if (now - lastCheckTime < fiveMinutes) {
+        const lastStatus = sessionStorage.getItem('subscription-check-status');
+        if (lastStatus === 'active') {
+          console.log("⏱️ Dashboard - Verificação recente encontrada, usuário tem assinatura ativa");
+          return;
+        }
+      }
+      
+      // Salvar o status atual
+      sessionStorage.setItem('subscription-check-timestamp', now.toString());
+      sessionStorage.setItem('subscription-check-status', hasActiveSubscription ? 'active' : 'inactive');
+      
       // Só redirecionar se realmente não tiver assinatura ativa
-      // E adicionar verificações extras para evitar loops
       const currentPath = window.location.pathname;
-      const comingFromFirstSubscription = document.referrer.includes('/first-subscription');
+      const comingFromFirstSubscription = sessionStorage.getItem('coming-from-first-subscription') === 'true';
       
       if (!hasActiveSubscription && 
           currentPath !== '/first-subscription' && 
           !comingFromFirstSubscription) {
         console.log("🔄 Dashboard - Redirecionando para first-subscription");
-        console.log("   - Current path:", currentPath);
-        console.log("   - Referrer:", document.referrer);
         setLocation('/first-subscription');
       } else if (hasActiveSubscription) {
         console.log("✅ Dashboard - Usuário tem assinatura ativa, permanecendo no dashboard");
+        // Limpar flag se tinha
+        sessionStorage.removeItem('coming-from-first-subscription');
       } else if (comingFromFirstSubscription) {
         console.log("⚠️ Dashboard - Usuário vindo de first-subscription, evitando loop");
+        // Limpar a flag após usar
+        sessionStorage.removeItem('coming-from-first-subscription');
       }
     }
   }, [user, userSubscription, subscriptionLoading, isError, setLocation]);
