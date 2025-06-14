@@ -29,6 +29,7 @@ import { adminRoutes } from '../admin-routes';
 import legalDocumentsRouter from './legal-documents-routes';
 import profileUploadRouter from './profile-upload';
 import chatRouter from '../chat-routes';
+import medicalRecordsRouter from './medical-records-routes';
 
 export default async function setupRoutes(app: express.Express) {
   
@@ -225,6 +226,10 @@ export default async function setupRoutes(app: express.Express) {
   // Rotas do chatbot
   console.log('Registrando chatRouter em /api/chat');
   app.use('/api/chat', chatRouter);
+  
+  // Rotas de prontuários médicos
+  console.log('Registrando medicalRecordsRouter em /api/medical-records');
+  app.use('/api/medical-records', medicalRecordsRouter);
   
   return app;
 } 

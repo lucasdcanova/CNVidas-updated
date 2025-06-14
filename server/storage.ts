@@ -1,5 +1,5 @@
-import { users, partners, doctors, partnerServices, appointments, claims, notifications, doctorPayments, auditLogs, qrTokens, subscriptionPlans, userSettings, emailVerifications, passwordResets, availabilitySlots, qrAuthLogs, dependents, partnerAddresses } from '../shared/schema';
-import { User, Partner, Doctor, PartnerService, Appointment, Claim, Notification, DoctorPayment, AuditLog, QrToken, SubscriptionPlan, UserSettings, EmailVerification, PasswordReset, AvailabilitySlot, QrAuthLog, InsertUser, InsertPartner, InsertDoctor, InsertPartnerService, InsertAppointment, InsertClaim, InsertNotification, InsertDoctorPayment, InsertAuditLog, InsertQrToken, InsertSubscriptionPlan, InsertUserSettings, InsertEmailVerification, InsertPasswordReset, InsertAvailabilitySlot, InsertQrAuthLog, Dependent, InsertDependent } from '@shared/types';
+import { users, partners, doctors, partnerServices, appointments, claims, notifications, doctorPayments, auditLogs, qrTokens, subscriptionPlans, userSettings, emailVerifications, passwordResets, availabilitySlots, qrAuthLogs, dependents, partnerAddresses, medicalRecords, medicalRecordEntries, medicalRecordAccess } from '../shared/schema';
+import { User, Partner, Doctor, PartnerService, Appointment, Claim, Notification, DoctorPayment, AuditLog, QrToken, SubscriptionPlan, UserSettings, EmailVerification, PasswordReset, AvailabilitySlot, QrAuthLog, InsertUser, InsertPartner, InsertDoctor, InsertPartnerService, InsertAppointment, InsertClaim, InsertNotification, InsertDoctorPayment, InsertAuditLog, InsertQrToken, InsertSubscriptionPlan, InsertUserSettings, InsertEmailVerification, InsertPasswordReset, InsertAvailabilitySlot, InsertQrAuthLog, Dependent, InsertDependent, MedicalRecord, InsertMedicalRecord, MedicalRecordEntry, InsertMedicalRecordEntry, MedicalRecordAccess, InsertMedicalRecordAccess } from '@shared/types';
 import { PartnerAddress, InsertPartnerAddress } from './interfaces/partner';
 import { db } from "./db";
 import { eq, and, gte, lte, desc, sql, count, or, gt, asc, inArray, ne } from "drizzle-orm";
@@ -650,8 +650,33 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getDoctorByUserId(userId: number): Promise<Doctor | undefined> {
-    const [doctor] = await this.db.select().from(doctors).where(eq(doctors.userId, userId));
-    return doctor as Doctor;
+    const result = await this.db.select({
+      id: doctors.id,
+      userId: doctors.userId,
+      specialization: doctors.specialization,
+      licenseNumber: doctors.licenseNumber,
+      biography: doctors.biography,
+      education: doctors.education,
+      experienceYears: doctors.experienceYears,
+      availableForEmergency: doctors.availableForEmergency,
+      consultationFee: doctors.consultationFee,
+      profileImage: sql<string>`COALESCE(${doctors.profileImage}, ${users.profileImage})`.as('profileImage'),
+      status: doctors.status,
+      welcomeCompleted: doctors.welcomeCompleted,
+      pixKeyType: doctors.pixKeyType,
+      pixKey: doctors.pixKey,
+      bankName: doctors.bankName,
+      accountType: doctors.accountType,
+      createdAt: doctors.createdAt,
+      updatedAt: doctors.updatedAt,
+      name: users.fullName
+    })
+    .from(doctors)
+    .leftJoin(users, eq(doctors.userId, users.id))
+    .where(eq(doctors.userId, userId))
+    .limit(1);
+    
+    return result[0] as Doctor | undefined;
   }
 
   async createDoctor(doctorData: InsertDoctor): Promise<Doctor> {
@@ -678,7 +703,7 @@ export class DatabaseStorage implements IStorage {
       experienceYears: doctors.experienceYears,
       availableForEmergency: doctors.availableForEmergency,
       consultationFee: doctors.consultationFee,
-      profileImage: doctors.profileImage,
+      profileImage: sql<string>`COALESCE(${doctors.profileImage}, ${users.profileImage})`.as('profileImage'),
       status: doctors.status,
       createdAt: doctors.createdAt,
       updatedAt: doctors.updatedAt,
@@ -703,7 +728,7 @@ export class DatabaseStorage implements IStorage {
       experienceYears: doctors.experienceYears,
       availableForEmergency: doctors.availableForEmergency,
       consultationFee: doctors.consultationFee,
-      profileImage: doctors.profileImage,
+      profileImage: sql<string>`COALESCE(${doctors.profileImage}, ${users.profileImage})`.as('profileImage'),
       status: doctors.status,
       createdAt: doctors.createdAt,
       updatedAt: doctors.updatedAt,
@@ -1566,7 +1591,232 @@ export class DatabaseStorage implements IStorage {
       throw new Error('Erro desconhecido ao buscar serviços');
     }
   }
+
+  // ==================== PRONTUÁRIOS MÉDICOS ====================
+  
+  // Criar prontuário para novo paciente
+  async createMedicalRecord(patientId: number): Promise<MedicalRecord> {
+    // Gerar número único do prontuário
+    const recordNumber = await this.generateRecordNumber(patientId);
+    
+    const [record] = await this.db.insert(medicalRecords).values({
+      patientId,
+      recordNumber,
+    }).returning();
+    
+    return record;
+  }
+  
+  // Gerar número único do prontuário
+  async generateRecordNumber(patientId: number): Promise<string> {
+    const year = new Date().getFullYear();
+    
+    // Buscar o último número sequencial do ano
+    const lastRecord = await this.db.select({
+      recordNumber: medicalRecords.recordNumber
+    })
+    .from(medicalRecords)
+    .where(sql`${medicalRecords.recordNumber} LIKE ${year + '-%'}`)
+    .orderBy(desc(medicalRecords.recordNumber))
+    .limit(1);
+    
+    let sequential = 1;
+    if (lastRecord.length > 0) {
+      const parts = lastRecord[0].recordNumber.split('-');
+      if (parts.length >= 2) {
+        sequential = parseInt(parts[1]) + 1;
+      }
+    }
+    
+    return `${year}-${sequential.toString().padStart(6, '0')}-${patientId.toString().padStart(6, '0')}`;
+  }
+  
+  // Buscar prontuário por ID do paciente
+  async getMedicalRecordByPatientId(patientId: number): Promise<MedicalRecord | null> {
+    const [record] = await this.db.select()
+      .from(medicalRecords)
+      .where(eq(medicalRecords.patientId, patientId))
+      .limit(1);
+    
+    return record || null;
+  }
+  
+  // Buscar prontuário por ID
+  async getMedicalRecord(recordId: number): Promise<MedicalRecord | null> {
+    const [record] = await this.db.select()
+      .from(medicalRecords)
+      .where(eq(medicalRecords.id, recordId))
+      .limit(1);
+    
+    return record || null;
+  }
+  
+  // Registrar acesso ao prontuário
+  async logMedicalRecordAccess(data: InsertMedicalRecordAccess): Promise<void> {
+    await this.db.insert(medicalRecordAccess).values(data);
+  }
+  
+  // Adicionar entrada no prontuário
+  async addMedicalRecordEntry(data: InsertMedicalRecordEntry): Promise<MedicalRecordEntry> {
+    const [entry] = await this.db.insert(medicalRecordEntries).values(data).returning();
+    
+    // Atualizar último acesso
+    await this.db.update(medicalRecords)
+      .set({
+        lastAccessedAt: new Date(),
+        lastAccessedBy: data.authorId
+      })
+      .where(eq(medicalRecords.id, data.recordId));
+    
+    return entry;
+  }
+  
+  // Buscar entradas do prontuário
+  async getMedicalRecordEntries(recordId: number): Promise<MedicalRecordEntry[]> {
+    return await this.db.select({
+      entry: medicalRecordEntries,
+      author: users
+    })
+    .from(medicalRecordEntries)
+    .leftJoin(users, eq(medicalRecordEntries.authorId, users.id))
+    .where(eq(medicalRecordEntries.recordId, recordId))
+    .orderBy(desc(medicalRecordEntries.createdAt))
+    .then(results => results.map(r => ({
+      ...r.entry,
+      author: r.author
+    })));
+  }
+  
+  // Buscar pacientes do médico (que já tiveram consulta ou têm consulta marcada)
+  async getDoctorPatients(doctorId: number): Promise<User[]> {
+    try {
+      const doctor = await this.getDoctorByUserId(doctorId);
+      if (!doctor) {
+        console.log(`Médico não encontrado para user ID: ${doctorId}`);
+        return [];
+      }
+      
+      console.log(`Buscando pacientes para médico Doctor ID: ${doctor.id}, User ID: ${doctorId}`);
+      
+      // Buscar todas as consultas do médico (excluindo canceladas)
+      const validAppointments = await this.db
+        .select()
+        .from(appointments)
+        .where(
+          and(
+            eq(appointments.doctorId, doctor.id),
+            ne(appointments.status, 'cancelled')
+          )
+        );
+      
+      console.log(`Encontradas ${validAppointments.length} consultas válidas`);
+      
+      // Agrupar manualmente por userId
+      const patientMap = new Map<number, { userId: number; lastAppointmentDate: Date; totalAppointments: number }>();
+      
+      for (const apt of validAppointments) {
+        const existing = patientMap.get(apt.userId);
+        if (existing) {
+          existing.totalAppointments++;
+          if (apt.appointmentDate && new Date(apt.appointmentDate) > existing.lastAppointmentDate) {
+            existing.lastAppointmentDate = new Date(apt.appointmentDate);
+          }
+        } else {
+          patientMap.set(apt.userId, {
+            userId: apt.userId,
+            lastAppointmentDate: apt.appointmentDate ? new Date(apt.appointmentDate) : new Date(),
+            totalAppointments: 1
+          });
+        }
+      }
+      
+      const patientData = Array.from(patientMap.values());
+      
+      console.log(`Encontrados ${patientData.length} pacientes com consultas não canceladas`);
+      
+      if (patientData.length === 0) return [];
+      
+      // Buscar dados completos dos pacientes
+      const patients = await this.db.select()
+        .from(users)
+        .where(inArray(users.id, patientData.map(p => p.userId)))
+        .orderBy(asc(users.fullName));
+      
+      // Adicionar informações de consulta aos pacientes
+      return patients.map(patient => {
+        const appointmentInfo = patientData.find(p => p.userId === patient.id);
+        return {
+          ...patient,
+          lastAppointmentDate: appointmentInfo?.lastAppointmentDate?.toISOString(),
+          totalAppointments: appointmentInfo?.totalAppointments || 0
+        };
+      });
+    } catch (error) {
+      console.error('Erro em getDoctorPatients:', error);
+      throw error;
+    }
+  }
+  
+  // Verificar se médico pode acessar prontuário
+  async canDoctorAccessMedicalRecord(doctorUserId: number, patientId: number): Promise<boolean> {
+    const doctor = await this.getDoctorByUserId(doctorUserId);
+    if (!doctor) return false;
+    
+    // Verificar se há consultas entre médico e paciente (excluindo canceladas)
+    const appointment = await this.db.select()
+      .from(appointments)
+      .where(
+        and(
+          eq(appointments.doctorId, doctor.id),
+          eq(appointments.userId, patientId),
+          ne(appointments.status, 'cancelled')
+        )
+      )
+      .limit(1);
+    
+    return appointment.length > 0;
+  }
+  
+  // Buscar prontuários (para admin)
+  async searchMedicalRecords(query: string): Promise<Array<MedicalRecord & { patient: User }>> {
+    const searchPattern = `%${query}%`;
+    
+    return await this.db.select({
+      record: medicalRecords,
+      patient: users
+    })
+    .from(medicalRecords)
+    .innerJoin(users, eq(medicalRecords.patientId, users.id))
+    .where(
+      or(
+        sql`LOWER(${users.fullName}) LIKE LOWER(${searchPattern})`,
+        sql`LOWER(${users.username}) LIKE LOWER(${searchPattern})`,
+        sql`${medicalRecords.recordNumber} LIKE ${searchPattern}`
+      )
+    )
+    .limit(50)
+    .then(results => results.map(r => ({
+      ...r.record,
+      patient: r.patient
+    })));
+  }
+  
+  // Buscar histórico de acesso
+  async getMedicalRecordAccessHistory(recordId: number): Promise<MedicalRecordAccess[]> {
+    return await this.db.select({
+      access: medicalRecordAccess,
+      user: users
+    })
+    .from(medicalRecordAccess)
+    .leftJoin(users, eq(medicalRecordAccess.userId, users.id))
+    .where(eq(medicalRecordAccess.recordId, recordId))
+    .orderBy(desc(medicalRecordAccess.accessedAt))
+    .limit(100)
+    .then(results => results.map(r => ({
+      ...r.access,
+      user: r.user
+    })));
+  }
 }
 
-// Export a singleton instance
 export const storage = new DatabaseStorage();

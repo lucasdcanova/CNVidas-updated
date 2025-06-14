@@ -321,6 +321,72 @@ export const partnerAddresses = pgTable("partner_addresses", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+// Tabela de prontuários médicos (seguindo normas brasileiras CFM)
+export const medicalRecords = pgTable("medical_records", {
+  id: serial("id").primaryKey(),
+  patientId: integer("patient_id").notNull().references(() => users.id),
+  // Dados básicos do prontuário
+  recordNumber: varchar("record_number", { length: 50 }).notNull().unique(), // Número único do prontuário
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  // Anamnese inicial
+  chiefComplaint: text("chief_complaint"), // Queixa principal
+  historyOfPresentIllness: text("history_of_present_illness"), // História da doença atual
+  pastMedicalHistory: text("past_medical_history"), // História médica pregressa
+  medications: text("medications"), // Medicações em uso
+  allergies: text("allergies"), // Alergias
+  familyHistory: text("family_history"), // História familiar
+  socialHistory: text("social_history"), // História social
+  // Exame físico inicial
+  vitalSigns: json("vital_signs"), // Sinais vitais (PA, FC, FR, Temp, etc)
+  physicalExamination: text("physical_examination"), // Exame físico
+  // Informações adicionais
+  bloodType: varchar("blood_type", { length: 5 }), // Tipo sanguíneo
+  emergencyContact: json("emergency_contact"), // Contato de emergência
+  // Campos de controle
+  isActive: boolean("is_active").default(true).notNull(),
+  lastAccessedAt: timestamp("last_accessed_at"),
+  lastAccessedBy: integer("last_accessed_by").references(() => users.id),
+});
+
+// Tabela de entradas no prontuário (evolução)
+export const medicalRecordEntries = pgTable("medical_record_entries", {
+  id: serial("id").primaryKey(),
+  recordId: integer("record_id").notNull().references(() => medicalRecords.id),
+  appointmentId: integer("appointment_id").references(() => appointments.id), // Vincula à consulta se houver
+  authorId: integer("author_id").notNull().references(() => users.id), // Médico que fez a entrada
+  entryType: varchar("entry_type", { length: 50 }).notNull(), // 'consultation', 'exam', 'prescription', etc
+  // Conteúdo da entrada
+  content: text("content").notNull(), // Conteúdo principal
+  subjective: text("subjective"), // S - Subjetivo (SOAP)
+  objective: text("objective"), // O - Objetivo (SOAP)
+  assessment: text("assessment"), // A - Avaliação (SOAP)
+  plan: text("plan"), // P - Plano (SOAP)
+  // Metadados
+  vitalSigns: json("vital_signs"), // Sinais vitais no momento
+  attachments: json("attachments"), // URLs de anexos (exames, receitas, etc)
+  // Controle
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  signedAt: timestamp("signed_at"), // Quando foi assinado digitalmente
+  signature: text("signature"), // Assinatura digital (hash)
+  ipAddress: varchar("ip_address", { length: 45 }), // IP de onde foi feita a entrada
+  // Campos para conformidade legal
+  cid10: varchar("cid10", { length: 10 }), // Código CID-10
+  procedures: json("procedures"), // Procedimentos realizados
+  prescriptions: json("prescriptions"), // Prescrições
+});
+
+// Tabela de acesso aos prontuários (auditoria)
+export const medicalRecordAccess = pgTable("medical_record_access", {
+  id: serial("id").primaryKey(),
+  recordId: integer("record_id").notNull().references(() => medicalRecords.id),
+  userId: integer("user_id").notNull().references(() => users.id),
+  accessType: varchar("access_type", { length: 50 }).notNull(), // 'view', 'create_entry', 'print', 'export'
+  accessReason: text("access_reason"), // Motivo do acesso
+  accessedAt: timestamp("accessed_at").defaultNow().notNull(),
+  ipAddress: varchar("ip_address", { length: 45 }),
+  userAgent: text("user_agent"),
+});
+
 export const userSettings = pgTable("user_settings", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").references(() => users.id, { onDelete: 'cascade' }).notNull().unique(),
@@ -476,6 +542,25 @@ export const userSubscriptionsRelations = relations(userSubscriptions, ({ one })
   plan: one(subscriptionPlans, { fields: [userSubscriptions.planId], references: [subscriptionPlans.id] }),
 }));
 
+// Relações para prontuários médicos
+export const medicalRecordsRelations = relations(medicalRecords, ({ one, many }) => ({
+  patient: one(users, { fields: [medicalRecords.patientId], references: [users.id] }),
+  lastAccessedByUser: one(users, { fields: [medicalRecords.lastAccessedBy], references: [users.id] }),
+  entries: many(medicalRecordEntries),
+  accessLogs: many(medicalRecordAccess),
+}));
+
+export const medicalRecordEntriesRelations = relations(medicalRecordEntries, ({ one }) => ({
+  record: one(medicalRecords, { fields: [medicalRecordEntries.recordId], references: [medicalRecords.id] }),
+  appointment: one(appointments, { fields: [medicalRecordEntries.appointmentId], references: [appointments.id] }),
+  author: one(users, { fields: [medicalRecordEntries.authorId], references: [users.id] }),
+}));
+
+export const medicalRecordAccessRelations = relations(medicalRecordAccess, ({ one }) => ({
+  record: one(medicalRecords, { fields: [medicalRecordAccess.recordId], references: [medicalRecords.id] }),
+  user: one(users, { fields: [medicalRecordAccess.userId], references: [users.id] }),
+}));
+
 export const userSchema = z.object({
   email: z.string().email(),
   username: z.string().min(3),
@@ -580,3 +665,11 @@ export type InsertUserSubscription = InferInsertModel<typeof userSubscriptions>;
 export type InsertSubscription = InferInsertModel<typeof subscriptions>;
 export type InsertPaymentSchedule = InferInsertModel<typeof paymentSchedules>;
 export type InsertSellerCommission = InferInsertModel<typeof sellerCommissions>;
+
+// Tipos para prontuários médicos
+export type MedicalRecord = InferSelectModel<typeof medicalRecords>;
+export type InsertMedicalRecord = InferInsertModel<typeof medicalRecords>;
+export type MedicalRecordEntry = InferSelectModel<typeof medicalRecordEntries>;
+export type InsertMedicalRecordEntry = InferInsertModel<typeof medicalRecordEntries>;
+export type MedicalRecordAccess = InferSelectModel<typeof medicalRecordAccess>;
+export type InsertMedicalRecordAccess = InferInsertModel<typeof medicalRecordAccess>;

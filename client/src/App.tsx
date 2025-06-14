@@ -64,6 +64,8 @@ import VerificarEmail from "@/pages/verificar-email";
 import RedefinirSenha from "@/pages/redefinir-senha";
 import ReenviarVerificacao from "@/pages/reenviar-verificacao";
 import EsqueciSenha from "@/pages/esqueci-senha";
+import AdminMedicalRecords from "@/pages/admin/medical-records";
+import DoctorMedicalRecords from "@/pages/doctor/medical-records";
 
 // Componente de erro boundary
 class ErrorBoundary extends React.Component<
@@ -156,6 +158,7 @@ function Router() {
       <ProtectedRoute path="/doctor/welcome" component={DoctorWelcome} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor/financeiro" component={DoctorFinanceiro} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor/consultation-history" component={DoctorConsultationHistory} allowedRoles={["doctor"]} />
+      <ProtectedRoute path="/doctor/medical-records" component={DoctorMedicalRecords} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor-onboarding" component={DoctorOnboarding} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor-telemedicine" component={DoctorTelemedicine} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor-availability" component={DoctorAvailability} allowedRoles={["doctor"]} />
@@ -199,6 +202,7 @@ function Router() {
       <ProtectedRoute path="/admin/subscription-plans" component={AdminSubscriptionPlans} allowedRoles={["admin"]} />
       <ProtectedRoute path="/admin/seller-stats" component={SellerStats} allowedRoles={["admin"]} />
       <ProtectedRoute path="/admin/checkout-tracking" component={CheckoutTrackingPage} allowedRoles={["admin"]} />
+      <ProtectedRoute path="/admin/medical-records" component={AdminMedicalRecords} allowedRoles={["admin"]} />
       
       {/* Fallback to 404 */}
       <Route component={NotFound} />

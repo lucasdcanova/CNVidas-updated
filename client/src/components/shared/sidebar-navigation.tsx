@@ -18,7 +18,8 @@ import {
   UserPlus,
   ShoppingCart,
   History,
-  Activity
+  Activity,
+  FolderOpen
 } from "lucide-react";
 
 interface SidebarNavigationProps {
@@ -197,6 +198,16 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({ userRole =
                 <ShoppingCart className="w-5 h-5 mr-3" />
                 Monitorar Checkouts
             </Link>
+            
+            <Link href="/admin/medical-records"
+              className={`${linkBaseClass} ${
+                isLinkActive("/admin/medical-records") 
+                  ? linkActiveClass 
+                  : linkInactiveClass
+              }`}>
+                <FolderOpen className="w-5 h-5 mr-3" />
+                Prontuários Médicos
+            </Link>
           </>
         )}
         
@@ -243,6 +254,16 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({ userRole =
               }`}>
                 <History className="w-5 h-5 mr-3" />
                 Histórico de Consultas
+            </Link>
+            
+            <Link href="/doctor/medical-records"
+              className={`${linkBaseClass} ${
+                isLinkActive("/doctor/medical-records") 
+                  ? linkActiveClass 
+                  : linkInactiveClass
+              }`}>
+                <FolderOpen className="w-5 h-5 mr-3" />
+                Prontuários
             </Link>
           </>
         )}
