@@ -173,7 +173,8 @@ router.get('/current', isAuthenticated, async (req: Request, res: Response) => {
   try {
     console.log(`🔍 Buscando assinatura atual para usuário ${user.email} (ID: ${user.id})`);
     
-    // Buscar a assinatura ativa mais recente do usuário no banco
+    // Buscar a assinatura mais recente do usuário no banco
+    // Não filtrar por status aqui para pegar qualquer assinatura
     const userSubscription = await db
       .select({
         subscription: userSubscriptions,
@@ -187,7 +188,11 @@ router.get('/current', isAuthenticated, async (req: Request, res: Response) => {
 
     if (userSubscription.length > 0) {
       const subscription = userSubscription[0];
-      console.log(`✅ Assinatura encontrada:`, subscription);
+      console.log(`✅ Assinatura encontrada:`);
+      console.log(`   - ID: ${subscription.subscription.id}`);
+      console.log(`   - Status: ${subscription.subscription.status}`);
+      console.log(`   - Plano: ${subscription.plan?.name}`);
+      console.log(`   - Data criação: ${subscription.subscription.createdAt}`);
       
       // **CORREÇÃO: Sincronizar subscriptionPlan na tabela users**
       if (subscription.plan && subscription.subscription.status === 'active') {
