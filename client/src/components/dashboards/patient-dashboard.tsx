@@ -182,12 +182,7 @@ export const PatientDashboard: React.FC = () => {
                     </h1>
                   </div>
                   
-                  <div className="flex items-center gap-3 ml-8">
-                    <img 
-                      src="/logo_cn_vidas_white_bg.svg" 
-                      alt="CN Vidas" 
-                      className="h-8 w-auto opacity-90"
-                    />
+                  <div className="ml-8">
                     <p className="text-gray-600 text-lg font-light">
                       Sua plataforma de saúde digital
                     </p>
