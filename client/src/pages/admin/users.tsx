@@ -1029,12 +1029,12 @@ const AdminUsersPage: React.FC = () => {
                     <SelectValue placeholder="Selecione um plano" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="basic">Basic</SelectItem>
-                    <SelectItem value="basic_family">Basic Family</SelectItem>
+                    <SelectItem value="basic">Básico</SelectItem>
+                    <SelectItem value="basic_family">Básico Família</SelectItem>
                     <SelectItem value="premium">Premium</SelectItem>
-                    <SelectItem value="premium_family">Premium Family</SelectItem>
+                    <SelectItem value="premium_family">Premium Família</SelectItem>
                     <SelectItem value="ultra">Ultra</SelectItem>
-                    <SelectItem value="ultra_family">Ultra Family</SelectItem>
+                    <SelectItem value="ultra_family">Ultra Família</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

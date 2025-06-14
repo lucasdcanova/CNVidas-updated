@@ -25,6 +25,7 @@ import {
   Zap
 } from "lucide-react";
 import { Link } from "wouter";
+import { getPlanName } from "@/components/shared/plan-indicator";
 
 interface Activity {
   id: string;
@@ -121,6 +122,30 @@ const RecentActivitiesPage: React.FC = () => {
       default:
         return 'text-blue-600';
     }
+  };
+
+  // Função para processar a descrição e substituir nomes de planos
+  const processDescription = (description: string): string => {
+    // Lista de planos para substituir
+    const planReplacements: Record<string, string> = {
+      'ultra_family': 'Ultra Família',
+      'premium_family': 'Premium Família',
+      'basic_family': 'Básico Família',
+      'ultra': 'Ultra',
+      'premium': 'Premium',
+      'basic': 'Básico',
+      'free': 'Gratuito'
+    };
+    
+    // Substituir cada plano na descrição
+    let processedDescription = description;
+    Object.entries(planReplacements).forEach(([key, value]) => {
+      // Usar regex para substituir com word boundaries para evitar substituições parciais
+      const regex = new RegExp(`\\b${key}\\b`, 'gi');
+      processedDescription = processedDescription.replace(regex, value);
+    });
+    
+    return processedDescription;
   };
 
   // Tipos únicos para o filtro

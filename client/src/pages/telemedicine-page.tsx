@@ -429,10 +429,11 @@ export default function TelemedicinePage() {
     const totalMinutes = differenceInMinutes(appointment, now);
     
     if (totalMinutes <= 0) {
-      return { canCancel: false, timeLeft: 'Consulta iniciada', isExpired: true };
+      return { canCancel: false, timeLeft: 'Consulta iniciada', isExpired: true, hoursToCancel: 0 };
     }
     
     const canCancel = totalMinutes > 720; // 12 horas = 720 minutos
+    const hoursToCancel = Math.max(0, Math.floor((totalMinutes - 720) / 60)); // Horas restantes para cancelar
     
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
@@ -444,7 +445,7 @@ export default function TelemedicinePage() {
       timeLeft = `${minutes}min`;
     }
     
-    return { canCancel, timeLeft, isExpired: false, totalMinutes };
+    return { canCancel, timeLeft, isExpired: false, totalMinutes, hoursToCancel };
   };
 
   // Hook para atualizar contador em tempo real
@@ -587,7 +588,7 @@ export default function TelemedicinePage() {
 
                         {/* Contador de Tempo e Status de Cancelamento */}
                         <div className={`rounded-lg p-3 mb-4 border ${timeInfo.canCancel ? 'bg-green-50 border-green-200' : 'bg-orange-50 border-orange-200'}`}>
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center space-x-2">
                               <Timer className={`h-4 w-4 ${timeInfo.canCancel ? 'text-green-600' : 'text-orange-600'}`} />
                               <span className={`text-sm font-medium ${timeInfo.canCancel ? 'text-green-800' : 'text-orange-800'}`}>
@@ -615,6 +616,21 @@ export default function TelemedicinePage() {
                               </div>
                             )}
                           </div>
+                          
+                          {/* Aviso sobre prazo de cancelamento */}
+                          {!timeInfo.isExpired && (
+                            <div className={`text-xs ${timeInfo.canCancel ? 'text-green-700' : 'text-orange-700'} bg-white/50 px-2 py-1 rounded border-l-2 ${timeInfo.canCancel ? 'border-green-400' : 'border-orange-400'}`}>
+                              {timeInfo.canCancel ? (
+                                <span>
+                                  ⚠️ Você tem <strong>{timeInfo.hoursToCancel}h</strong> para cancelar antes de ser cobrado o valor integral
+                                </span>
+                              ) : (
+                                <span>
+                                  ⚠️ Prazo de cancelamento expirado - consulta será cobrada integralmente
+                                </span>
+                              )}
+                            </div>
+                          )}
                         </div>
 
                         {/* Seção Data e Hora */}
