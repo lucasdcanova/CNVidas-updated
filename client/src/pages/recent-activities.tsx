@@ -288,7 +288,7 @@ const RecentActivitiesPage: React.FC = () => {
                         </div>
                         
                         <p className="text-gray-600 mb-3 line-clamp-2">
-                          {activity.description}
+                          {processDescription(activity.description)}
                         </p>
                         
                         <div className="flex items-center gap-4 text-sm text-gray-500">

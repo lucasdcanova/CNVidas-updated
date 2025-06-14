@@ -65,13 +65,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const unreadCount = notificationsData?.count || 0;
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-slate-50 bg-subtle-grid">
-      {/* Decorative background elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute -top-32 -left-32 w-64 h-64 bg-blue-400 opacity-5 rounded-full filter blur-3xl"></div>
-        <div className="absolute top-1/3 -right-32 w-80 h-80 bg-green-400 opacity-5 rounded-full filter blur-3xl"></div>
-        <div className="absolute -bottom-32 left-1/3 w-64 h-64 bg-purple-400 opacity-5 rounded-full filter blur-3xl"></div>
-      </div>
+    <div className="flex h-screen overflow-hidden bg-blue-50">{/* Fundo azul claro sólido que corresponde à identidade visual */}
 
       {/* Overlay when sidebar is open on mobile */}
       {sidebarOpen && (

@@ -8,7 +8,7 @@ interface AuthLayoutProps {
 
 export const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen flex bg-blue-50">
       {/* Left side with form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 relative">
         {/* Background gradient blobs */}
