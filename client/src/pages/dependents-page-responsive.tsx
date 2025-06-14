@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -22,6 +22,8 @@ import {
 } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import DashboardLayout from '@/components/layouts/dashboard-layout';
+import { useAuth } from '@/hooks/use-auth';
+import { useLocation } from 'wouter';
 
 // Schema de validação
 const dependentSchema = z.object({
@@ -45,6 +47,20 @@ export default function DependentsPageResponsive() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { user } = useAuth();
+  const [, navigate] = useLocation();
+
+  // Check if user has a family plan
+  useEffect(() => {
+    if (user && (!user.subscriptionPlan || !user.subscriptionPlan.includes('_family'))) {
+      toast({
+        title: 'Acesso Negado',
+        description: 'Esta página é exclusiva para usuários com planos familiares.',
+        variant: 'destructive',
+      });
+      navigate('/dashboard');
+    }
+  }, [user, navigate, toast]);
 
   // Form
   const form = useForm<DependentForm>({

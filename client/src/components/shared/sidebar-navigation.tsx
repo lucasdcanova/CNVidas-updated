@@ -23,9 +23,10 @@ import {
 
 interface SidebarNavigationProps {
   userRole?: string;
+  subscriptionPlan?: string;
 }
 
-export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({ userRole = "patient" }) => {
+export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({ userRole = "patient", subscriptionPlan }) => {
   const [location] = useLocation();
   
   const isLinkActive = (path: string) => {
@@ -97,15 +98,18 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({ userRole =
                 Serviços
             </Link>
             
-            <Link href="/dependents"
-              className={`${linkBaseClass} ${
-                isLinkActive("/dependents") 
-                  ? linkActiveClass 
-                  : linkInactiveClass
-              }`}>
-                <UserPlus className="w-5 h-5 mr-3" />
-                Dependentes
-            </Link>
+            {/* Only show Dependentes for users with family plans */}
+            {subscriptionPlan && (subscriptionPlan.includes('_family') || subscriptionPlan === 'ultra_family' || subscriptionPlan === 'premium_family' || subscriptionPlan === 'basic_family') && (
+              <Link href="/dependents"
+                className={`${linkBaseClass} ${
+                  isLinkActive("/dependents") 
+                    ? linkActiveClass 
+                    : linkInactiveClass
+                }`}>
+                  <UserPlus className="w-5 h-5 mr-3" />
+                  Dependentes
+              </Link>
+            )}
             
             <Link href="/subscription"
               className={`${linkBaseClass} ${

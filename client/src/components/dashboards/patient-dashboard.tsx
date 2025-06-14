@@ -160,17 +160,15 @@ export const PatientDashboard: React.FC = () => {
     <div className="max-w-7xl mx-auto">
       {/* Welcome card */}
       <div className="mb-8 relative">
-        <div className="bg-gradient-to-r from-white via-blue-50/30 to-primary/5 rounded-2xl border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden">
+        <div className="bg-gradient-to-r from-white via-blue-50/30 to-primary/5 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden">
           <div className="relative">
             {/* Background pattern */}
             <div className="absolute inset-0 bg-gradient-to-br from-transparent via-primary/[0.02] to-primary/[0.05]"></div>
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/5 to-transparent rounded-full transform translate-x-32 -translate-y-32"></div>
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-blue-400/5 to-transparent rounded-full transform -translate-x-24 translate-y-24"></div>
             
-            <div className="relative z-10 p-8 md:p-10">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                {/* Left side - Welcome message */}
-                <div className="flex-1 space-y-4">
+            <div className="relative z-10 p-12 md:p-16">
+              <div className="space-y-4">
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1.5">
                       <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
@@ -182,44 +180,8 @@ export const PatientDashboard: React.FC = () => {
                     </h1>
                   </div>
                   
-                  <div className="ml-8">
-                    <p className="text-gray-600 text-lg font-light">
-                      Sua plataforma de saúde digital
-                    </p>
-                  </div>
-                  
-                  <div className="ml-8 flex items-center gap-4 text-sm text-gray-500">
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                      <span>Sistema online</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="material-icons text-sm text-primary">verified</span>
-                      <span>Plataforma segura</span>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Right side - Quick stats */}
-                <div className="flex md:flex-col gap-4 md:gap-3">
-                  <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/40 shadow-sm hover:shadow-md transition-all duration-300 min-w-[120px]">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-primary mb-1">
-                        {user?.subscriptionPlan?.includes('premium') || user?.subscriptionPlan?.includes('ultra') ? '∞' : 
-                         user?.subscriptionPlan?.includes('basic') ? user?.emergencyConsultationsLeft || 0 : '0'}
-                      </div>
-                      <div className="text-xs text-gray-600 font-medium">Consultas disponíveis</div>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/40 shadow-sm hover:shadow-md transition-all duration-300 min-w-[120px]">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-green-600 mb-1">
-                        {user?.subscriptionStatus === 'active' ? '✓' : '○'}
-                      </div>
-                      <div className="text-xs text-gray-600 font-medium">Status da conta</div>
-                    </div>
-                  </div>
+
+
                 </div>
               </div>
             </div>

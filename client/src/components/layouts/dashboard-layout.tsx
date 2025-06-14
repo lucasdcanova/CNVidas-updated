@@ -103,7 +103,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           </div>
         </div>
         
-        <SidebarNavigation userRole={user?.role} />
+        <SidebarNavigation userRole={user?.role} subscriptionPlan={user?.subscriptionPlan} />
         
         <div className="mt-auto p-4 border-t border-gray-100/50">
           <UserProfile user={userWithProfileImage} />
