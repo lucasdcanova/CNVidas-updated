@@ -11635,3 +11635,54 @@ Consulta ID: 121, Status: waiting, Date: 2025-06-14T23:04:20.184Z
 Consultas após filtrar canceladas: 0
 Encontradas 0 consultas próximas
 Consultas retornadas: []
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Médico selecionado para emergência: {
+  doctorId: 4,
+  doctorUserId: 32,
+  doctorName: 'Lucas Dickel Canova',
+  availableForEmergency: true
+}
+🚀 Criando sala de emergência: emergency-58-1749942521832
+➡️ Criando sala emergency-58-1749942521832 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749942521832" já existe...
+Sala "emergency-58-1749942521832" não existe, será criada
+🆕 Criando nova sala "emergency-58-1749942521832" no Daily.co...
+Payload para criação da sala: {"name":"emergency-58-1749942521832","properties":{"start_audio_off":false,"start_video_off":false,"enable_chat":true,"enable_screenshare":true,"enable_knocking":false,"enable_network_ui":true,"enable_prejoin_ui":false,"exp":1749946122}}
+✅ Sala "emergency-58-1749942521832" criada com sucesso
+⏳ Aguardando primeira fase de propagação (5s)...
+🔍 Verificando se sala "emergency-58-1749942521832" já está acessível...
+✅ Sala "emergency-58-1749942521832" confirmada como acessível
+⏳ Aguardando propagação adicional da sala...
+Criando token para sala emergency-58-1749942521832
+Verificando/criando sala emergency-58-1749942521832 antes de gerar token
+➡️ Criando sala emergency-58-1749942521832 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749942521832" já existe...
+✅ Sala "emergency-58-1749942521832" já existe no Daily.co
+Sala emergency-58-1749942521832 verificada/criada com sucesso
+Solicitando token com propriedades: {
+  room_name: 'emergency-58-1749942521832',
+  user_id: '58',
+  user_name: 'Lucas Dickel Canova',
+  exp: 1749949731,
+  is_owner: false,
+  enable_screenshare: true,
+  start_video_off: false,
+  start_audio_off: false
+}
+Token simplificado criado com sucesso: eyJhbGciOiJIUzI...
+✅ Consulta de emergência criada: {
+  appointmentId: 122,
+  doctorId: 4,
+  userId: 58,
+  status: 'waiting',
+  isEmergency: true,
+  type: 'telemedicine'
+}
+Consulta de emergência iniciada: Paciente Lucas Dickel Canova (ID: 58) com Dr. Lucas Dickel Canova (ID: 4), Sala: emergency-58-1749942521832
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+📋 Consulta de emergência 122 consultada por paciente 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===

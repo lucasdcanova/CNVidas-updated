@@ -203,8 +203,32 @@ export default function MinimalistVideoCall({
     
     initializeComponent();
     
+    // Adicionar estilos globais para esconder controles do Daily
+    const style = document.createElement('style');
+    style.textContent = `
+      /* Esconder todos os controles do Daily.co */
+      .daily-video-toplevel-div .daily-video-chrome,
+      .daily-video-toplevel-div .daily-prejoin-chrome,
+      .daily-video-toplevel-div [class*="controls"],
+      .daily-video-toplevel-div [class*="topbar"],
+      .daily-video-toplevel-div [class*="participant-label"],
+      .daily-video-toplevel-div [class*="network-info"],
+      .daily-video-toplevel-div [class*="screenshare-controls"] {
+        display: none !important;
+      }
+      
+      /* Forçar vídeo em tela cheia */
+      .daily-video-toplevel-div video {
+        object-fit: cover !important;
+        width: 100% !important;
+        height: 100% !important;
+      }
+    `;
+    document.head.appendChild(style);
+    
     return () => {
       setIsMounted(false);
+      document.head.removeChild(style);
     };
   }, []);
 
@@ -292,7 +316,7 @@ export default function MinimalistVideoCall({
         console.log('✅ Nenhuma instância ativa encontrada');
       }
       
-      // Criar call frame com configuração estilo FaceTime
+      // Criar call frame com configuração mínima
       const callFrame = DailyIframe.createFrame(videoContainerRef.current, {
         iframeStyle: {
           position: 'absolute',
@@ -301,31 +325,10 @@ export default function MinimalistVideoCall({
           width: '100%',
           height: '100%',
           border: 'none',
-          borderRadius: '0',
-          zIndex: 1
+          borderRadius: '0'
         },
         showLeaveButton: false,
-        showFullscreenButton: false,
-        showLocalVideo: true,
-        showParticipantsBar: false,
-        showUserNameChangeUI: false,
-        showScreenShareButton: false,
-        showRecordingButton: false,
-        showSettingsButton: false,
-        showChatButton: false,
-        showPipButton: false,
-        layout: 'custom-v1',
-        customLayout: {
-          preset: 'pip',
-          aspectRatio: 9 / 16, // Vídeo vertical (retrato)
-          max_cam_streams: 2,
-          pip: {
-            position: 'bottom-right',
-            corner_radius: 24,
-            width: 120,
-            edge_margin: 20
-          }
-        }
+        showFullscreenButton: false
       });
 
       callFrameRef.current = callFrame;
@@ -346,24 +349,37 @@ export default function MinimalistVideoCall({
           callFrame.setLocalVideo(isVideoEnabled);
           callFrame.setLocalAudio(isAudioEnabled);
           
-          // Configurar layout minimalista tipo FaceTime
+          // Configurar interface após conectar
           setTimeout(() => {
             if (callFrame) {
-              // Forçar layout vertical com PIP
-              callFrame.updateCustomLayout({
-                preset: 'pip',
-                aspectRatio: 9 / 16,
-                max_cam_streams: 2,
-                pip: {
-                  position: 'bottom-right',
-                  corner_radius: 24,
-                  width: 100,
-                  edge_margin: 16
+              try {
+                // Ocultar controles do Daily
+                const iframe = videoContainerRef.current?.querySelector('iframe');
+                if (iframe) {
+                  // Aplicar CSS para esconder elementos desnecessários
+                  const style = document.createElement('style');
+                  style.textContent = `
+                    .daily-video-call-controls { display: none !important; }
+                    .daily-video-call-topbar { display: none !important; }
+                    .daily-video-participant-label { display: none !important; }
+                    .daily-video-local-cam-tile { 
+                      position: fixed !important;
+                      bottom: 20px !important;
+                      right: 20px !important;
+                      width: 100px !important;
+                      height: 150px !important;
+                      border-radius: 12px !important;
+                      z-index: 10 !important;
+                    }
+                  `;
+                  iframe.contentDocument?.head?.appendChild(style);
                 }
-              });
-              console.log('✅ Layout FaceTime configurado');
+                console.log('✅ Interface customizada aplicada');
+              } catch (error) {
+                console.log('Não foi possível customizar a interface:', error);
+              }
             }
-          }, 1000);
+          }, 2000);
         })
         .on('left-meeting', () => {
           console.log('👋 Desconectado da sala');
@@ -534,22 +550,21 @@ export default function MinimalistVideoCall({
   }, []);
 
   return (
-    <div className="fixed inset-0 w-full h-full bg-black overflow-hidden flex items-center justify-center">
-      {/* Container de vídeo - Formato vertical estilo FaceTime */}
-      <div className="relative w-full h-full max-w-md">
-        <div
-          ref={videoContainerRef}
-          className="absolute inset-0 bg-black"
-          style={{ 
-            width: '100%', 
-            height: '100%',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            zIndex: 1
-          }}
-        />
-      </div>
+    <div className="fixed inset-0 w-full h-full bg-black overflow-hidden">
+      {/* Container de vídeo - Tela cheia */}
+      <div
+        ref={videoContainerRef}
+        className="absolute inset-0 bg-black daily-video-container"
+        style={{ 
+          width: '100%', 
+          height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          zIndex: 1
+        }}
+      />
+      
 
       {/* Overlay com informações - sempre visível quando em chamada */}
       {isCallActive && (
