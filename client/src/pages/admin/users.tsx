@@ -47,6 +47,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { getPlanName } from "@/components/shared/plan-indicator";
 import {
   Form,
   FormControl,
@@ -740,11 +741,12 @@ const AdminUsersPage: React.FC = () => {
                             {user.role === 'patient' ? (
                               user.subscriptionPlan ? (
                                 <Badge className={`text-xs sm:text-sm whitespace-nowrap ${
-                                  user.subscriptionPlan === 'premium' ? 'bg-yellow-500 hover:bg-yellow-600' : 
-                                  user.subscriptionPlan === 'basic' ? 'bg-blue-500 hover:bg-blue-600' : 
+                                  user.subscriptionPlan === 'premium' || user.subscriptionPlan === 'premium_family' ? 'bg-yellow-500 hover:bg-yellow-600' : 
+                                  user.subscriptionPlan === 'basic' || user.subscriptionPlan === 'basic_family' ? 'bg-blue-500 hover:bg-blue-600' : 
+                                  user.subscriptionPlan === 'ultra' || user.subscriptionPlan === 'ultra_family' ? 'bg-purple-500 hover:bg-purple-600' :
                                   'bg-slate-500 hover:bg-slate-600'
                                 }`}>
-                                  {user.subscriptionPlan.charAt(0).toUpperCase() + user.subscriptionPlan.slice(1)}
+                                  {getPlanName(user.subscriptionPlan as any)}
                                 </Badge>
                               ) : (
                                 <Badge variant="outline" className="text-xs sm:text-sm whitespace-nowrap">Gratuito</Badge>
@@ -788,7 +790,7 @@ const AdminUsersPage: React.FC = () => {
                               <div className="flex sm:hidden gap-1">
                                 {user.role === 'patient' && user.subscriptionPlan && (
                                   <Badge className="text-xs" variant={user.subscriptionStatus === 'active' ? 'default' : 'outline'}>
-                                    {user.subscriptionPlan}
+                                    {getPlanName(user.subscriptionPlan as any)}
                                   </Badge>
                                 )}
                                 {user.emailVerified ? (
@@ -973,13 +975,13 @@ const AdminUsersPage: React.FC = () => {
                     <SelectValue placeholder="Selecione um plano" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="free">Free</SelectItem>
-                    <SelectItem value="basic">Basic (R$ 89,90/mês)</SelectItem>
-                    <SelectItem value="basic_family">Basic Family (R$ 149,90/mês)</SelectItem>
+                    <SelectItem value="free">Gratuito</SelectItem>
+                    <SelectItem value="basic">Básico (R$ 89,90/mês)</SelectItem>
+                    <SelectItem value="basic_family">Básico Família (R$ 149,90/mês)</SelectItem>
                     <SelectItem value="premium">Premium (R$ 129,90/mês)</SelectItem>
-                    <SelectItem value="premium_family">Premium Family (R$ 199,90/mês)</SelectItem>
+                    <SelectItem value="premium_family">Premium Família (R$ 199,90/mês)</SelectItem>
                     <SelectItem value="ultra">Ultra (R$ 169,90/mês)</SelectItem>
-                    <SelectItem value="ultra_family">Ultra Family (R$ 239,90/mês)</SelectItem>
+                    <SelectItem value="ultra_family">Ultra Família (R$ 239,90/mês)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { stripePromise } from '@/lib/stripe-config';
+import { getPlanName } from "@/components/shared/plan-indicator";
 
 // O tipo para os planos vindos da API
 interface SubscriptionPlan {
@@ -375,7 +376,7 @@ export default function SubscribePage() {
                     </div>
                     <CardHeader>
                       <CardTitle className={isUltraPlan ? "text-indigo-700" : ""}>
-                        {plan.displayName}
+                        {plan.displayName || getPlanName(plan.name as any)}
                         {isUltraPlan && <span className="ml-2 inline-flex animate-pulse bg-indigo-100 text-indigo-800 text-xs px-2 py-0.5 rounded-full">NOVO</span>}
                       </CardTitle>
                       <CardDescription>{getPlanDescription(plan)}</CardDescription>

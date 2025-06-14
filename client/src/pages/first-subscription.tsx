@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { apiRequest } from "@/lib/queryClient";
 import CheckoutModal from "@/components/checkout/checkout-modal-fix";
 import cnvidasLogo from "@/assets/cnvidas-logo-transparent.png";
+import { getPlanName } from "@/components/shared/plan-indicator";
 
 // Definição do tipo de plano de assinatura
 interface SubscriptionPlan {
@@ -314,7 +315,7 @@ const FirstSubscriptionPage: React.FC = () => {
                       ? 'text-white flex items-center text-2xl' 
                       : 'flex items-center text-2xl'
                   }>
-                    {plan.displayName || plan.name}
+                    {plan.displayName || getPlanName(plan.name as any)}
                   </CardTitle>
                   <CardDescription className={
                     plan.name === 'ultra' || plan.name === 'premium' || plan.name === 'basic' ||

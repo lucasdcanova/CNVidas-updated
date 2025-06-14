@@ -12,9 +12,9 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/use-auth';
 import { 
   Loader2, Clock, Calendar as CalendarIcon, Search, Filter, 
-  Heart, User, Star, ArrowRight, Clock3, CheckCircle, AlertCircle
+  Heart, User, Star, ArrowRight, Clock3, CheckCircle, AlertCircle, X, Timer
 } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, differenceInHours, differenceInMinutes, differenceInSeconds } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
@@ -420,6 +420,82 @@ export default function TelemedicinePage() {
     const prefix = isFemale ? "Dra. " : "Dr. ";
     return prefix + formattedName;
   };
+
+  // Função para calcular tempo restante até a consulta
+  const getTimeUntilAppointment = (appointmentDate: string) => {
+    const now = new Date();
+    const appointment = new Date(appointmentDate);
+    
+    const totalMinutes = differenceInMinutes(appointment, now);
+    
+    if (totalMinutes <= 0) {
+      return { canCancel: false, timeLeft: 'Consulta iniciada', isExpired: true };
+    }
+    
+    const canCancel = totalMinutes > 720; // 12 horas = 720 minutos
+    
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    
+    let timeLeft = '';
+    if (hours > 0) {
+      timeLeft = `${hours}h ${minutes}min`;
+    } else {
+      timeLeft = `${minutes}min`;
+    }
+    
+    return { canCancel, timeLeft, isExpired: false, totalMinutes };
+  };
+
+  // Hook para atualizar contador em tempo real
+  const [currentTime, setCurrentTime] = useState(new Date());
+  
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000); // Atualiza a cada minuto
+    
+    return () => clearInterval(timer);
+  }, []);
+
+  // Mutation para cancelar consulta
+  const cancelAppointmentMutation = useMutation({
+    mutationFn: async (appointmentId: number) => {
+      const response = await fetch(`/api/appointments/${appointmentId}/cancel`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error('Erro ao cancelar consulta');
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Consulta cancelada",
+        description: "Sua consulta foi cancelada com sucesso.",
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/appointments/upcoming'] });
+    },
+    onError: (error) => {
+      toast({
+        title: "Erro ao cancelar",
+        description: "Não foi possível cancelar a consulta. Tente novamente.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleCancelAppointment = (appointmentId: number) => {
+    if (window.confirm('Tem certeza que deseja cancelar esta consulta?')) {
+      cancelAppointmentMutation.mutate(appointmentId);
+    }
+  };
   
   // Função para filtrar médicos por especialidade e termo de busca
   const filterDoctors = (doctors: Doctor[]) => {
@@ -470,6 +546,8 @@ export default function TelemedicinePage() {
                       availableForEmergency: appointment.availableForEmergency
                     } as Doctor);
                     
+                    const timeInfo = getTimeUntilAppointment(appointment.date);
+                    
                     return (
                       <div key={appointment.id} className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-blue-100 hover:border-blue-300">
                         {/* Header Principal */}
@@ -504,6 +582,38 @@ export default function TelemedicinePage() {
                             <p className={`text-xs ${priceInfo.color} font-medium mt-1`}>
                               {priceInfo.text}
                             </p>
+                          </div>
+                        </div>
+
+                        {/* Contador de Tempo e Status de Cancelamento */}
+                        <div className={`rounded-lg p-3 mb-4 border ${timeInfo.canCancel ? 'bg-green-50 border-green-200' : 'bg-orange-50 border-orange-200'}`}>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2">
+                              <Timer className={`h-4 w-4 ${timeInfo.canCancel ? 'text-green-600' : 'text-orange-600'}`} />
+                              <span className={`text-sm font-medium ${timeInfo.canCancel ? 'text-green-800' : 'text-orange-800'}`}>
+                                {timeInfo.isExpired ? 'Consulta iniciada' : `Faltam ${timeInfo.timeLeft}`}
+                              </span>
+                            </div>
+                            {timeInfo.canCancel ? (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
+                                onClick={() => handleCancelAppointment(appointment.id)}
+                                disabled={cancelAppointmentMutation.isPending}
+                              >
+                                {cancelAppointmentMutation.isPending ? (
+                                  <Loader2 className="h-3 w-3 animate-spin mr-1" />
+                                ) : (
+                                  <X className="h-3 w-3 mr-1" />
+                                )}
+                                Cancelar
+                              </Button>
+                            ) : (
+                              <div className="text-xs text-orange-700 bg-orange-100 px-2 py-1 rounded-full">
+                                {timeInfo.isExpired ? 'Em andamento' : 'Não pode ser cancelada - será cobrada'}
+                              </div>
+                            )}
                           </div>
                         </div>
 

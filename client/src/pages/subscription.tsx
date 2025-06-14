@@ -14,6 +14,7 @@ import { getSubscriptionPlans, getUserSubscription } from "@/lib/api";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import CheckoutModal from "@/components/checkout/checkout-modal";
+import { getPlanName } from "@/components/shared/plan-indicator";
 
 // Definição do tipo de plano de assinatura
 interface SubscriptionPlan {
@@ -255,13 +256,7 @@ const SubscriptionPage: React.FC = () => {
                     ? 'border-white text-white bg-white/20' 
                     : 'bg-primary/20'
                 } px-3 py-1 rounded-full font-medium`}>
-                  {currentSubscription?.plan?.name === 'premium' || currentSubscription?.plan?.name === 'premium_family'
-                    ? 'Premium' 
-                    : currentSubscription?.plan?.name === 'basic' || currentSubscription?.plan?.name === 'basic_family'
-                      ? 'Básico' 
-                      : currentSubscription?.plan?.name === 'ultra' || currentSubscription?.plan?.name === 'ultra_family'
-                        ? 'Ultra'
-                        : 'Gratuito'}
+                  {getPlanName(currentSubscription?.plan?.name as any)}
                 </Badge>
               </div>
               <CardDescription className={
@@ -277,7 +272,7 @@ const SubscriptionPage: React.FC = () => {
               <div className="flex flex-col md:flex-row justify-between md:items-center gap-6">
                 <div>
                   <h3 className="text-xl font-bold flex items-center">
-                    <span>{currentSubscription?.plan?.displayName || "Plano Atual"}</span>
+                    <span>{currentSubscription?.plan?.displayName || getPlanName(currentSubscription?.plan?.name as any) || "Plano Atual"}</span>
                     <Badge variant="success" className="ml-3">
                       {currentSubscription.status === "active" ? "Ativo" : currentSubscription.status}
                     </Badge>
@@ -402,7 +397,7 @@ const SubscriptionPage: React.FC = () => {
                           ? 'text-white flex items-center'
                           : 'flex items-center'
                   }>
-                    {plan.displayName}
+                    {plan.displayName || getPlanName(plan.name as any)}
                   </CardTitle>
                   {isCurrentPlan(plan.name) && (
                     <Badge variant="outline" className={
