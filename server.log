@@ -8045,3 +8045,2424 @@ Encontrados 0 pacientes com consultas não canceladas
 🔍 Doctor /appointments - Consultas de emergência: 0
 🔍 Doctor /appointments - Consultas com status waiting: 0
 ✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 requireAuth - Verificando autenticação para GET /appointments
+🔐 requireAuth - req.user: 32 (doctor)
+✅ requireAuth - Usuário autenticado: 32 (doctor)
+🔍 Doctor /appointments - Buscando consultas do médico ID: 32
+🔍 Doctor /appointments - Total de consultas: 1
+🔍 Doctor /appointments - Consultas do médico (ID 4): 0
+🔍 Doctor /appointments - Consultas de emergência: 0
+🔍 Doctor /appointments - Consultas com status waiting: 0
+✅ Doctor /appointments - Consultas encontradas: 0
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+🔐 JWT: Usuário dr@lucascanova.com autenticado via cookie com plano free
+Logout realizado com sucesso - cookies removidos
+=== ROTA /api/user INTERCEPTADA ===
+=== ROTA /api/user INTERCEPTADA ===
+=== ROTA /api/login INTERCEPTADA ===
+=== ROTA LOGIN CHAMADA ===
+URL: /login
+Method: POST
+Body: { email: 'lucas.canova@hotmail.com', password: '666666' }
+Buscando usuário no banco: lucas.canova@hotmail.com
+Iniciando query no banco de dados...
+Query executada, resultado: 1 usuários encontrados
+Usuário encontrado: true
+Verificando senha com bcrypt
+Login bem-sucedido para: lucas.canova@hotmail.com
+Cookie options: {
+  host: 'localhost:8080',
+  isLocalhost: true,
+  isProduction: false,
+  secure: false,
+  domain: undefined
+}
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '24ca1cc5-2aab-4f55-8d40-f0e05d93937f5035c1',
+  __stripe_sid: 'ef4e828d-e602-4ee5-ba4e-0514af2f1511429015',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5OTMyNzg0LCJleHAiOjE3NTA1Mzc1ODR9.gg84LWcogC4d3QLLps9FIXHJHgQDeh4s_RS8IvVOVCY'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749932784,
+  exp: 1750537584
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /unread-count
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+⚠️ Arquivo de upload não encontrado: /profiles/profile-1749872528273-906009943.jpg
+🔄 Redirecionando para imagem padrão: /profiles/profile-1749872528273-906009943.jpg
+✅ Notifications /unread-count - Contagem: 2
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '24ca1cc5-2aab-4f55-8d40-f0e05d93937f5035c1',
+  __stripe_sid: 'ef4e828d-e602-4ee5-ba4e-0514af2f1511429015',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5OTMyNzg0LCJleHAiOjE3NTA1Mzc1ODR9.gg84LWcogC4d3QLLps9FIXHJHgQDeh4s_RS8IvVOVCY'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749932784,
+  exp: 1750537584
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /unread-count
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+⚠️ Arquivo de upload não encontrado: /profiles/profile-1749872528273-906009943.jpg
+🔄 Redirecionando para imagem padrão: /profiles/profile-1749872528273-906009943.jpg
+✅ Notifications /unread-count - Contagem: 2
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /recent-activities
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Activities - Buscando atividades recentes do usuário ID: 58
+Total de consultas encontradas para usuário 58: 0
+Consultas após filtrar canceladas: 0
+Encontradas 0 consultas próximas
+Consultas retornadas: []
+✅ Activities - Atividades encontradas: 4
+Session table checked/created successfully
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+5:32:05 PM [tsx] change in ./server/routes/auth-routes.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Registrando medicalRecordsRouter em /api/medical-records
+Conexão com o banco de dados testada com sucesso: 2025-06-14 20:32:07.783167+00
+Session table checked/created successfully
+5:32:07 PM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+🕐 Configurando jobs agendados...
+⚠️ node-cron não está instalado. Jobs agendados desabilitados.
+Para habilitar, execute: npm install node-cron
+Configuração de email carregada. Serviço de email disponível.
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '24ca1cc5-2aab-4f55-8d40-f0e05d93937f5035c1',
+  __stripe_sid: 'ef4e828d-e602-4ee5-ba4e-0514af2f1511429015',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5OTMyNzg0LCJleHAiOjE3NTA1Mzc1ODR9.gg84LWcogC4d3QLLps9FIXHJHgQDeh4s_RS8IvVOVCY'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749932784,
+  exp: 1750537584
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /unread-count
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Notifications /unread-count - Contagem: 2
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /recent-activities
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Activities - Buscando atividades recentes do usuário ID: 58
+Total de consultas encontradas para usuário 58: 0
+Consultas após filtrar canceladas: 0
+Encontradas 0 consultas próximas
+Consultas retornadas: []
+Session table checked/created successfully
+✅ Activities - Atividades encontradas: 4
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+5:57:09 PM [tsx] change in ./server/routes/index.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Registrando medicalRecordsRouter em /api/medical-records
+Conexão com o banco de dados testada com sucesso: 2025-06-14 20:57:11.713846+00
+Session table checked/created successfully
+5:57:11 PM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+🕐 Configurando jobs agendados...
+⚠️ node-cron não está instalado. Jobs agendados desabilitados.
+Para habilitar, execute: npm install node-cron
+Configuração de email carregada. Serviço de email disponível.
+5:57:17 PM [tsx] change in ./server/routes/index.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+node:internal/modules/cjs/loader:1225
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module '../middleware/auth-middleware'
+Require stack:
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at nextResolveSimple (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:942)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:2550
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:1624
+    at resolveTsPaths (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:760)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:1038
+    at m._resolveFilename (file:///Users/lucascanova/Documents/CNVidas%201.0/CNVidas-updated/node_modules/tsx/dist/register-hc1YoAqe.mjs:1:789)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts'
+  ]
+}
+
+Node.js v20.18.0
+6:02:20 PM [tsx] change in ./server/routes/index.ts Rerunning...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+node:internal/modules/cjs/loader:1225
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module '../middleware/auth-middleware'
+Require stack:
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at nextResolveSimple (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:942)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:2550
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:1624
+    at resolveTsPaths (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:760)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:1038
+    at m._resolveFilename (file:///Users/lucascanova/Documents/CNVidas%201.0/CNVidas-updated/node_modules/tsx/dist/register-hc1YoAqe.mjs:1:789)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts'
+  ]
+}
+
+Node.js v20.18.0
+6:02:30 PM [tsx] change in ./server/routes/index.ts Rerunning...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+node:internal/modules/cjs/loader:1225
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module '../middleware/auth-middleware'
+Require stack:
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/medical-records-ai-routes.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at nextResolveSimple (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:942)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:2550
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:1624
+    at resolveTsPaths (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:760)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:1038
+    at m._resolveFilename (file:///Users/lucascanova/Documents/CNVidas%201.0/CNVidas-updated/node_modules/tsx/dist/register-hc1YoAqe.mjs:1:789)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/medical-records-ai-routes.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts'
+  ]
+}
+
+Node.js v20.18.0
+6:07:23 PM [tsx] change in ./server/routes/index.ts Rerunning...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+node:internal/modules/cjs/loader:1225
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module '../middleware/auth-middleware'
+Require stack:
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/medical-records-ai-routes.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at nextResolveSimple (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:942)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:2550
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:1624
+    at resolveTsPaths (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:760)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:1038
+    at m._resolveFilename (file:///Users/lucascanova/Documents/CNVidas%201.0/CNVidas-updated/node_modules/tsx/dist/register-hc1YoAqe.mjs:1:789)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/medical-records-ai-routes.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts'
+  ]
+}
+
+Node.js v20.18.0
+6:07:31 PM [tsx] change in ./server/routes/index.ts Rerunning...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+node:internal/modules/cjs/loader:1225
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module '../middleware/auth-middleware'
+Require stack:
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/medical-records-ai-routes.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at nextResolveSimple (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:942)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:2550
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:1624
+    at resolveTsPaths (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:760)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:1038
+    at m._resolveFilename (file:///Users/lucascanova/Documents/CNVidas%201.0/CNVidas-updated/node_modules/tsx/dist/register-hc1YoAqe.mjs:1:789)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/medical-records-ai-routes.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts'
+  ]
+}
+
+Node.js v20.18.0
+6:08:54 PM [tsx] change in ./server/routes/medical-records-ai-routes.ts Rerunning...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+node:internal/modules/cjs/loader:1225
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module '../middleware/auth-middleware'
+Require stack:
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at nextResolveSimple (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:942)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:2550
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:1624
+    at resolveTsPaths (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:760)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:1038
+    at m._resolveFilename (file:///Users/lucascanova/Documents/CNVidas%201.0/CNVidas-updated/node_modules/tsx/dist/register-hc1YoAqe.mjs:1:789)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts'
+  ]
+}
+
+Node.js v20.18.0
+6:14:05 PM [tsx] change in ./server/routes/index.ts Rerunning...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+node:internal/modules/cjs/loader:1225
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module '../middleware/auth-middleware'
+Require stack:
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at nextResolveSimple (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:942)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:2550
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:1624
+    at resolveTsPaths (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:760)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:1038
+    at m._resolveFilename (file:///Users/lucascanova/Documents/CNVidas%201.0/CNVidas-updated/node_modules/tsx/dist/register-hc1YoAqe.mjs:1:789)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts'
+  ]
+}
+
+Node.js v20.18.0
+6:14:30 PM [tsx] change in ./server/routes/index.ts Rerunning...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+node:internal/modules/cjs/loader:1225
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module '../middleware/auth-middleware'
+Require stack:
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at nextResolveSimple (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:942)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:2550
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:1624
+    at resolveTsPaths (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:760)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:1038
+    at m._resolveFilename (file:///Users/lucascanova/Documents/CNVidas%201.0/CNVidas-updated/node_modules/tsx/dist/register-hc1YoAqe.mjs:1:789)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts'
+  ]
+}
+
+Node.js v20.18.0
+6:33:07 PM [tsx] change in ./server/routes/auth-routes.ts Rerunning...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+node:internal/modules/cjs/loader:1225
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module '../middleware/auth-middleware'
+Require stack:
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at nextResolveSimple (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:942)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:2550
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:1624
+    at resolveTsPaths (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:760)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:1038
+    at m._resolveFilename (file:///Users/lucascanova/Documents/CNVidas%201.0/CNVidas-updated/node_modules/tsx/dist/register-hc1YoAqe.mjs:1:789)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts'
+  ]
+}
+
+Node.js v20.18.0
+6:33:23 PM [tsx] change in ./server/routes/auth-routes.ts Rerunning...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+node:internal/modules/cjs/loader:1225
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module '../middleware/auth-middleware'
+Require stack:
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at nextResolveSimple (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:942)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:2550
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:1624
+    at resolveTsPaths (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:760)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:1038
+    at m._resolveFilename (file:///Users/lucascanova/Documents/CNVidas%201.0/CNVidas-updated/node_modules/tsx/dist/register-hc1YoAqe.mjs:1:789)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts'
+  ]
+}
+
+Node.js v20.18.0
+6:34:32 PM [tsx] change in ./server/storage.ts Rerunning...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+node:internal/modules/cjs/loader:1225
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module '../middleware/auth-middleware'
+Require stack:
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at nextResolveSimple (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:942)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:2550
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:1624
+    at resolveTsPaths (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:760)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:1038
+    at m._resolveFilename (file:///Users/lucascanova/Documents/CNVidas%201.0/CNVidas-updated/node_modules/tsx/dist/register-hc1YoAqe.mjs:1:789)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts'
+  ]
+}
+
+Node.js v20.18.0
+6:34:52 PM [tsx] change in ./server/routes/auth-routes.ts Rerunning...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+node:internal/modules/cjs/loader:1225
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module '../middleware/auth-middleware'
+Require stack:
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at nextResolveSimple (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:942)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:2550
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:1624
+    at resolveTsPaths (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:760)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:1038
+    at m._resolveFilename (file:///Users/lucascanova/Documents/CNVidas%201.0/CNVidas-updated/node_modules/tsx/dist/register-hc1YoAqe.mjs:1:789)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-recording-routes.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/index.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts'
+  ]
+}
+
+Node.js v20.18.0

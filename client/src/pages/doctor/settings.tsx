@@ -49,7 +49,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import DashboardLayout from "@/components/layouts/dashboard-layout";
-import { Bell, Shield, Clock, Mail, Phone, Lock, UserPlus, Eye, EyeOff, Mic } from "lucide-react";
+import { Bell, Shield, Clock, Mail, Phone, Lock, UserPlus, Eye, EyeOff, Mic, FileText, AlertCircle } from "lucide-react";
 
 // Schema para validação de formulário de preferências de notificação
 const notificationSchema = z.object({
@@ -74,7 +74,7 @@ const privacySchema = z.object({
 type NotificationSettings = z.infer<typeof notificationSchema>;
 type PrivacySettings = z.infer<typeof privacySchema>;
 
-const PatientSettings = () => {
+const DoctorSettings = () => {
   const { toast } = useToast();
   const { data: user, isLoading: isUserLoading } = useUser();
   const [activeTab, setActiveTab] = useState("notifications");
@@ -224,7 +224,7 @@ const PatientSettings = () => {
     );
   }
 
-  if (!user) {
+  if (!user || user.role !== 'doctor') {
     return (
       <DashboardLayout>
         <div className="container mx-auto p-4 max-w-4xl">
@@ -232,7 +232,7 @@ const PatientSettings = () => {
             <CardHeader>
               <CardTitle>Acesso Negado</CardTitle>
               <CardDescription>
-                É necessário estar logado para acessar esta página.
+                Esta página é exclusiva para médicos.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -244,9 +244,9 @@ const PatientSettings = () => {
   return (
     <DashboardLayout>
       <div className="container mx-auto p-4 max-w-4xl">
-        <h1 className="text-3xl font-bold mb-2 text-primary animate-fade-in">Configurações da Conta</h1>
+        <h1 className="text-3xl font-bold mb-2 text-primary animate-fade-in">Configurações Profissionais</h1>
         <p className="text-gray-500 mb-6 animate-fade-in delay-100">
-          Gerencie suas preferências e ajuste como a plataforma funciona para você.
+          Gerencie suas preferências profissionais e ajuste como a plataforma funciona para você.
         </p>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="animate-slide-up">
@@ -266,7 +266,7 @@ const PatientSettings = () => {
               <CardHeader>
                 <CardTitle>Preferências de Notificação</CardTitle>
                 <CardDescription>
-                  Configure como e quando deseja receber notificações da plataforma.
+                  Configure como e quando deseja receber notificações profissionais.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -288,7 +288,7 @@ const PatientSettings = () => {
                                   Notificações por Email
                                 </FormLabel>
                                 <FormDescription>
-                                  Receba notificações e atualizações no seu email.
+                                  Receba notificações sobre consultas e atualizações no seu email.
                                 </FormDescription>
                               </div>
                               <FormControl>
@@ -312,7 +312,7 @@ const PatientSettings = () => {
                                   Notificações por SMS
                                 </FormLabel>
                                 <FormDescription>
-                                  Receba lembretes e alertas importantes via SMS.
+                                  Receba alertas urgentes via mensagem de texto.
                                 </FormDescription>
                               </div>
                               <FormControl>
@@ -321,67 +321,6 @@ const PatientSettings = () => {
                                   onCheckedChange={field.onChange}
                                 />
                               </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={notificationForm.control}
-                          name="pushNotifications"
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 transition-all duration-300 hover:shadow-sm">
-                              <div className="space-y-0.5">
-                                <FormLabel className="text-base flex items-center gap-2">
-                                  <Bell className="w-5 h-5 text-primary" />
-                                  Notificações Push
-                                </FormLabel>
-                                <FormDescription>
-                                  Receba notificações instantâneas no navegador ou aplicativo.
-                                </FormDescription>
-                              </div>
-                              <FormControl>
-                                <Switch
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      
-                      <div className="space-y-4">
-                        <h3 className="text-lg font-medium">Preferências de Frequência</h3>
-                        <Separator />
-                        
-                        <FormField
-                          control={notificationForm.control}
-                          name="notificationFrequency"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-base flex items-center gap-2">
-                                <Clock className="w-5 h-5 text-primary" />
-                                Frequência de Notificações
-                              </FormLabel>
-                              <FormDescription>
-                                Defina com que frequência deseja receber notificações não urgentes.
-                              </FormDescription>
-                              <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <FormControl>
-                                  <SelectTrigger className="w-full transition-all duration-300 hover:shadow-sm focus:shadow-md">
-                                    <SelectValue placeholder="Selecione uma frequência" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="immediate">Imediatamente</SelectItem>
-                                  <SelectItem value="daily">Resumo Diário</SelectItem>
-                                  <SelectItem value="weekly">Resumo Semanal</SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
                             </FormItem>
                           )}
                         />
@@ -392,30 +331,12 @@ const PatientSettings = () => {
                           render={({ field }) => (
                             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 transition-all duration-300 hover:shadow-sm">
                               <div className="space-y-0.5">
-                                <FormLabel className="text-base">Lembretes de Consulta</FormLabel>
+                                <FormLabel className="text-base flex items-center gap-2">
+                                  <Clock className="w-5 h-5 text-primary" />
+                                  Lembretes de Consulta
+                                </FormLabel>
                                 <FormDescription>
-                                  Receba lembretes sobre suas consultas agendadas.
-                                </FormDescription>
-                              </div>
-                              <FormControl>
-                                <Switch
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={notificationForm.control}
-                          name="marketingEmails"
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 transition-all duration-300 hover:shadow-sm">
-                              <div className="space-y-0.5">
-                                <FormLabel className="text-base">Emails Promocionais</FormLabel>
-                                <FormDescription>
-                                  Receba informações sobre novos serviços e ofertas.
+                                  Receba lembretes sobre suas próximas consultas agendadas.
                                 </FormDescription>
                               </div>
                               <FormControl>
@@ -448,9 +369,9 @@ const PatientSettings = () => {
           <TabsContent value="privacy" className="animate-fade-in">
             <Card>
               <CardHeader>
-                <CardTitle>Configurações de Privacidade</CardTitle>
+                <CardTitle>Configurações de Privacidade e Prática Médica</CardTitle>
                 <CardDescription>
-                  Controle quem pode ver suas informações e como seus dados são compartilhados.
+                  Controle suas preferências de privacidade e gravação de consultas.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -458,21 +379,28 @@ const PatientSettings = () => {
                   <form onSubmit={privacyForm.handleSubmit(onPrivacySubmit)} className="space-y-6">
                     <div className="grid gap-6">
                       <div className="space-y-4">
-                        <h3 className="text-lg font-medium">Compartilhamento de Dados</h3>
+                        <h3 className="text-lg font-medium">Gravação de Consultas</h3>
                         <Separator />
                         
                         <FormField
                           control={privacyForm.control}
-                          name="shareWithDoctors"
+                          name="allowConsultationRecording"
                           render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 transition-all duration-300 hover:shadow-sm">
+                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 transition-all duration-300 hover:shadow-sm bg-blue-50/50 border-blue-200">
                               <div className="space-y-0.5">
                                 <FormLabel className="text-base flex items-center gap-2">
-                                  <UserPlus className="w-5 h-5 text-primary" />
-                                  Compartilhar com Médicos
+                                  <Mic className="w-5 h-5 text-primary" />
+                                  Gravação Automática de Teleconsultas
                                 </FormLabel>
                                 <FormDescription>
-                                  Permitir que médicos da plataforma vejam seu histórico médico.
+                                  Permitir gravação automática de teleconsultas para geração de prontuários com IA.
+                                  <span className="block text-xs mt-2 text-muted-foreground">
+                                    <AlertCircle className="w-3 h-3 inline mr-1" />
+                                    A gravação só ocorrerá quando ambos (médico e paciente) autorizarem.
+                                  </span>
+                                  <span className="block text-xs mt-1 text-muted-foreground">
+                                    As gravações são processadas com segurança e deletadas após a transcrição.
+                                  </span>
                                 </FormDescription>
                               </div>
                               <FormControl>
@@ -484,6 +412,11 @@ const PatientSettings = () => {
                             </FormItem>
                           )}
                         />
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-medium">Compartilhamento de Dados</h3>
+                        <Separator />
                         
                         <FormField
                           control={privacyForm.control}
@@ -493,28 +426,7 @@ const PatientSettings = () => {
                               <div className="space-y-0.5">
                                 <FormLabel className="text-base">Compartilhar com Parceiros</FormLabel>
                                 <FormDescription>
-                                  Compartilhar dados com clínicas e parceiros da plataforma.
-                                </FormDescription>
-                              </div>
-                              <FormControl>
-                                <Switch
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={privacyForm.control}
-                          name="shareFullMedicalHistory"
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 transition-all duration-300 hover:shadow-sm">
-                              <div className="space-y-0.5">
-                                <FormLabel className="text-base">Histórico Médico Completo</FormLabel>
-                                <FormDescription>
-                                  Compartilhar seu histórico médico completo com prestadores de serviço.
+                                  Compartilhar informações profissionais com clínicas e parceiros da plataforma.
                                 </FormDescription>
                               </div>
                               <FormControl>
@@ -538,34 +450,7 @@ const PatientSettings = () => {
                                   Uso de Dados Anonimizados
                                 </FormLabel>
                                 <FormDescription>
-                                  Permitir o uso de seus dados de forma anônima para pesquisas e melhorias da plataforma.
-                                </FormDescription>
-                              </div>
-                              <FormControl>
-                                <Switch
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={privacyForm.control}
-                          name="allowConsultationRecording"
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 transition-all duration-300 hover:shadow-sm">
-                              <div className="space-y-0.5">
-                                <FormLabel className="text-base flex items-center gap-2">
-                                  <Mic className="w-5 h-5 text-primary" />
-                                  Gravação Automática de Consultas
-                                </FormLabel>
-                                <FormDescription>
-                                  Permitir gravação automática de teleconsultas para geração de prontuários médicos com IA.
-                                  <span className="block text-xs mt-1 text-muted-foreground">
-                                    As gravações são processadas com segurança e deletadas após a transcrição.
-                                  </span>
+                                  Permitir o uso de dados anonimizados para pesquisas e melhorias da plataforma.
                                 </FormDescription>
                               </div>
                               <FormControl>
@@ -587,30 +472,41 @@ const PatientSettings = () => {
                           control={privacyForm.control}
                           name="profileVisibility"
                           render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-base flex items-center gap-2">
-                                <Eye className="w-5 h-5 text-primary" />
-                                Visibilidade do Perfil
-                              </FormLabel>
-                              <FormDescription>
-                                Defina quem pode ver informações do seu perfil na plataforma.
-                              </FormDescription>
-                              <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <FormControl>
-                                  <SelectTrigger className="w-full transition-all duration-300 hover:shadow-sm focus:shadow-md">
-                                    <SelectValue placeholder="Selecione uma opção" />
+                            <FormItem className="space-y-3">
+                              <FormLabel>Quem pode ver seu perfil profissional</FormLabel>
+                              <FormControl>
+                                <Select
+                                  value={field.value}
+                                  onValueChange={field.onChange}
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Selecione a visibilidade" />
                                   </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="public">Público (Todos os usuários)</SelectItem>
-                                  <SelectItem value="contacts">Somente Contatos (Médicos e clínicas que você consulta)</SelectItem>
-                                  <SelectItem value="private">Privado (Apenas você e administradores)</SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
+                                  <SelectContent>
+                                    <SelectItem value="public">
+                                      <div className="flex items-center gap-2">
+                                        <Eye className="w-4 h-4" />
+                                        <span>Público - Todos os usuários</span>
+                                      </div>
+                                    </SelectItem>
+                                    <SelectItem value="contacts">
+                                      <div className="flex items-center gap-2">
+                                        <UserPlus className="w-4 h-4" />
+                                        <span>Pacientes - Apenas seus pacientes</span>
+                                      </div>
+                                    </SelectItem>
+                                    <SelectItem value="private">
+                                      <div className="flex items-center gap-2">
+                                        <EyeOff className="w-4 h-4" />
+                                        <span>Privado - Ninguém</span>
+                                      </div>
+                                    </SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+                              <FormDescription>
+                                Controle quem pode visualizar suas informações profissionais na plataforma.
+                              </FormDescription>
                             </FormItem>
                           )}
                         />
@@ -623,7 +519,7 @@ const PatientSettings = () => {
                         className="transition-all duration-300 hover:shadow-md"
                         disabled={saveSettingsMutation.isPending || !privacyForm.formState.isDirty}
                       >
-                        {saveSettingsMutation.isPending ? "Salvando..." : "Salvar Configurações"}
+                        {saveSettingsMutation.isPending ? "Salvando..." : "Salvar Preferências"}
                       </Button>
                     </div>
                   </form>
@@ -637,4 +533,4 @@ const PatientSettings = () => {
   );
 };
 
-export default PatientSettings;
+export default DoctorSettings;

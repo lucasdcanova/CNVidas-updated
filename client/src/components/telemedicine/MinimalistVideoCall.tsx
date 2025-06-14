@@ -4,6 +4,9 @@ import { Mic, MicOff, Video, VideoOff, Phone, X, AlertCircle } from 'lucide-reac
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { TelemedicineDiagnostics } from '@/utils/telemedicine-diagnostics';
+import RecordingControls from './RecordingControls';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 interface MinimalistVideoCallProps {
   roomUrl?: string;
@@ -14,6 +17,8 @@ interface MinimalistVideoCallProps {
   onParticipantLeft?: (participant: any) => void;
   userName?: string;
   isDoctor?: boolean;
+  appointmentId?: number;
+  enableRecording?: boolean;
 }
 
 export default function MinimalistVideoCall({
@@ -24,7 +29,9 @@ export default function MinimalistVideoCall({
   onParticipantJoined,
   onParticipantLeft,
   userName = 'Você',
-  isDoctor = false
+  isDoctor = false,
+  appointmentId,
+  enableRecording = true
 }: MinimalistVideoCallProps) {
   const videoContainerRef = useRef<HTMLDivElement>(null);
   const callFrameRef = useRef<any>(null);
@@ -40,6 +47,46 @@ export default function MinimalistVideoCall({
   const [connectionError, setConnectionError] = useState<string | null>(null);
   const retryCountRef = useRef(0);
   const maxRetries = 3;
+  const [doctorSettings, setDoctorSettings] = useState<any>(null);
+
+  // Buscar configurações do paciente quando for médico
+  const { data: patientSettings } = useQuery({
+    queryKey: ['patient-settings', appointmentId],
+    queryFn: async () => {
+      if (!isDoctor || !appointmentId) return null;
+      
+      try {
+        // Buscar informações da consulta para obter o ID do paciente
+        const appointmentResponse = await axios.get(`/api/appointments/${appointmentId}`);
+        const patientId = appointmentResponse.data.user_id;
+        
+        // Buscar configurações do paciente
+        const settingsResponse = await axios.get(`/api/users/${patientId}/settings`);
+        return settingsResponse.data;
+      } catch (error) {
+        console.error('Erro ao buscar configurações do paciente:', error);
+        return null;
+      }
+    },
+    enabled: isDoctor && !!appointmentId
+  });
+
+  // Buscar configurações do médico
+  const { data: doctorSettingsData } = useQuery({
+    queryKey: ['/api/users/settings'],
+    queryFn: async () => {
+      if (!isDoctor) return null;
+      
+      try {
+        const response = await axios.get('/api/users/settings');
+        return response.data;
+      } catch (error) {
+        console.error('Erro ao buscar configurações do médico:', error);
+        return null;
+      }
+    },
+    enabled: isDoctor
+  });
 
   // Marcar como montado
   useEffect(() => {
@@ -48,6 +95,23 @@ export default function MinimalistVideoCall({
       setIsMounted(false);
     };
   }, []);
+
+  // Atualizar configurações do médico
+  useEffect(() => {
+    if (doctorSettingsData) {
+      setDoctorSettings(doctorSettingsData);
+    }
+  }, [doctorSettingsData]);
+
+  // Determinar se deve gravar automaticamente
+  const shouldAutoRecord = () => {
+    if (!isDoctor || !patientSettings || !doctorSettings) return false;
+    
+    const patientAllowsRecording = patientSettings.privacy?.allowConsultationRecording !== false;
+    const doctorAllowsRecording = doctorSettings.privacy?.allowConsultationRecording !== false;
+    
+    return patientAllowsRecording && doctorAllowsRecording;
+  };
 
   // Timer para duração da chamada
   useEffect(() => {
@@ -246,6 +310,10 @@ export default function MinimalistVideoCall({
     if (callFrameRef.current) {
       callFrameRef.current.leave();
     }
+    // Disparar evento para parar gravação automática
+    if (window.recordingControlsRef) {
+      window.recordingControlsRef.stopRecording();
+    }
   }, []);
 
   // Alternar áudio
@@ -326,14 +394,25 @@ export default function MinimalistVideoCall({
                   {formatDuration(callDuration)}
                 </p>
               </div>
-              {participants.length > 0 && (
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                  <span className="text-white/70 text-sm">
-                    {participants.length} {participants.length === 1 ? 'participante' : 'participantes'}
-                  </span>
-                </div>
-              )}
+              <div className="flex flex-col items-end gap-2">
+                {participants.length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                    <span className="text-white/70 text-sm">
+                      {participants.length} {participants.length === 1 ? 'participante' : 'participantes'}
+                    </span>
+                  </div>
+                )}
+                {/* Controles de gravação - apenas para médicos */}
+                {isDoctor && enableRecording && appointmentId && (
+                  <RecordingControls
+                    appointmentId={appointmentId}
+                    className="bg-black/40 backdrop-blur-sm rounded-lg p-2"
+                    autoStart={shouldAutoRecord()}
+                    patientConsent={true}
+                  />
+                )}
+              </div>
             </div>
           </div>
 

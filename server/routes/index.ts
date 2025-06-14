@@ -30,6 +30,10 @@ import legalDocumentsRouter from './legal-documents-routes';
 import profileUploadRouter from './profile-upload';
 import chatRouter from '../chat-routes';
 import medicalRecordsRouter from './medical-records-routes';
+import medicalRecordsAIRouter from './medical-records-ai-routes';
+import consultationRecordingRouter from './consultation-recording-routes';
+import userSettingsRouter from './user-settings-routes';
+import settingsRouter from '../settings-routes';
 
 export default async function setupRoutes(app: express.Express) {
   
@@ -110,6 +114,14 @@ export default async function setupRoutes(app: express.Express) {
   // Rotas de usuários
   console.log('Registrando userRouter em /api/users');
   app.use('/api/users', userRouter);
+  
+  // Rotas de configurações de usuário
+  console.log('Registrando settingsRouter em /api/users/settings');
+  app.use('/api/users/settings', settingsRouter);
+  
+  // Rotas de configurações de usuários específicos (para médicos)
+  console.log('Registrando userSettingsRouter em /api');
+  app.use('/api', userSettingsRouter);
   
   // Rotas administrativas
   console.log('Registrando adminRoutes em /api/admin');
@@ -230,6 +242,14 @@ export default async function setupRoutes(app: express.Express) {
   // Rotas de prontuários médicos
   console.log('Registrando medicalRecordsRouter em /api/medical-records');
   app.use('/api/medical-records', medicalRecordsRouter);
+  
+  // Rotas de prontuários médicos com IA
+  console.log('Registrando medicalRecordsAIRouter em /api/medical-records-ai');
+  app.use('/api/medical-records-ai', medicalRecordsAIRouter);
+  
+  // Rotas de gravação de consultas
+  console.log('Registrando consultationRecordingRouter em /api/consultation-recordings');
+  app.use('/api/consultation-recordings', consultationRecordingRouter);
   
   return app;
 } 

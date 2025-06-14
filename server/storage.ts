@@ -1075,8 +1075,25 @@ export class DatabaseStorage implements IStorage {
   async saveUserSettings(userId: number, settings: Partial<{ notifications: any, privacy: any }>): Promise<UserSettings> {
     const existingSettings = await this.getUserSettings(userId);
     if (existingSettings) {
+      // Merge existing settings with new settings to avoid overwriting fields
+      const mergedSettings: any = {};
+      
+      if (settings.notifications) {
+        mergedSettings.notifications = {
+          ...(existingSettings.notifications || {}),
+          ...settings.notifications
+        };
+      }
+      
+      if (settings.privacy) {
+        mergedSettings.privacy = {
+          ...(existingSettings.privacy || {}),
+          ...settings.privacy
+        };
+      }
+      
       const [updated] = await this.db.update(userSettings)
-        .set({ ...settings, updatedAt: new Date() })
+        .set({ ...mergedSettings, updatedAt: new Date() })
         .where(eq(userSettings.userId, userId))
         .returning();
       return updated as UserSettings;

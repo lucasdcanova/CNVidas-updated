@@ -41,9 +41,7 @@ model appointments {
   partners               partners?         @relation(fields: [partner_id], references: [id], onUpdate: NoAction)
   partner_services       partner_services? @relation(fields: [service_id], references: [id], onUpdate: NoAction)
   users                  users             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  doctor_payments         doctor_payments[]
-  consultation_recording  consultation_recordings?
-  medical_records         medical_records[]
+  doctor_payments        doctor_payments[]
 
   @@index([payment_intent_id])
   @@index([payment_status])
@@ -321,9 +319,6 @@ model users {
   qr_tokens                                        qr_tokens[]
   user_settings                                    user_settings?
   user_subscriptions                               user_subscriptions[]
-  medical_records_patient                          medical_records[]     @relation("medical_records_patient")
-  medical_records_doctor                           medical_records[]     @relation("medical_records_doctor")
-  medical_record_versions                          medical_record_versions[]
 }
 
 model audit_logs {
@@ -451,64 +446,11 @@ model services {
   partners    partners? @relation(fields: [partner_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model consultation_recordings {
-  id                      Int                      @id @default(autoincrement())
-  appointment_id          Int                      @unique
-  audio_url               String?
-  transcription           String?                  @db.Text
-  ai_generated_notes      String?                  @db.Text
-  transcription_status    String                   @default("pending")
-  processing_started_at   DateTime?                @db.Timestamptz(6)
-  processing_completed_at DateTime?                @db.Timestamptz(6)
-  processing_error        String?
-  created_at              DateTime                 @default(now()) @db.Timestamptz(6)
-  updated_at              DateTime                 @default(now()) @db.Timestamptz(6)
-  appointments            appointments             @relation(fields: [appointment_id], references: [id], onDelete: Cascade)
-  medical_records         medical_records[]
-}
-
-model medical_records {
-  id                       Int                       @id @default(autoincrement())
-  patient_id               Int
-  doctor_id                Int
-  appointment_id           Int?
-  recording_id             Int?
-  content                  Json
-  status                   String                    @default("draft")
-  ai_generated             Boolean                   @default(false)
-  signed_at                DateTime?                 @db.Timestamptz(6)
-  signature_hash           String?
-  created_at               DateTime                  @default(now()) @db.Timestamptz(6)
-  updated_at               DateTime                  @default(now()) @db.Timestamptz(6)
-  patient                  users                     @relation("medical_records_patient", fields: [patient_id], references: [id])
-  doctor                   users                     @relation("medical_records_doctor", fields: [doctor_id], references: [id])
-  appointments             appointments?             @relation(fields: [appointment_id], references: [id])
-  consultation_recordings  consultation_recordings?  @relation(fields: [recording_id], references: [id])
-  medical_record_versions  medical_record_versions[]
-
-  @@index([patient_id])
-  @@index([doctor_id])
-  @@index([appointment_id])
-}
-
-model medical_record_versions {
-  id               Int              @id @default(autoincrement())
-  medical_record_id Int
-  content          Json
-  edited_by        Int
-  version_number   Int
-  created_at       DateTime         @default(now()) @db.Timestamptz(6)
-  medical_records  medical_records  @relation(fields: [medical_record_id], references: [id], onDelete: Cascade)
-  editor           users            @relation(fields: [edited_by], references: [id])
-
-  @@index([medical_record_id])
-}
-
 model user_settings {
   id            Int      @id @default(autoincrement())
   user_id       Int      @unique
   notifications Json?    @default("{\"marketingEmails\": false, \"smsNotifications\": false, \"pushNotifications\": true, \"emailNotifications\": true, \"appointmentReminders\": true, \"notificationFrequency\": \"immediate\"}")
-  privacy       Json?    @default("{\"shareWithDoctors\": true, \"profileVisibility\": \"contacts\", \"shareWithPartners\": false, \"allowAnonymizedDataUse\": true, \"shareFullMedicalHistory\": false, \"allowConsultationRecording\": true}")
+  privacy       Json?    @default("{\"shareWithDoctors\": true, \"profileVisibility\": \"contacts\", \"shareWithPartners\": false, \"allowAnonymizedDataUse\": true, \"shareFullMedicalHistory\": false}")
   created_at    DateTime @default(now()) @db.Timestamp(6)
   updated_at    DateTime @default(now()) @db.Timestamp(6)
   users         users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)

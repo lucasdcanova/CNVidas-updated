@@ -70,6 +70,9 @@ const registerSchema = z.discriminatedUnion("role", [
     acceptContract: z.boolean().refine(val => val === true, {
       message: "Você deve aceitar o Contrato de Adesão",
     }),
+    acceptRecording: z.boolean().refine(val => val === true, {
+      message: "Você deve aceitar o consentimento de gravação de consultas",
+    }),
   }),
   // Schema para parceiros (requer CNPJ)
   z.object({
@@ -104,6 +107,9 @@ const registerSchema = z.discriminatedUnion("role", [
     }),
     acceptPrivacy: z.boolean().refine(val => val === true, {
       message: "Você deve aceitar a Política de Privacidade",
+    }),
+    acceptRecording: z.boolean().refine(val => val === true, {
+      message: "Você deve aceitar o consentimento de gravação de consultas",
     }),
   }),
 ]).superRefine((data, ctx) => {
@@ -1004,6 +1010,17 @@ const AuthPage: React.FC = () => {
                                       <li>Seguir as orientações médicas</li>
                                       <li>Respeitar outros usuários e profissionais</li>
                                     </ul>
+                                    
+                                    <h3 className="font-semibold mt-4">Gravação de Consultas</h3>
+                                    <p>Para pacientes e médicos que utilizam o serviço de telemedicina:</p>
+                                    <ul className="list-disc pl-6 space-y-1">
+                                      <li>As teleconsultas podem ser gravadas automaticamente quando ambas as partes autorizam</li>
+                                      <li>As gravações são processadas por inteligência artificial para gerar prontuários médicos</li>
+                                      <li>O áudio é transcrito e deletado após o processamento</li>
+                                      <li>Apenas médico e paciente têm acesso ao prontuário gerado</li>
+                                      <li>Você pode desativar esta funcionalidade nas configurações de privacidade</li>
+                                      <li>O consentimento específico para gravação será solicitado durante o cadastro</li>
+                                    </ul>
                                   </div>
                                 </ScrollArea>
                               </DialogContent>
@@ -1053,6 +1070,17 @@ const AuthPage: React.FC = () => {
                                       <li>Conformidade com a LGPD</li>
                                       <li>Servidores seguros no Brasil</li>
                                       <li>Acesso restrito e auditado</li>
+                                    </ul>
+                                    
+                                    <h3 className="font-semibold mt-4">Dados de Teleconsultas</h3>
+                                    <p>Quando você autoriza a gravação de consultas:</p>
+                                    <ul className="list-disc pl-6 space-y-1">
+                                      <li>O áudio é temporariamente armazenado para processamento</li>
+                                      <li>A transcrição é realizada por IA com total sigilo</li>
+                                      <li>O áudio original é deletado após a transcrição</li>
+                                      <li>O prontuário gerado fica armazenado com criptografia</li>
+                                      <li>Apenas médico e paciente têm acesso aos dados</li>
+                                      <li>Você pode solicitar a exclusão dos dados a qualquer momento</li>
                                     </ul>
                                   </div>
                                 </ScrollArea>
@@ -1166,6 +1194,72 @@ const AuthPage: React.FC = () => {
                       )}
                     />
                   ) : null}
+
+                  {/* Consentimento de Gravação - Para pacientes e médicos */}
+                  {(registerForm.watch("role") === "patient" || registerForm.watch("role") === "doctor") && (
+                    <FormField
+                      control={registerForm.control}
+                      name="acceptRecording"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 mb-3">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                              disabled={isRegistering}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel className="text-sm">
+                              Li e aceito a{" "}
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <button
+                                    type="button"
+                                    className="text-blue-600 hover:underline font-medium"
+                                  >
+                                    Política de Gravação de Teleconsultas
+                                  </button>
+                                </DialogTrigger>
+                                <DialogContent className="max-w-4xl max-h-[80vh]">
+                                  <DialogHeader>
+                                    <DialogTitle>Política de Gravação de Teleconsultas</DialogTitle>
+                                  </DialogHeader>
+                                  <ScrollArea className="h-[60vh] w-full">
+                                    <div className="text-sm space-y-4 pr-4">
+                                      <p>
+                                        Ao aceitar esta política, você autoriza que as teleconsultas sejam gravadas automaticamente 
+                                        para fins de documentação médica e geração de prontuários com inteligência artificial.
+                                      </p>
+                                      
+                                      <h3 className="font-semibold mt-4">Importante:</h3>
+                                      <ul className="list-disc pl-6 space-y-1">
+                                        <li>As gravações são processadas com total segurança e sigilo médico</li>
+                                        <li>O áudio é transcrito e deletado após o processamento</li>
+                                        <li>Apenas médico e paciente têm acesso ao prontuário gerado</li>
+                                        <li>Você pode desativar esta opção a qualquer momento nas configurações</li>
+                                        <li>A gravação só ocorre quando ambas as partes (médico e paciente) autorizam</li>
+                                      </ul>
+                                      
+                                      <h3 className="font-semibold mt-4">Segurança e Privacidade</h3>
+                                      <ul className="list-disc pl-6 space-y-1">
+                                        <li>Conformidade com a LGPD</li>
+                                        <li>Servidores seguros no Brasil</li>
+                                        <li>Acesso restrito e auditado</li>
+                                        <li>Criptografia de ponta a ponta</li>
+                                        <li>Exclusão automática do áudio após processamento</li>
+                                      </ul>
+                                    </div>
+                                  </ScrollArea>
+                                </DialogContent>
+                              </Dialog>
+                            </FormLabel>
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  )}
                 </div>
                 
                 <Button 

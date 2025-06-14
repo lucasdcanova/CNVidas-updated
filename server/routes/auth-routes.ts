@@ -66,7 +66,8 @@ authRouter.post('/register', async (req: Request, res: Response) => {
       acceptTerms,
       acceptPrivacy,
       acceptContract,
-      acceptPartnerContract
+      acceptPartnerContract,
+      acceptRecording
     } = req.body;
     
     if (!email || !password || !fullName) {
@@ -197,6 +198,44 @@ authRouter.post('/register', async (req: Request, res: Response) => {
     } catch (notificationError) {
       console.error('Erro ao criar notificação de boas-vindas:', notificationError);
       // Não falhar o registro se a notificação falhar
+    }
+
+    // Criar prontuário médico automaticamente para pacientes
+    if (role === 'patient') {
+      try {
+        await storage.createMedicalRecord(newUser.id);
+        console.log(`Prontuário médico criado para paciente ${newUser.id}`);
+      } catch (medicalRecordError) {
+        console.error('Erro ao criar prontuário médico:', medicalRecordError);
+        // Não falhar o registro se a criação do prontuário falhar
+      }
+    }
+
+    // Salvar configurações de privacidade do usuário (incluindo consentimento de gravação)
+    // Criar configurações para todos os tipos de usuário
+    try {
+      const defaultPrivacySettings = {
+        shareWithDoctors: true,
+        shareWithPartners: false,
+        shareFullMedicalHistory: false,
+        allowAnonymizedDataUse: true,
+        profileVisibility: 'contacts'
+      };
+
+      // Adicionar consentimento de gravação para pacientes e médicos
+      if ((role === 'patient' || role === 'doctor') && acceptRecording !== undefined) {
+        Object.assign(defaultPrivacySettings, {
+          allowConsultationRecording: acceptRecording === true
+        });
+      }
+
+      await storage.saveUserSettings(newUser.id, {
+        privacy: defaultPrivacySettings
+      });
+      console.log(`Configurações de privacidade salvas para usuário ${newUser.id}`);
+    } catch (settingsError) {
+      console.error('Erro ao salvar configurações de privacidade:', settingsError);
+      // Não falhar o registro se a criação das configurações falhar
     }
 
     // Fazer login automático após registro bem-sucedido
