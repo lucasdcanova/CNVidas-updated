@@ -289,3 +289,106 @@ Session table checked/created successfully
 Acesse: http://localhost:8080
 Ou: http://127.0.0.1:8080
 Configuração de email carregada. Serviço de email disponível.
+9:41:16 PM [tsx] change in ./server/routes/index.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-14 00:41:17.852575+00
+Session table checked/created successfully
+9:41:17 PM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+Configuração de email carregada. Serviço de email disponível.
+9:41:29 PM [tsx] change in ./server/routes/index.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Conexão com o banco de dados testada com sucesso: 2025-06-14 00:41:30.626089+00
+Session table checked/created successfully
+9:41:30 PM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+Configuração de email carregada. Serviço de email disponível.
+9:41:48 PM [tsx] change in ./server/chat-routes.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Conexão com o banco de dados testada com sucesso: 2025-06-14 00:41:50.059304+00
+Session table checked/created successfully
+9:41:50 PM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+Configuração de email carregada. Serviço de email disponível.
+9:42:24 PM [tsx] change in ./server/chat-routes.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Conexão com o banco de dados testada com sucesso: 2025-06-14 00:42:25.319488+00
+Session table checked/created successfully
+9:42:25 PM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+Configuração de email carregada. Serviço de email disponível.

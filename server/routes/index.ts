@@ -28,6 +28,7 @@ import checkoutTrackingRouter from './checkout-tracking-routes';
 import { adminRoutes } from '../admin-routes';
 import legalDocumentsRouter from './legal-documents-routes';
 import profileUploadRouter from './profile-upload';
+import chatRouter from '../chat-routes';
 
 export default async function setupRoutes(app: express.Express) {
   // Rotas de autenticação (PRIMEIRO para evitar conflitos)
@@ -242,6 +243,10 @@ export default async function setupRoutes(app: express.Express) {
   // Rotas de documentos legais
   console.log('Registrando legalDocumentsRouter em /api/legal-documents');
   app.use('/api/legal-documents', legalDocumentsRouter);
+  
+  // Rotas do chatbot
+  console.log('Registrando chatRouter em /api/chat');
+  app.use('/api/chat', chatRouter);
   
   return app;
 } 

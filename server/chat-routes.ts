@@ -19,7 +19,7 @@ interface ChatRequest {
 }
 
 // Criar o router para as rotas de chat
-export const chatRouter = Router();
+const chatRouter = Router();
 
 // Contexto do sistema para instruir o modelo da OpenAI
 const systemContext = `
@@ -56,6 +56,14 @@ Documentos legais disponíveis:
 
 // Rota para processar mensagens do chat
 chatRouter.post("/", async (req: Request, res: Response) => {
+  // Verificar se a chave da API está configurada
+  if (!process.env.OPENAI_API_KEY) {
+    console.error("OPENAI_API_KEY não está configurada");
+    return res.status(500).json({ 
+      error: "Chatbot temporariamente indisponível", 
+      details: "O serviço de chat não está configurado corretamente. Por favor, tente novamente mais tarde ou entre em contato pelo telefone 0800 123 4567." 
+    });
+  }
   try {
     const { message, history } = req.body as ChatRequest;
 
