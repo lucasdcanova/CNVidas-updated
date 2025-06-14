@@ -536,9 +536,6 @@ export default function ProfilePhotoUploader({
                   <p className="text-sm text-muted-foreground">
                     {previewImage ? 'Clique na câmera para alterar' : 'Adicione uma foto de perfil'}
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    JPG, PNG ou GIF. Máximo 50MB (será comprimido automaticamente)
-                  </p>
                 </div>
               )}
             </div>

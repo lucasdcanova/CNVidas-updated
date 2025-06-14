@@ -188,9 +188,6 @@ export default function ProfileImageUploader({
                 <p className="text-sm text-muted-foreground mb-2">
                   Adicione uma foto de perfil para personalizar sua conta
                 </p>
-                <p className="text-xs text-muted-foreground">
-                  Formatos aceitos: JPG, PNG, GIF. Tamanho máximo: 5MB
-                </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-2">
