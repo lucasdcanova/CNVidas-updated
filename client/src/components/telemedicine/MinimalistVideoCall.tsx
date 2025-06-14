@@ -34,7 +34,6 @@ export default function MinimalistVideoCall({
   const [isConnecting, setIsConnecting] = useState(false);
   const [participants, setParticipants] = useState<any[]>([]);
   const [callDuration, setCallDuration] = useState(0);
-  const [isPortrait, setIsPortrait] = useState(window.innerHeight > window.innerWidth);
   const callStartTimeRef = useRef<number>(0);
   const [isMounted, setIsMounted] = useState(false);
   const isJoiningRef = useRef(false);
@@ -42,20 +41,10 @@ export default function MinimalistVideoCall({
   const retryCountRef = useRef(0);
   const maxRetries = 3;
 
-  // Detectar orientação da tela e marcar como montado
+  // Marcar como montado
   useEffect(() => {
     setIsMounted(true);
-    
-    const handleResize = () => {
-      setIsPortrait(window.innerHeight > window.innerWidth);
-    };
-
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', handleResize);
-
     return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('orientationchange', handleResize);
       setIsMounted(false);
     };
   }, []);
@@ -73,175 +62,37 @@ export default function MinimalistVideoCall({
     }
   }, [isCallActive]);
 
-  // Formatar duração
   const formatDuration = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    
+    if (hours > 0) {
+      return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+    return `${minutes}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const toggleAudio = useCallback(() => {
-    if (callFrameRef.current) {
-      callFrameRef.current.setLocalAudio(!isAudioEnabled);
-      setIsAudioEnabled(!isAudioEnabled);
-    }
-  }, [isAudioEnabled]);
-
-  const toggleVideo = useCallback(() => {
-    if (callFrameRef.current) {
-      callFrameRef.current.setLocalVideo(!isVideoEnabled);
-      setIsVideoEnabled(!isVideoEnabled);
-    }
-  }, [isVideoEnabled]);
-
-  const leaveCall = useCallback(async () => {
-    if (callFrameRef.current) {
-      try {
-        await callFrameRef.current.leave();
-        await callFrameRef.current.destroy();
-        
-        // Remover da lista global
-        if ((window as any).__dailyInstances) {
-          (window as any).__dailyInstances = (window as any).__dailyInstances.filter(
-            (instance: any) => instance !== callFrameRef.current
-          );
-        }
-        
-        callFrameRef.current = null;
-      } catch (error) {
-        console.error('Erro ao sair da chamada:', error);
-        // Forçar limpeza mesmo com erro
-        callFrameRef.current = null;
-      }
-      
-      setIsCallActive(false);
-      setCallDuration(0);
-      callStartTimeRef.current = 0;
-      if (onLeaveCall) onLeaveCall();
-    }
-  }, [onLeaveCall]);
-
+  // Função para entrar na chamada
   const joinCall = useCallback(async () => {
-    if (!roomUrl) {
-      console.log('🚫 Sem roomUrl, cancelando joinCall');
+    if (!roomUrl || !videoContainerRef.current || isJoiningRef.current) {
+      console.log('❌ Condições não atendidas para entrar na chamada:', {
+        roomUrl: !!roomUrl,
+        container: !!videoContainerRef.current,
+        isJoining: isJoiningRef.current
+      });
       return;
-    }
-    
-    // Evitar múltiplas tentativas simultâneas
-    if (isJoiningRef.current || isCallActive) {
-      console.log('🚫 Já está tentando entrar na sala ou já está ativo, ignorando...');
-      return;
-    }
-    
-    // Verificar se já existe uma instância global do Daily
-    const existingInstances = (window as any).__dailyInstances || [];
-    if (existingInstances.length > 0) {
-      console.log('⚠️ Destruindo instâncias antigas do Daily...');
-      for (const instance of existingInstances) {
-        try {
-          await instance.destroy();
-        } catch (e) {
-          console.error('Erro ao destruir instância:', e);
-        }
-      }
-      (window as any).__dailyInstances = [];
-    }
-    
-    // Verificar se já existe uma instância local
-    if (callFrameRef.current) {
-      console.log('⚠️ Já existe uma instância do DailyIframe, destruindo...');
-      try {
-        await callFrameRef.current.destroy();
-        callFrameRef.current = null;
-      } catch (error) {
-        console.error('Erro ao destruir instância anterior:', error);
-      }
     }
 
     isJoiningRef.current = true;
     setIsConnecting(true);
+    setConnectionError(null);
 
     try {
-      // Solicitar permissões de mídia com tratamento de erro específico
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-        // Importante: manter a stream ativa até o Daily assumir o controle
-        // Não chamar track.stop() aqui!
-        console.log('✅ Permissões de mídia obtidas com sucesso');
-        
-        // Guardar referência da stream para limpeza posterior se necessário
-        const tracks = stream.getTracks();
-        
-        // Adicionar listener para detectar falha na captura
-        tracks.forEach(track => {
-          track.onended = () => {
-            console.error('❌ MediaStreamTrack ended unexpectedly:', track.kind);
-            if (track.readyState === 'ended') {
-              setConnectionError(`Falha na captura de ${track.kind === 'video' ? 'vídeo' : 'áudio'}. Por favor, verifique suas configurações.`);
-            }
-          };
-        });
-      } catch (mediaError: any) {
-        console.error('❌ Erro ao obter permissões de mídia:', mediaError);
-        
-        let errorMessage = 'Erro ao acessar câmera/microfone. ';
-        
-        if (mediaError.name === 'NotFoundError') {
-          errorMessage += 'Nenhum dispositivo de mídia encontrado.';
-        } else if (mediaError.name === 'NotAllowedError' || mediaError.name === 'PermissionDeniedError') {
-          errorMessage += 'Permissão negada. Por favor, permita o acesso.';
-        } else if (mediaError.name === 'NotReadableError' || mediaError.name === 'TrackStartError') {
-          errorMessage += 'Dispositivo em uso por outro aplicativo.';
-        } else {
-          errorMessage += mediaError.message || 'Erro desconhecido.';
-        }
-        
-        setConnectionError(errorMessage);
-        throw new Error(errorMessage);
-      }
-
-      // Aguardar um pouco para garantir que o container esteja renderizado
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      if (!videoContainerRef.current) {
-        console.error('Container de vídeo não encontrado, tentando novamente...');
-        // Tentar novamente após um pequeno delay
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        if (!videoContainerRef.current) {
-          throw new Error('Container de vídeo não encontrado após múltiplas tentativas');
-        }
-      }
-
-      // Configuração minimalista do Daily.co com prevenção de erros de captura
-      const dailyOptions = {
-        showLeaveButton: false,
-        showFullscreenButton: false,
-        showLocalVideo: true,
-        showParticipantsBar: false,
-        // Removido showChat - não é uma propriedade válida
-        // Configurações importantes para prevenir erros de captura
-        audioSource: true, // Usar fonte de áudio padrão
-        videoSource: true, // Usar fonte de vídeo padrão
-        // Configurações do Daily.co (formato correto)
-        dailyConfig: {
-          // Configurações de vídeo e áudio sem usar APIs deprecadas
-          useDevicePreferenceCookies: true,
-          userMediaVideoConstraints: {
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
-            frameRate: { ideal: 24 }
-          },
-          userMediaAudioConstraints: {
-            echoCancellation: true,
-            noiseSuppression: true,
-            autoGainControl: true
-          },
-          // Desabilitar recursos que podem causar delay
-          enableKnocking: false, // Não exigir "bater" para entrar
-          enablePreJoinUI: false, // Não mostrar UI de pré-entrada
-          enableNetworkUI: true // Mostrar indicadores de conexão
-        },
+      console.log('🎬 Iniciando videochamada minimalista...');
+      
+      // Criar call frame com configuração PIP fixa
+      const callFrame = DailyIframe.createFrame(videoContainerRef.current, {
         iframeStyle: {
           position: 'absolute',
           top: '0',
@@ -249,223 +100,176 @@ export default function MinimalistVideoCall({
           width: '100%',
           height: '100%',
           border: 'none',
-          background: '#000',
-          zIndex: 1
+          borderRadius: '0',
+          zIndex: '1'
+        },
+        showLeaveButton: false,
+        showFullscreenButton: false,
+        showLocalVideo: true,
+        showParticipantsBar: false,
+        showUserNameChangeUI: false,
+        showPrejoinUI: false,
+        activeSpeakerMode: true,
+        // Configuração PIP fixa - vídeo local sempre no canto
+        layout: 'custom-v1',
+        customLayout: {
+          preset: 'pip',
+          max_cam_streams: 2,
+          pip: {
+            cam_aside: true,
+            cam_position: 'bottom-right'
+          }
+        },
+        theme: {
+          colors: {
+            accent: '#3B82F6',
+            accentText: '#FFFFFF',
+            background: '#000000',
+            backgroundAccent: '#1F2937',
+            baseText: '#FFFFFF',
+            border: '#374151',
+            mainAreaBg: '#000000',
+            mainAreaBgAccent: '#111827',
+            mainAreaText: '#FFFFFF',
+            supportiveText: '#9CA3AF'
+          }
         }
-      };
-
-      const callFrame = DailyIframe.createFrame(
-        videoContainerRef.current,
-        dailyOptions
-      );
+      });
 
       callFrameRef.current = callFrame;
-      
-      // Adicionar à lista global para rastreamento
-      if (!(window as any).__dailyInstances) {
-        (window as any).__dailyInstances = [];
-      }
-      (window as any).__dailyInstances.push(callFrame);
 
-      // Eventos
-      callFrame.on('joining-meeting', () => {
-        console.log('🔄 Evento: joining-meeting - Conectando...');
-        setConnectionError('Conectando à sala...');
-      });
-      
-      callFrame.on('joined-meeting', () => {
-        console.log('📞 Evento: joined-meeting - Conectado com sucesso!');
-        setIsConnecting(false);
-        setIsCallActive(true);
-        setConnectionError(null);
-        retryCountRef.current = 0; // Reset retry count on success
-        callStartTimeRef.current = Date.now();
-        if (onJoinCall) onJoinCall();
-      });
-      
-      callFrame.on('left-meeting', () => {
-        console.log('👋 Evento: left-meeting - Saiu da reunião');
-      });
-
-      callFrame.on('participant-joined', (event: any) => {
-        console.log('👤 Participante entrou:', event.participant?.user_name || 'Desconhecido');
-        updateParticipants();
-        if (onParticipantJoined) {
-          onParticipantJoined(event.participant);
-        }
-      });
-
-      callFrame.on('participant-left', (event: any) => {
-        updateParticipants();
-        if (onParticipantLeft) {
-          onParticipantLeft(event.participant);
-        }
-      });
-
-      callFrame.on('error', async (error: any) => {
-        console.error('Erro na chamada:', error);
-        
-        // Não propagar erros 429 (rate limit) pois são do Sentry
-        if (error?.errorMsg?.includes('429')) {
-          return;
-        }
-        
-        // Tratar erro de captura de mídia
-        if (error?.errorMsg?.includes('MediaStreamTrack') || error?.errorMsg?.includes('capture failure')) {
-          console.error('❌ Falha na captura de mídia detectada');
-          setConnectionError('Falha na captura de câmera/microfone. Possíveis soluções:\n1. Recarregue a página (F5)\n2. Verifique se outro app está usando a câmera\n3. Tente desabilitar temporariamente o vídeo\n4. Use outro navegador (Chrome/Edge recomendado)');
+      // Configurar eventos
+      callFrame
+        .on('joined-meeting', (event: any) => {
+          console.log('✅ Conectado à sala de videochamada');
+          setIsCallActive(true);
           setIsConnecting(false);
-          isJoiningRef.current = false;
-          return;
-        }
-        
-        // Tratar erro de sala não encontrada
-        if (error?.error?.type === 'no-room' || error?.errorMsg?.includes('meeting does not exist')) {
-          console.log('🚨 Sala não encontrada');
+          callStartTimeRef.current = Date.now();
+          onJoinCall?.();
           
+          // Configurar layout PIP após entrar
+          callFrame.setLocalVideo(isVideoEnabled);
+          callFrame.setLocalAudio(isAudioEnabled);
+        })
+        .on('left-meeting', () => {
+          console.log('👋 Desconectado da sala');
+          setIsCallActive(false);
+          setIsConnecting(false);
+          callStartTimeRef.current = 0;
+          setCallDuration(0);
+          setParticipants([]);
+          onLeaveCall?.();
+        })
+        .on('participant-joined', (event: any) => {
+          console.log('👥 Participante entrou:', event.participant);
+          updateParticipants();
+          onParticipantJoined?.(event.participant);
+        })
+        .on('participant-left', (event: any) => {
+          console.log('👋 Participante saiu:', event.participant);
+          updateParticipants();
+          onParticipantLeft?.(event.participant);
+        })
+        .on('error', (event: any) => {
+          console.error('❌ Erro na videochamada:', event);
+          const errorMessage = event.errorMsg || event.error?.msg || 'Erro de conexão';
+          setConnectionError(errorMessage);
+          setIsConnecting(false);
+          
+          // Tentar reconectar automaticamente
           if (retryCountRef.current < maxRetries) {
             retryCountRef.current++;
-            setConnectionError(`Sala ainda não está pronta. Tentativa ${retryCountRef.current}/${maxRetries}`);
-            
-            // Destruir o frame atual antes de tentar novamente
-            try {
-              await callFrame.destroy();
-              callFrameRef.current = null;
-            } catch (destroyError) {
-              console.error('Erro ao destruir frame:', destroyError);
-            }
-            
-            // Aguardar um tempo exponencial para propagação
-            const waitTime = Math.min(5000 * Math.pow(2, retryCountRef.current - 1), 20000);
-            console.log(`⏳ Aguardando ${waitTime}ms antes da próxima tentativa...`);
-            await new Promise(resolve => setTimeout(resolve, waitTime));
-            
-            // Resetar estados e tentar novamente
-            setIsConnecting(false);
-            isJoiningRef.current = false;
-            
-            // Tentar conectar novamente apenas se ainda estivermos montados
-            if (isMounted && !isCallActive && roomUrl) {
-              console.log('🔄 Tentando reconectar...');
+            console.log(`🔄 Tentando reconectar (${retryCountRef.current}/${maxRetries})...`);
+            setTimeout(() => {
+              if (callFrameRef.current) {
+                callFrameRef.current.leave();
+                callFrameRef.current.destroy();
+                callFrameRef.current = null;
+              }
+              isJoiningRef.current = false;
               joinCall();
-            }
-          } else {
-            setConnectionError('A sala de videoconferência ainda não está disponível. Por favor, aguarde alguns instantes e clique em "Tentar Novamente".');
-            setIsConnecting(false);
-            isJoiningRef.current = false;
+            }, 3000);
           }
-        } else {
-          setConnectionError(error?.errorMsg || 'Erro ao conectar à videoconferência');
-          setIsConnecting(false);
-          isJoiningRef.current = false;
-        }
-      });
+        })
+        .on('camera-error', (event: any) => {
+          console.warn('📹 Erro na câmera:', event);
+          setIsVideoEnabled(false);
+        })
+        .on('mic-error', (event: any) => {
+          console.warn('🎤 Erro no microfone:', event);
+          setIsAudioEnabled(false);
+        });
 
       const updateParticipants = () => {
         if (callFrameRef.current) {
-          const allParticipants = callFrameRef.current.participants();
-          const participantsList = Object.values(allParticipants).filter(
-            (p: any) => p.session_id !== 'local'
-          );
-          setParticipants(participantsList);
+          const participants = callFrameRef.current.participants();
+          const participantList = Object.values(participants || {});
+          setParticipants(participantList);
         }
       };
 
-      // Verificar dispositivos de mídia antes de entrar
-      try {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const hasVideo = devices.some(device => device.kind === 'videoinput');
-        const hasAudio = devices.some(device => device.kind === 'audioinput');
-        
-        console.log('📹 Dispositivos disponíveis:', {
-          video: hasVideo,
-          audio: hasAudio,
-          devices: devices.map(d => ({ kind: d.kind, label: d.label || 'Sem nome' }))
-        });
-        
-        if (!hasVideo && !hasAudio) {
-          throw new Error('Nenhum dispositivo de mídia encontrado');
-        }
-      } catch (devicesError) {
-        console.error('❌ Erro ao verificar dispositivos:', devicesError);
-      }
-      
       // Entrar na sala
-      console.log('🚀 Tentando entrar na sala:', {
-        url: roomUrl,
-        token: token ? '***REDACTED***' : 'NO_TOKEN',
-        tokenType: typeof token,
-        hasToken: !!token,
-        userName: userName
-      });
-      
-      // Garantir que o token seja uma string ou undefined
       const joinOptions: any = {
         url: roomUrl,
-        userName: userName || 'Participante'
+        userName: userName || 'Usuário',
+        startVideoOff: !isVideoEnabled,
+        startAudioOff: !isAudioEnabled
       };
-      
-      // Só adicionar token se for uma string válida
-      if (token && typeof token === 'string' && token.trim() !== '') {
-        joinOptions.token = token;
-        console.log('✅ Token adicionado às opções de join');
-      } else {
-        console.log('⚠️ Entrando sem token (modo público)');
-      }
-      
-      console.log('🎯 Opções de join finais:', joinOptions);
-      
-      // Adicionar timeout para a tentativa de conexão
-      const joinTimeout = setTimeout(() => {
-        console.error('⏱️ Timeout ao tentar entrar na sala');
-        setConnectionError('A conexão está demorando mais que o esperado. Por favor, aguarde mais alguns instantes ou clique em "Tentar Novamente".');
-        setIsConnecting(false);
-        isJoiningRef.current = false;
-      }, 60000); // 60 segundos de timeout - aumentado para dar mais tempo
-      
-      try {
-        await callFrame.join(joinOptions);
-        clearTimeout(joinTimeout);
-      } catch (joinError) {
-        clearTimeout(joinTimeout);
-        console.error('❌ Erro ao fazer join:', joinError);
-        throw joinError;
-      }
-      
-      console.log('✅ Entrou na sala com sucesso');
 
-    } catch (error) {
-      console.error('Erro ao iniciar chamada:', error);
+      if (token) {
+        joinOptions.token = token;
+      }
+
+      await callFrame.join(joinOptions);
+
+    } catch (error: any) {
+      console.error('❌ Erro ao entrar na videochamada:', error);
+      setConnectionError(error.message || 'Falha ao conectar');
       setIsConnecting(false);
-    } finally {
       isJoiningRef.current = false;
     }
-  }, [roomUrl, token, userName, onJoinCall, onParticipantJoined, onParticipantLeft]);
+  }, [roomUrl, token, userName, isVideoEnabled, isAudioEnabled, onJoinCall, onLeaveCall, onParticipantJoined, onParticipantLeft]);
 
-  // Auto-iniciar se tiver URL (removido joinCall das dependências para evitar loop)
-  const hasAutoStartedRef = useRef(false);
-  
+  // Função para sair da chamada
+  const leaveCall = useCallback(() => {
+    console.log('📞 Encerrando videochamada...');
+    if (callFrameRef.current) {
+      callFrameRef.current.leave();
+    }
+  }, []);
+
+  // Alternar áudio
+  const toggleAudio = useCallback(() => {
+    if (callFrameRef.current) {
+      const newState = !isAudioEnabled;
+      callFrameRef.current.setLocalAudio(newState);
+      setIsAudioEnabled(newState);
+    }
+  }, [isAudioEnabled]);
+
+  // Alternar vídeo
+  const toggleVideo = useCallback(() => {
+    if (callFrameRef.current) {
+      const newState = !isVideoEnabled;
+      callFrameRef.current.setLocalVideo(newState);
+      setIsVideoEnabled(newState);
+    }
+  }, [isVideoEnabled]);
+
+  // Auto-iniciar quando tiver URL
   useEffect(() => {
-    if (roomUrl && !isCallActive && !isConnecting && isMounted && !connectionError && !isJoiningRef.current && !hasAutoStartedRef.current) {
-      // Verificar se já existe uma instância ativa
-      const existingInstances = (window as any).__dailyInstances || [];
-      if (existingInstances.length > 0) {
-        console.log('🚫 Já existe uma instância do Daily, cancelando auto-start');
-        return;
-      }
+    if (roomUrl && !isCallActive && !isConnecting && isMounted && !connectionError && !isJoiningRef.current) {
+      console.log('🚀 Condições atendidas para auto-iniciar videochamada');
       
-      // Marcar que já tentamos auto-iniciar
-      hasAutoStartedRef.current = true;
-      
-      // Aguardar um tempo maior para garantir que a sala esteja propagada
+      // Aguardar um tempo para garantir que a sala esteja propagada
       const timer = setTimeout(() => {
         console.log('🎬 Auto-iniciando videochamada após delay de segurança');
         joinCall();
-      }, 8000); // Aumentado para 8 segundos para garantir propagação completa
+      }, 8000);
       
       return () => clearTimeout(timer);
     }
-  }, [roomUrl, isCallActive, isConnecting, isMounted, connectionError]); // Removido joinCall para evitar loop infinito
+  }, [roomUrl, isCallActive, isConnecting, isMounted, connectionError]);
 
   // Limpar ao desmontar
   useEffect(() => {
@@ -483,8 +287,8 @@ export default function MinimalistVideoCall({
   }, []);
 
   return (
-    <div className="relative w-full h-full min-h-screen bg-black overflow-hidden">
-      {/* Container de vídeo */}
+    <div className="fixed inset-0 w-full h-full bg-black overflow-hidden">
+      {/* Container de vídeo - PIP fixo */}
       <div
         ref={videoContainerRef}
         className="absolute inset-0 bg-black"
@@ -493,28 +297,29 @@ export default function MinimalistVideoCall({
           height: '100%',
           position: 'absolute',
           top: 0,
-          left: 0
+          left: 0,
+          zIndex: 1
         }}
       />
 
-      {/* Overlay com informações */}
+      {/* Overlay com informações - sempre visível quando em chamada */}
       {isCallActive && (
         <>
           {/* Header com informações da chamada */}
-          <div className="absolute top-0 left-0 right-0 p-3 sm:p-4 md:p-6 bg-gradient-to-b from-black/80 via-black/40 to-transparent z-20">
+          <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/80 via-black/40 to-transparent z-20">
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-white text-base sm:text-lg md:text-xl font-medium">
+                <h3 className="text-white text-lg font-medium">
                   {isDoctor ? 'Consulta de Emergência' : `Dr. ${participants[0]?.user_name || 'Médico'}`}
                 </h3>
-                <p className="text-white/70 text-xs sm:text-sm">
+                <p className="text-white/70 text-sm">
                   {formatDuration(callDuration)}
                 </p>
               </div>
               {participants.length > 0 && (
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                  <span className="text-white/70 text-xs sm:text-sm">
+                  <span className="text-white/70 text-sm">
                     {participants.length} {participants.length === 1 ? 'participante' : 'participantes'}
                   </span>
                 </div>
@@ -522,20 +327,14 @@ export default function MinimalistVideoCall({
             </div>
           </div>
 
-          {/* Controles minimalistas responsivos */}
-          <div className={cn(
-            "absolute z-30 flex items-center justify-center",
-            "bottom-4 sm:bottom-6 md:bottom-8",
-            isPortrait 
-              ? "left-1/2 -translate-x-1/2 gap-4 sm:gap-6"
-              : "left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:right-8 gap-3 sm:gap-4"
-          )}>
+          {/* Controles fixos na parte inferior */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center justify-center gap-6">
             {/* Botão de Áudio */}
             <button
               onClick={toggleAudio}
               className={cn(
                 "relative rounded-full transition-all duration-200 backdrop-blur-md",
-                "w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center",
+                "w-16 h-16 flex items-center justify-center",
                 "shadow-lg hover:shadow-xl transform hover:scale-105",
                 isAudioEnabled 
                   ? "bg-white/20 hover:bg-white/30 border border-white/20" 
@@ -544,9 +343,9 @@ export default function MinimalistVideoCall({
               aria-label={isAudioEnabled ? "Desativar microfone" : "Ativar microfone"}
             >
               {isAudioEnabled ? (
-                <Mic className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" />
+                <Mic className="w-7 h-7 text-white" />
               ) : (
-                <MicOff className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" />
+                <MicOff className="w-7 h-7 text-white" />
               )}
             </button>
 
@@ -555,7 +354,7 @@ export default function MinimalistVideoCall({
               onClick={toggleVideo}
               className={cn(
                 "relative rounded-full transition-all duration-200 backdrop-blur-md",
-                "w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center",
+                "w-16 h-16 flex items-center justify-center",
                 "shadow-lg hover:shadow-xl transform hover:scale-105",
                 isVideoEnabled 
                   ? "bg-white/20 hover:bg-white/30 border border-white/20" 
@@ -564,9 +363,9 @@ export default function MinimalistVideoCall({
               aria-label={isVideoEnabled ? "Desativar câmera" : "Ativar câmera"}
             >
               {isVideoEnabled ? (
-                <Video className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" />
+                <Video className="w-7 h-7 text-white" />
               ) : (
-                <VideoOff className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" />
+                <VideoOff className="w-7 h-7 text-white" />
               )}
             </button>
 
@@ -575,28 +374,15 @@ export default function MinimalistVideoCall({
               onClick={leaveCall}
               className={cn(
                 "relative rounded-full transition-all duration-200",
-                "w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 flex items-center justify-center",
+                "w-20 h-20 flex items-center justify-center",
                 "bg-red-600 hover:bg-red-700 shadow-xl hover:shadow-2xl",
-                "transform hover:scale-105 active:scale-95",
-                "ml-2 sm:ml-4"
+                "transform hover:scale-105 active:scale-95"
               )}
               aria-label="Encerrar chamada"
             >
-              <Phone className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white rotate-[135deg]" />
+              <Phone className="w-8 h-8 text-white rotate-[135deg]" />
             </button>
           </div>
-
-          {/* Indicador de vídeo desligado */}
-          {!isVideoEnabled && (
-            <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-              <div className="text-center p-4">
-                <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-full bg-gray-800/90 flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                  <VideoOff className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 text-gray-500" />
-                </div>
-                <p className="text-white/60 text-xs sm:text-sm md:text-base">Câmera desligada</p>
-              </div>
-            </div>
-          )}
         </>
       )}
 
@@ -604,9 +390,9 @@ export default function MinimalistVideoCall({
       {isConnecting && (
         <div className="absolute inset-0 flex items-center justify-center bg-black z-40">
           <div className="text-center p-4">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 border-4 sm:border-4 border-white/20 border-t-white rounded-full animate-spin mb-3 sm:mb-4 mx-auto" />
-            <p className="text-white text-base sm:text-lg md:text-xl">Conectando...</p>
-            <p className="text-white/60 text-xs sm:text-sm mt-2">
+            <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin mb-4 mx-auto" />
+            <p className="text-white text-xl">Conectando...</p>
+            <p className="text-white/60 text-sm mt-2">
               {connectionError || 'Preparando sua consulta'}
             </p>
             {retryCountRef.current > 0 && (

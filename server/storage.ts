@@ -230,6 +230,8 @@ export interface IStorage {
   cancelAppointment(id: number, reason: string): Promise<Appointment>;
   deleteAppointment(id: number): Promise<void>;
   getUserIdByDoctorId(doctorId: number): Promise<number | undefined>;
+  getAppointmentsForPaymentProcessing(startTime: Date, endTime: Date): Promise<Appointment[]>;
+  getCancelledAppointmentsWithPendingPayment(): Promise<Appointment[]>;
 
   getUserByToken(token: string): Promise<ExpressUser | null>;
   getCurrentSubscription(userId: number): Promise<any>;
@@ -1296,6 +1298,32 @@ export class DatabaseStorage implements IStorage {
   async getUserIdByDoctorId(doctorId: number): Promise<number | undefined> {
     const result = await this.db.select({ userId: doctors.userId }).from(doctors).where(eq(doctors.id, doctorId));
     return result[0]?.userId;
+  }
+
+  async getAppointmentsForPaymentProcessing(startTime: Date, endTime: Date): Promise<Appointment[]> {
+    return this.db.select()
+      .from(appointments)
+      .where(
+        and(
+          eq(appointments.isEmergency, false), // Apenas consultas agendadas
+          gte(appointments.date, startTime),
+          lte(appointments.date, endTime),
+          eq(appointments.paymentStatus, 'authorized'), // Apenas pagamentos pré-autorizados
+          sql`${appointments.paymentIntentId} IS NOT NULL`
+        )
+      );
+  }
+
+  async getCancelledAppointmentsWithPendingPayment(): Promise<Appointment[]> {
+    return this.db.select()
+      .from(appointments)
+      .where(
+        and(
+          eq(appointments.status, 'cancelled'),
+          eq(appointments.paymentStatus, 'authorized'),
+          sql`${appointments.paymentIntentId} IS NOT NULL`
+        )
+      );
   }
 
   async getUserByToken(token: string): Promise<ExpressUser | null> {

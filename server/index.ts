@@ -16,6 +16,7 @@ import { users } from "../shared/schema";
 import { eq } from "drizzle-orm";
 import jwt from "jsonwebtoken";
 import fs from 'fs';
+import { setupCronJobs } from "./cron-setup";
 
 (async () => {
   const app = express();
@@ -321,5 +322,8 @@ import fs from 'fs';
     log(`Servidor rodando na porta ${PORT}`, 'server');
     console.log(`Acesse: http://localhost:${PORT}`);
     console.log(`Ou: http://127.0.0.1:${PORT}`);
+    
+    // Configurar jobs agendados após o servidor iniciar
+    setupCronJobs();
   });
 })();

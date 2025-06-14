@@ -114,7 +114,19 @@ export function RobustVideoCall({ url, token, userName, onLeave }: RobustVideoCa
                 borderRadius: '8px',
               },
               showLocalVideo: true,
-              showParticipantsBar: true,
+              showParticipantsBar: false,
+              showLeaveButton: false,
+              showFullscreenButton: false,
+              activeSpeakerMode: true,
+              layout: 'custom-v1',
+              customLayout: {
+                preset: 'pip',
+                max_cam_streams: 2,
+                pip: {
+                  cam_aside: true,
+                  cam_position: 'bottom-right'
+                }
+              },
               userName: userName || 'Usuário',
             });
             break;

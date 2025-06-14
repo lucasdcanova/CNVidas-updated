@@ -12,7 +12,7 @@ import { Loader2, AlertCircle, Clock, User, ShieldAlert, FileText, Save } from '
 import { apiRequest } from '@/lib/queryClient';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import FaceTimeVideoCall from '@/components/telemedicine/FaceTimeVideoCall';
+import MinimalistVideoCall from '@/components/telemedicine/MinimalistVideoCall';
 
 interface ConsultationInfo {
   roomUrl: string | null;
@@ -256,7 +256,7 @@ export default function DoctorEmergencyRoom() {
     return (
       <div className="fixed inset-0 z-50 bg-black">
         {/* Componente de vídeo FaceTime em tela cheia */}
-        <FaceTimeVideoCall
+                      <MinimalistVideoCall
           roomUrl={consultation.roomUrl!}
           token={consultation.token || undefined}
           onJoinCall={() => {

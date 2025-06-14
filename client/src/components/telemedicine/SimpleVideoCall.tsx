@@ -153,12 +153,25 @@ export function SimpleVideoCall({ url, token, userName, onLeave }: SimpleVideoCa
         const fullUrl = dailyUrl;
         console.log('URL final para Daily.co:', fullUrl, 'Com token:', token ? (token.substring(0, 15) + '...') : 'não fornecido');
         
-        // Configurações simplificadas do Daily.co sem layouts avançados
+        // Configurações com layout PIP fixo
         const options = {
           url: fullUrl,
           userName: userName || 'Usuário',
           token: token,
           showLeaveButton: false,
+          showFullscreenButton: false,
+          showLocalVideo: true,
+          showParticipantsBar: false,
+          activeSpeakerMode: true,
+          layout: 'custom-v1',
+          customLayout: {
+            preset: 'pip',
+            max_cam_streams: 2,
+            pip: {
+              cam_aside: true,
+              cam_position: 'bottom-right'
+            }
+          },
           iframeStyle: {
             position: 'absolute',
             top: '0',
@@ -168,7 +181,6 @@ export function SimpleVideoCall({ url, token, userName, onLeave }: SimpleVideoCa
             border: 'none',
             borderRadius: '8px'
           }
-          // Removendo todas as opções avançadas que podem causar problemas
         };
         
         // Criar o frame com tratamento de erros aprimorado
@@ -262,17 +274,7 @@ export function SimpleVideoCall({ url, token, userName, onLeave }: SimpleVideoCa
               }
             });
           
-          // Aplicar configurações adicionais para layout estilo FaceTime
-          frame.setCustomLayout({
-            // Mostrar vídeos em formato retrato com proporção 9:16 para emular FaceTime
-            portraitMode: true,
-            // Garantir que os participantes sejam mostrados em cards maiores
-            maximizedParticipant: false,
-            // Mostrar nome dos participantes apenas brevemente
-            showParticipantNames: false,
-            // Esconder UI de controles após alguns segundos de inatividade
-            autoHideControls: true
-          });
+          // Layout PIP já configurado nas opções do createFrame
           
           // Entrar na reunião após garantir que os listeners estão configurados
           console.log('Tentando entrar na reunião com URL:', fullUrl);

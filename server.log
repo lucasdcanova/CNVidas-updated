@@ -5221,3 +5221,152 @@ Session table checked/created successfully
 Acesse: http://localhost:8080
 Ou: http://127.0.0.1:8080
 Configuração de email carregada. Serviço de email disponível.
+1:01:44 AM [tsx] change in ./server/storage.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Conexão com o banco de dados testada com sucesso: 2025-06-14 04:01:45.821719+00
+Session table checked/created successfully
+1:01:45 AM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+Configuração de email carregada. Serviço de email disponível.
+1:02:02 AM [tsx] change in ./server/storage.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Conexão com o banco de dados testada com sucesso: 2025-06-14 04:02:03.881018+00
+Session table checked/created successfully
+1:02:04 AM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+Configuração de email carregada. Serviço de email disponível.
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para POST /108/cancel
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Cancelando consulta #108 pelo usuário 58
+Verificando permissão de cancelamento - Paciente userId: 58, appointment.userId: 58
+Consulta #108 cancelada com sucesso
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+Encontradas 1 consultas próximas
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando claims para usuário 58
+Encontrados 0 claims
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para POST /108/cancel
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Cancelando consulta #108 pelo usuário 58
+Verificando permissão de cancelamento - Paciente userId: 58, appointment.userId: 58
+Consulta #108 cancelada com sucesso
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+Encontradas 1 consultas próximas
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+1:05:45 AM [tsx] change in ./server/index.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Conexão com o banco de dados testada com sucesso: 2025-06-14 04:05:47.48522+00
+Session table checked/created successfully
+1:05:47 AM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+Configuração de email carregada. Serviço de email disponível.
+1:05:57 AM [tsx] change in ./server/index.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+node:internal/modules/cjs/loader:1225
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module 'node-cron'
+Require stack:
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/cron-setup.ts
+- /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at nextResolveSimple (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:942)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:2550
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:2:1624
+    at resolveTsPaths (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:760)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/tsx/dist/register-D2KMMyKp.cjs:3:1038
+    at m._resolveFilename (file:///Users/lucascanova/Documents/CNVidas%201.0/CNVidas-updated/node_modules/tsx/dist/register-hc1YoAqe.mjs:1:789)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/cron-setup.ts',
+    '/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/index.ts'
+  ]
+}
+
+Node.js v20.18.0

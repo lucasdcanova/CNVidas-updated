@@ -64,10 +64,18 @@ export function DirectIframeVideoCall({ url, token, userName, onLeave }: DirectI
       // Adicionar timestamp para prevenir cache
       urlParams.append('cache', Date.now().toString());
       
-      // Garantir modo de barra lateral (interface simplificada)
+      // Garantir modo PIP (interface simplificada)
       urlParams.append('showLeaveButton', 'true');
-      urlParams.append('showFullscreenButton', 'true');
-      urlParams.append('layout', 'grid');
+      urlParams.append('showFullscreenButton', 'false');
+      urlParams.append('layout', 'custom-v1');
+      urlParams.append('customLayout', JSON.stringify({
+        preset: 'pip',
+        max_cam_streams: 2,
+        pip: {
+          cam_aside: true,
+          cam_position: 'bottom-right'
+        }
+      }));
       
       // Logging para depuração
       console.log('Room name:', roomName);

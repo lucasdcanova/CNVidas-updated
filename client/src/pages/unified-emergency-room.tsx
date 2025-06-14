@@ -6,7 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, ShieldAlert } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import { Button } from '@/components/ui/button';
-import FaceTimeVideoCall from '@/components/telemedicine/FaceTimeVideoCall';
+import MinimalistVideoCall from '@/components/telemedicine/MinimalistVideoCall';
 
 /**
  * Sala de Emergência Unificada
@@ -228,7 +228,7 @@ export default function UnifiedEmergencyRoom() {
           
           {!loading && !error && roomData && (
             <div className="fixed inset-0 z-50 bg-black">
-              <FaceTimeVideoCall
+              <MinimalistVideoCall
                 roomUrl={roomData.roomUrl}
                 token={roomData.token}
                 userName={user?.fullName || (isDoctor ? 'Médico' : 'Paciente')}
