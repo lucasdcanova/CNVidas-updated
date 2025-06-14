@@ -13,6 +13,7 @@ type AuthContextType = {
   isLoading: boolean;
   error: Error | null;
   loginMutation: UseMutationResult<UserData, Error, LoginCredentials>;
+  loginWithQRCodeMutation: UseMutationResult<UserData, Error, { token: string }>;
   logoutMutation: UseMutationResult<Response, Error, void>;
   registerMutation: UseMutationResult<UserData, Error, RegisterCredentials>;
   forgotPasswordMutation: UseMutationResult<Response, Error, { email: string }>;
@@ -178,6 +179,83 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       toast({
         title: "Erro no login",
         description: error.message || "Não foi possível fazer login. Verifique suas credenciais.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Mutation para login com QR Code
+  const loginWithQRCodeMutation = useMutation({
+    mutationFn: async ({ token }: { token: string }) => {
+      console.log("Tentando login com QR Code:", token);
+      
+      const response = await apiRequest("POST", "/api/auth/login-qr", { token });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "QR Code inválido ou expirado");
+      }
+      
+      const responseData = await response.json();
+      
+      // Armazenar token de autenticação se disponível
+      if (responseData.authToken) {
+        console.log("Token de autenticação recebido:", responseData.authToken);
+        localStorage.setItem("authToken", responseData.authToken);
+      }
+      
+      // Armazenar ID da sessão se disponível
+      if (responseData.sessionId) {
+        console.log("ID da sessão recebido:", responseData.sessionId);
+        localStorage.setItem("sessionID", responseData.sessionId);
+      }
+      
+      // Armazenar dados do usuário localmente
+      try {
+        localStorage.setItem("userData", JSON.stringify({
+          id: responseData.id,
+          email: responseData.email,
+          role: responseData.role,
+          username: responseData.username,
+          fullName: responseData.fullName
+        }));
+        console.log("Dados do usuário armazenados para autenticação alternativa");
+      } catch (e) {
+        console.warn("Erro ao armazenar dados do usuário:", e);
+      }
+      
+      return responseData;
+    },
+    onSuccess: (userData: UserData & { sessionId?: string, authToken?: string }) => {
+      console.log("Login com QR Code bem-sucedido:", userData);
+      
+      // Salvar os dados do usuário na cache
+      queryClient.setQueryData(["/api/user"], userData);
+      
+      // Redirecionar com base no papel do usuário
+      if (userData.role === "admin") {
+        console.log("Usuário é administrador, redirecionando para /admin/users");
+        window.location.href = "/admin/users";
+      } else if (userData.role === "doctor") {
+        console.log("Usuário é médico, redirecionando para /doctor-telemedicine");
+        window.location.href = "/doctor-telemedicine";
+      } else if (userData.role === "partner") {
+        console.log("Usuário é parceiro, redirecionando para /partner/dashboard");
+        window.location.href = "/partner/dashboard";
+      } else {
+        // Pacientes e outros usuários vão para a página principal
+        console.log("Usuário é paciente, redirecionando para /dashboard");
+        window.location.href = "/dashboard";
+      }
+      
+      // Forçar uma verificação de autenticação
+      setTimeout(() => refetch(), 300);
+    },
+    onError: (error: Error) => {
+      console.error("Erro no login com QR Code:", error);
+      toast({
+        title: "Erro no login",
+        description: error.message || "QR Code inválido ou expirado. Tente novamente.",
         variant: "destructive",
       });
     },
@@ -405,6 +483,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         error,
         loginMutation,
+        loginWithQRCodeMutation,
         logoutMutation,
         registerMutation,
         forgotPasswordMutation,

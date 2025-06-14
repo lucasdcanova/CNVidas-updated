@@ -348,6 +348,120 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
 });
 
 /**
+ * Autentica um usuário via QR Code
+ * POST /api/auth/login-qr
+ */
+authRouter.post('/login-qr', async (req: Request, res: Response) => {
+  try {
+    const { token } = req.body;
+    
+    if (!token) {
+      return res.status(400).json({ error: 'QR Code não fornecido' });
+    }
+    
+    // Buscar o usuário pelo token QR
+    const user = await storage.getUserByQrToken(token);
+    
+    if (!user) {
+      return res.status(401).json({ error: 'QR Code inválido ou expirado' });
+    }
+    
+    // Registrar o uso do QR token
+    try {
+      await storage.logQrAuthentication({
+        tokenUserId: user.id,
+        scannerUserId: user.id, // No login, o scanner é o próprio usuário
+        scannedAt: new Date(),
+        ipAddress: req.ip || 'unknown',
+        userAgent: req.headers['user-agent'] || 'unknown',
+        success: true,
+        token: token
+      });
+    } catch (logError) {
+      console.error('Erro ao registrar log de QR auth:', logError);
+      // Continue com o login mesmo se o log falhar
+    }
+    
+    // Login bem-sucedido - gerar JWT token
+    console.log('Login via QR Code bem-sucedido para:', user.email);
+    
+    const jwtSecret = process.env.JWT_SECRET || 'cnvidas-secret-key-2024';
+    const jwtToken = jwt.sign(
+      { 
+        userId: user.id, 
+        email: user.email, 
+        role: user.role 
+      }, 
+      jwtSecret, 
+      { expiresIn: '7d' }
+    );
+    
+    // Configurar cookie httpOnly para segurança
+    res.cookie('auth_token', jwtToken, getCookieOptions(req));
+    
+    res.json({
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      fullName: user.fullName,
+      role: user.role,
+      subscriptionPlan: user.subscriptionPlan,
+      subscriptionStatus: user.subscriptionStatus,
+      emergencyConsultationsLeft: user.emergencyConsultationsLeft,
+      emergencyConsultationsResetAt: user.emergencyConsultationsResetAt,
+      profileImage: user.profileImage,
+      phone: user.phone,
+      cpf: user.cpf,
+      cnpj: user.cnpj,
+      city: user.city,
+      state: user.state,
+      address: user.address,
+      zipcode: user.zipcode,
+      token: jwtToken,
+      message: 'Login via QR Code realizado com sucesso'
+    });
+
+  } catch (error) {
+    console.error('Erro no login via QR Code:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+/**
+ * Verifica se um QR Code é válido
+ * POST /api/auth/verify-qr
+ */
+authRouter.post('/verify-qr', async (req: Request, res: Response) => {
+  try {
+    const { token } = req.body;
+    
+    if (!token) {
+      return res.status(400).json({ error: 'QR Code não fornecido' });
+    }
+    
+    // Buscar o usuário pelo token QR
+    const user = await storage.getUserByQrToken(token);
+    
+    if (!user) {
+      return res.status(401).json({ error: 'QR Code inválido ou expirado' });
+    }
+    
+    res.json({
+      valid: true,
+      user: {
+        fullName: user.fullName,
+        email: user.email,
+        role: user.role
+      }
+    });
+
+  } catch (error) {
+    console.error('Erro ao verificar QR Code:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+/**
  * Desautentica um usuário
  * POST /api/auth/logout
  */
