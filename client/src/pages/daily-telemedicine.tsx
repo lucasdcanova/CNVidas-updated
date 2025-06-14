@@ -360,6 +360,7 @@ export default function DailyTelemedicinePage() {
                       roomUrl={videoCallState.roomUrl}
                       token={videoCallState.token}
                       isEmergency={videoCallState.isEmergency}
+                      appointmentId={appointmentId ? parseInt(appointmentId) : undefined}
                       onConnectionIssue={(issue) => {
                         console.log('Problema de conexão detectado:', issue);
                         

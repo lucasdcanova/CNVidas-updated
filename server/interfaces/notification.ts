@@ -1,7 +1,7 @@
 export interface Notification {
   id: number;
   userId: number;
-  type: 'appointment' | 'system' | 'payment' | 'emergency';
+  type: 'appointment' | 'system' | 'payment' | 'emergency' | 'claim' | 'subscription' | 'qr_scan' | 'checkout' | 'dependent' | 'profile';
   title: string;
   message: string;
   read: boolean;

@@ -28,6 +28,7 @@ interface DailyVideoCallProps {
   onLeaveCall?: () => void;
   isEmergency?: boolean;
   onConnectionIssue?: (issue: ConnectionIssue) => void;
+  appointmentId?: number;
 }
 
 interface NetworkStats {
@@ -42,7 +43,8 @@ export default function DailyVideoCall({
   onJoinCall, 
   onLeaveCall,
   isEmergency = false,
-  onConnectionIssue
+  onConnectionIssue,
+  appointmentId
 }: DailyVideoCallProps) {
   const { toast } = useToast();
   const videoContainerRef = useRef<HTMLDivElement>(null);
@@ -54,6 +56,7 @@ export default function DailyVideoCall({
   const [loadingDots, setLoadingDots] = useState(0);
   const [networkStats, setNetworkStats] = useState<NetworkStats>({});
   const [retryAttempts, setRetryAttempts] = useState(0);
+  const [callStartTime, setCallStartTime] = useState<Date | null>(null);
 
   // Efeito para animação de carregamento
   useEffect(() => {
@@ -66,15 +69,49 @@ export default function DailyVideoCall({
   }, [isConnecting]);
 
   // Função para encerrar a chamada
-  const leaveCall = useCallback(() => {
+  const leaveCall = useCallback(async () => {
     if (callFrameRef.current) {
+      // Calcular duração da consulta
+      let duration = 0;
+      if (callStartTime) {
+        const endTime = new Date();
+        duration = Math.floor((endTime.getTime() - callStartTime.getTime()) / 1000 / 60); // Duração em minutos
+      }
+      
+      // Se houver appointmentId, notificar o servidor sobre o fim da consulta
+      if (appointmentId && duration > 0) {
+        try {
+          const response = await fetch(`/api/appointments/${appointmentId}/end`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({ duration })
+          });
+          
+          const data = await response.json();
+          console.log(`Consulta #${appointmentId} finalizada. Duração: ${duration} minutos`);
+          
+          if (data.paymentCaptured) {
+            toast({
+              title: 'Consulta finalizada',
+              description: 'O pagamento foi processado com sucesso.',
+            });
+          }
+        } catch (error) {
+          console.error('Erro ao marcar fim da consulta:', error);
+        }
+      }
+      
       callFrameRef.current.leave();
       callFrameRef.current.destroy();
       callFrameRef.current = null;
       setIsCallActive(false);
+      setCallStartTime(null);
       if (onLeaveCall) onLeaveCall();
     }
-  }, [onLeaveCall]);
+  }, [onLeaveCall, appointmentId, callStartTime, toast]);
 
   // Função para alternar o áudio
   const toggleAudio = useCallback(() => {
@@ -217,10 +254,28 @@ export default function DailyVideoCall({
       callFrameRef.current = callFrame;
 
       // Etapa 7: Configurar eventos
-      callFrame.on('joined-meeting', () => {
+      callFrame.on('joined-meeting', async () => {
         console.log('Entrou na sala de videochamada');
         setIsConnecting(false);
         setIsCallActive(true);
+        setCallStartTime(new Date());
+        
+        // Se houver appointmentId, notificar o servidor que a consulta iniciou
+        if (appointmentId) {
+          try {
+            await fetch(`/api/appointments/${appointmentId}/start`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              credentials: 'include'
+            });
+            console.log(`Consulta #${appointmentId} marcada como iniciada`);
+          } catch (error) {
+            console.error('Erro ao marcar início da consulta:', error);
+          }
+        }
+        
         if (onJoinCall) onJoinCall();
         toast({
           title: 'Conectado',

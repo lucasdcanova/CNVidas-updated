@@ -249,6 +249,184 @@ appointmentJoinRouter.post('/:id/join', requireAuth, async (req: AuthenticatedRe
 });
 
 /**
+ * Endpoint para registrar início da consulta
+ * POST /api/appointments/:id/start
+ */
+appointmentJoinRouter.post('/:id/start', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Não autorizado' });
+    }
+
+    const appointmentId = parseInt(req.params.id);
+    if (isNaN(appointmentId)) {
+      return res.status(400).json({ message: 'ID de consulta inválido' });
+    }
+
+    console.log(`Iniciando consulta #${appointmentId}`);
+
+    // Buscar a consulta
+    const appointment = await storage.getAppointment(appointmentId);
+    if (!appointment) {
+      return res.status(404).json({ message: 'Consulta não encontrada' });
+    }
+
+    // Verificar se o usuário é o médico da consulta
+    const isDoctor = req.user.role === 'doctor';
+    if (!isDoctor) {
+      return res.status(403).json({ message: 'Apenas médicos podem iniciar consultas' });
+    }
+
+    // Atualizar o status da consulta para "in_progress" e registrar o horário de início
+    await storage.updateAppointment(appointmentId, {
+      status: 'in_progress',
+      updatedAt: new Date()
+    });
+
+    console.log(`Consulta #${appointmentId} iniciada com sucesso`);
+
+    return res.json({
+      success: true,
+      message: 'Consulta iniciada com sucesso',
+      startedAt: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error('Erro ao iniciar consulta:', error);
+    return res.status(500).json({
+      message: 'Erro ao iniciar consulta',
+      error: error instanceof Error ? error.message : 'Erro desconhecido'
+    });
+  }
+});
+
+/**
+ * Endpoint para registrar fim da consulta e processar pagamento
+ * POST /api/appointments/:id/end
+ */
+appointmentJoinRouter.post('/:id/end', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Não autorizado' });
+    }
+
+    const appointmentId = parseInt(req.params.id);
+    const { duration } = req.body; // Duração em minutos
+
+    if (isNaN(appointmentId)) {
+      return res.status(400).json({ message: 'ID de consulta inválido' });
+    }
+
+    console.log(`Finalizando consulta #${appointmentId}, duração: ${duration} minutos`);
+
+    // Buscar a consulta
+    const appointment = await storage.getAppointment(appointmentId);
+    if (!appointment) {
+      return res.status(404).json({ message: 'Consulta não encontrada' });
+    }
+
+    // Verificar se o usuário é o médico da consulta
+    const isDoctor = req.user.role === 'doctor';
+    if (!isDoctor) {
+      return res.status(403).json({ message: 'Apenas médicos podem finalizar consultas' });
+    }
+
+    // Atualizar o status da consulta
+    const updateData: any = {
+      status: 'completed',
+      updatedAt: new Date()
+    };
+
+    // Lógica diferente para consultas de emergência vs agendadas
+    if (appointment.isEmergency) {
+      // CONSULTAS DE EMERGÊNCIA: Cobrar após 5 minutos
+      if (duration >= 5) {
+        // Buscar informações do usuário para verificar plano e consultas restantes
+        const user = await storage.getUser(appointment.userId);
+        if (!user) {
+          throw new Error('Usuário não encontrado');
+        }
+
+        // Verificar se o usuário tem consultas de emergência disponíveis no plano
+        const hasEmergencyConsultations = user.emergencyConsultationsLeft && user.emergencyConsultationsLeft > 0;
+        const isPremiumOrUltra = user.subscriptionPlan && (user.subscriptionPlan.includes('premium') || user.subscriptionPlan.includes('ultra'));
+        
+        if (isPremiumOrUltra) {
+          // Planos premium/ultra têm consultas ilimitadas, não precisa cobrar
+          console.log(`Usuário com plano ${user.subscriptionPlan} - consulta de emergência gratuita`);
+          updateData.paymentStatus = 'free';
+          updateData.notes = 'Consulta de emergência gratuita (plano premium/ultra)';
+        } else if (hasEmergencyConsultations) {
+          // Descontar uma consulta de emergência do plano
+          await storage.updateUser(appointment.userId, {
+            emergencyConsultationsLeft: user.emergencyConsultationsLeft! - 1
+          });
+          console.log(`Descontada 1 consulta de emergência. Restantes: ${user.emergencyConsultationsLeft! - 1}`);
+          updateData.paymentStatus = 'free';
+          updateData.notes = 'Consulta de emergência descontada do plano';
+        } else {
+          // Plano gratuito/básico sem consultas restantes - cobrar valor integral
+          if (appointment.paymentIntentId && appointment.paymentStatus === 'authorized') {
+            try {
+              // Importar a função de captura
+              const { captureConsultationPayment: capture } = await import('../utils/stripe-payment');
+              
+              // Capturar o pagamento integral
+              const paymentIntent = await capture(appointment.paymentIntentId);
+              
+              updateData.paymentStatus = 'completed';
+              updateData.paymentCapturedAt = new Date();
+              
+              console.log(`Pagamento integral capturado para consulta de emergência #${appointmentId}`);
+            } catch (paymentError) {
+              console.error(`Erro ao capturar pagamento:`, paymentError);
+              updateData.notes = appointment.notes 
+                ? `${appointment.notes}\n\nErro ao capturar pagamento: ${paymentError}`
+                : `Erro ao capturar pagamento: ${paymentError}`;
+            }
+          }
+        }
+      } else {
+        // Consulta de emergência com menos de 5 minutos - não cobrar
+        if (appointment.paymentIntentId && appointment.paymentStatus === 'authorized') {
+          try {
+            await cancelConsultationPayment(appointment.paymentIntentId);
+            updateData.paymentStatus = 'cancelled';
+            console.log(`Pré-autorização cancelada para consulta de emergência #${appointmentId} (duração < 5 min)`);
+          } catch (paymentError) {
+            console.error(`Erro ao cancelar pré-autorização:`, paymentError);
+          }
+        }
+      }
+    } else {
+      // CONSULTAS AGENDADAS: A cobrança já foi feita 12h antes (implementar posteriormente)
+      // Por enquanto, apenas marcar como concluída
+      console.log(`Consulta agendada #${appointmentId} concluída. Pagamento já processado anteriormente.`);
+      updateData.paymentStatus = appointment.paymentStatus || 'completed';
+    }
+
+    await storage.updateAppointment(appointmentId, updateData);
+
+    console.log(`Consulta #${appointmentId} finalizada com sucesso`);
+
+    return res.json({
+      success: true,
+      message: 'Consulta finalizada com sucesso',
+      endedAt: new Date().toISOString(),
+      duration: duration,
+      paymentCaptured: duration >= 5 && appointment.paymentIntentId
+    });
+
+  } catch (error) {
+    console.error('Erro ao finalizar consulta:', error);
+    return res.status(500).json({
+      message: 'Erro ao finalizar consulta',
+      error: error instanceof Error ? error.message : 'Erro desconhecido'
+    });
+  }
+});
+
+/**
  * Endpoint para excluir consultas
  * DELETE /api/appointments/:id
  */

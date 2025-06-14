@@ -1381,7 +1381,7 @@ export class DatabaseStorage implements IStorage {
       .where(eq(partnerServices.isActive, true));
     
     // Buscar endereços para cada parceiro
-    const partnerIds = [...new Set(results.map(r => r.partner?.id).filter(Boolean))];
+    const partnerIds = [...new Set(results.map(r => r.partner?.id).filter(Boolean))] as number[];
     const addressesByPartner = new Map<number, PartnerAddress[]>();
     
     for (const partnerId of partnerIds) {
