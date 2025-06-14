@@ -159,44 +159,26 @@ export const PatientDashboard: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto">
       {/* Welcome card */}
-      <Card className="mb-6 overflow-hidden relative glass-card-subtle border-0">
-        {/* Decorative gradient elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-400/10 rounded-full filter blur-3xl transform translate-x-1/2 -translate-y-1/3"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-400/10 rounded-full filter blur-3xl transform -translate-x-1/2 translate-y-1/3"></div>
-        
-        <div className="md:flex items-center justify-between relative z-10">
-          <div className="p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-gray-800 leading-tight">
-              Olá, <span className="text-primary">{user?.fullName}</span>!
-            </h2>
-            <p className="mt-2 text-gray-600 max-w-xl">
-              Bem-vindo ao seu painel de saúde digital. Aqui você pode acessar todos os serviços integrados da CN Vidas para cuidar da sua saúde por completo.
-            </p>
-            <div className="mt-5 flex flex-wrap md:flex-nowrap gap-3">
-              <Link href="/telemedicine">
-                <Button className="inline-flex items-center bg-gradient-to-r from-primary to-primary/90 shadow-md hover:shadow-lg transition-all">
-                  <span className="material-icons mr-2 text-sm">videocam</span>
-                  Telemedicina
-                </Button>
-              </Link>
-              <Link href="/claims/new">
-                <Button variant="outline" className="inline-flex items-center border-primary/30 hover:bg-primary/10 text-primary transition-all">
-                  <span className="material-icons mr-2 text-sm">description</span>
-                  Novo Sinistro
-                </Button>
-              </Link>
+      <div className="mb-8 relative">
+        <div className="bg-gradient-to-r from-primary/5 via-primary/3 to-transparent rounded-2xl border border-primary/10 backdrop-blur-sm">
+          <div className="p-8 relative">
+            {/* Subtle decorative element */}
+            <div className="absolute top-4 right-4 w-20 h-20 bg-primary/5 rounded-full blur-2xl"></div>
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                <h1 className="text-3xl font-light text-gray-900">
+                  Olá, <span className="font-medium text-primary">{user?.fullName?.split(' ')[0]}</span>
+                </h1>
+              </div>
+              <p className="text-gray-600 font-light">
+                Seu painel de saúde digital
+              </p>
             </div>
           </div>
-          {/* Illustration on desktop */}
-          <div className="hidden md:flex items-center justify-center p-6 md:p-8 md:min-w-[280px]">
-            <img 
-              src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&h=200" 
-              alt="Ilustração médica" 
-              className="h-40 w-auto object-contain rounded-lg shadow-md" 
-            />
-          </div>
         </div>
-      </Card>
+      </div>
 
       {/* Status cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">

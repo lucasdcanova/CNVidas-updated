@@ -998,7 +998,7 @@ const Profile: React.FC = () => {
                           className="w-fit"
                         />
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className={user?.role === "admin" ? "grid grid-cols-1 md:grid-cols-2 gap-4" : ""}>
                         <FormField
                           control={patientForm.control}
                           name="fullName"
@@ -1023,29 +1023,26 @@ const Profile: React.FC = () => {
                           )}
                         />
                         
-                        <FormField
-                          control={patientForm.control}
-                          name="username"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Nome de Usuário</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  placeholder="seunome" 
-                                  disabled={true} // Sempre desabilitado para não-admins
-                                  className={user?.role !== "admin" ? "bg-muted cursor-not-allowed" : ""}
-                                  {...field} 
-                                />
-                              </FormControl>
-                              {user?.role !== "admin" && (
-                                <FormDescription className="text-xs">
-                                  Este campo não pode ser editado
-                                </FormDescription>
-                              )}
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                        {/* Campo username visível apenas para administradores */}
+                        {user?.role === "admin" && (
+                          <FormField
+                            control={patientForm.control}
+                            name="username"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Nome de Usuário</FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    placeholder="seunome" 
+                                    disabled={!isEditMode}
+                                    {...field} 
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        )}
                       </div>
                       
                       <FormField
