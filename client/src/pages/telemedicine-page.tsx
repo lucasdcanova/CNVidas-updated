@@ -445,7 +445,7 @@ export default function TelemedicinePage() {
           <Card className="mb-8 mt-4 overflow-hidden border-2 border-blue-500 shadow-xl bg-gradient-to-br from-blue-50 to-indigo-50">
             <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
               <div className="flex justify-between items-center">
-                <CardTitle className="flex items-center text-xl">
+                <CardTitle className="flex items-center text-xl text-white">
                   <CalendarIcon className="mr-3 h-6 w-6" />
                   Suas Próximas Consultas
                 </CardTitle>
