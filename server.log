@@ -11686,3 +11686,196 @@ Consulta de emergência iniciada: Paciente Lucas Dickel Canova (ID: 58) com Dr. 
 🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
 🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
 === ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /unread-count
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+✅ Notifications /unread-count - Contagem: 2
+Total de consultas encontradas para usuário 58: 3
+Consulta ID: 120, Status: waiting, Date: 2025-06-14T23:00:28.451Z
+Consulta ID: 121, Status: waiting, Date: 2025-06-14T23:04:20.184Z
+Consulta ID: 122, Status: waiting, Date: 2025-06-14T23:08:51.987Z
+Consultas após filtrar canceladas: 0
+Encontradas 0 consultas próximas
+Consultas retornadas: []
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Médico selecionado para emergência: {
+  doctorId: 4,
+  doctorUserId: 32,
+  doctorName: 'Lucas Dickel Canova',
+  availableForEmergency: true
+}
+🚀 Criando sala de emergência: emergency-58-1749943425165
+➡️ Criando sala emergency-58-1749943425165 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749943425165" já existe...
+Sala "emergency-58-1749943425165" não existe, será criada
+🆕 Criando nova sala "emergency-58-1749943425165" no Daily.co...
+Payload para criação da sala: {"name":"emergency-58-1749943425165","properties":{"start_audio_off":false,"start_video_off":false,"enable_chat":true,"enable_screenshare":true,"enable_knocking":false,"enable_network_ui":true,"enable_prejoin_ui":false,"exp":1749947025}}
+✅ Sala "emergency-58-1749943425165" criada com sucesso
+⏳ Aguardando primeira fase de propagação (5s)...
+🔍 Verificando se sala "emergency-58-1749943425165" já está acessível...
+✅ Sala "emergency-58-1749943425165" confirmada como acessível
+⏳ Aguardando propagação adicional da sala...
+Criando token para sala emergency-58-1749943425165
+Verificando/criando sala emergency-58-1749943425165 antes de gerar token
+➡️ Criando sala emergency-58-1749943425165 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749943425165" já existe...
+✅ Sala "emergency-58-1749943425165" já existe no Daily.co
+Sala emergency-58-1749943425165 verificada/criada com sucesso
+Solicitando token com propriedades: {
+  room_name: 'emergency-58-1749943425165',
+  user_id: '58',
+  user_name: 'Lucas Dickel Canova',
+  exp: 1749950634,
+  is_owner: false,
+  enable_screenshare: true,
+  start_video_off: false,
+  start_audio_off: false
+}
+Token simplificado criado com sucesso: eyJhbGciOiJIUzI...
+✅ Consulta de emergência criada: {
+  appointmentId: 123,
+  doctorId: 4,
+  userId: 58,
+  status: 'waiting',
+  isEmergency: true,
+  type: 'telemedicine'
+}
+Consulta de emergência iniciada: Paciente Lucas Dickel Canova (ID: 58) com Dr. Lucas Dickel Canova (ID: 4), Sala: emergency-58-1749943425165
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+📋 Consulta de emergência 123 consultada por paciente 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+Total de consultas encontradas para usuário 58: 4
+Consulta ID: 120, Status: waiting, Date: 2025-06-14T23:00:28.451Z
+Consulta ID: 121, Status: waiting, Date: 2025-06-14T23:04:20.184Z
+Consulta ID: 122, Status: waiting, Date: 2025-06-14T23:08:51.987Z
+Consulta ID: 123, Status: waiting, Date: 2025-06-14T23:23:55.072Z
+Consultas após filtrar canceladas: 0
+Encontradas 0 consultas próximas
+Consultas retornadas: []
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /unread-count
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Total de consultas encontradas para usuário 58: 4
+Consulta ID: 120, Status: waiting, Date: 2025-06-14T23:00:28.451Z
+Consulta ID: 121, Status: waiting, Date: 2025-06-14T23:04:20.184Z
+Consulta ID: 122, Status: waiting, Date: 2025-06-14T23:08:51.987Z
+Consulta ID: 123, Status: waiting, Date: 2025-06-14T23:23:55.072Z
+✅ Notifications /unread-count - Contagem: 2
+Consultas após filtrar canceladas: 0
+Encontradas 0 consultas próximas
+Consultas retornadas: []
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Médico selecionado para emergência: {
+  doctorId: 4,
+  doctorUserId: 32,
+  doctorName: 'Lucas Dickel Canova',
+  availableForEmergency: true
+}
+🚀 Criando sala de emergência: emergency-58-1749943483698
+➡️ Criando sala emergency-58-1749943483698 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749943483698" já existe...
+Sala "emergency-58-1749943483698" não existe, será criada
+🆕 Criando nova sala "emergency-58-1749943483698" no Daily.co...
+Payload para criação da sala: {"name":"emergency-58-1749943483698","properties":{"start_audio_off":false,"start_video_off":false,"enable_chat":true,"enable_screenshare":true,"enable_knocking":false,"enable_network_ui":true,"enable_prejoin_ui":false,"exp":1749947084}}
+✅ Sala "emergency-58-1749943483698" criada com sucesso
+⏳ Aguardando primeira fase de propagação (5s)...
+🔍 Verificando se sala "emergency-58-1749943483698" já está acessível...
+✅ Sala "emergency-58-1749943483698" confirmada como acessível
+⏳ Aguardando propagação adicional da sala...
+Criando token para sala emergency-58-1749943483698
+Verificando/criando sala emergency-58-1749943483698 antes de gerar token
+➡️ Criando sala emergency-58-1749943483698 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749943483698" já existe...
+✅ Sala "emergency-58-1749943483698" já existe no Daily.co
+Sala emergency-58-1749943483698 verificada/criada com sucesso
+Solicitando token com propriedades: {
+  room_name: 'emergency-58-1749943483698',
+  user_id: '58',
+  user_name: 'Lucas Dickel Canova',
+  exp: 1749950693,
+  is_owner: false,
+  enable_screenshare: true,
+  start_video_off: false,
+  start_audio_off: false
+}
+Token simplificado criado com sucesso: eyJhbGciOiJIUzI...
+✅ Consulta de emergência criada: {
+  appointmentId: 124,
+  doctorId: 4,
+  userId: 58,
+  status: 'waiting',
+  isEmergency: true,
+  type: 'telemedicine'
+}
+Consulta de emergência iniciada: Paciente Lucas Dickel Canova (ID: 58) com Dr. Lucas Dickel Canova (ID: 4), Sala: emergency-58-1749943483698
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+📋 Consulta de emergência 124 consultada por paciente 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '24ca1cc5-2aab-4f55-8d40-f0e05d93937f5035c1',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5OTMyNzg0LCJleHAiOjE3NTA1Mzc1ODR9.gg84LWcogC4d3QLLps9FIXHJHgQDeh4s_RS8IvVOVCY',
+  __stripe_sid: '606bb664-1012-4279-944a-73b3aa12af22c10f5a'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749932784,
+  exp: 1750537584
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /recent-activities
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Activities - Buscando atividades recentes do usuário ID: 58
+✅ Activities - Atividades encontradas: 5
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===

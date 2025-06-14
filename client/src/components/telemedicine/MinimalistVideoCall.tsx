@@ -203,31 +203,87 @@ export default function MinimalistVideoCall({
     
     initializeComponent();
     
-    // Adicionar estilos globais para esconder controles do Daily
+    // Observador para remover controles do Daily assim que aparecerem
+    const observer = new MutationObserver(() => {
+      // Remover controles do Daily.co
+      const controls = document.querySelectorAll(
+        '[class*="controls"], [class*="button"], [class*="toolbar"], button:not(.cnvidas-control)'
+      );
+      controls.forEach(el => {
+        if (!el.classList.contains('cnvidas-control')) {
+          el.style.display = 'none';
+          el.style.visibility = 'hidden';
+        }
+      });
+    });
+    
+    // Observar mudanças no DOM
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+    
+    // Adicionar estilos globais para esconder TODOS os controles do Daily
     const style = document.createElement('style');
     style.textContent = `
-      /* Esconder todos os controles do Daily.co */
-      .daily-video-toplevel-div .daily-video-chrome,
-      .daily-video-toplevel-div .daily-prejoin-chrome,
-      .daily-video-toplevel-div [class*="controls"],
-      .daily-video-toplevel-div [class*="topbar"],
-      .daily-video-toplevel-div [class*="participant-label"],
-      .daily-video-toplevel-div [class*="network-info"],
-      .daily-video-toplevel-div [class*="screenshare-controls"] {
+      /* Esconder ABSOLUTAMENTE TODOS os controles do Daily.co */
+      #daily-video-wrapper .controls-button,
+      #daily-video-wrapper .controls-button-container,
+      #daily-video-wrapper .bottom-controls-container,
+      #daily-video-wrapper .top-toolbar-container,
+      #daily-video-wrapper .participant-label,
+      #daily-video-wrapper .network-info-container,
+      #daily-video-wrapper .screenshare-controls-container,
+      #daily-video-wrapper [class*="DailyVideoControlsContainer"],
+      #daily-video-wrapper [class*="ControlsButton"],
+      #daily-video-wrapper [class*="Toolbar"],
+      #daily-video-wrapper [class*="controls"],
+      #daily-video-wrapper [class*="button"],
+      #daily-video-wrapper [class*="Button"],
+      #daily-video-wrapper [aria-label="Mute mic"],
+      #daily-video-wrapper [aria-label="Turn off cam"],
+      #daily-video-wrapper [aria-label="Leave call"],
+      #daily-video-wrapper [aria-label="Settings"],
+      #daily-video-wrapper [aria-label="More options"],
+      .daily-video-chrome,
+      .daily-prejoin-chrome,
+      .controls-menu,
+      .controls-button-container,
+      .bottom-controls-container {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+      
+      /* Esconder qualquer SVG de controle */
+      #daily-video-wrapper svg[class*="control"],
+      #daily-video-wrapper svg[class*="button"],
+      #daily-video-wrapper button {
         display: none !important;
       }
       
-      /* Forçar vídeo em tela cheia */
-      .daily-video-toplevel-div video {
+      /* Forçar vídeo em tela cheia sem bordas */
+      #daily-video-wrapper,
+      #daily-video-wrapper video {
         object-fit: cover !important;
         width: 100% !important;
         height: 100% !important;
+        border: none !important;
+        outline: none !important;
+      }
+      
+      /* Remover qualquer padding ou margem */
+      #daily-video-wrapper > div {
+        padding: 0 !important;
+        margin: 0 !important;
       }
     `;
     document.head.appendChild(style);
     
     return () => {
       setIsMounted(false);
+      observer.disconnect();
       document.head.removeChild(style);
     };
   }, []);
@@ -349,37 +405,58 @@ export default function MinimalistVideoCall({
           callFrame.setLocalVideo(isVideoEnabled);
           callFrame.setLocalAudio(isAudioEnabled);
           
-          // Configurar interface após conectar
-          setTimeout(() => {
-            if (callFrame) {
-              try {
-                // Ocultar controles do Daily
-                const iframe = videoContainerRef.current?.querySelector('iframe');
-                if (iframe) {
-                  // Aplicar CSS para esconder elementos desnecessários
-                  const style = document.createElement('style');
-                  style.textContent = `
-                    .daily-video-call-controls { display: none !important; }
-                    .daily-video-call-topbar { display: none !important; }
-                    .daily-video-participant-label { display: none !important; }
-                    .daily-video-local-cam-tile { 
-                      position: fixed !important;
-                      bottom: 20px !important;
-                      right: 20px !important;
-                      width: 100px !important;
-                      height: 150px !important;
-                      border-radius: 12px !important;
-                      z-index: 10 !important;
+          // Configurar interface após conectar e manter ocultos os controles
+          const hideControlsInterval = setInterval(() => {
+            try {
+              const iframe = videoContainerRef.current?.querySelector('iframe');
+              if (iframe && iframe.contentDocument) {
+                // Injetar CSS diretamente no iframe
+                let styleElement = iframe.contentDocument.getElementById('cnvidas-custom-style');
+                if (!styleElement) {
+                  styleElement = iframe.contentDocument.createElement('style');
+                  styleElement.id = 'cnvidas-custom-style';
+                  styleElement.textContent = `
+                    /* Esconder TODOS os controles */
+                    [class*="controls"], [class*="Controls"],
+                    [class*="toolbar"], [class*="Toolbar"],
+                    [class*="button"], [class*="Button"],
+                    [class*="participant-label"],
+                    [class*="network"],
+                    [class*="menu"],
+                    .controls-button,
+                    .controls-button-container,
+                    .bottom-controls-container,
+                    .top-toolbar-container,
+                    button {
+                      display: none !important;
+                      visibility: hidden !important;
+                    }
+                    
+                    /* Vídeo em tela cheia */
+                    video {
+                      width: 100% !important;
+                      height: 100% !important;
+                      object-fit: cover !important;
                     }
                   `;
-                  iframe.contentDocument?.head?.appendChild(style);
+                  iframe.contentDocument.head.appendChild(styleElement);
                 }
-                console.log('✅ Interface customizada aplicada');
-              } catch (error) {
-                console.log('Não foi possível customizar a interface:', error);
+                
+                // Também ocultar via JavaScript
+                const buttons = iframe.contentDocument.querySelectorAll('button, [class*="control"], [class*="button"]');
+                buttons.forEach(btn => {
+                  btn.style.display = 'none';
+                  btn.style.visibility = 'hidden';
+                });
               }
+            } catch (error) {
+              // Ignorar erros de cross-origin
             }
-          }, 2000);
+          }, 500);
+          
+          // Parar o intervalo quando sair da chamada
+          const stopInterval = () => clearInterval(hideControlsInterval);
+          callFrame.on('left-meeting', stopInterval);
         })
         .on('left-meeting', () => {
           console.log('👋 Desconectado da sala');
@@ -570,7 +647,7 @@ export default function MinimalistVideoCall({
       {isCallActive && (
         <>
           {/* Header minimalista estilo FaceTime */}
-          <div className="absolute top-0 left-0 right-0 p-6 z-20">
+          <div className="absolute top-0 left-0 right-0 p-6" style={{ zIndex: 9999 }}>
             <div className="flex justify-between items-center">
               {/* Nome do participante e tempo */}
               <div className="bg-black/40 backdrop-blur-xl rounded-full px-4 py-2">
@@ -594,12 +671,13 @@ export default function MinimalistVideoCall({
           </div>
 
           {/* Controles estilo FaceTime - flutuantes na parte inferior */}
-          <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent z-30">
+          <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent" style={{ zIndex: 9999 }}>
             <div className="flex items-center justify-center gap-4">
               {/* Botão de Mudo */}
               <button
                 onClick={toggleAudio}
                 className={cn(
+                  "cnvidas-control",
                   "relative rounded-full transition-all duration-200",
                   "w-14 h-14 flex items-center justify-center",
                   "backdrop-blur-xl shadow-lg",
@@ -620,6 +698,7 @@ export default function MinimalistVideoCall({
               <button
                 onClick={leaveCall}
                 className={cn(
+                  "cnvidas-control",
                   "relative rounded-full transition-all duration-200",
                   "w-16 h-16 flex items-center justify-center mx-4",
                   "bg-red-500 hover:bg-red-600 shadow-xl",
@@ -634,6 +713,7 @@ export default function MinimalistVideoCall({
               <button
                 onClick={toggleVideo}
                 className={cn(
+                  "cnvidas-control",
                   "relative rounded-full transition-all duration-200",
                   "w-14 h-14 flex items-center justify-center",
                   "backdrop-blur-xl shadow-lg",
