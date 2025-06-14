@@ -8,6 +8,105 @@ import RecordingControls from './RecordingControls';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
+// Gerenciamento global de instâncias do Daily
+declare global {
+  interface Window {
+    __dailyInstances?: Set<any>;
+    __dailyCurrentInstance?: any;
+    recordingControlsRef?: any;
+  }
+}
+
+// Função para forçar limpeza de todas as instâncias
+const forceCleanupAllDailyInstances = async () => {
+  console.log('🧹 Forçando limpeza completa de todas as instâncias Daily...');
+  
+  // Limpar instâncias registradas
+  if (window.__dailyInstances) {
+    const instances = Array.from(window.__dailyInstances);
+    for (const instance of instances) {
+      try {
+        if (instance && typeof instance.destroy === 'function') {
+          await instance.destroy();
+        }
+      } catch (error) {
+        console.warn('Erro ao limpar instância registrada:', error);
+      }
+    }
+    window.__dailyInstances.clear();
+  }
+  
+  // Tentar limpar instância global do Daily
+  try {
+    if (typeof DailyIframe !== 'undefined' && DailyIframe.getCallInstance) {
+      const globalInstance = DailyIframe.getCallInstance();
+      if (globalInstance) {
+        console.log('🧹 Limpando instância global do Daily...');
+        try {
+          await globalInstance.leave();
+        } catch (e) {
+          // Ignorar erro se já saiu
+        }
+        await globalInstance.destroy();
+      }
+    }
+  } catch (error) {
+    console.warn('Erro ao limpar instância global:', error);
+  }
+  
+  // Limpar referência atual
+  if (window.__dailyCurrentInstance) {
+    try {
+      await window.__dailyCurrentInstance.destroy();
+    } catch (error) {
+      console.warn('Erro ao limpar instância atual:', error);
+    }
+    window.__dailyCurrentInstance = null;
+  }
+  
+  // Aguardar um pouco para garantir limpeza completa
+  await new Promise(resolve => setTimeout(resolve, 1000));
+};
+
+// Função para limpar todas as instâncias globais
+const cleanupAllDailyInstances = async () => {
+  if (!window.__dailyInstances) {
+    window.__dailyInstances = new Set();
+    return;
+  }
+  
+  const instances = Array.from(window.__dailyInstances);
+  for (const instance of instances) {
+    try {
+      if (instance && typeof instance.destroy === 'function') {
+        await instance.destroy();
+      }
+    } catch (error) {
+      console.warn('Erro ao limpar instância:', error);
+    }
+  }
+  window.__dailyInstances.clear();
+};
+
+// Função para registrar uma nova instância
+const registerDailyInstance = (instance: any) => {
+  if (!window.__dailyInstances) {
+    window.__dailyInstances = new Set();
+  }
+  window.__dailyInstances.add(instance);
+  window.__dailyCurrentInstance = instance;
+};
+
+// Função para desregistrar uma instância
+const unregisterDailyInstance = (instance: any) => {
+  if (window.__dailyInstances) {
+    window.__dailyInstances.delete(instance);
+  }
+  if (window.__dailyCurrentInstance === instance) {
+    window.__dailyCurrentInstance = null;
+  }
+};
+
 interface MinimalistVideoCallProps {
   roomUrl?: string;
   token?: string;
@@ -88,9 +187,22 @@ export default function MinimalistVideoCall({
     enabled: isDoctor
   });
 
-  // Marcar como montado
+  // Marcar como montado e limpar instâncias conflitantes
   useEffect(() => {
     setIsMounted(true);
+    
+    // Limpar todas as instâncias existentes do Daily ao montar
+    const initializeComponent = async () => {
+      try {
+        console.log('🧹 Inicializando componente de videochamada...');
+        await forceCleanupAllDailyInstances();
+      } catch (error) {
+        console.log('ℹ️ Erro ao limpar instâncias existentes:', error);
+      }
+    };
+    
+    initializeComponent();
+    
     return () => {
       setIsMounted(false);
     };
@@ -139,24 +251,26 @@ export default function MinimalistVideoCall({
 
   // Função para entrar na chamada
   const joinCall = useCallback(async () => {
-    if (!roomUrl || !videoContainerRef.current || isJoiningRef.current) {
+    if (!roomUrl || !videoContainerRef.current || isJoiningRef.current || isCallActive) {
       console.log('❌ Condições não atendidas para entrar na chamada:', {
         roomUrl: !!roomUrl,
         container: !!videoContainerRef.current,
-        isJoining: isJoiningRef.current
+        isJoining: isJoiningRef.current,
+        isCallActive: isCallActive
       });
       return;
     }
 
-    // Limpar qualquer instância existente antes de criar uma nova
-    if (callFrameRef.current) {
-      console.log('🧹 Limpando instância anterior do DailyIframe...');
-      try {
-        await callFrameRef.current.destroy();
+    // Forçar limpeza completa antes de criar nova instância
+    console.log('🧹 Forçando limpeza completa antes de criar nova instância...');
+    try {
+      await forceCleanupAllDailyInstances();
+      if (callFrameRef.current) {
+        unregisterDailyInstance(callFrameRef.current);
         callFrameRef.current = null;
-      } catch (error) {
-        console.error('Erro ao destruir instância anterior:', error);
       }
+    } catch (error) {
+      console.error('Erro ao limpar instâncias:', error);
     }
 
     isJoiningRef.current = true;
@@ -166,7 +280,19 @@ export default function MinimalistVideoCall({
     try {
       console.log('🎬 Iniciando videochamada minimalista...');
       
-      // Criar call frame com configuração PIP fixa
+      // Verificação final antes de criar nova instância
+      try {
+        const existingInstance = DailyIframe.getCallInstance();
+        if (existingInstance) {
+          console.log('⚠️ Ainda existe uma instância ativa, forçando destruição...');
+          await existingInstance.destroy();
+          await new Promise(resolve => setTimeout(resolve, 500));
+        }
+      } catch (error) {
+        console.log('✅ Nenhuma instância ativa encontrada');
+      }
+      
+      // Criar call frame com configuração estilo FaceTime
       const callFrame = DailyIframe.createFrame(videoContainerRef.current, {
         iframeStyle: {
           position: 'absolute',
@@ -176,41 +302,36 @@ export default function MinimalistVideoCall({
           height: '100%',
           border: 'none',
           borderRadius: '0',
-          zIndex: '1'
+          zIndex: 1
         },
         showLeaveButton: false,
         showFullscreenButton: false,
         showLocalVideo: true,
         showParticipantsBar: false,
         showUserNameChangeUI: false,
-        activeSpeakerMode: true,
-        // Configuração PIP fixa - vídeo local sempre no canto
+        showScreenShareButton: false,
+        showRecordingButton: false,
+        showSettingsButton: false,
+        showChatButton: false,
+        showPipButton: false,
         layout: 'custom-v1',
         customLayout: {
           preset: 'pip',
+          aspectRatio: 9 / 16, // Vídeo vertical (retrato)
           max_cam_streams: 2,
           pip: {
-            cam_aside: true,
-            cam_position: 'bottom-right'
-          }
-        },
-        theme: {
-          colors: {
-            accent: '#3B82F6',
-            accentText: '#FFFFFF',
-            background: '#000000',
-            backgroundAccent: '#1F2937',
-            baseText: '#FFFFFF',
-            border: '#374151',
-            mainAreaBg: '#000000',
-            mainAreaBgAccent: '#111827',
-            mainAreaText: '#FFFFFF',
-            supportiveText: '#9CA3AF'
+            position: 'bottom-right',
+            corner_radius: 24,
+            width: 120,
+            edge_margin: 20
           }
         }
       });
 
       callFrameRef.current = callFrame;
+      
+      // Registrar a nova instância no sistema global
+      registerDailyInstance(callFrame);
 
       // Configurar eventos
       callFrame
@@ -224,6 +345,25 @@ export default function MinimalistVideoCall({
           // Configurar layout PIP após entrar
           callFrame.setLocalVideo(isVideoEnabled);
           callFrame.setLocalAudio(isAudioEnabled);
+          
+          // Configurar layout minimalista tipo FaceTime
+          setTimeout(() => {
+            if (callFrame) {
+              // Forçar layout vertical com PIP
+              callFrame.updateCustomLayout({
+                preset: 'pip',
+                aspectRatio: 9 / 16,
+                max_cam_streams: 2,
+                pip: {
+                  position: 'bottom-right',
+                  corner_radius: 24,
+                  width: 100,
+                  edge_margin: 16
+                }
+              });
+              console.log('✅ Layout FaceTime configurado');
+            }
+          }, 1000);
         })
         .on('left-meeting', () => {
           console.log('👋 Desconectado da sala');
@@ -305,14 +445,31 @@ export default function MinimalistVideoCall({
   }, [roomUrl, token, userName, isVideoEnabled, isAudioEnabled, onJoinCall, onLeaveCall, onParticipantJoined, onParticipantLeft]);
 
   // Função para sair da chamada
-  const leaveCall = useCallback(() => {
-    console.log('📞 Encerrando videochamada...');
+  const leaveCall = useCallback(async () => {
+    console.log('🔴 Encerrando videochamada...');
     if (callFrameRef.current) {
-      callFrameRef.current.leave();
-    }
-    // Disparar evento para parar gravação automática
-    if (window.recordingControlsRef) {
-      window.recordingControlsRef.stopRecording();
+      try {
+        // Disparar evento para parar gravação automática
+        if (window.recordingControlsRef) {
+          window.recordingControlsRef.stopRecording();
+        }
+        
+        // Sair da reunião
+        await callFrameRef.current.leave();
+        
+        // Desregistrar e destruir a instância
+        unregisterDailyInstance(callFrameRef.current);
+        await callFrameRef.current.destroy();
+        callFrameRef.current = null;
+        isJoiningRef.current = false;
+      } catch (error) {
+        console.error('Erro ao sair da chamada:', error);
+        if (callFrameRef.current) {
+          unregisterDailyInstance(callFrameRef.current);
+        }
+        callFrameRef.current = null;
+        isJoiningRef.current = false;
+      }
     }
   }, []);
 
@@ -339,138 +496,145 @@ export default function MinimalistVideoCall({
     if (roomUrl && !isCallActive && !isConnecting && isMounted && !connectionError && !isJoiningRef.current) {
       console.log('🚀 Condições atendidas para auto-iniciar videochamada');
       
-      // Aguardar um tempo para garantir que a sala esteja propagada
+      // Aguardar um tempo maior para garantir que não há conflitos
       const timer = setTimeout(() => {
-        console.log('🎬 Auto-iniciando videochamada após delay de segurança');
-        joinCall();
-      }, 8000);
+        if (!isCallActive && !isConnecting && !isJoiningRef.current) {
+          console.log('🎬 Auto-iniciando videochamada após delay de segurança');
+          joinCall();
+        }
+      }, 5000);
       
       return () => clearTimeout(timer);
     }
-  }, [roomUrl, isCallActive, isConnecting, isMounted, connectionError]);
+  }, [roomUrl, isCallActive, isConnecting, isMounted, connectionError, joinCall]);
 
   // Limpar ao desmontar
   useEffect(() => {
     return () => {
       if (callFrameRef.current) {
         try {
-          callFrameRef.current.leave();
+          console.log('🧹 Limpando DailyIframe ao desmontar componente...');
+          // Desregistrar a instância
+          unregisterDailyInstance(callFrameRef.current);
+          // Primeiro sair da reunião
+          if (callFrameRef.current.meetingState() !== 'left-meeting') {
+            callFrameRef.current.leave();
+          }
+          // Depois destruir a instância
           callFrameRef.current.destroy();
           callFrameRef.current = null;
         } catch (error) {
           console.error('Erro ao limpar DailyIframe:', error);
+          callFrameRef.current = null;
         }
       }
+      // Resetar flags
+      isJoiningRef.current = false;
     };
   }, []);
 
   return (
-    <div className="fixed inset-0 w-full h-full bg-black overflow-hidden">
-      {/* Container de vídeo - PIP fixo */}
-      <div
-        ref={videoContainerRef}
-        className="absolute inset-0 bg-black"
-        style={{ 
-          width: '100%', 
-          height: '100%',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          zIndex: 1
-        }}
-      />
+    <div className="fixed inset-0 w-full h-full bg-black overflow-hidden flex items-center justify-center">
+      {/* Container de vídeo - Formato vertical estilo FaceTime */}
+      <div className="relative w-full h-full max-w-md">
+        <div
+          ref={videoContainerRef}
+          className="absolute inset-0 bg-black"
+          style={{ 
+            width: '100%', 
+            height: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            zIndex: 1
+          }}
+        />
+      </div>
 
       {/* Overlay com informações - sempre visível quando em chamada */}
       {isCallActive && (
         <>
-          {/* Header com informações da chamada */}
-          <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/80 via-black/40 to-transparent z-20">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-white text-lg font-medium">
-                  {isDoctor ? 'Consulta de Emergência' : `Dr. ${participants[0]?.user_name || 'Médico'}`}
-                </h3>
-                <p className="text-white/70 text-sm">
+          {/* Header minimalista estilo FaceTime */}
+          <div className="absolute top-0 left-0 right-0 p-6 z-20">
+            <div className="flex justify-between items-center">
+              {/* Nome do participante e tempo */}
+              <div className="bg-black/40 backdrop-blur-xl rounded-full px-4 py-2">
+                <p className="text-white text-sm font-medium">
                   {formatDuration(callDuration)}
                 </p>
               </div>
-              <div className="flex flex-col items-end gap-2">
-                {participants.length > 0 && (
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-white/70 text-sm">
-                      {participants.length} {participants.length === 1 ? 'participante' : 'participantes'}
-                    </span>
-                  </div>
-                )}
-                {/* Controles de gravação - apenas para médicos */}
-                {isDoctor && enableRecording && appointmentId && (
+              
+              {/* Indicador de gravação para médicos */}
+              {isDoctor && enableRecording && appointmentId && (
+                <div className="bg-black/40 backdrop-blur-xl rounded-full">
                   <RecordingControls
                     appointmentId={appointmentId}
-                    className="bg-black/40 backdrop-blur-sm rounded-lg p-2"
+                    className="px-4 py-2"
                     autoStart={shouldAutoRecord()}
                     patientConsent={true}
                   />
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Controles fixos na parte inferior */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center justify-center gap-6">
-            {/* Botão de Áudio */}
-            <button
-              onClick={toggleAudio}
-              className={cn(
-                "relative rounded-full transition-all duration-200 backdrop-blur-md",
-                "w-16 h-16 flex items-center justify-center",
-                "shadow-lg hover:shadow-xl transform hover:scale-105",
-                isAudioEnabled 
-                  ? "bg-white/20 hover:bg-white/30 border border-white/20" 
-                  : "bg-red-500/90 hover:bg-red-600 border border-red-500"
-              )}
-              aria-label={isAudioEnabled ? "Desativar microfone" : "Ativar microfone"}
-            >
-              {isAudioEnabled ? (
-                <Mic className="w-7 h-7 text-white" />
-              ) : (
-                <MicOff className="w-7 h-7 text-white" />
-              )}
-            </button>
+          {/* Controles estilo FaceTime - flutuantes na parte inferior */}
+          <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent z-30">
+            <div className="flex items-center justify-center gap-4">
+              {/* Botão de Mudo */}
+              <button
+                onClick={toggleAudio}
+                className={cn(
+                  "relative rounded-full transition-all duration-200",
+                  "w-14 h-14 flex items-center justify-center",
+                  "backdrop-blur-xl shadow-lg",
+                  isAudioEnabled 
+                    ? "bg-white/30 hover:bg-white/40 text-white" 
+                    : "bg-white text-black"
+                )}
+                aria-label={isAudioEnabled ? "Silenciar" : "Ativar som"}
+              >
+                {isAudioEnabled ? (
+                  <Mic className="w-6 h-6" />
+                ) : (
+                  <MicOff className="w-6 h-6" />
+                )}
+              </button>
 
-            {/* Botão de Vídeo */}
-            <button
-              onClick={toggleVideo}
-              className={cn(
-                "relative rounded-full transition-all duration-200 backdrop-blur-md",
-                "w-16 h-16 flex items-center justify-center",
-                "shadow-lg hover:shadow-xl transform hover:scale-105",
-                isVideoEnabled 
-                  ? "bg-white/20 hover:bg-white/30 border border-white/20" 
-                  : "bg-red-500/90 hover:bg-red-600 border border-red-500"
-              )}
-              aria-label={isVideoEnabled ? "Desativar câmera" : "Ativar câmera"}
-            >
-              {isVideoEnabled ? (
-                <Video className="w-7 h-7 text-white" />
-              ) : (
-                <VideoOff className="w-7 h-7 text-white" />
-              )}
-            </button>
+              {/* Botão de Encerrar - Central e maior */}
+              <button
+                onClick={leaveCall}
+                className={cn(
+                  "relative rounded-full transition-all duration-200",
+                  "w-16 h-16 flex items-center justify-center mx-4",
+                  "bg-red-500 hover:bg-red-600 shadow-xl",
+                  "transform hover:scale-105 active:scale-95"
+                )}
+                aria-label="Encerrar"
+              >
+                <Phone className="w-7 h-7 text-white rotate-[135deg]" />
+              </button>
 
-            {/* Botão de Desligar - Maior e mais destacado */}
-            <button
-              onClick={leaveCall}
-              className={cn(
-                "relative rounded-full transition-all duration-200",
-                "w-20 h-20 flex items-center justify-center",
-                "bg-red-600 hover:bg-red-700 shadow-xl hover:shadow-2xl",
-                "transform hover:scale-105 active:scale-95"
-              )}
-              aria-label="Encerrar chamada"
-            >
-              <Phone className="w-8 h-8 text-white rotate-[135deg]" />
-            </button>
+              {/* Botão de Câmera */}
+              <button
+                onClick={toggleVideo}
+                className={cn(
+                  "relative rounded-full transition-all duration-200",
+                  "w-14 h-14 flex items-center justify-center",
+                  "backdrop-blur-xl shadow-lg",
+                  isVideoEnabled 
+                    ? "bg-white/30 hover:bg-white/40 text-white" 
+                    : "bg-white text-black"
+                )}
+                aria-label={isVideoEnabled ? "Desativar câmera" : "Ativar câmera"}
+              >
+                {isVideoEnabled ? (
+                  <Video className="w-6 h-6" />
+                ) : (
+                  <VideoOff className="w-6 h-6" />
+                )}
+              </button>
+            </div>
           </div>
         </>
       )}
