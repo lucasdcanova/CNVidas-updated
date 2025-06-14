@@ -160,21 +160,27 @@ export const PatientDashboard: React.FC = () => {
     <div className="max-w-7xl mx-auto">
       {/* Welcome card */}
       <div className="mb-8 relative">
-        <div className="bg-gradient-to-r from-primary/5 via-primary/3 to-transparent rounded-2xl border border-primary/10 backdrop-blur-sm">
-          <div className="p-8 relative">
-            {/* Subtle decorative element */}
-            <div className="absolute top-4 right-4 w-20 h-20 bg-primary/5 rounded-full blur-2xl"></div>
+        <div className="bg-gradient-to-br from-white via-primary/[0.02] to-primary/[0.08] rounded-3xl border border-gray-100/60 shadow-sm hover:shadow-md transition-all duration-300">
+          <div className="p-10 relative overflow-hidden">
+            {/* Geometric decorative elements */}
+            <div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-primary/10 to-primary/5 rounded-full blur-xl"></div>
+            <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-tr from-blue-400/5 to-purple-400/5 rounded-full blur-lg"></div>
             
             <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-                <h1 className="text-3xl font-light text-gray-900">
-                  Olá, <span className="font-medium text-primary">{user?.fullName?.split(' ')[0]}</span>
-                </h1>
+              <div className="space-y-3">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                    <div className="w-1 h-1 bg-primary/60 rounded-full animate-pulse"></div>
+                  </div>
+                  <h1 className="text-2xl font-normal text-gray-900 tracking-tight">
+                    Olá, <span className="font-semibold text-primary">{user?.fullName}</span>
+                  </h1>
+                </div>
+                <p className="text-gray-600 font-light text-lg leading-relaxed ml-7">
+                  Bem-vindo ao CN Vidas, sua plataforma de saúde digital
+                </p>
               </div>
-              <p className="text-gray-600 font-light">
-                Seu painel de saúde digital
-              </p>
             </div>
           </div>
         </div>
