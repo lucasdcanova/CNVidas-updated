@@ -68,6 +68,10 @@ const Services: React.FC = () => {
       
       const url = `/api/services${params.toString() ? `?${params.toString()}` : ''}`;
       
+      console.log('[Services] Fetching URL:', url);
+      console.log('[Services] User city:', user?.city);
+      console.log('[Services] Params:', params.toString());
+      
       const response = await fetch(url, {
         headers: {
           'X-Auth-Token': localStorage.getItem('authToken') || '',

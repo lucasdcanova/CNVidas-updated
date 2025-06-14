@@ -20,30 +20,51 @@ Registrando checkoutTrackingRouter em /api
 Registrando rotas públicas de médicos em /api/doctors
 Registrando rotas públicas de serviços em /api/services
 Registrando legalDocumentsRouter em /api/legal-documents
-Conexão com o banco de dados testada com sucesso: 2025-06-14 00:10:42.828636+00
+Conexão com o banco de dados testada com sucesso: 2025-06-14 00:11:54.854904+00
 Session table checked/created successfully
-9:10:43 PM [server] Servidor rodando na porta 8080
+9:11:54 PM [server] Servidor rodando na porta 8080
 Acesse: http://localhost:8080
 Ou: http://127.0.0.1:8080
 Configuração de email carregada. Serviço de email disponível.
+[API] userCity raw: TrÃªs Passos
+[API] userCity encoded: Tr%C3%83%C2%AAs%20Passos
+[API] userCity decoded: TrÃªs Passos
 Session table checked/created successfully
 [Storage] Filtrando 12 serviços para cidade: TrÃªs Passos (raio: 50km)
-[Storage] Serviço "Vacinas" sem cidade do parceiro - excluído
-[Storage] Serviço "Serviços Hospitalares" sem cidade do parceiro - excluído
-[Storage] Serviço "Atendimento psicológico" - Cidade: Três Passos - Distância: nullkm
-[Storage] Serviço "Medicamentos éticos ou de referência" - Cidade: Crissiumal - Distância: nullkm
-[Storage] Serviço "Consulta com Dr. Lucas Canova" - Cidade: Três Passos - Distância: nullkm
-[Storage] Serviço "Exames laboratoriais" sem cidade do parceiro - excluído
-[Storage] Serviço "Medicamentos genéricos ou similares" - Cidade: Crissiumal - Distância: nullkm
-[Storage] Serviço "Suplementos, perfumaria, ortopédicos e manipulados" - Cidade: Três Passos - Distância: nullkm
-[Storage] Serviço "Vacinas" - Cidade: Três Passos - Distância: nullkm
-[Storage] Serviço "Medicamentos genéricos ou similares" - Cidade: Três Passos - Distância: nullkm
-[Storage] Serviço "Medicamentos éticos ou referência" - Cidade: Três Passos - Distância: nullkm
-[Storage] Serviço "Exames laboratoriais" sem cidade do parceiro - excluído
 [Storage] Serviços filtrados: 0
 [API] Total de serviços filtrados: 0
 [API] Serviços filtrados para cidade: TrÃªs Passos
-9:11:15 PM [tsx] change in ./server/routes/index.ts Restarting...
+[API] userCity raw: Três Passos
+[API] userCity encoded: Tr%C3%AAs%20Passos
+[API] userCity decoded: Três Passos
+[Storage] Filtrando 12 serviços para cidade: Três Passos (raio: 50km)
+[Storage] Serviços filtrados: 8
+[API] Total de serviços filtrados: 8
+[API] Serviços filtrados para cidade: Três Passos
+[API] Exemplo de serviço: {
+  id: 6,
+  name: 'Atendimento psicológico',
+  isNational: false,
+  distance: 0,
+  serviceImage: 'Tem imagem',
+  partner: 'Tem parceiro'
+}
+[API] userCity raw: Três Passos
+[API] userCity encoded: Tr%C3%AAs%20Passos
+[API] userCity decoded: Três Passos
+[Storage] Filtrando 12 serviços para cidade: Três Passos (raio: 50km)
+[Storage] Serviços filtrados: 8
+[API] Total de serviços filtrados: 8
+[API] Serviços filtrados para cidade: Três Passos
+[API] Exemplo de serviço: {
+  id: 6,
+  name: 'Atendimento psicológico',
+  isNational: false,
+  distance: 0,
+  serviceImage: 'Tem imagem',
+  partner: 'Tem parceiro'
+}
+9:12:55 PM [tsx] change in ./server/routes/index.ts Restarting...
 cAuthRouter carregado - rotas disponíveis:
 - POST /register
 - POST /login
@@ -62,9 +83,83 @@ Registrando checkoutTrackingRouter em /api
 Registrando rotas públicas de médicos em /api/doctors
 Registrando rotas públicas de serviços em /api/services
 Registrando legalDocumentsRouter em /api/legal-documents
-Conexão com o banco de dados testada com sucesso: 2025-06-14 00:11:16.749923+00
+Conexão com o banco de dados testada com sucesso: 2025-06-14 00:12:57.095953+00
 Session table checked/created successfully
-9:11:16 PM [server] Servidor rodando na porta 8080
+9:12:57 PM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+Configuração de email carregada. Serviço de email disponível.
+9:13:06 PM [tsx] change in ./server/storage.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-14 00:13:07.232979+00
+Session table checked/created successfully
+9:13:07 PM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+Configuração de email carregada. Serviço de email disponível.
+9:13:11 PM [tsx] change in ./server/storage.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-14 00:13:12.540561+00
+Session table checked/created successfully
+9:13:12 PM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+9:13:12 PM [tsx] change in ./server/storage.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Conexão com o banco de dados testada com sucesso: 2025-06-14 00:13:13.85682+00
+Session table checked/created successfully
+9:13:13 PM [server] Servidor rodando na porta 8080
 Acesse: http://localhost:8080
 Ou: http://127.0.0.1:8080
 Configuração de email carregada. Serviço de email disponível.

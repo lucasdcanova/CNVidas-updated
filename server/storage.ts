@@ -1373,17 +1373,14 @@ export class DatabaseStorage implements IStorage {
 
     // Se não houver cidade do usuário, retornar todos os serviços ativos
     if (!userCity) {
-      console.log('[Storage] Sem cidade do usuário, retornando todos os serviços ativos:', services.length);
       return services;
     }
 
     // Filtrar serviços: nacionais + locais dentro do raio
-    console.log(`[Storage] Filtrando ${services.length} serviços para cidade: ${userCity} (raio: ${maxDistance}km)`);
     
     const filteredServices = services.filter(service => {
       // Serviços nacionais sempre aparecem
       if (service.isNational === true) {
-        console.log(`[Storage] Serviço "${service.name}" é nacional - incluído`);
         return true;
       }
 
@@ -1391,12 +1388,10 @@ export class DatabaseStorage implements IStorage {
       if (!service.partner?.addresses || service.partner.addresses.length === 0) {
         // Se não tem endereços cadastrados, usar cidade do parceiro como fallback
         if (!service.partner?.city) {
-          console.log(`[Storage] Serviço "${service.name}" sem cidade do parceiro - excluído`);
           return false;
         }
         
         const distance = getDistanceBetweenCities(userCity, service.partner.city);
-        console.log(`[Storage] Serviço "${service.name}" - Cidade: ${service.partner.city} - Distância: ${distance}km`);
         
         if (distance !== null && distance <= maxDistance) {
           service.distance = distance;
@@ -1432,7 +1427,6 @@ export class DatabaseStorage implements IStorage {
       return false;
     });
     
-    console.log(`[Storage] Serviços filtrados: ${filteredServices.length}`);
     return filteredServices;
   }
 }
