@@ -38,22 +38,15 @@ appointmentJoinRouter.get('/upcoming', requireAuth, async (req: AuthenticatedReq
  * Endpoint para criar nova consulta
  * POST /api/appointments
  */
-appointmentJoinRouter.post('/', async (req: Request, res: Response) => {
+appointmentJoinRouter.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const authReq = req as AuthenticatedRequest;
-    
     // Verificar autenticação
-    let userId = null;
-    let userData = null;
-    
-    if (authReq.isAuthenticated && authReq.isAuthenticated() && authReq.user) {
-      userId = authReq.user.id;
-      userData = authReq.user;
-    }
-    
-    if (!userId || !userData) {
+    if (!req.user) {
       return res.status(401).json({ message: 'Não autorizado' });
     }
+    
+    const userId = req.user.id;
+    const userData = req.user;
     
     const { doctorId, date, duration, notes, type } = req.body;
     
