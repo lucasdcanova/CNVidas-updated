@@ -373,7 +373,6 @@ export default function TelemedicinePage() {
           <>
             <span className="line-through text-gray-500 mr-1.5">R$ {basePrice.toFixed(2)}</span>
             <span>R$ {finalPrice.toFixed(2)}</span>
-            <span className="ml-1.5 text-xs font-medium">(-{discountAmount.toFixed(2)})</span>
           </>
         ) : (
           <span>R$ {finalPrice.toFixed(2)}</span>

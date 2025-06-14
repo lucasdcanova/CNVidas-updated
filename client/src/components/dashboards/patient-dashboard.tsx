@@ -180,7 +180,6 @@ export const PatientDashboard: React.FC = () => {
                   </h1>
                 </div>
               </div>
-              </div>
             </div>
           </div>
         </div>
@@ -218,7 +217,8 @@ export const PatientDashboard: React.FC = () => {
             `bg-gradient-to-br ${getPlanColor(user.subscriptionPlan).gradient}` : 
             "bg-gradient-to-br from-blue-400 to-blue-600"}
           iconColor="text-white"
-          title="Consultas de Emergência"
+          title="Telemedicina"
+          subtitle="Consultas por mês:"
           value={user?.subscriptionPlan?.includes('premium') || user?.subscriptionPlan?.includes('ultra') ? 'Ilimitadas' :
                  user?.subscriptionPlan?.includes('basic') ? `${user?.emergencyConsultationsLeft || 0}/2 disponíveis` :
                  'Não disponível'}
@@ -231,7 +231,7 @@ export const PatientDashboard: React.FC = () => {
             user?.subscriptionPlan?.includes('premium') || user?.subscriptionPlan?.includes('ultra') ? 
             `Seu plano ${getPlanName(user?.subscriptionPlan || '')} inclui consultas de emergência ilimitadas` : 
             "Faça upgrade para ter acesso a consultas de emergência"}
-          linkText="Agendar agora"
+          linkText="Acessar telemedicina"
           linkUrl="/telemedicine"
           planType={user?.subscriptionPlan || undefined}
         />

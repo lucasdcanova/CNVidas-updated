@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { storage } from '../storage';
 import { createRoom, createToken } from '../utils/daily';
 import { AuthenticatedRequest, requireAuth } from '../middleware/auth';
+import { cancelConsultationPayment } from '../utils/stripe-payment';
 
 const appointmentJoinRouter = Router();
 
@@ -48,16 +49,21 @@ appointmentJoinRouter.post('/', requireAuth, async (req: AuthenticatedRequest, r
     const userId = req.user.id;
     const userData = req.user;
     
-    const { doctorId, date, duration, notes, type } = req.body;
+    const { doctorId, date, duration, notes, type, paymentIntentId, paymentAmount, isEmergency } = req.body;
     
     if (!doctorId || !date) {
       return res.status(400).json({ message: 'doctorId e date são obrigatórios' });
     }
     
+    // Para consultas não emergenciais, verificar se o pagamento foi pré-autorizado
+    if (!isEmergency && (!paymentIntentId || !paymentAmount)) {
+      return res.status(400).json({ message: 'Pagamento pré-autorizado é obrigatório para consultas não emergenciais' });
+    }
+    
     console.log(`Criando consulta para usuário ${userId} com médico ${doctorId}`);
     
-    // Criar a consulta
-    const appointmentData = {
+    // Criar a consulta com informações de pagamento
+    const appointmentData: any = {
       userId: userId,
       doctorId: parseInt(doctorId),
       date: new Date(date),
@@ -65,8 +71,15 @@ appointmentJoinRouter.post('/', requireAuth, async (req: AuthenticatedRequest, r
       status: 'scheduled',
       notes: notes || '',
       type: type || 'telemedicine',
-      isEmergency: false
+      isEmergency: isEmergency || false
     };
+    
+    // Adicionar informações de pagamento se fornecidas
+    if (paymentIntentId && paymentAmount) {
+      appointmentData.paymentIntentId = paymentIntentId;
+      appointmentData.paymentAmount = paymentAmount;
+      appointmentData.paymentStatus = 'authorized'; // Pagamento pré-autorizado
+    }
     
     const newAppointment = await storage.createAppointment(appointmentData);
     
@@ -403,8 +416,20 @@ appointmentJoinRouter.post('/:id/cancel', requireAuth, async (req: Authenticated
     
     await storage.updateAppointment(appointmentIdNum, {
       status: 'cancelled',
-      notes: appointment.notes ? `${appointment.notes}\n\n${cancelInfo}` : cancelInfo
+      notes: appointment.notes ? `${appointment.notes}\n\n${cancelInfo}` : cancelInfo,
+      paymentStatus: 'cancelled'
     });
+    
+    // Se houver um payment intent, cancelar a pré-autorização
+    if (appointment.paymentIntentId) {
+      try {
+        await cancelConsultationPayment(appointment.paymentIntentId);
+        console.log(`Pré-autorização de pagamento cancelada para consulta #${appointmentIdNum}`);
+      } catch (paymentError) {
+        console.error(`Erro ao cancelar pré-autorização de pagamento:`, paymentError);
+        // Continuar mesmo se o cancelamento do pagamento falhar
+      }
+    }
     
     console.log(`Consulta #${appointmentIdNum} cancelada com sucesso`);
     

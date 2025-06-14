@@ -10,6 +10,7 @@ interface StatusCardProps {
   iconBgColor: string;
   iconColor: string;
   title: string;
+  subtitle?: string;
   value: string;
   status?: {
     label: string;
@@ -26,6 +27,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
   iconBgColor,
   iconColor,
   title,
+  subtitle,
   value,
   status,
   footer,
@@ -107,6 +109,9 @@ export const StatusCard: React.FC<StatusCardProps> = ({
           </div>
           <div className="ml-4 w-0 flex-1">
             <dt className="text-sm font-medium text-gray-500 truncate">{title}</dt>
+            {subtitle && (
+              <div className="text-xs text-gray-400 mt-0.5">{subtitle}</div>
+            )}
             <div className="flex items-center mt-1">
               <div className={`text-xl font-bold ${planColors ? planColors.text : "text-gray-800"}`}>{value}</div>
               {status && (

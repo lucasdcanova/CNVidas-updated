@@ -3785,3 +3785,1073 @@ Verificando autenticação na rota de assinatura...
    - Status: active
    - Plano: ultra_family
    - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /recent-activities
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Activities - Buscando atividades recentes do usuário ID: 58
+✅ Activities - Atividades encontradas: 6
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /recent-activities
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Activities - Buscando atividades recentes do usuário ID: 58
+✅ Activities - Atividades encontradas: 6
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-14
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-14
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-15
+ℹ️ Doctor /:id/availability - Nenhum slot disponível para o dia 6
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-16
+ℹ️ Doctor /:id/availability - Nenhum slot disponível para o dia 0
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-17
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-17
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-18
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-18
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-19
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-19
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-20
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-20
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-21
+✅ Doctor /:id/availability - 2 horários disponíveis para 2025-06-21
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-22
+ℹ️ Doctor /:id/availability - Nenhum slot disponível para o dia 6
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-23
+ℹ️ Doctor /:id/availability - Nenhum slot disponível para o dia 0
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-24
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-24
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-25
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-25
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-26
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-26
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-27
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-27
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /recent-activities
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Activities - Buscando atividades recentes do usuário ID: 58
+✅ Activities - Atividades encontradas: 6
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /profile
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para PUT /profile
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+📥 Dados recebidos no backend: {
+  street: 'Gonçalves Dias',
+  address: 'Gonçalves Dias, 333 - Pindorama - Três Passos/RS - CEP: 98600000',
+  zipcode: '98600000',
+  number: '333',
+  neighborhood: 'Pindorama',
+  city: 'Três Passos',
+  state: 'RS'
+}
+🔄 Atualizando perfil do usuário 58 com campos: [
+  'phone',        'birthDate',
+  'address',      'city',
+  'state',        'zipcode',
+  'number',       'complement',
+  'neighborhood', 'street'
+]
+📦 Valores sendo salvos: {
+  phone: '',
+  birthDate: '1994-03-23',
+  address: 'Gonçalves Dias, 333 - Pindorama - Três Passos/RS - CEP: 98600000',
+  city: 'Três Passos',
+  state: 'RS',
+  zipcode: '98600000',
+  number: '333',
+  complement: '',
+  neighborhood: 'Pindorama',
+  street: 'Gonçalves Dias'
+}
+✅ Usuário atualizado. Dados salvos: {
+  street: 'Gonçalves Dias',
+  address: 'Gonçalves Dias, 333 - Pindorama - Três Passos/RS - CEP: 98600000',
+  zipcode: '98600000',
+  city: 'Três Passos',
+  state: 'RS'
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /profile
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /profile
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== UPLOAD PROFILE IMAGE (PATIENT) ===
+User ID: 58
+File received: {
+  filename: 'profile-1749872528273-906009943.jpg',
+  originalname: 'profile.jpg',
+  mimetype: 'image/jpeg',
+  size: '0.12MB'
+}
+Image URL gerada: /uploads/profiles/profile-1749872528273-906009943.jpg
+Update result: Result {
+  command: 'UPDATE',
+  rowCount: 1,
+  oid: null,
+  rows: [],
+  fields: [],
+  _parsers: undefined,
+  _types: TypeOverrides {
+    _types: {
+      getTypeParser: [Function: getTypeParser],
+      setTypeParser: [Function: setTypeParser],
+      arrayParser: [Object],
+      builtins: [Object]
+    },
+    text: {},
+    binary: {}
+  },
+  RowCtor: null,
+  rowAsArray: false
+}
+Imagem antiga removida: /uploads/profiles/profile-1749869106047-332006128.jpg
+Upload de paciente concluído com sucesso
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /profile
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /profile
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+⚠️ Arquivo de upload não encontrado: /profiles/profile-1749872528273-906009943.jpg
+🔄 Redirecionando para imagem padrão: /profiles/profile-1749872528273-906009943.jpg
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /recent-activities
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Activities - Buscando atividades recentes do usuário ID: 58
+✅ Activities - Atividades encontradas: 6
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+Retornando planos de assinatura para usuário (rota pública): [
+  {
+    id: 4,
+    name: 'free',
+    displayName: 'Gratuito',
+    price: 0,
+    emergencyConsultations: '0',
+    specialistDiscount: 0,
+    insuranceCoverage: false,
+    features: [
+      'Acesso ao marketplace',
+      'Pagamento integral pelos serviços',
+      '0 teleconsultas de emergência por mês',
+      'Sem descontos e sem cobertura de seguro'
+    ],
+    isDefault: true,
+    createdAt: 2025-05-19T14:54:18.234Z,
+    updatedAt: 2025-05-19T14:54:18.234Z
+  },
+  {
+    id: 5,
+    name: 'basic',
+    displayName: 'Básico',
+    price: 8990,
+    emergencyConsultations: '2',
+    specialistDiscount: 30,
+    insuranceCoverage: true,
+    features: [
+      '2 teleconsultas de emergência por mês',
+      '30% de desconto com especialistas',
+      'Acesso completo aos descontos de parceiros',
+      'Cobertura de seguro: R$ 300/dia de internação',
+      'Suporte 24/7'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-19T14:54:18.234Z,
+    updatedAt: 2025-05-19T14:54:18.234Z
+  },
+  {
+    id: 6,
+    name: 'premium',
+    displayName: 'Premium',
+    price: 12990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 50,
+    insuranceCoverage: true,
+    features: [
+      'Teleconsultas de emergência ilimitadas',
+      '50% de desconto com especialistas',
+      'Prioridade de agendamento',
+      'Cobertura de seguro: R$ 300/dia de internação',
+      'Suporte prioritário 24/7'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-19T14:54:18.234Z,
+    updatedAt: 2025-05-19T14:54:18.234Z
+  },
+  {
+    id: 7,
+    name: 'basic_family',
+    displayName: 'Básico Familiar',
+    price: 14990,
+    emergencyConsultations: '2',
+    specialistDiscount: 30,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Básico para cada dependente',
+      'Até 4 CPFs',
+      '2 teleconsultas de emergência por mês',
+      '30% de desconto com especialistas',
+      'Acesso completo aos descontos de parceiros',
+      'Cobertura de seguro: R$ 300/dia de internação',
+      'Suporte 24/7'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  },
+  {
+    id: 8,
+    name: 'premium_family',
+    displayName: 'Premium Familiar',
+    price: 19990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 50,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Premium para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '50% de desconto com especialistas',
+      'Prioridade de agendamento',
+      'Cobertura de seguro: R$ 300/dia de internação',
+      'Suporte prioritário 24/7'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  },
+  {
+    id: 9,
+    name: 'ultra',
+    displayName: 'Ultra',
+    price: 16990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  },
+  {
+    id: 10,
+    name: 'ultra_family',
+    displayName: 'Ultra Familiar',
+    price: 23990,
+    emergencyConsultations: 'unlimited',
+    specialistDiscount: 70,
+    insuranceCoverage: true,
+    features: [
+      'Mesmos benefícios do Ultra para cada dependente',
+      'Até 4 CPFs',
+      'Teleconsultas de emergência ilimitadas',
+      '70% de desconto com especialistas',
+      'Prioridade máxima de agendamento',
+      'Cobertura de seguro: R$ 500/dia de internação',
+      'Todos os demais benefícios dos planos anteriores'
+    ],
+    isDefault: false,
+    createdAt: 2025-05-20T02:56:59.709Z,
+    updatedAt: 2025-05-20T02:56:59.709Z
+  }
+]
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+GET /api/dependents - Request received: {
+  user: {
+    id: 58,
+    email: 'lucas.canova@hotmail.com',
+    role: 'patient',
+    fullName: 'Lucas Dickel Canova',
+    username: 'p03474256076',
+    emailVerified: true,
+    subscriptionPlan: 'ultra_family',
+    subscriptionStatus: 'active',
+    emergencyConsultationsLeft: 8,
+    emergencyConsultationsResetAt: undefined,
+    profileImage: '/uploads/profiles/profile-1749872528273-906009943.jpg',
+    phone: '',
+    cpf: null,
+    cnpj: undefined,
+    city: 'Três Passos',
+    state: 'RS',
+    address: 'Gonçalves Dias, 333 - Pindorama - Três Passos/RS - CEP: 98600000',
+    zipcode: '98600000'
+  },
+  url: '/',
+  headers: {
+    host: 'localhost:8080',
+    connection: 'close',
+    'cache-control': 'no-cache, no-store, must-revalidate',
+    expires: '0',
+    'sec-ch-ua-platform': '"macOS"',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+    pragma: 'no-cache',
+    'sec-ch-ua': '"Google Chrome";v="137", "Chromium";v="137", "Not/A)Brand";v="24"',
+    'sec-ch-ua-mobile': '?0',
+    accept: '*/*',
+    'sec-fetch-site': 'same-origin',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-dest': 'empty',
+    referer: 'http://localhost:5173/dependents',
+    'accept-encoding': 'gzip, deflate, br, zstd',
+    'accept-language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+    cookie: '__stripe_mid=1861aef6-543f-4483-ab4b-09818dff49e4c5183e; auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34; __stripe_sid=7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+  }
+}
+Buscando dependentes para usuário ID: 58
+Dependentes encontrados: 1
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+[API] Total de serviços filtrados: 8
+[API] Serviços filtrados para cidade: Três Passos
+[API] Exemplo de serviço: {
+  id: 6,
+  name: 'Atendimento psicológico',
+  isNational: false,
+  distance: 0,
+  serviceImage: 'Tem imagem',
+  partner: 'Tem parceiro'
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando claims para usuário 58
+Encontrados 0 claims
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /recent-activities
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Activities - Buscando atividades recentes do usuário ID: 58
+✅ Activities - Atividades encontradas: 6
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /recent-activities
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Activities - Buscando atividades recentes do usuário ID: 58
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+✅ Activities - Atividades encontradas: 6
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /recent-activities
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Activities - Buscando atividades recentes do usuário ID: 58
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+✅ Activities - Atividades encontradas: 6
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /recent-activities
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Activities - Buscando atividades recentes do usuário ID: 58
+✅ Activities - Atividades encontradas: 6
+12:47:44 AM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Conexão com o banco de dados testada com sucesso: 2025-06-14 03:47:46.7349+00
+Session table checked/created successfully
+12:47:46 AM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+Configuração de email carregada. Serviço de email disponível.
+12:47:57 AM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Conexão com o banco de dados testada com sucesso: 2025-06-14 03:47:58.432+00
+Session table checked/created successfully
+12:47:58 AM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+Configuração de email carregada. Serviço de email disponível.
+12:48:07 AM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Conexão com o banco de dados testada com sucesso: 2025-06-14 03:48:09.296384+00
+Session table checked/created successfully
+12:48:09 AM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+Configuração de email carregada. Serviço de email disponível.
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+⚠️ Arquivo de upload não encontrado: /profile-1747951137232-694756185.jpg
+🔄 Redirecionando para imagem padrão: /profile-1747951137232-694756185.jpg
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+⚠️ Arquivo de upload não encontrado: /profile-1747876767178-948110885.jpg
+🔄 Redirecionando para imagem padrão: /profile-1747876767178-948110885.jpg
+12:48:28 AM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Conexão com o banco de dados testada com sucesso: 2025-06-14 03:48:31.546237+00
+Session table checked/created successfully
+12:48:31 AM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+Configuração de email carregada. Serviço de email disponível.
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
