@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { getUpcomingAppointments, getClaims, getServices, getRecentActivities } from "@/lib/api";
+import { getUpcomingAppointments, getServices, getRecentActivities } from "@/lib/api";
 import StatusCard from "@/components/shared/status-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -11,7 +11,7 @@ import { ptBR } from "date-fns/locale/pt-BR";
 import { ArrowRight, Calendar, Clock, MapPin, Phone, Star, Heart, Activity, Shield, Users, Stethoscope, Building2, CreditCard, FileText, AlertTriangle, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { getPlanColor, getPlanName } from "@/components/shared/plan-indicator";
 import { useToast } from "@/hooks/use-toast";
-import { Claim, Service, Notification, Partner } from "@/shared/types";
+import { Service, Notification, Partner } from "@/shared/types";
 import logoFallback from "@/assets/logo_cn_vidas_white_bg.svg";
 
 interface Activity {
@@ -69,15 +69,7 @@ export const PatientDashboard: React.FC = () => {
     queryFn: getUpcomingAppointments,
   });
   
-  const { data: claimsRaw = [] } = useQuery({
-    queryKey: ["/api/claims"],
-    queryFn: getClaims,
-  });
-  const claims: Claim[] = Array.isArray(claimsRaw)
-    ? claimsRaw
-    : (claimsRaw && typeof claimsRaw === 'object' && 'data' in claimsRaw && Array.isArray(claimsRaw.data))
-      ? claimsRaw.data
-      : [];
+
   
   const { data: featuredServices = [] } = useQuery({
     queryKey: ["/api/services"],
@@ -207,7 +199,7 @@ export const PatientDashboard: React.FC = () => {
       </Card>
 
       {/* Status cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <StatusCard
           icon="card_membership"
           iconBgColor={user?.subscriptionPlan ? 
@@ -254,22 +246,6 @@ export const PatientDashboard: React.FC = () => {
           linkText="Agendar agora"
           linkUrl="/telemedicine"
           planType={user?.subscriptionPlan || undefined}
-        />
-        
-        <StatusCard
-          icon="description"
-          iconBgColor="bg-gradient-to-br from-blue-400 to-blue-600"
-          iconColor="text-white"
-          title="Sinistros Ativos"
-          value={claims.filter((c: Claim) => c.status === 'em análise').length > 0 
-            ? `${claims.filter((c: Claim) => c.status === 'em análise').length} sinistro${claims.filter((c: Claim) => c.status === 'em análise').length !== 1 ? 's' : ''}` 
-            : 'Sem sinistros no momento'}
-          status={claims.filter((c: Claim) => c.status === 'em análise').length > 0 ? {
-            label: "Em análise",
-            color: "bg-yellow-100 text-yellow-800"
-          } : undefined}
-          linkText="Acompanhar"
-          linkUrl="/claims"
         />
       </div>
 

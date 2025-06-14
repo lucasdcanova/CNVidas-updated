@@ -192,6 +192,15 @@ const Profile: React.FC = () => {
   React.useEffect(() => {
     if (profileData && !isPatientFormInitialized && (user?.role === "patient" || user?.role === "admin")) {
       console.log("Inicializando formulário do paciente com dados do perfil:", profileData);
+      console.log("🏠 Dados de endereço do perfil:", {
+        street: profileData.street,
+        address: profileData.address,
+        zipcode: profileData.zipcode,
+        number: profileData.number,
+        neighborhood: profileData.neighborhood,
+        city: profileData.city,
+        state: profileData.state
+      });
       patientForm.reset({
         fullName: profileData.fullName || "",
         username: profileData.username || "",
@@ -443,6 +452,17 @@ const Profile: React.FC = () => {
     setIsUpdatingProfile(true);
     
     try {
+      // Debug - verificar dados antes de enviar
+      console.log("🔍 Dados do formulário antes de enviar:", {
+        street: data.street,
+        zipcode: data.zipcode,
+        number: data.number,
+        neighborhood: data.neighborhood,
+        city: data.city,
+        state: data.state,
+        address: data.address
+      });
+      
       // Preparar dados para envio, excluindo campos não editáveis para não-admins
       const updateData: any = {
         phone: data.phone || "",
@@ -454,8 +474,12 @@ const Profile: React.FC = () => {
         complement: data.complement || "",
         neighborhood: data.neighborhood || "",
         city: data.city || "",
-        state: data.state || ""
+        state: data.state || "",
+        // Incluir address caso esteja presente
+        address: data.address || ""
       };
+      
+      console.log("📤 Enviando dados para API:", updateData);
       
       // Se for admin, incluir campos protegidos
       if (user?.role === "admin") {

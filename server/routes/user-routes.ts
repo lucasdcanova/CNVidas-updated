@@ -42,7 +42,17 @@ userRouter.put('/profile', requireAuth, async (req: AuthenticatedRequest, res: R
       return res.status(401).json({ error: 'Usuário não autenticado' });
     }
 
-    const { fullName, username, email, phone, birthDate, address, city, state, zipcode, number, complement, neighborhood } = req.body;
+    const { fullName, username, email, phone, birthDate, address, city, state, zipcode, number, complement, neighborhood, street } = req.body;
+
+    console.log('📥 Dados recebidos no backend:', {
+      street,
+      address,
+      zipcode,
+      number,
+      neighborhood,
+      city,
+      state
+    });
 
     // **CORREÇÃO: Filtrar campos undefined/null para evitar "No values to set"**
     const updateData: any = {};
@@ -60,6 +70,7 @@ userRouter.put('/profile', requireAuth, async (req: AuthenticatedRequest, res: R
     if (number !== undefined && number !== null) updateData.number = number;
     if (complement !== undefined && complement !== null) updateData.complement = complement;
     if (neighborhood !== undefined && neighborhood !== null) updateData.neighborhood = neighborhood;
+    if (street !== undefined && street !== null) updateData.street = street;
 
     // Verificar se há pelo menos um campo para atualizar
     if (Object.keys(updateData).length === 0) {
@@ -67,8 +78,17 @@ userRouter.put('/profile', requireAuth, async (req: AuthenticatedRequest, res: R
     }
 
     console.log(`🔄 Atualizando perfil do usuário ${req.user.id} com campos:`, Object.keys(updateData));
+    console.log(`📦 Valores sendo salvos:`, updateData);
 
     const updatedUser = await storage.updateUser(req.user.id, updateData);
+    
+    console.log(`✅ Usuário atualizado. Dados salvos:`, {
+      street: updatedUser.street,
+      address: updatedUser.address,
+      zipcode: updatedUser.zipcode,
+      city: updatedUser.city,
+      state: updatedUser.state
+    });
 
     if (!updatedUser) {
       return res.status(404).json({ error: 'Usuário não encontrado' });
