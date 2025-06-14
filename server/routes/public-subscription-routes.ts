@@ -221,69 +221,19 @@ router.get('/current', isAuthenticated, async (req: Request, res: Response) => {
         }
       });
     } else {
-      console.log(`⚠️ Nenhuma assinatura encontrada para ${user.email}. Retornando plano gratuito.`);
+      console.log(`⚠️ Nenhuma assinatura encontrada para ${user.email}. Retornando null para forçar onboarding.`);
       
-      // Se não há assinatura, retornar plano gratuito padrão
+      // Se não há assinatura, retornar null para que o dashboard redirecione para first-subscription
       return res.json({
-        subscription: {
-          id: 0,
-          userId: user.id,
-          planId: 4,
-          status: "active",
-          startDate: new Date().toISOString(),
-          endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
-          plan: {
-            id: 4,
-            name: 'free',
-            displayName: 'Gratuito',
-            price: 0,
-            emergencyConsultations: '0',
-            specialistDiscount: 0,
-            insuranceCoverage: false,
-            features: [
-              'Acesso ao marketplace',
-              'Pagamento integral pelos serviços',
-              '0 teleconsultas de emergência por mês',
-              'Sem descontos e sem cobertura de seguro'
-            ],
-            isDefault: true,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-          }
-        }
+        subscription: null
       });
     }
   } catch (error) {
     console.error('❌ Erro ao buscar assinatura do usuário:', error);
     
-    // Em caso de erro, retornar plano gratuito como fallback
+    // Em caso de erro, retornar null para forçar onboarding
     return res.json({
-      subscription: {
-        id: 0,
-        userId: user.id,
-        planId: 4,
-        status: "active",
-        startDate: new Date().toISOString(),
-        endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
-        plan: {
-          id: 4,
-          name: 'free',
-          displayName: 'Gratuito',
-          price: 0,
-          emergencyConsultations: '0',
-          specialistDiscount: 0,
-          insuranceCoverage: false,
-          features: [
-            'Acesso ao marketplace',
-            'Pagamento integral pelos serviços',
-            '0 teleconsultas de emergência por mês',
-            'Sem descontos e sem cobertura de seguro'
-          ],
-          isDefault: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        }
-      }
+      subscription: null
     });
   }
 });

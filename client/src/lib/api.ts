@@ -356,7 +356,8 @@ export const getUserSubscription = async () => {
   const res = await apiRequest("GET", "/api/subscription/current");
   const data = await res.json();
   // Se a resposta tem estrutura aninhada, extrair o objeto subscription
-  return data.subscription || data;
+  // Retornar null se não houver assinatura para forçar onboarding
+  return data.subscription !== undefined ? data.subscription : data;
 };
 
 export const createSubscription = async (planId: number) => {

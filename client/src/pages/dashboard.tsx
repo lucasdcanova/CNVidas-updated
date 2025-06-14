@@ -26,8 +26,9 @@ const Dashboard: React.FC = () => {
     if (user?.role === "patient" && !subscriptionLoading && userSubscription !== undefined) {
       console.log("🔍 Dashboard - userSubscription:", userSubscription);
       
-      // Com a nova função getUserSubscription, já temos o objeto de assinatura diretamente
-      const hasActiveSubscription = userSubscription && userSubscription.status === "active";
+      // Verificar se tem assinatura e se está ativa
+      // userSubscription pode ser null se o usuário não tem assinatura
+      const hasActiveSubscription = userSubscription !== null && userSubscription.status === "active";
       
       console.log("🔍 Dashboard - Status da assinatura:", userSubscription?.status);
       console.log("🔍 Dashboard - Tem assinatura ativa?", hasActiveSubscription);
