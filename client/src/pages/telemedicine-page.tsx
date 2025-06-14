@@ -20,6 +20,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import DashboardLayout from '@/components/layouts/dashboard-layout';
 import useSubscriptionError from '@/hooks/use-subscription-error';
+import PreAuthPaymentDialog from '@/components/checkout/pre-auth-payment-dialog';
 
 // Tipos
 type Doctor = {
@@ -76,6 +77,15 @@ export default function TelemedicinePage() {
   const [isStartingEmergency, setIsStartingEmergency] = useState<boolean>(false);
   const [selectedSpecialty, setSelectedSpecialty] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState<boolean>(false);
+  const [pendingAppointment, setPendingAppointment] = useState<{
+    doctorId: number;
+    doctorName: string;
+    date: string;
+    duration: number;
+    notes: string;
+    type: string;
+  } | null>(null);
   
   
   // Consultas usando React Query
@@ -105,7 +115,7 @@ export default function TelemedicinePage() {
     },
   });
   
-  const { data: upcomingAppointments = [], isLoading: isLoadingAppointments } = useQuery<Appointment[]>({
+  const { data: upcomingAppointments = [], isLoading: isLoadingAppointments, refetch: refetchAppointments } = useQuery<Appointment[]>({
     queryKey: ['/api/appointments/upcoming'],
     queryFn: async (): Promise<Appointment[]> => {
       try {
@@ -116,6 +126,10 @@ export default function TelemedicinePage() {
         return [];
       }
     },
+    staleTime: 0, // Dados sempre considerados obsoletos
+    cacheTime: 0, // Sem cache
+    refetchOnMount: true, // Sempre buscar ao montar
+    refetchOnWindowFocus: true, // Buscar ao focar na janela
   });
   
   // Mutation para criar nova consulta
@@ -151,7 +165,7 @@ export default function TelemedicinePage() {
         return await response.json();
       } else {
         // Formato direto (usado pelo AppointmentScheduler)
-        const { doctorId, date, duration, notes, type } = data;
+        const { doctorId, date, duration, notes, type, paymentIntentId, paymentAmount } = data;
         
         const appointmentData = {
           doctorId,
@@ -159,6 +173,8 @@ export default function TelemedicinePage() {
           duration: duration || 30,
           notes: notes || '',
           type: type || 'telemedicine',
+          paymentIntentId,
+          paymentAmount
         };
         
         const response = await apiRequest('POST', '/api/appointments', appointmentData);
@@ -168,6 +184,7 @@ export default function TelemedicinePage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/appointments/upcoming'] });
       setIsBookingDialogOpen(false);
+      setIsPaymentDialogOpen(false);
       toast({
         title: 'Consulta agendada com sucesso',
         description: 'Você receberá uma notificação quando for confirmada pelo médico.',
@@ -209,7 +226,33 @@ export default function TelemedicinePage() {
     },
   });
   
-  
+  // Handler para sucesso do pagamento
+  const handlePaymentSuccess = (paymentIntentId: string): void => {
+    if (!pendingAppointment || !selectedDoctor) return;
+    
+    // Calcular o valor da consulta com base no plano do usuário
+    const priceInfo = getScheduledConsultationPriceInfo(selectedDoctor);
+    
+    if (!priceInfo.finalPrice) {
+      toast({
+        title: 'Erro ao processar pagamento',
+        description: 'Não foi possível calcular o valor da consulta.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
+    // Criar a consulta com o paymentIntentId
+    createAppointmentMutation.mutate({
+      ...pendingAppointment,
+      paymentIntentId,
+      paymentAmount: Math.round(priceInfo.finalPrice * 100) // Converter para centavos
+    });
+    
+    // Limpar estados
+    setPendingAppointment(null);
+    setIsPaymentDialogOpen(false);
+  };
   
   // Handler para iniciar consulta de emergência
   const handleStartEmergencyConsultation = (doctor: Doctor): void => {
@@ -317,7 +360,10 @@ export default function TelemedicinePage() {
         finalPrice: null,
         discountText: "",
         discountAmount: 0,
-        message: "O médico ainda não definiu o preço da consulta"
+        message: "O médico ainda não definiu o preço da consulta",
+        text: "O médico ainda não definiu o preço da consulta",
+        color: "text-amber-600",
+        badge: <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">Preço não definido</Badge>
       };
     }
     
@@ -350,6 +396,10 @@ export default function TelemedicinePage() {
     }
     
     return {
+      basePrice,
+      finalPrice,
+      discountText,
+      discountAmount,
       text: user?.subscriptionPlan !== 'free' && user?.subscriptionPlan
         ? `${discountText} (Plano ${planName})`
         : "Valor integral",
@@ -475,12 +525,15 @@ export default function TelemedicinePage() {
       
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({
         title: "Consulta cancelada",
         description: "Sua consulta foi cancelada com sucesso.",
       });
-      queryClient.invalidateQueries({ queryKey: ['/api/appointments/upcoming'] });
+      // Invalidar e refetch imediato
+      await queryClient.invalidateQueries({ queryKey: ['/api/appointments/upcoming'] });
+      await queryClient.refetchQueries({ queryKey: ['/api/appointments/upcoming'] });
+      await refetchAppointments();
     },
     onError: (error) => {
       toast({
@@ -517,7 +570,7 @@ export default function TelemedicinePage() {
     <DashboardLayout title="Telemedicina">
       <div className="max-w-6xl mx-auto">
         {/* Card de Consultas Agendadas - Topo da Página */}
-        {upcomingAppointments.length > 0 && (
+        {upcomingAppointments.filter(apt => apt.status !== 'cancelled').length > 0 && (
           <Card className="mb-8 mt-4 overflow-hidden border-2 border-blue-500 shadow-xl bg-gradient-to-br from-blue-50 to-indigo-50">
             <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
               <div className="flex justify-between items-center">
@@ -540,7 +593,7 @@ export default function TelemedicinePage() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {upcomingAppointments.map((appointment: Appointment) => {
+                  {upcomingAppointments.filter(apt => apt.status !== 'cancelled').map((appointment: Appointment) => {
                     const priceInfo = getScheduledConsultationPriceInfo({
                       consultationFee: appointment.consultationFee,
                       availableForEmergency: appointment.availableForEmergency
@@ -949,20 +1002,31 @@ export default function TelemedicinePage() {
                   const appointmentDate = new Date(date);
                   appointmentDate.setHours(hoursNum, minutesNum, 0, 0);
                   
-                  // Criar agendamento
-                  await createAppointmentMutation.mutateAsync({
+                  // Calcular o valor da consulta
+                  const priceInfo = getScheduledConsultationPriceInfo(selectedDoctor);
+                  
+                  if (!priceInfo.basePrice) {
+                    toast({
+                      title: "Erro ao agendar consulta",
+                      description: "O médico ainda não definiu o preço da consulta.",
+                      variant: "destructive",
+                    });
+                    return;
+                  }
+                  
+                  // Salvar dados do agendamento pendente
+                  setPendingAppointment({
                     doctorId: selectedDoctor.id,
+                    doctorName: selectedDoctor.name || 'Médico',
                     date: appointmentDate.toISOString(),
                     duration: 30,
                     notes: '',
                     type: 'telemedicine'
                   });
                   
+                  // Fechar modal de agendamento e abrir modal de pagamento
                   setIsBookingDialogOpen(false);
-                  toast({
-                    title: "Consulta agendada com sucesso!",
-                    description: `Sua consulta foi marcada para ${format(appointmentDate, "dd 'de' MMMM 'às' HH:mm", { locale: ptBR })}`,
-                  });
+                  setIsPaymentDialogOpen(true);
                 } catch (error) {
                   console.error('Erro ao agendar consulta:', error);
                   toast({
@@ -977,6 +1041,25 @@ export default function TelemedicinePage() {
           )}
         </DialogContent>
       </Dialog>
+      
+      {/* Modal de Pagamento */}
+      {isPaymentDialogOpen && pendingAppointment && selectedDoctor && (
+        <PreAuthPaymentDialog
+          isOpen={isPaymentDialogOpen}
+          onClose={() => {
+            setIsPaymentDialogOpen(false);
+            setPendingAppointment(null);
+          }}
+          onSuccess={handlePaymentSuccess}
+          appointmentData={{
+            doctorId: selectedDoctor.id,
+            doctorName: formatDoctorName(selectedDoctor.name || 'Médico'),
+            date: pendingAppointment.date,
+            amount: Math.round(getScheduledConsultationPriceInfo(selectedDoctor).finalPrice! * 100), // Converter para centavos
+            isEmergency: false
+          }}
+        />
+      )}
     </DashboardLayout>
   );
 }

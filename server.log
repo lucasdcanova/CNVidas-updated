@@ -596,3 +596,660 @@ Ou: http://127.0.0.1:8080
 Para habilitar, execute: npm install node-cron
 Configuração de email carregada. Serviço de email disponível.
 Session table checked/created successfully
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: '7c40b497-1ceb-4182-820a-71f532e8cd44f0b120'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+⚠️ Arquivo de upload não encontrado: /profiles/profile-1749872528273-906009943.jpg
+🔄 Redirecionando para imagem padrão: /profiles/profile-1749872528273-906009943.jpg
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /unread-count
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Notifications /unread-count - Contagem: 2
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /recent-activities
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Activities - Buscando atividades recentes do usuário ID: 58
+Encontradas 1 consultas próximas
+✅ Activities - Atividades encontradas: 9
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+⚠️ Arquivo de upload não encontrado: /profile-1747876767178-948110885.jpg
+🔄 Redirecionando para imagem padrão: /profile-1747876767178-948110885.jpg
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+⚠️ Arquivo de upload não encontrado: /profile-1747951137232-694756185.jpg
+🔄 Redirecionando para imagem padrão: /profile-1747951137232-694756185.jpg
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para POST /108/cancel
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Cancelando consulta #108 pelo usuário 58
+Verificando permissão de cancelamento - Paciente userId: 58, appointment.userId: 58
+Consulta #108 cancelada com sucesso
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+Encontradas 1 consultas próximas
+10:22:57 AM [tsx] change in ./server/storage.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Conexão com o banco de dados testada com sucesso: 2025-06-14 13:22:58.959211+00
+Session table checked/created successfully
+10:22:59 AM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+🕐 Configurando jobs agendados...
+⚠️ node-cron não está instalado. Jobs agendados desabilitados.
+Para habilitar, execute: npm install node-cron
+Configuração de email carregada. Serviço de email disponível.
+10:23:04 AM [tsx] change in ./server/storage.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Conexão com o banco de dados testada com sucesso: 2025-06-14 13:23:06.211542+00
+Session table checked/created successfully
+10:23:06 AM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+🕐 Configurando jobs agendados...
+⚠️ node-cron não está instalado. Jobs agendados desabilitados.
+Para habilitar, execute: npm install node-cron
+Configuração de email carregada. Serviço de email disponível.
+10:30:24 AM [tsx] change in ./server/storage.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Conexão com o banco de dados testada com sucesso: 2025-06-14 13:30:26.805528+00
+Session table checked/created successfully
+10:30:27 AM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+🕐 Configurando jobs agendados...
+⚠️ node-cron não está instalado. Jobs agendados desabilitados.
+Para habilitar, execute: npm install node-cron
+Configuração de email carregada. Serviço de email disponível.
+10:35:29 AM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Conexão com o banco de dados testada com sucesso: 2025-06-14 13:35:31.514709+00
+Session table checked/created successfully
+10:35:31 AM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+🕐 Configurando jobs agendados...
+⚠️ node-cron não está instalado. Jobs agendados desabilitados.
+Para habilitar, execute: npm install node-cron
+Configuração de email carregada. Serviço de email disponível.
+10:36:02 AM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Conexão com o banco de dados testada com sucesso: 2025-06-14 13:36:04.022273+00
+Session table checked/created successfully
+10:36:04 AM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+🕐 Configurando jobs agendados...
+⚠️ node-cron não está instalado. Jobs agendados desabilitados.
+Para habilitar, execute: npm install node-cron
+Configuração de email carregada. Serviço de email disponível.
+🔐 requireAuth - Verificando autenticação para GET /debug/108
+🔐 requireAuth - req.user: undefined
+❌ requireAuth - Usuário não autenticado para GET /debug/108
+11:16:28 AM [tsx] change in ./server/routes/appointment-join.ts Restarting...
+cAuthRouter carregado - rotas disponíveis:
+- POST /register
+- POST /login
+- POST /test
+- GET /user (verificação de autenticação)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+🖼️ Configurando diretório de arquivos estáticos...
+✅ Arquivos estáticos servidos de: /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/public
+Registrando authRouter em /api/auth
+Registrando userRouter em /api/users
+Registrando adminRoutes em /api/admin
+Registrando partnerRouter em /api/partners
+Registrando doctorRouter em /api/doctors
+Registrando notificationRouter em /api/notifications
+Registrando checkoutTrackingRouter em /api
+Registrando rotas públicas de médicos em /api/doctors
+Registrando rotas públicas de serviços em /api/services
+Registrando legalDocumentsRouter em /api/legal-documents
+Registrando chatRouter em /api/chat
+Conexão com o banco de dados testada com sucesso: 2025-06-14 14:16:30.027979+00
+Session table checked/created successfully
+11:16:30 AM [server] Servidor rodando na porta 8080
+Acesse: http://localhost:8080
+Ou: http://127.0.0.1:8080
+🕐 Configurando jobs agendados...
+⚠️ node-cron não está instalado. Jobs agendados desabilitados.
+Para habilitar, execute: npm install node-cron
+Configuração de email carregada. Serviço de email disponível.
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando claims para usuário 58
+Encontrados 0 claims
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+⚠️ Arquivo de upload não encontrado: /profile-1747876767178-948110885.jpg
+🔄 Redirecionando para imagem padrão: /profile-1747876767178-948110885.jpg
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+⚠️ Arquivo de upload não encontrado: /profile-1747951137232-694756185.jpg
+🔄 Redirecionando para imagem padrão: /profile-1747951137232-694756185.jpg
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-14
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-14
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-15
+ℹ️ Doctor /:id/availability - Nenhum slot disponível para o dia 6
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-16
+ℹ️ Doctor /:id/availability - Nenhum slot disponível para o dia 0
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-17
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-17
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-18
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-18
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-19
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-19
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-20
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-20
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-21
+✅ Doctor /:id/availability - 2 horários disponíveis para 2025-06-21
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-22
+ℹ️ Doctor /:id/availability - Nenhum slot disponível para o dia 6
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-23
+ℹ️ Doctor /:id/availability - Nenhum slot disponível para o dia 0
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-24
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-24
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-25
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-25
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-26
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-26
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-27
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-27
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para POST /
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para POST /
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+Total de consultas encontradas para usuário 58: 6
+Consulta ID: 107, Status: waiting, Date: 2025-06-13T22:28:18.014Z
+Consulta ID: 109, Status: waiting, Date: 2025-06-14T03:52:32.964Z
+Consulta ID: 110, Status: waiting, Date: 2025-06-14T03:53:19.495Z
+Consulta ID: 108, Status: cancelled, Date: 2025-06-20T20:30:00.000Z
+Consulta ID: 111, Status: waiting, Date: 2025-06-14T04:30:10.704Z
+Consulta ID: 112, Status: waiting, Date: 2025-06-14T13:21:19.557Z
+Consultas após filtrar canceladas: 0
+Encontradas 0 consultas próximas
+Consultas retornadas: []
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+Total de consultas encontradas para usuário 58: 6
+Consulta ID: 107, Status: waiting, Date: 2025-06-13T22:28:18.014Z
+Consulta ID: 109, Status: waiting, Date: 2025-06-14T03:52:32.964Z
+Consulta ID: 110, Status: waiting, Date: 2025-06-14T03:53:19.495Z
+Consulta ID: 108, Status: cancelled, Date: 2025-06-20T20:30:00.000Z
+Consulta ID: 111, Status: waiting, Date: 2025-06-14T04:30:10.704Z
+Consulta ID: 112, Status: waiting, Date: 2025-06-14T13:21:19.557Z
+Consultas após filtrar canceladas: 0
+Encontradas 0 consultas próximas
+Consultas retornadas: []
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+Total de consultas encontradas para usuário 58: 6
+Consulta ID: 107, Status: waiting, Date: 2025-06-13T22:28:18.014Z
+Consulta ID: 109, Status: waiting, Date: 2025-06-14T03:52:32.964Z
+Consulta ID: 110, Status: waiting, Date: 2025-06-14T03:53:19.495Z
+Consulta ID: 108, Status: cancelled, Date: 2025-06-20T20:30:00.000Z
+Consulta ID: 111, Status: waiting, Date: 2025-06-14T04:30:10.704Z
+Consulta ID: 112, Status: waiting, Date: 2025-06-14T13:21:19.557Z
+Consultas após filtrar canceladas: 0
+Encontradas 0 consultas próximas
+Consultas retornadas: []
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+Total de consultas encontradas para usuário 58: 6
+Consulta ID: 107, Status: waiting, Date: 2025-06-13T22:28:18.014Z
+Consulta ID: 109, Status: waiting, Date: 2025-06-14T03:52:32.964Z
+Consulta ID: 110, Status: waiting, Date: 2025-06-14T03:53:19.495Z
+Consulta ID: 108, Status: cancelled, Date: 2025-06-20T20:30:00.000Z
+Consulta ID: 111, Status: waiting, Date: 2025-06-14T04:30:10.704Z
+Consulta ID: 112, Status: waiting, Date: 2025-06-14T13:21:19.557Z
+Consultas após filtrar canceladas: 0
+Encontradas 0 consultas próximas
+Consultas retornadas: []
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+Total de consultas encontradas para usuário 58: 6
+Consulta ID: 107, Status: waiting, Date: 2025-06-13T22:28:18.014Z
+Consulta ID: 109, Status: waiting, Date: 2025-06-14T03:52:32.964Z
+Consulta ID: 110, Status: waiting, Date: 2025-06-14T03:53:19.495Z
+Consulta ID: 108, Status: cancelled, Date: 2025-06-20T20:30:00.000Z
+Consulta ID: 111, Status: waiting, Date: 2025-06-14T04:30:10.704Z
+Consulta ID: 112, Status: waiting, Date: 2025-06-14T13:21:19.557Z
+Consultas após filtrar canceladas: 0
+Encontradas 0 consultas próximas
+Consultas retornadas: []
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+Total de consultas encontradas para usuário 58: 6
+Consulta ID: 107, Status: waiting, Date: 2025-06-13T22:28:18.014Z
+Consulta ID: 109, Status: waiting, Date: 2025-06-14T03:52:32.964Z
+Consulta ID: 110, Status: waiting, Date: 2025-06-14T03:53:19.495Z
+Consulta ID: 108, Status: cancelled, Date: 2025-06-20T20:30:00.000Z
+Consulta ID: 111, Status: waiting, Date: 2025-06-14T04:30:10.704Z
+Consulta ID: 112, Status: waiting, Date: 2025-06-14T13:21:19.557Z
+Consultas após filtrar canceladas: 0
+Encontradas 0 consultas próximas
+Consultas retornadas: []
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+Total de consultas encontradas para usuário 58: 6
+Consulta ID: 107, Status: waiting, Date: 2025-06-13T22:28:18.014Z
+Consulta ID: 109, Status: waiting, Date: 2025-06-14T03:52:32.964Z
+Consulta ID: 110, Status: waiting, Date: 2025-06-14T03:53:19.495Z
+Consulta ID: 108, Status: cancelled, Date: 2025-06-20T20:30:00.000Z
+Consulta ID: 111, Status: waiting, Date: 2025-06-14T04:30:10.704Z
+Consulta ID: 112, Status: waiting, Date: 2025-06-14T13:21:19.557Z
+Consultas após filtrar canceladas: 0
+Encontradas 0 consultas próximas
+Consultas retornadas: []
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+Total de consultas encontradas para usuário 58: 6
+Consulta ID: 107, Status: waiting, Date: 2025-06-13T22:28:18.014Z
+Consulta ID: 109, Status: waiting, Date: 2025-06-14T03:52:32.964Z
+Consulta ID: 110, Status: waiting, Date: 2025-06-14T03:53:19.495Z
+Consulta ID: 108, Status: cancelled, Date: 2025-06-20T20:30:00.000Z
+Consulta ID: 111, Status: waiting, Date: 2025-06-14T04:30:10.704Z
+Consulta ID: 112, Status: waiting, Date: 2025-06-14T13:21:19.557Z
+Consultas após filtrar canceladas: 0
+Encontradas 0 consultas próximas
+Consultas retornadas: []
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+Total de consultas encontradas para usuário 58: 6
+Consulta ID: 107, Status: waiting, Date: 2025-06-13T22:28:18.014Z
+Consulta ID: 109, Status: waiting, Date: 2025-06-14T03:52:32.964Z
+Consulta ID: 110, Status: waiting, Date: 2025-06-14T03:53:19.495Z
+Consulta ID: 108, Status: cancelled, Date: 2025-06-20T20:30:00.000Z
+Consulta ID: 111, Status: waiting, Date: 2025-06-14T04:30:10.704Z
+Consulta ID: 112, Status: waiting, Date: 2025-06-14T13:21:19.557Z
+Consultas após filtrar canceladas: 0
+Encontradas 0 consultas próximas
+Consultas retornadas: []
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /unread-count
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Notifications /unread-count - Buscando contagem para usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+✅ Notifications /unread-count - Contagem: 2
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+⚠️ Arquivo de upload não encontrado: /profiles/profile-1749872528273-906009943.jpg
+🔄 Redirecionando para imagem padrão: /profiles/profile-1749872528273-906009943.jpg
+Total de consultas encontradas para usuário 58: 6
+Consulta ID: 107, Status: waiting, Date: 2025-06-13T22:28:18.014Z
+Consulta ID: 109, Status: waiting, Date: 2025-06-14T03:52:32.964Z
+Consulta ID: 110, Status: waiting, Date: 2025-06-14T03:53:19.495Z
+Consulta ID: 108, Status: cancelled, Date: 2025-06-20T20:30:00.000Z
+Consulta ID: 111, Status: waiting, Date: 2025-06-14T04:30:10.704Z
+Consulta ID: 112, Status: waiting, Date: 2025-06-14T13:21:19.557Z
+Session table checked/created successfully
+Consultas após filtrar canceladas: 0
+Encontradas 0 consultas próximas
+Consultas retornadas: []
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Médico selecionado para emergência: {
+  doctorId: 4,
+  doctorUserId: 32,
+  doctorName: 'Lucas Dickel Canova',
+  availableForEmergency: true
+}
+🚀 Criando sala de emergência: emergency-58-1749911912354
+➡️ Criando sala emergency-58-1749911912354 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749911912354" já existe...
+Sala "emergency-58-1749911912354" não existe, será criada
+🆕 Criando nova sala "emergency-58-1749911912354" no Daily.co...
+Payload para criação da sala: {"name":"emergency-58-1749911912354","properties":{"start_audio_off":false,"start_video_off":false,"enable_chat":true,"enable_screenshare":true,"enable_knocking":false,"enable_network_ui":true,"enable_prejoin_ui":false,"exp":1749915513}}
+✅ Sala "emergency-58-1749911912354" criada com sucesso
+⏳ Aguardando primeira fase de propagação (5s)...
+🔍 Verificando se sala "emergency-58-1749911912354" já está acessível...
+✅ Sala "emergency-58-1749911912354" confirmada como acessível
+⏳ Aguardando propagação adicional da sala...
+Criando token para sala emergency-58-1749911912354
+Verificando/criando sala emergency-58-1749911912354 antes de gerar token
+➡️ Criando sala emergency-58-1749911912354 no Daily.co - API key: true
+🔍 Verificando se sala "emergency-58-1749911912354" já existe...
+✅ Sala "emergency-58-1749911912354" já existe no Daily.co
+Sala emergency-58-1749911912354 verificada/criada com sucesso
+Solicitando token com propriedades: {
+  room_name: 'emergency-58-1749911912354',
+  user_id: '58',
+  user_name: 'Lucas Dickel Canova',
+  exp: 1749919122,
+  is_owner: false,
+  enable_screenshare: true,
+  start_video_off: false,
+  start_audio_off: false
+}
+Token simplificado criado com sucesso: eyJhbGciOiJIUzI...
+✅ Consulta de emergência criada: {
+  appointmentId: 113,
+  doctorId: 4,
+  userId: 58,
+  status: 'waiting',
+  isEmergency: true,
+  type: 'telemedicine'
+}
+Consulta de emergência iniciada: Paciente Lucas Dickel Canova (ID: 58) com Dr. Lucas Dickel Canova (ID: 4), Sala: emergency-58-1749911912354
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+📋 Consulta de emergência 113 consultada por paciente 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /upcoming
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+Buscando consultas próximas para usuário 58
+Total de consultas encontradas para usuário 58: 7
+Consulta ID: 107, Status: waiting, Date: 2025-06-13T22:28:18.014Z
+Consulta ID: 109, Status: waiting, Date: 2025-06-14T03:52:32.964Z
+Consulta ID: 110, Status: waiting, Date: 2025-06-14T03:53:19.495Z
+Consulta ID: 108, Status: cancelled, Date: 2025-06-20T20:30:00.000Z
+Consulta ID: 111, Status: waiting, Date: 2025-06-14T04:30:10.704Z
+Consulta ID: 113, Status: waiting, Date: 2025-06-14T14:38:42.478Z
+Consulta ID: 112, Status: waiting, Date: 2025-06-14T13:21:19.557Z
+Consultas após filtrar canceladas: 0
+Encontradas 0 consultas próximas
+Consultas retornadas: []
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-14
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-14
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-15
+ℹ️ Doctor /:id/availability - Nenhum slot disponível para o dia 6
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-16
+ℹ️ Doctor /:id/availability - Nenhum slot disponível para o dia 0
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-17
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-17
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-18
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-18
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-19
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-19
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-20
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-20
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-21
+✅ Doctor /:id/availability - 2 horários disponíveis para 2025-06-21
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-22
+ℹ️ Doctor /:id/availability - Nenhum slot disponível para o dia 6
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-23
+ℹ️ Doctor /:id/availability - Nenhum slot disponível para o dia 0
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-24
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-24
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-25
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-25
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-26
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-26
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Doctor /:id/availability - Buscando disponibilidade do médico ID: 4 para data: 2025-06-27
+✅ Doctor /:id/availability - 3 horários disponíveis para 2025-06-27
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+Erro ao criar intenção de pagamento para consulta: AppError: Você precisa ter um método de pagamento cadastrado para realizar consultas
+    at <anonymous> (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-payment-routes.ts:53:13)
+    at Layer.handle [as handle_request] (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/express/lib/router/route.js:149:13)
+    at requireAuth (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/server/routes/consultation-payment-routes.ts:23:3)
+    at Layer.handle [as handle_request] (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/Users/lucascanova/Documents/CNVidas 1.0/CNVidas-updated/node_modules/express/lib/router/index.js:346:12) {
+  statusCode: 400,
+  status: 'fail',
+  isOperational: true
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /profile
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===
+🔍 Middleware JWT Global - Processando: /api/subscription/current
+🔍 Cookies: {
+  __stripe_mid: '1861aef6-543f-4483-ab4b-09818dff49e4c5183e',
+  auth_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU4LCJlbWFpbCI6Imx1Y2FzLmNhbm92YUBob3RtYWlsLmNvbSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzQ5NDIzNzk3LCJleHAiOjE3NTAwMjg1OTd9.etqRBoYdkIPLS5kwKiqUgwNtgw9hLmU8KLwGC2lTe34',
+  __stripe_sid: 'eef2774e-af26-49a7-811a-5102c64c468cf2c09d'
+}
+🔍 Headers auth: undefined
+🔍 Header x-auth-token: undefined
+🔍 Verificando cookie auth_token: eyJhbGciOiJIUzI1NiIs...
+🔍 Cookie decodificado: {
+  userId: 58,
+  email: 'lucas.canova@hotmail.com',
+  role: 'patient',
+  iat: 1749423797,
+  exp: 1750028597
+}
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔍 Final do middleware - Usuário autenticado? true
+Verificando autenticação na rota de assinatura...
+✅ Usuário autenticado: lucas.canova@hotmail.com
+🔍 Buscando assinatura atual para usuário lucas.canova@hotmail.com (ID: 58)
+✅ Assinatura encontrada:
+   - ID: 1
+   - Status: active
+   - Plano: ultra_family
+   - Data criação: Sun Jun 08 2025 20:10:30 GMT-0300 (Brasilia Standard Time)
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+🔐 requireAuth - Verificando autenticação para GET /recent-activities
+🔐 requireAuth - req.user: 58 (patient)
+✅ requireAuth - Usuário autenticado: 58 (patient)
+🔍 Activities - Buscando atividades recentes do usuário ID: 58
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+✅ Activities - Atividades encontradas: 9
+🔐 JWT: Usuário lucas.canova@hotmail.com autenticado via cookie com plano ultra_family
+=== ROTA /api/user INTERCEPTADA ===

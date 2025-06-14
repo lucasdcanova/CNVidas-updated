@@ -24,6 +24,14 @@ appointmentJoinRouter.get('/upcoming', requireAuth, async (req: AuthenticatedReq
     
     console.log(`Encontradas ${upcomingAppointments.length} consultas próximas`);
     
+    // Log de debug temporário
+    console.log('Consultas retornadas:', upcomingAppointments.map(apt => ({
+      id: apt.id,
+      status: apt.status,
+      date: apt.date,
+      doctorName: apt.doctorName
+    })));
+    
     res.json(upcomingAppointments);
     
   } catch (error) {
@@ -592,11 +600,21 @@ appointmentJoinRouter.post('/:id/cancel', requireAuth, async (req: Authenticated
     // Vamos usar o campo notes para registrar o cancelamento
     const cancelInfo = `Cancelado por ${req.user.fullName || req.user.username} em ${new Date().toISOString()}. Motivo: ${reason || 'Não especificado'}`;
     
+    console.log(`[CANCELAMENTO] Atualizando consulta #${appointmentIdNum} para status 'cancelled'`);
+    
     await storage.updateAppointment(appointmentIdNum, {
       status: 'cancelled',
       notes: appointment.notes ? `${appointment.notes}\n\n${cancelInfo}` : cancelInfo,
       paymentStatus: 'cancelled'
     });
+    
+    // Verificar se a atualização funcionou
+    const updatedAppointment = await storage.getAppointmentById(appointmentIdNum);
+    console.log(`[CANCELAMENTO] Status após atualização: "${updatedAppointment?.status}"`);
+    
+    if (updatedAppointment?.status !== 'cancelled') {
+      console.error(`[ERRO] Consulta #${appointmentIdNum} não foi atualizada para 'cancelled'. Status atual: "${updatedAppointment?.status}"`);
+    }
     
     // Se houver um payment intent, cancelar a pré-autorização
     if (appointment.paymentIntentId) {
@@ -621,6 +639,67 @@ appointmentJoinRouter.post('/:id/cancel', requireAuth, async (req: Authenticated
     return res.status(500).json({ 
       message: 'Erro ao cancelar consulta',
       error: error instanceof Error ? error.message : 'Erro desconhecido'
+    });
+  }
+});
+
+/**
+ * ENDPOINT TEMPORÁRIO DE DEBUG
+ * GET /api/appointments/debug/108
+ * Busca diretamente a consulta #108 do banco de dados
+ */
+appointmentJoinRouter.get('/debug/108', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    console.log('=== DEBUG: Buscando consulta #108 diretamente do banco ===');
+    
+    // Buscar a consulta diretamente
+    const appointment = await storage.getAppointment(108);
+    
+    if (!appointment) {
+      console.log('Consulta #108 não encontrada no banco de dados');
+      return res.status(404).json({ 
+        message: 'Consulta #108 não encontrada',
+        debug: true 
+      });
+    }
+    
+    // Buscar informações adicionais
+    const doctor = appointment.doctorId ? await storage.getDoctor(appointment.doctorId) : null;
+    const user = await storage.getUser(appointment.userId);
+    
+    // Log completo dos dados
+    console.log('Dados completos da consulta #108:', {
+      ...appointment,
+      doctor: doctor ? { id: doctor.id, name: doctor.name } : null,
+      user: user ? { id: user.id, name: user.fullName } : null
+    });
+    
+    // Retornar todos os dados para análise
+    return res.json({
+      debug: true,
+      appointment: {
+        ...appointment,
+        // Campos adicionais para debug
+        _raw: appointment,
+        _doctor: doctor,
+        _user: user ? {
+          id: user.id,
+          fullName: user.fullName,
+          email: user.email
+        } : null
+      },
+      metadata: {
+        queriedAt: new Date().toISOString(),
+        databaseTime: new Date().toISOString()
+      }
+    });
+    
+  } catch (error) {
+    console.error('Erro no debug da consulta #108:', error);
+    return res.status(500).json({ 
+      message: 'Erro ao buscar consulta #108',
+      error: error instanceof Error ? error.message : 'Erro desconhecido',
+      debug: true
     });
   }
 });

@@ -2,7 +2,7 @@ import { users, partners, doctors, partnerServices, appointments, claims, notifi
 import { User, Partner, Doctor, PartnerService, Appointment, Claim, Notification, DoctorPayment, AuditLog, QrToken, SubscriptionPlan, UserSettings, EmailVerification, PasswordReset, AvailabilitySlot, QrAuthLog, InsertUser, InsertPartner, InsertDoctor, InsertPartnerService, InsertAppointment, InsertClaim, InsertNotification, InsertDoctorPayment, InsertAuditLog, InsertQrToken, InsertSubscriptionPlan, InsertUserSettings, InsertEmailVerification, InsertPasswordReset, InsertAvailabilitySlot, InsertQrAuthLog, Dependent, InsertDependent } from '@shared/types';
 import { PartnerAddress, InsertPartnerAddress } from './interfaces/partner';
 import { db } from "./db";
-import { eq, and, gte, lte, desc, sql, count, or, gt, asc, inArray } from "drizzle-orm";
+import { eq, and, gte, lte, desc, sql, count, or, gt, asc, inArray, ne } from "drizzle-orm";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
 import { pool } from "./db";
@@ -853,6 +853,24 @@ export class DatabaseStorage implements IStorage {
 
   async getUpcomingAppointmentsWithDoctorInfo(userId: number): Promise<any[]> {
     const now = new Date();
+    
+    // Primeiro, buscar todas as consultas do usuário para debug
+    const allUserAppointments = await this.db.select({
+      id: appointments.id,
+      status: appointments.status,
+      date: appointments.date
+    })
+    .from(appointments)
+    .where(eq(appointments.userId, userId));
+    
+    console.log(`Total de consultas encontradas para usuário ${userId}: ${allUserAppointments.length}`);
+    
+    // Logar detalhes de cada consulta
+    allUserAppointments.forEach(apt => {
+      console.log(`Consulta ID: ${apt.id}, Status: ${apt.status}, Date: ${apt.date.toISOString()}`);
+    });
+    
+    // Agora buscar com os filtros aplicados
     const result = await this.db.select({
       // Dados do appointment
       id: appointments.id,
@@ -881,10 +899,13 @@ export class DatabaseStorage implements IStorage {
     .where(
       and(
         eq(appointments.userId, userId),
-        gte(appointments.date, now)
+        gte(appointments.date, now),
+        ne(appointments.status, 'cancelled')
       )
     )
     .orderBy(asc(appointments.date));
+    
+    console.log(`Consultas após filtrar canceladas: ${result.length}`);
     
     return result;
   }

@@ -84,6 +84,17 @@ export default function MinimalistVideoCall({
       return;
     }
 
+    // Limpar qualquer instância existente antes de criar uma nova
+    if (callFrameRef.current) {
+      console.log('🧹 Limpando instância anterior do DailyIframe...');
+      try {
+        await callFrameRef.current.destroy();
+        callFrameRef.current = null;
+      } catch (error) {
+        console.error('Erro ao destruir instância anterior:', error);
+      }
+    }
+
     isJoiningRef.current = true;
     setIsConnecting(true);
     setConnectionError(null);
@@ -108,7 +119,6 @@ export default function MinimalistVideoCall({
         showLocalVideo: true,
         showParticipantsBar: false,
         showUserNameChangeUI: false,
-        showPrejoinUI: false,
         activeSpeakerMode: true,
         // Configuração PIP fixa - vídeo local sempre no canto
         layout: 'custom-v1',
