@@ -113,25 +113,51 @@ export default function TelemedicinePage() {
   });
   
   // Mutation para criar nova consulta
-  const createAppointmentMutation = useMutation<unknown, Error, AppointmentFormValues>({
-    mutationFn: async (data: AppointmentFormValues): Promise<unknown> => {
-      const { doctorId, date, time, notes } = data;
+  const createAppointmentMutation = useMutation<unknown, Error, any>({
+    mutationFn: async (data: any): Promise<unknown> => {
+      console.log('Dados recebidos na mutationFn:', data);
       
-      // Combinar data e hora em um único formato ISO
-      const [hours, minutes] = time.split(':');
-      const appointmentDate = new Date(date);
-      appointmentDate.setHours(parseInt(hours), parseInt(minutes));
+      // Verificar se é o formato antigo (AppointmentFormValues) ou novo formato
+      let appointmentDate: Date;
       
-      const appointmentData = {
-        doctorId,
-        date: appointmentDate.toISOString(),
-        duration: 30, // Duração padrão: 30 minutos
-        notes: notes || '',
-        type: 'telemedicine',
-      };
-      
-      const response = await apiRequest('POST', '/api/appointments', appointmentData);
-      return await response.json();
+      if (data.appointmentDate && data.appointmentTime) {
+        // Formato do formulário (AppointmentFormValues)
+        const { doctorId, appointmentDate: dateStr, appointmentTime: timeStr, notes } = data;
+        
+        if (!timeStr) {
+          throw new Error('Horário não foi selecionado corretamente');
+        }
+        
+        // Combinar data e hora em um único formato ISO
+        const [hours, minutes] = timeStr.split(':');
+        appointmentDate = new Date(dateStr);
+        appointmentDate.setHours(parseInt(hours), parseInt(minutes));
+        
+        const appointmentData = {
+          doctorId,
+          date: appointmentDate.toISOString(),
+          duration: 30, // Duração padrão: 30 minutos
+          notes: notes || '',
+          type: 'telemedicine',
+        };
+        
+        const response = await apiRequest('POST', '/api/appointments', appointmentData);
+        return await response.json();
+      } else {
+        // Formato direto (usado pelo AppointmentScheduler)
+        const { doctorId, date, duration, notes, type } = data;
+        
+        const appointmentData = {
+          doctorId,
+          date,
+          duration: duration || 30,
+          notes: notes || '',
+          type: type || 'telemedicine',
+        };
+        
+        const response = await apiRequest('POST', '/api/appointments', appointmentData);
+        return await response.json();
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/appointments/upcoming'] });
@@ -142,6 +168,7 @@ export default function TelemedicinePage() {
       });
     },
     onError: (error: Error) => {
+      console.error('Erro na mutationFn:', error);
       toast({
         title: 'Erro ao agendar consulta',
         description: error.message || 'Ocorreu um erro ao agendar sua consulta. Tente novamente.',

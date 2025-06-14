@@ -37,6 +37,19 @@ const cityCoordinates: CityCoordinates = {
   'carazinho': { lat: -28.2836, lng: -52.7864 },
   'santo angelo': { lat: -28.2994, lng: -54.2631 },
   'alegrete': { lat: -29.7833, lng: -55.7919 },
+  'crissiumal': { lat: -27.4997, lng: -54.1019 },
+  'tenente portela': { lat: -27.3708, lng: -53.7567 },
+  'horizontina': { lat: -27.6250, lng: -54.3081 },
+  'humaitá': { lat: -27.5714, lng: -53.9764 },
+  'miraguaí': { lat: -27.4939, lng: -53.6903 },
+  'redentora': { lat: -27.6636, lng: -53.6394 },
+  'campo novo': { lat: -27.6794, lng: -53.8031 },
+  'braga': { lat: -27.6169, lng: -53.7397 },
+  'sede nova': { lat: -27.6353, lng: -54.0747 },
+  'são martinho': { lat: -27.7081, lng: -53.9656 },
+  'bom progresso': { lat: -27.5453, lng: -53.8653 },
+  'vista gaúcha': { lat: -27.3722, lng: -53.7025 },
+  'derrubadas': { lat: -27.2633, lng: -53.8647 },
   
   // São Paulo
   'são paulo': { lat: -23.5505, lng: -46.6333 },
@@ -119,12 +132,19 @@ export function calculateDistance(lat1: number, lng1: number, lat2: number, lng2
 }
 
 /**
+ * Remove acentos de uma string
+ */
+function removeAccents(str: string): string {
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+/**
  * Obtém as coordenadas de uma cidade
  * @param cityName Nome da cidade (normalizado para minúsculas)
  * @returns Coordenadas da cidade ou null se não encontrada
  */
 export function getCityCoordinates(cityName: string): { lat: number; lng: number } | null {
-  const normalizedCity = cityName.toLowerCase().trim();
+  const normalizedCity = removeAccents(cityName.toLowerCase().trim());
   return cityCoordinates[normalizedCity] || null;
 }
 

@@ -167,6 +167,13 @@ export default async function setupRoutes(app: express.Express) {
     try {
       const { partnerId, userCity } = req.query;
       
+      // Log para debug de encoding
+      if (userCity) {
+        console.log('[API] userCity raw:', userCity);
+        console.log('[API] userCity encoded:', encodeURIComponent(userCity as string));
+        console.log('[API] userCity decoded:', decodeURIComponent(userCity as string));
+      }
+      
       if (partnerId) {
         // Se partnerId for fornecido, buscar apenas serviços desse parceiro
         const partnerIdNumber = parseInt(partnerId as string);
