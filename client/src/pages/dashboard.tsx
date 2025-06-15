@@ -54,10 +54,17 @@ const Dashboard: React.FC = () => {
       console.log("🔍 Dashboard - User status:", user.subscriptionStatus);
       console.log("🔍 Dashboard - Verificando no momento:", new Date().toISOString());
       
-      // IMPORTANTE: Se o status do usuário é 'active', não fazer nenhum redirecionamento
-      if (user.subscriptionStatus === 'active') {
-        console.log("✅ Dashboard - Usuário tem status ativo, permanecendo no dashboard");
+      // Se o status do usuário é 'active' E tem assinatura válida, não fazer redirecionamento
+      if (user.subscriptionStatus === 'active' && userSubscription && userSubscription.status === 'active') {
+        console.log("✅ Dashboard - Usuário tem status ativo confirmado, permanecendo no dashboard");
         setIsFirstLogin(false);
+        return;
+      }
+      
+      // Se não tem assinatura alguma (novo usuário), redirecionar para first-subscription
+      if (!userSubscription || userSubscription === null) {
+        console.log("🆕 Dashboard - Novo usuário sem assinatura, redirecionando para first-subscription");
+        setLocation('/first-subscription');
         return;
       }
       
