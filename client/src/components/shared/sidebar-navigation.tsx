@@ -77,7 +77,15 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({ userRole =
                 Telemedicina
             </Link>
             
-
+            <Link href="/services"
+              className={`${linkBaseClass} ${
+                isLinkActive("/services") 
+                  ? linkActiveClass 
+                  : linkInactiveClass
+              }`}>
+                <Stethoscope className="w-5 h-5 mr-3" />
+                Serviços
+            </Link>
             
             <Link href="/claims"
               className={`${linkBaseClass} ${
@@ -87,16 +95,6 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({ userRole =
               }`}>
                 <ClipboardList className="w-5 h-5 mr-3" />
                 Sinistros
-            </Link>
-            
-            <Link href="/services"
-              className={`${linkBaseClass} ${
-                isLinkActive("/services") 
-                  ? linkActiveClass 
-                  : linkInactiveClass
-              }`}>
-                <Stethoscope className="w-5 h-5 mr-3" />
-                Serviços
             </Link>
             
             {/* Only show Dependentes for users with family plans */}

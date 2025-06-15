@@ -72,21 +72,21 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({ userRole = "
       
       {userRole === "patient" && (
         <>
-          <Link href="/claims">
-            <div className={`flex flex-col items-center py-3 px-3 ${
-              isLinkActive("/claims") ? activeClass : inactiveClass
-            }`}>
-              <span className="material-icons text-lg">description</span>
-              <span className="text-xs mt-1 font-medium">Sinistros</span>
-            </div>
-          </Link>
-          
           <Link href="/services">
             <div className={`flex flex-col items-center py-3 px-3 ${
               isLinkActive("/services") ? activeClass : inactiveClass
             }`}>
               <span className="material-icons text-lg">medical_services</span>
               <span className="text-xs mt-1 font-medium">Serviços</span>
+            </div>
+          </Link>
+          
+          <Link href="/claims">
+            <div className={`flex flex-col items-center py-3 px-3 ${
+              isLinkActive("/claims") ? activeClass : inactiveClass
+            }`}>
+              <span className="material-icons text-lg">description</span>
+              <span className="text-xs mt-1 font-medium">Sinistros</span>
             </div>
           </Link>
           
