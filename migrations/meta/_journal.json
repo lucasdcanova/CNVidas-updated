@@ -29,6 +29,13 @@
       "when": 1749828048528,
       "tag": "0003_blushing_ink",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1750000612569,
+      "tag": "0004_strange_power_man",
+      "breakpoints": true
     }
   ]
 }
