@@ -8,6 +8,7 @@ import AdminDashboard from "@/components/dashboards/admin-dashboard";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { getUserSubscription } from "@/lib/api";
+import { apiRequest } from "@/lib/queryClient";
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -51,6 +52,31 @@ const Dashboard: React.FC = () => {
     if (userSubscription !== undefined) {
       console.log("🔍 Dashboard - userSubscription:", userSubscription);
       console.log("🔍 Dashboard - Verificando no momento:", new Date().toISOString());
+      
+      // Se o status é pendente, verificar se o pagamento foi confirmado
+      if (user.subscriptionStatus === 'pending') {
+        console.log('⏳ Dashboard - Status pendente detectado, verificando pagamento...');
+        
+        apiRequest('POST', '/api/subscription/check-pending-payment', {})
+          .then(async (response) => {
+            if (response.ok) {
+              const data = await response.json();
+              console.log('📋 Resultado da verificação de pagamento:', data);
+              
+              if (data.status === 'active') {
+                console.log('✅ Pagamento confirmado! Recarregando dados...');
+                // Recarregar dados do usuário e assinatura
+                queryClient.invalidateQueries({ queryKey: ["/api/auth/check"] });
+                queryClient.invalidateQueries({ queryKey: ["/api/subscription/current"] });
+                // Não continuar com o fluxo normal
+                return;
+              }
+            }
+          })
+          .catch((error) => {
+            console.error('Erro ao verificar pagamento pendente:', error);
+          });
+      }
       
       // Verificar se tem assinatura e se está ativa
       // userSubscription pode ser null se o usuário não tem assinatura

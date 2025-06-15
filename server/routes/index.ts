@@ -14,6 +14,7 @@ import emergencyV2Router from './emergency-v2';
 import paymentRouter from './payment-routes';
 import subscriptionCreateRouter from './subscription-create-route';
 import subscriptionPaymentRouter from './subscription-payment-routes';
+import subscriptionStatusCheckRouter from './subscription-status-check';
 import telemedicineErrorLogsRouter from './telemedicine-error-logs';
 import dailyEmergencyRouter from './daily-emergency-routes';
 import addressRouter from './address-routes';
@@ -93,6 +94,9 @@ export default async function setupRoutes(app: express.Express) {
   
   // Adicionar rotas de métodos de pagamento no caminho esperado pelo cliente
   app.use('/api/subscription', subscriptionPaymentRouter);
+  
+  // Rota de verificação de status de pagamento pendente
+  app.use('/api/subscription', subscriptionStatusCheckRouter);
   
   // Rotas de dependentes
   app.use('/api/dependents', dependentsRouter);

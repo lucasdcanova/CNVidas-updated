@@ -67,22 +67,40 @@ const CheckoutForm: React.FC<{
           variant: "destructive",
         });
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-        // Pagamento bem-sucedido
-        toast({
-          title: "Assinatura confirmada",
-          description: "Sua assinatura foi ativada com sucesso!",
-        });
-        
-        // Invalidar a consulta para atualizar a UI
-        queryClient.invalidateQueries({ queryKey: ["/api/subscription/current"] });
-        
-        // Chamar callback de sucesso se existir
-        if (onSuccess) {
-          onSuccess();
+        // Pagamento bem-sucedido - confirmar no backend
+        try {
+          const confirmResponse = await apiRequest('POST', '/api/subscription/confirm-payment', {
+            paymentIntentId: paymentIntent.id
+          });
+          
+          if (confirmResponse.ok) {
+            toast({
+              title: "Assinatura ativada!",
+              description: "Sua assinatura foi ativada com sucesso!",
+            });
+            
+            // Invalidar a consulta para atualizar a UI
+            queryClient.invalidateQueries({ queryKey: ["/api/subscription/current"] });
+            queryClient.invalidateQueries({ queryKey: ["/api/auth/check"] });
+            
+            // Chamar callback de sucesso se existir
+            if (onSuccess) {
+              onSuccess();
+            }
+            
+            // Fechar o modal
+            onClose();
+          } else {
+            throw new Error('Falha ao confirmar pagamento no servidor');
+          }
+        } catch (confirmError) {
+          console.error('Erro ao confirmar pagamento:', confirmError);
+          toast({
+            title: "Aviso",
+            description: "Pagamento recebido, mas houve um erro ao ativar a assinatura. Por favor, entre em contato com o suporte.",
+            variant: "destructive",
+          });
         }
-        
-        // Fechar o modal
-        onClose();
       } else if (paymentIntent && paymentIntent.status === 'processing') {
         // Pagamento em processamento
         toast({
