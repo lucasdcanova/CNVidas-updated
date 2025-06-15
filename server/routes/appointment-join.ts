@@ -670,7 +670,7 @@ appointmentJoinRouter.get('/debug/108', requireAuth, async (req: AuthenticatedRe
     // Log completo dos dados
     console.log('Dados completos da consulta #108:', {
       ...appointment,
-      doctor: doctor ? { id: doctor.id, name: doctor.name } : null,
+      doctor: doctor ? { id: doctor.id, name: doctor.fullName || 'Médico' } : null,
       user: user ? { id: user.id, name: user.fullName } : null
     });
     

@@ -217,7 +217,7 @@ notificationRouter.get("/recent-activities", requireAuth, async (req: Authentica
     // 4. Leituras de QR Code (buscar logs de autenticação)
     try {
       const qrLogs = await storage.getQrAuthLogs(5, 0);
-      qrLogs.filter(log => log.tokenUserName && log.tokenUserName.includes(user?.fullName || '')).forEach(log => {
+      qrLogs.filter(log => log.tokenUserName && log.tokenUserName.includes(req.user?.fullName || '')).forEach(log => {
         activities.push({
           id: `qr-scan-${log.id}`,
           type: 'qr_scan',

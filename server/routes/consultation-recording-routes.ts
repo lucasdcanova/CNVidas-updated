@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs/promises';
 import OpenAI from 'openai';
 import { PrismaClient } from '@prisma/client';
-import { isAuthenticated } from '../middleware/auth';
+import { requireAuth, AuthRequest } from '../middleware/auth-unified';
 import { uploadToS3 } from '../utils/s3-upload';
 
 const router = express.Router();
@@ -42,11 +42,15 @@ const upload = multer({
 });
 
 // Upload de gravação
-router.post('/upload', isAuthenticated, upload.single('audio'), async (req, res) => {
+router.post('/upload', requireAuth, upload.single('audio'), async (req: AuthRequest, res) => {
   try {
     const { appointmentId } = req.body;
-    const userId = req.session.userId;
+    const userId = req.user?.id;
     const file = req.file;
+
+    if (!userId) {
+      return res.status(401).json({ success: false, error: 'Usuário não autenticado' });
+    }
 
     if (!file) {
       return res.status(400).json({ success: false, error: 'Nenhum arquivo enviado' });
@@ -307,10 +311,14 @@ async function processRecording(recordingId: number) {
 }
 
 // Obter status de processamento
-router.get('/status/:recordingId', isAuthenticated, async (req, res) => {
+router.get('/status/:recordingId', requireAuth, async (req: AuthRequest, res) => {
   try {
     const { recordingId } = req.params;
-    const userId = req.session.userId;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ success: false, error: 'Usuário não autenticado' });
+    }
 
     // Verificar se o usuário tem acesso
     const recording = await prisma.consultation_recordings.findFirst({
@@ -359,10 +367,14 @@ router.get('/status/:recordingId', isAuthenticated, async (req, res) => {
 });
 
 // Obter transcrição
-router.get('/transcription/:recordingId', isAuthenticated, async (req, res) => {
+router.get('/transcription/:recordingId', requireAuth, async (req: AuthRequest, res) => {
   try {
     const { recordingId } = req.params;
-    const userId = req.session.userId;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ success: false, error: 'Usuário não autenticado' });
+    }
 
     const recording = await prisma.consultation_recordings.findFirst({
       where: {
@@ -395,6 +407,108 @@ router.get('/transcription/:recordingId', isAuthenticated, async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Erro ao obter transcrição'
+    });
+  }
+});
+
+// Obter gravação
+router.get('/:recordingId', requireAuth, async (req: AuthRequest, res) => {
+  try {
+    const recordingId = parseInt(req.params.recordingId);
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ success: false, error: 'Usuário não autenticado' });
+    }
+
+    // Verificar se o usuário tem acesso
+    const recording = await prisma.consultation_recordings.findFirst({
+      where: {
+        id: recordingId,
+        appointments: {
+          OR: [
+            { user_id: userId },
+            { doctors: { user_id: userId } }
+          ]
+        }
+      },
+      include: {
+        medical_records: {
+          orderBy: { created_at: 'desc' },
+          take: 1
+        }
+      }
+    });
+
+    if (!recording) {
+      return res.status(404).json({ success: false, error: 'Gravação não encontrada' });
+    }
+
+    res.json({
+      success: true,
+      recording: {
+        id: recording.id,
+        status: recording.transcription_status,
+        hasTranscription: !!recording.transcription,
+        hasAiNotes: !!recording.ai_generated_notes,
+        medicalRecordId: recording.medical_records[0]?.id,
+        error: recording.processing_error,
+        createdAt: recording.created_at,
+        completedAt: recording.processing_completed_at
+      }
+    });
+
+  } catch (error: any) {
+    console.error('Erro ao obter gravação:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Erro ao obter gravação'
+    });
+  }
+});
+
+// Deletar gravação
+router.delete('/:recordingId', requireAuth, async (req: AuthRequest, res) => {
+  try {
+    const recordingId = parseInt(req.params.recordingId);
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ success: false, error: 'Usuário não autenticado' });
+    }
+
+    // Verificar se o usuário tem acesso
+    const recording = await prisma.consultation_recordings.findFirst({
+      where: {
+        id: recordingId,
+        appointments: {
+          OR: [
+            { user_id: userId },
+            { doctors: { user_id: userId } }
+          ]
+        }
+      }
+    });
+
+    if (!recording) {
+      return res.status(404).json({ success: false, error: 'Gravação não encontrada' });
+    }
+
+    // Remover gravação do banco
+    await prisma.consultation_recordings.delete({
+      where: { id: recordingId }
+    });
+
+    res.json({
+      success: true,
+      message: 'Gravação removida com sucesso'
+    });
+
+  } catch (error: any) {
+    console.error('Erro ao deletar gravação:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Erro ao deletar gravação'
     });
   }
 });

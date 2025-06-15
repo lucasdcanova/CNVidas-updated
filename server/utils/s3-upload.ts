@@ -5,23 +5,27 @@ import path from 'path';
 let s3: any = null;
 
 try {
-  const AWS = require('aws-sdk');
+  // Tentar carregar AWS SDK dinamicamente
+  const AWS = eval('require')('aws-sdk');
   if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
     s3 = new AWS.S3({
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
       region: process.env.AWS_REGION || 'us-east-1'
     });
+    console.log('✅ AWS S3 configurado com sucesso');
+  } else {
+    console.log('⚠️ Credenciais AWS não encontradas');
   }
 } catch (error) {
-  console.log('AWS SDK não disponível, S3 upload desabilitado');
+  console.log('ℹ️ AWS SDK não disponível, S3 upload desabilitado');
 }
 
 export async function uploadToS3(filePath: string, key: string): Promise<string> {
   // Se não tiver configuração AWS ou S3 não estiver disponível, retornar erro
   if (!s3 || !process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY || !process.env.S3_BUCKET_NAME) {
-    console.log('AWS S3 não configurado, usando armazenamento local');
-    throw new Error('S3 não configurado');
+    console.log('⚠️ AWS S3 não configurado, usando armazenamento local');
+    throw new Error('S3 não configurado - usando armazenamento local');
   }
 
   const fileContent = fs.readFileSync(filePath);
@@ -36,9 +40,10 @@ export async function uploadToS3(filePath: string, key: string): Promise<string>
 
   try {
     const result = await s3.upload(params).promise();
+    console.log(`✅ Upload S3 concluído: ${result.Location}`);
     return result.Location;
   } catch (error) {
-    console.error('Erro ao fazer upload para S3:', error);
+    console.error('❌ Erro ao fazer upload para S3:', error);
     throw error;
   }
 }

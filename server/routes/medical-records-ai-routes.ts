@@ -2,6 +2,8 @@ import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import { isAuthenticated } from '../middleware/auth';
 import crypto from 'crypto';
+import OpenAI from 'openai';
+import { requireAuth, requireDoctor, AuthRequest } from '../middleware/auth-unified';
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -9,7 +11,7 @@ const prisma = new PrismaClient();
 // Middleware para verificar se o usuário é médico
 const isDoctorMiddleware = async (req: any, res: any, next: any) => {
   try {
-    const userId = req.session.userId;
+    const userId = req.user?.id;
     const user = await prisma.users.findUnique({
       where: { id: userId },
       include: { doctors: true }
@@ -94,7 +96,7 @@ router.get('/', isAuthenticated, isDoctorMiddleware, async (req, res) => {
 router.get('/:id', isAuthenticated, async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.session.userId;
+    const userId = req.user?.id;
 
     const record = await prisma.medical_records.findFirst({
       where: {
@@ -156,7 +158,7 @@ router.get('/:id', isAuthenticated, async (req, res) => {
 router.get('/by-appointment/:appointmentId', isAuthenticated, async (req, res) => {
   try {
     const { appointmentId } = req.params;
-    const userId = req.session.userId;
+    const userId = req.user?.id;
 
     const record = await prisma.medical_records.findFirst({
       where: {
@@ -407,7 +409,7 @@ router.post('/:id/sign', isAuthenticated, isDoctorMiddleware, async (req, res) =
 router.get('/:id/versions', isAuthenticated, async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.session.userId;
+    const userId = req.user?.id;
 
     // Verificar se o usuário tem acesso ao prontuário
     const record = await prisma.medical_records.findFirst({
@@ -447,7 +449,7 @@ router.get('/:id/versions', isAuthenticated, async (req, res) => {
 // Prontuários do paciente (para pacientes verem seus próprios prontuários)
 router.get('/patient/my-records', isAuthenticated, async (req, res) => {
   try {
-    const userId = req.session.userId;
+    const userId = req.user?.id;
     const { page = 1, limit = 10 } = req.query;
 
     const offset = (Number(page) - 1) * Number(limit);

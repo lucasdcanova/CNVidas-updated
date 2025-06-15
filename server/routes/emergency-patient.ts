@@ -26,19 +26,33 @@ emergencyPatientRouter.post('/start', async (req: Request, res: Response) => {
     }
 
     // Verificar se tem consultas de emergência disponíveis
-    if (!user.emergency_consultations_left || user.emergency_consultations_left <= 0) {
-      return res.status(403).json({ 
+    if (user.emergencyConsultationsLeft <= 0) {
+      return res.status(400).json({
+        success: false,
         error: 'Você não possui consultas de emergência disponíveis',
-        emergency_consultations_left: 0
+        consultationsLeft: user.emergencyConsultationsLeft
       });
     }
 
-    // Verificar se tem assinatura ativa
-    if (user.subscription_status !== 'active' || !user.subscription_plan || user.subscription_plan === 'free') {
-      return res.status(403).json({ 
-        error: 'Você precisa de uma assinatura ativa para usar consultas de emergência',
-        subscription_status: user.subscription_status,
-        subscription_plan: user.subscription_plan
+    // Verificar se o usuário tem plano ativo
+    if (user.subscriptionStatus !== 'active' || 
+        (user.subscriptionPlan !== 'basic' && 
+         user.subscriptionPlan !== 'premium' && 
+         user.subscriptionPlan !== 'ultra')) {
+      return res.status(400).json({
+        success: false,
+        error: 'Plano inativo ou inválido para consultas de emergência',
+        subscriptionStatus: user.subscriptionStatus,
+        subscriptionPlan: user.subscriptionPlan
+      });
+    }
+
+    // Verificar se ainda tem consultas disponíveis
+    if (user.emergencyConsultationsLeft <= 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Limite de consultas de emergência esgotado para este mês',
+        consultationsLeft: user.emergencyConsultationsLeft
       });
     }
     
@@ -86,10 +100,10 @@ emergencyPatientRouter.post('/start', async (req: Request, res: Response) => {
     
     // Decrementar o número de consultas de emergência disponíveis
     await storage.updateUser(req.user!.id, {
-      emergency_consultations_left: user.emergency_consultations_left - 1
+      emergencyConsultationsLeft: user.emergencyConsultationsLeft - 1
     });
     
-    console.log(`Consultas de emergência restantes para usuário ${req.user!.id}: ${user.emergency_consultations_left - 1}`);
+    console.log(`Consultas de emergência restantes para usuário ${req.user!.id}: ${user.emergencyConsultationsLeft - 1}`);
     
     // Enviar notificação para médicos disponíveis
     // TODO: Implementar notificação em tempo real para médicos
@@ -103,7 +117,7 @@ emergencyPatientRouter.post('/start', async (req: Request, res: Response) => {
       },
       token,
       appointmentId: appointment.id,
-      emergency_consultations_left: user.emergency_consultations_left - 1
+      consultationsLeft: user.emergencyConsultationsLeft - 1
     });
     
   } catch (error) {
@@ -160,18 +174,18 @@ emergencyPatientRouter.get('/eligibility', async (req: Request, res: Response) =
     }
 
     // Verificar se tem consultas de emergência disponíveis
-    const hasEmergencyConsultations = user.emergency_consultations_left && user.emergency_consultations_left > 0;
+    const hasEmergencyConsultations = user.emergencyConsultationsLeft && user.emergencyConsultationsLeft > 0;
     
     // Verificar se tem assinatura ativa
-    const hasActiveSubscription = user.subscription_status === 'active' && 
-      user.subscription_plan && 
-      user.subscription_plan !== 'free';
+    const hasActiveSubscription = user.subscriptionStatus === 'active' && 
+      user.subscriptionPlan && 
+      user.subscriptionPlan !== 'free';
 
     return res.json({
       eligible: hasEmergencyConsultations && hasActiveSubscription,
-      emergency_consultations_left: user.emergency_consultations_left || 0,
-      subscription_plan: user.subscription_plan,
-      subscription_status: user.subscription_status,
+      consultationsLeft: user.emergencyConsultationsLeft || 0,
+      subscriptionPlan: user.subscriptionPlan,
+      subscriptionStatus: user.subscriptionStatus,
       reasons: {
         has_consultations: hasEmergencyConsultations,
         has_active_subscription: hasActiveSubscription,
@@ -211,10 +225,11 @@ emergencyPatientRouter.get('/available-doctors', async (req: Request, res: Respo
     // Filtrar apenas informações relevantes para o paciente
     const doctorsInfo = availableDoctors.map(doctor => ({
       id: doctor.id,
-      name: doctor.full_name || doctor.email,
-      specialization: doctor.specialization || 'Clínico Geral',
-      available: true,
-      profileImage: doctor.profile_image || null
+      name: doctor.fullName || doctor.email,
+      email: doctor.email,
+      specialization: doctor.doctors[0]?.specialization || 'Clínico Geral',
+      profileImage: doctor.doctors[0]?.profileImage || null,
+      available: true
     }));
 
     return res.json({

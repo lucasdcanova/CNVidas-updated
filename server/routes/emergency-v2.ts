@@ -316,9 +316,10 @@ emergencyV2Router.get('/consultation/:appointmentId', authenticateToken, async (
     
     // Se for médico, incluir informações adicionais do paciente
     if (doctor) {
-      response.patientAge = patient?.birthdate ? 
-        Math.floor((new Date().getTime() - new Date(patient.birthdate).getTime()) / (1000 * 60 * 60 * 24 * 365.25)) : 
-        undefined;
+      const age = patient.birthDate ? 
+        Math.floor((new Date().getTime() - new Date(patient.birthDate).getTime()) / (365.25 * 24 * 60 * 60 * 1000)) : 
+        null;
+      response.patientAge = age;
       response.patientPhone = patient?.phone || undefined;
       response.patientEmail = patient?.email || undefined;
       

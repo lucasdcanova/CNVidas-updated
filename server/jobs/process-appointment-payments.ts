@@ -54,7 +54,7 @@ export async function processAppointmentPayments() {
             title: 'Pagamento Processado',
             message: `O pagamento da sua consulta foi processado com sucesso. A consulta está confirmada para ${new Date(appointment.date).toLocaleString('pt-BR')}.`,
             isRead: false,
-            data: { appointmentId: appointment.id }
+            relatedId: appointment.id
           });
         }
       } catch (error) {
@@ -73,8 +73,8 @@ export async function processAppointmentPayments() {
           type: 'error',
           title: 'Erro no Pagamento',
           message: `Houve um problema ao processar o pagamento da sua consulta. Por favor, entre em contato com o suporte.`,
-          read: false,
-          data: { appointmentId: appointment.id }
+          isRead: false,
+          relatedId: appointment.id
         });
       }
     }

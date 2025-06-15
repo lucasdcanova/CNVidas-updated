@@ -4,7 +4,7 @@ import { db } from '../db';
 import { users, doctors, partners } from '../../shared/schema';
 import { eq } from 'drizzle-orm';
 
-// Interface para o usuário autenticado
+// Interface para usuário autenticado (versão simplificada do User)
 export interface AuthUser {
   id: number;
   email: string;
@@ -15,6 +15,40 @@ export interface AuthUser {
   subscriptionPlan?: string | null;
   subscriptionStatus?: string | null;
   profileImage?: string | null;
+  // Adicionar campos adicionais necessários
+  password?: string;
+  cpf?: string | null;
+  phone?: string | null;
+  address?: string | null;
+  city?: string | null;
+  state?: string | null;
+  zipcode?: string | null;
+  createdAt?: Date;
+  updatedAt?: Date;
+  lastLogin?: Date | null;
+  isActive?: boolean;
+  sellerId?: string | null;
+  sellerName?: string | null;
+  stripeCustomerId?: string | null;
+  stripeSubscriptionId?: string | null;
+  birthDate?: string | null;
+  emergencyConsultationsLeft?: number | null;
+  lastSubscriptionCancellation?: Date | null;
+  street?: string | null;
+  number?: string | null;
+  complement?: string | null;
+  neighborhood?: string | null;
+  subscriptionChangedAt?: Date | null;
+  gender?: string | null;
+  status?: string | null;
+  subscriptionPlanId?: number | null;
+  subscriptionStartDate?: Date | null;
+  subscriptionEndDate?: Date | null;
+  welcomeCompleted?: boolean | null;
+  pixKeyType?: string | null;
+  pixKey?: string | null;
+  bankName?: string | null;
+  accountType?: string | null;
 }
 
 // Interface para request com usuário
@@ -80,7 +114,40 @@ export const verifyToken = async (token: string): Promise<AuthUser | null> => {
       emailVerified: user.emailVerified,
       subscriptionPlan: user.subscriptionPlan,
       subscriptionStatus: user.subscriptionStatus,
-      profileImage: user.profileImage
+      profileImage: user.profileImage,
+      password: user.password,
+      cpf: user.cpf,
+      phone: user.phone,
+      address: user.address,
+      city: user.city,
+      state: user.state,
+      zipcode: user.zipcode,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      lastLogin: user.lastLogin,
+      isActive: user.isActive,
+      sellerId: user.sellerId,
+      sellerName: user.sellerName,
+      stripeCustomerId: user.stripeCustomerId,
+      stripeSubscriptionId: user.stripeSubscriptionId,
+      birthDate: user.birthDate,
+      emergencyConsultationsLeft: user.emergencyConsultationsLeft,
+      lastSubscriptionCancellation: user.lastSubscriptionCancellation,
+      street: user.street,
+      number: user.number,
+      complement: user.complement,
+      neighborhood: user.neighborhood,
+      subscriptionChangedAt: user.subscriptionChangedAt,
+      gender: user.gender,
+      status: user.status,
+      subscriptionPlanId: user.subscriptionPlanId,
+      subscriptionStartDate: user.subscriptionStartDate,
+      subscriptionEndDate: user.subscriptionEndDate,
+      welcomeCompleted: user.welcomeCompleted,
+      pixKeyType: user.pixKeyType,
+      pixKey: user.pixKey,
+      bankName: user.bankName,
+      accountType: user.accountType
     };
   } catch (error) {
     console.error('Erro ao verificar token:', error);

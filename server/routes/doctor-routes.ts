@@ -309,11 +309,16 @@ doctorRouter.get('/appointments', requireAuth, requireDoctorRole, async (req: Au
         const patient = appointment.userId ? await storage.getUser(appointment.userId) : null;
         return {
           ...appointment,
-          patientName: patient?.fullName || patient?.username || 'Paciente',
-          patientEmail: patient?.email,
-          patientPhone: patient?.phone,
+          patientName: patient?.fullName || 'Paciente',
+          patientAge: null, // Calcular idade se necessário
+          patientEmail: patient?.email || '',
+          patientPhone: patient?.phone || '',
           patientProfileImage: patient?.profileImage,
           patientBirthDate: patient?.birthDate,
+          consultationFee: appointment.paymentAmount || 0,
+          diagnosis: '', // Campo não existe no schema
+          prescription: '', // Campo não existe no schema
+          recordUrl: '', // Campo não existe no schema
           patientAge: patient?.birthDate ? 
             Math.floor((Date.now() - new Date(patient.birthDate).getTime()) / (365.25 * 24 * 60 * 60 * 1000)) : 
             null

@@ -1,15 +1,19 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
-import { isAuthenticated } from '../middleware/auth';
+import { requireAuth, AuthRequest } from '../middleware/auth-unified';
 
 const router = express.Router();
 const prisma = new PrismaClient();
 
 // Obter configurações de um usuário específico (apenas médicos podem ver de pacientes)
-router.get('/:userId/settings', isAuthenticated, async (req, res) => {
+router.get('/:userId/settings', requireAuth, async (req: AuthRequest, res) => {
   try {
-    const requesterId = req.session.userId;
+    const requesterId = req.user?.id;
     const targetUserId = parseInt(req.params.userId);
+
+    if (!requesterId) {
+      return res.status(401).json({ error: 'Usuário não autenticado' });
+    }
 
     // Verificar se o usuário está tentando acessar suas próprias configurações
     if (requesterId === targetUserId) {
@@ -110,10 +114,14 @@ router.get('/:userId/settings', isAuthenticated, async (req, res) => {
 });
 
 // Obter informações de uma consulta (para médicos)
-router.get('/appointments/:appointmentId', isAuthenticated, async (req, res) => {
+router.get('/appointments/:appointmentId', requireAuth, async (req: AuthRequest, res) => {
   try {
-    const userId = req.session.userId;
+    const userId = req.user?.id;
     const appointmentId = parseInt(req.params.appointmentId);
+
+    if (!userId) {
+      return res.status(401).json({ error: 'Usuário não autenticado' });
+    }
 
     // Buscar usuário e verificar se é médico
     const user = await prisma.users.findUnique({
