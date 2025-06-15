@@ -733,13 +733,13 @@ const AuthPage: React.FC = () => {
                           />
                         </FormControl>
                         <div className="space-y-1 leading-none">
-                          <FormLabel className="text-sm">
+                          <FormLabel className="text-xs text-gray-600">
                             Li e aceito todos os documentos legais:{" "}
                             <Dialog>
                               <DialogTrigger asChild>
                                 <button
                                   type="button"
-                                  className="text-blue-600 hover:underline font-medium"
+                                  className="text-blue-600 hover:underline font-medium text-xs"
                                 >
                                   Termos de Uso
                                 </button>
@@ -778,7 +778,7 @@ const AuthPage: React.FC = () => {
                               <DialogTrigger asChild>
                                 <button
                                   type="button"
-                                  className="text-blue-600 hover:underline font-medium"
+                                  className="text-blue-600 hover:underline font-medium text-xs"
                                 >
                                   Política de Privacidade
                                 </button>
@@ -819,7 +819,7 @@ const AuthPage: React.FC = () => {
                                   <DialogTrigger asChild>
                                     <button
                                       type="button"
-                                      className="text-blue-600 hover:underline font-medium"
+                                      className="text-blue-600 hover:underline font-medium text-xs"
                                     >
                                       Contrato de Adesão dos Planos
                                     </button>
@@ -851,7 +851,7 @@ const AuthPage: React.FC = () => {
                                   <DialogTrigger asChild>
                                     <button
                                       type="button"
-                                      className="text-blue-600 hover:underline font-medium"
+                                      className="text-blue-600 hover:underline font-medium text-xs"
                                     >
                                       Contrato de Parceria
                                     </button>
@@ -885,7 +885,7 @@ const AuthPage: React.FC = () => {
                                   <DialogTrigger asChild>
                                     <button
                                       type="button"
-                                      className="text-blue-600 hover:underline font-medium"
+                                      className="text-blue-600 hover:underline font-medium text-xs"
                                     >
                                       Política de Gravação de Teleconsultas
                                     </button>
