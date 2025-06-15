@@ -34,6 +34,7 @@ import medicalRecordsAIRouter from './medical-records-ai-routes';
 import consultationRecordingRouter from './consultation-recording-routes';
 import userSettingsRouter from './user-settings-routes';
 import settingsRouter from '../settings-routes';
+import paymentHistoryRouter from './payment-history-routes';
 
 export default async function setupRoutes(app: express.Express) {
   
@@ -138,6 +139,10 @@ export default async function setupRoutes(app: express.Express) {
   // Rotas de notificações
   console.log('Registrando notificationRouter em /api/notifications');
   app.use('/api/notifications', notificationRouter);
+  
+  // Rotas de histórico de pagamentos
+  console.log('Registrando paymentHistoryRouter em /api/payment-history');
+  app.use('/api/payment-history', paymentHistoryRouter);
   
   // Rotas de monitoramento de checkouts
   console.log('Registrando checkoutTrackingRouter em /api');

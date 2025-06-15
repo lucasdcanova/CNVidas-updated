@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -70,7 +69,7 @@ function PaymentForm({ onCancel, onSuccess }: { onCancel: () => void; onSuccess:
   };
 
   return (
-    <div className="p-4 border rounded-lg">
+    <div className="p-4 border rounded-lg bg-card">
       <PaymentElement />
       <div className="mt-4 flex justify-end space-x-2">
         <Button
@@ -165,89 +164,91 @@ export default function PaymentMethods({ paymentMethods, onUpdate }: PaymentMeth
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Métodos de Pagamento</CardTitle>
-        <CardDescription>
-          Gerencie seus métodos de pagamento para assinaturas e consultas
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {paymentMethods.map((method) => (
-            <div
-              key={method.id}
-              className="flex items-center justify-between p-4 border rounded-lg"
-            >
-              <div className="flex items-center space-x-4">
-                <CreditCard className="h-6 w-6 text-muted-foreground" />
-                <div>
-                  <p className="font-medium">
-                    {method.card ? (
-                      <>
-                        {method.card.brand.toUpperCase()} terminando em {method.card.last4}
-                      </>
-                    ) : (
-                      method.type.toUpperCase()
-                    )}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {method.billing_details.name}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleSetDefault(method.id)}
-                  disabled={isLoading}
-                >
-                  Definir como padrão
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleRemove(method.id)}
-                  disabled={isLoading}
-                >
-                  <Trash2 className="h-4 w-4 text-destructive" />
-                </Button>
-              </div>
+    <div className="space-y-4">
+      {paymentMethods.length === 0 && !isAddingNew && (
+        <div className="text-center py-8 text-muted-foreground">
+          <CreditCard className="h-12 w-12 mx-auto mb-4 opacity-50" />
+          <p className="mb-2">Nenhum método de pagamento cadastrado</p>
+          <p className="text-sm">Adicione um cartão ou método de pagamento para facilitar suas transações</p>
+        </div>
+      )}
+      
+      {paymentMethods.map((method) => (
+        <div
+          key={method.id}
+          className="flex items-center justify-between p-4 border rounded-lg bg-card"
+        >
+          <div className="flex items-center space-x-4">
+            <CreditCard className="h-6 w-6 text-muted-foreground" />
+            <div>
+              <p className="font-medium">
+                {method.card ? (
+                  <>
+                    {method.card.brand.toUpperCase()} terminando em {method.card.last4}
+                  </>
+                ) : (
+                  method.type.toUpperCase()
+                )}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {method.billing_details.name}
+              </p>
             </div>
-          ))}
-
-          {isAddingNew ? (
-            isSetupLoading ? (
-              <div>Carregando Stripe...</div>
-            ) : clientSecret ? (
-              <StripeSetupProvider>
-                <PaymentForm
-                  onCancel={() => setIsAddingNew(false)}
-                  onSuccess={() => {
-                    setIsAddingNew(false);
-                    onUpdate();
-                  }}
-                />
-              </StripeSetupProvider>
-            ) : (
-              <div className="text-center text-muted-foreground">
-                Erro ao carregar formulário de pagamento
-              </div>
-            )
-          ) : (
+          </div>
+          <div className="flex items-center space-x-2">
             <Button
               variant="outline"
-              className="w-full"
-              onClick={() => setIsAddingNew(true)}
-              disabled={isLoading || isSetupLoading}
+              size="sm"
+              onClick={() => handleSetDefault(method.id)}
+              disabled={isLoading}
             >
-              <Plus className="h-4 w-4 mr-2" />
-              Adicionar novo método de pagamento
+              Definir como padrão
             </Button>
-          )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleRemove(method.id)}
+              disabled={isLoading}
+            >
+              <Trash2 className="h-4 w-4 text-destructive" />
+            </Button>
+          </div>
         </div>
-      </CardContent>
-    </Card>
+      ))}
+
+      {isAddingNew ? (
+        isSetupLoading ? (
+          <div className="p-4 border rounded-lg bg-card">
+            <div className="text-center text-muted-foreground">
+              Carregando Stripe...
+            </div>
+          </div>
+        ) : clientSecret ? (
+          <StripeSetupProvider>
+            <PaymentForm
+              onCancel={() => setIsAddingNew(false)}
+              onSuccess={() => {
+                setIsAddingNew(false);
+                onUpdate();
+              }}
+            />
+          </StripeSetupProvider>
+        ) : (
+          <div className="p-4 border rounded-lg bg-card text-center text-muted-foreground">
+            Erro ao carregar formulário de pagamento
+          </div>
+        )
+      ) : (
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={() => setIsAddingNew(true)}
+          disabled={isLoading || isSetupLoading}
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          Adicionar novo método de pagamento
+        </Button>
+      )}
+    </div>
   );
 } 

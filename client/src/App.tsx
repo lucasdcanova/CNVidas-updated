@@ -24,6 +24,7 @@ import Claims from "@/pages/claims";
 import NewClaim from "@/pages/claims/new"; 
 import Services from "@/pages/services";
 import Profile from "@/pages/profile";
+import Payments from "@/pages/payments";
 import Address from "@/pages/address";
 import Checkout from "@/pages/checkout";
 import Subscribe from "@/pages/subscribe";
@@ -141,6 +142,7 @@ function Router() {
       <ProtectedRoute path="/claims/new" component={NewClaim} allowedRoles={["patient"]} />
       <ProtectedRoute path="/services" component={Services} allowedRoles={["patient"]} />
       <ProtectedRoute path="/profile" component={Profile} />
+      <ProtectedRoute path="/payments" component={Payments} allowedRoles={["patient"]} />
       <ProtectedRoute path="/address" component={Address} />
       <ProtectedRoute path="/settings" component={PatientSettings} allowedRoles={["patient"]} />
       <ProtectedRoute path="/dependents" component={DependentsPage} allowedRoles={["patient"]} />

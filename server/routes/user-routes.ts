@@ -5,6 +5,9 @@ import { AppError } from '../utils/app-error.js';
 import { sendEmail } from '../utils/email';
 import { compare, hash } from 'bcrypt';
 import { NotificationService } from '../utils/notification-service';
+import { db } from '../db';
+import { users } from '../../shared/schema';
+import { eq } from 'drizzle-orm';
 
 const userRouter = express.Router();
 
@@ -99,6 +102,42 @@ userRouter.put('/profile', requireAuth, async (req: AuthenticatedRequest, res: R
     return res.json(userWithoutPassword);
   } catch (error) {
     console.error('Erro ao atualizar perfil:', error);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+/**
+ * Registrar vendedor/indicador
+ * PUT /api/users/seller
+ */
+userRouter.put('/seller', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Usuário não autenticado' });
+    }
+
+    const { sellerName } = req.body;
+
+    if (!sellerName || sellerName.trim().length < 3) {
+      return res.status(400).json({ error: 'Nome do vendedor deve ter pelo menos 3 caracteres' });
+    }
+
+    // Atualizar o campo sellerName do usuário
+    await db.update(users)
+      .set({ 
+        sellerName: sellerName.trim(),
+        updatedAt: new Date()
+      })
+      .where(eq(users.id, req.user.id));
+
+    console.log(`Vendedor registrado para usuário ${req.user.id}: ${sellerName}`);
+
+    return res.json({ 
+      message: 'Vendedor registrado com sucesso',
+      sellerName: sellerName.trim()
+    });
+  } catch (error) {
+    console.error('Erro ao registrar vendedor:', error);
     return res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });

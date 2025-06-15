@@ -308,6 +308,19 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({ userRole =
               Perfil
           </Link>
           
+          {/* Pagamentos disponível apenas para pacientes */}
+          {userRole === "patient" && (
+            <Link href="/payments" 
+              className={`${linkBaseClass} ${
+                isLinkActive("/payments") 
+                  ? linkActiveClass 
+                  : linkInactiveClass
+              }`}>
+                <CreditCard className="w-5 h-5 mr-3" />
+                Pagamentos
+            </Link>
+          )}
+          
           {/* QR Code disponível apenas para pacientes */}
           {userRole === "patient" && (
             <Link href="/qr-code" 

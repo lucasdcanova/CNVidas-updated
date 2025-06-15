@@ -35,7 +35,6 @@ import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import { 
   Loader2, 
-  CreditCard, 
   User, 
   Lock, 
   Shield, 
@@ -48,8 +47,6 @@ import Breadcrumb from "@/components/ui/breadcrumb";
 import { AddressFormOptimized as AddressForm, AddressFormValues } from "@/components/forms/address-form-optimized";
 import { ImageCropper } from "@/components/shared/ImageCropper";
 import ProfilePhotoUploader from "@/components/shared/ProfilePhotoUploader";
-import PaymentMethods from "@/components/payment/payment-methods";
-import { useStripeSetup } from '@/hooks/use-stripe-setup';
 
 // Esquema de perfil básico (paciente)
 const patientProfileSchema = z.object({
@@ -873,22 +870,6 @@ const Profile: React.FC = () => {
     }
   };
   
-  // Adicionar a query para buscar os métodos de pagamento
-  const paymentMethodsQuery = useQuery({
-    queryKey: ['/api/subscription/payment-methods'],
-    queryFn: async () => {
-      const response = await apiRequest('GET', '/api/subscription/payment-methods');
-      if (!response.ok) {
-        throw new Error('Falha ao buscar métodos de pagamento');
-      }
-      return response.json();
-    },
-    staleTime: 5 * 60 * 1000,
-    cacheTime: 10 * 60 * 1000,
-    refetchOnWindowFocus: false,
-  });
-
-  const paymentMethodsData = paymentMethodsQuery.data;
 
   if (profileLoading || (user?.role === "partner" && partnerLoading) || (user?.role === "doctor" && doctorLoading)) {
     return (
@@ -922,7 +903,7 @@ const Profile: React.FC = () => {
         </div>
         
         <Tabs defaultValue="profile" className="w-full">
-          <TabsList className={`grid w-full ${user?.role === "patient" ? "grid-cols-3" : "grid-cols-2"}`}>
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="profile">
               <User className="h-4 w-4 mr-2" />
               Perfil
@@ -931,12 +912,6 @@ const Profile: React.FC = () => {
               <Lock className="h-4 w-4 mr-2" />
               Segurança
             </TabsTrigger>
-            {user?.role === "patient" && (
-              <TabsTrigger value="billing">
-                <CreditCard className="h-4 w-4 mr-2" />
-                Pagamento
-              </TabsTrigger>
-            )}
           </TabsList>
           
           <TabsContent value="profile">
@@ -1660,39 +1635,6 @@ const Profile: React.FC = () => {
                     </div>
                   </form>
                 </Form>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="billing">
-            <Card>
-              <CardHeader>
-                <CardTitle>Assinaturas e Pagamentos</CardTitle>
-                <CardDescription>
-                  Gerencie seus métodos de pagamento e visualize seu histórico de transações
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-8">
-                  <div className="border rounded-lg p-4">
-                    <h3 className="text-lg font-medium mb-2">Informações de Assinatura</h3>
-                    <p className="text-sm text-muted-foreground">Seu plano atual: <span className="font-medium">{profileData?.subscriptionPlan ? profileData.subscriptionPlan.replace(/_/g, ' ').toUpperCase() : "Não assinante"}</span></p>
-                    <p className="text-sm text-muted-foreground">Status: <span className={`font-medium ${profileData?.subscriptionStatus === 'active' ? 'text-green-500' : 'text-red-500'}`}>{profileData?.subscriptionStatus === 'active' ? 'Ativo' : 'Inativo'}</span></p>
-                    
-                    <div className="mt-4">
-                      <p className="text-sm text-muted-foreground">Para gerenciar sua assinatura ou trocar de plano, visite a página de <a href="/subscription" className="text-primary underline">assinaturas</a>.</p>
-                    </div>
-                  </div>
-
-                  {/* Componente de métodos de pagamento */}
-                  <PaymentMethods 
-                    paymentMethods={paymentMethodsData?.paymentMethods || []}
-                    onUpdate={() => {
-                      // Recarregar os métodos de pagamento
-                      paymentMethodsQuery.refetch();
-                    }}
-                  />
-                </div>
               </CardContent>
             </Card>
             
