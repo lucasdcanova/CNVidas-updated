@@ -516,6 +516,8 @@ authRouter.post('/verify-qr', async (req: Request, res: Response) => {
   try {
     const { token } = req.body;
     
+    console.log('Verificando QR token:', token ? token.substring(0, 10) + '...' : 'Token não fornecido');
+    
     if (!token) {
       return res.status(400).json({ error: 'QR Code não fornecido' });
     }
@@ -524,8 +526,11 @@ authRouter.post('/verify-qr', async (req: Request, res: Response) => {
     const user = await storage.getUserByQrToken(token);
     
     if (!user) {
+      console.log('Token QR inválido ou expirado');
       return res.status(401).json({ error: 'QR Code inválido ou expirado' });
     }
+    
+    console.log(`QR token válido para usuário: ${user.email}`);
     
     res.json({
       valid: true,

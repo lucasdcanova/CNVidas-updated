@@ -268,7 +268,7 @@ export class DatabaseStorage implements IStorage {
   // QR Code authentication methods
   async generateQrToken(userId: number): Promise<{ token: string, expiresAt: Date }> {
     const token = randomBytes(32).toString('hex');
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutos
+    const expiresAt = new Date(Date.now() + 30 * 60 * 1000); // 30 minutos
     await this.db.insert(qrTokens).values({ userId, token, expiresAt });
     return { token, expiresAt };
   }

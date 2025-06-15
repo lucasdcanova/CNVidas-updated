@@ -172,10 +172,16 @@ userRouter.post('/generate-qr', requireAuth, async (req: AuthenticatedRequest, r
       return res.status(401).json({ error: 'Usuário não autenticado' });
     }
 
-    // Gerar um token único e simples para o QR code
-    const qrToken = `CNV-${req.user.id}-${Date.now()}`;
+    // Gerar token QR usando o storage (que salva no banco de dados)
+    const { token, expiresAt } = await storage.generateQrToken(req.user.id);
     
-    return res.json({ qrCode: qrToken });
+    console.log(`QR Token gerado para usuário ${req.user.id}: ${token.substring(0, 10)}...`);
+    console.log(`Expira em: ${expiresAt.toISOString()}`);
+    
+    return res.json({ 
+      qrCode: token,
+      expiresAt: expiresAt.toISOString()
+    });
   } catch (error) {
     console.error('Erro ao gerar QR Code:', error);
     return res.status(500).json({ error: 'Erro interno do servidor' });
