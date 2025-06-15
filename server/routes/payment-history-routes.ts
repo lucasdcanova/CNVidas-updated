@@ -43,7 +43,7 @@ paymentHistoryRouter.get('/', requireAuth, async (req: AuthenticatedRequest, res
       .select({
         id: sql`${appointments.id}::text`.as('id'),
         type: sql`'consultation'`.as('type'),
-        description: sql`CONCAT('Consulta com Dr(a). ', ${users.fullName})`.as('description'),
+        description: sql`CONCAT('Consulta com Dr(a). ', COALESCE(${users.fullName}, 'Médico'))`.as('description'),
         amount: appointments.paymentAmount,
         status: appointments.paymentStatus,
         date: appointments.createdAt,
@@ -56,7 +56,7 @@ paymentHistoryRouter.get('/', requireAuth, async (req: AuthenticatedRequest, res
       .leftJoin(users, eq(doctors.userId, users.id))
       .where(
         and(
-          eq(appointments.patientId, req.user.id),
+          eq(appointments.userId, req.user.id),
           or(
             eq(appointments.paymentStatus, 'completed'),
             eq(appointments.paymentStatus, 'paid'),
