@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { requireAuth, AuthenticatedRequest } from '../middleware/auth';
 import { db } from '../db';
-import { userSubscriptions, consultations, subscriptionPlans, users, doctors } from '../../shared/schema';
+import { userSubscriptions, appointments, subscriptionPlans, users, doctors } from '../../shared/schema';
 import { eq, desc, and, or, sql } from 'drizzle-orm';
 
 const paymentHistoryRouter = Router();
@@ -38,32 +38,35 @@ paymentHistoryRouter.get('/', requireAuth, async (req: AuthenticatedRequest, res
     
     console.log(`✅ Encontradas ${subscriptionHistory.length} assinaturas`);
 
-    // Buscar histórico de consultas
+    // Buscar histórico de consultas (appointments)
     const consultationHistory = await db
       .select({
-        id: sql`${consultations.id}::text`.as('id'),
+        id: sql`${appointments.id}::text`.as('id'),
         type: sql`'consultation'`.as('type'),
         description: sql`CONCAT('Consulta com Dr(a). ', ${users.fullName})`.as('description'),
-        amount: consultations.price,
-        status: consultations.status,
-        date: consultations.createdAt,
+        amount: appointments.paymentAmount,
+        status: appointments.paymentStatus,
+        date: appointments.createdAt,
         paymentMethod: sql`'credit_card'`.as('paymentMethod'),
         doctorName: users.fullName,
-        consultationType: consultations.type
+        consultationType: appointments.type
       })
-      .from(consultations)
-      .leftJoin(doctors, eq(consultations.doctorId, doctors.id))
+      .from(appointments)
+      .leftJoin(doctors, eq(appointments.doctorId, doctors.id))
       .leftJoin(users, eq(doctors.userId, users.id))
       .where(
         and(
-          eq(consultations.patientId, req.user.id),
+          eq(appointments.patientId, req.user.id),
           or(
-            eq(consultations.status, 'completed'),
-            eq(consultations.status, 'paid')
+            eq(appointments.paymentStatus, 'completed'),
+            eq(appointments.paymentStatus, 'paid'),
+            eq(appointments.paymentStatus, 'included_in_plan')
           )
         )
       )
-      .orderBy(desc(consultations.createdAt));
+      .orderBy(desc(appointments.createdAt));
+
+    console.log(`✅ Encontradas ${consultationHistory.length} consultas`);
 
     // Combinar e ordenar por data
     const allTransactions = [
