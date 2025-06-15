@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { QrCode, Camera, CheckCircle, XCircle, User } from 'lucide-react';
 import DashboardLayout from '@/components/layouts/dashboard-layout';
 import { PartnerOnboardingGuard } from '@/components/partner/partner-onboarding-guard';
+import { Html5QrcodeScanner, Html5Qrcode } from 'html5-qrcode';
 
 export default function PartnerVerification() {
   const [isScanning, setIsScanning] = useState(false);
@@ -15,31 +16,78 @@ export default function PartnerVerification() {
   const [verificationResult, setVerificationResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const scannerRef = useRef<Html5Qrcode | null>(null);
+
+  // Cleanup ao desmontar o componente
+  useEffect(() => {
+    return () => {
+      if (scannerRef.current) {
+        scannerRef.current.stop().catch(() => {});
+      }
+    };
+  }, []);
 
   const startScanning = async () => {
     try {
-      // Check for camera permission
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      stream.getTracks().forEach(track => track.stop()); // Stop the stream immediately
-      
       setIsScanning(true);
       
-      // Initialize QR scanner (you would integrate with a QR scanning library here)
-      toast({
-        title: 'Scanner Ativo',
-        description: 'Posicione o QR Code na frente da câmera'
-      });
+      // Aguardar um pouco para o DOM atualizar
+      setTimeout(() => {
+        const scanner = new Html5Qrcode("qr-reader");
+        scannerRef.current = scanner;
+        
+        scanner.start(
+          { facingMode: "environment" },
+          {
+            fps: 10,
+            qrbox: { width: 250, height: 250 }
+          },
+          (decodedText) => {
+            // QR Code lido com sucesso
+            stopScanning();
+            verifyQRCode(decodedText);
+          },
+          (errorMessage) => {
+            // Ignorar erros de leitura contínua
+          }
+        ).then(() => {
+          toast({
+            title: 'Scanner Ativo',
+            description: 'Posicione o QR Code na frente da câmera'
+          });
+        }).catch((err) => {
+          console.error('Erro ao iniciar scanner:', err);
+          setIsScanning(false);
+          toast({
+            title: 'Erro de Câmera',
+            description: 'Não foi possível acessar a câmera. Verifique as permissões.',
+            variant: 'destructive'
+          });
+        });
+      }, 100);
     } catch (error) {
+      console.error('Erro ao iniciar scanner:', error);
+      setIsScanning(false);
       toast({
-        title: 'Erro de Câmera',
-        description: 'Não foi possível acessar a câmera. Verifique as permissões.',
+        title: 'Erro',
+        description: 'Não foi possível iniciar o scanner',
         variant: 'destructive'
       });
     }
   };
 
   const stopScanning = () => {
-    setIsScanning(false);
+    if (scannerRef.current) {
+      scannerRef.current.stop().then(() => {
+        scannerRef.current = null;
+        setIsScanning(false);
+      }).catch((err) => {
+        console.error('Erro ao parar scanner:', err);
+        setIsScanning(false);
+      });
+    } else {
+      setIsScanning(false);
+    }
   };
 
   const verifyQRCode = async (code: string) => {
@@ -136,12 +184,8 @@ export default function PartnerVerification() {
           <CardContent className="space-y-4">
             {isScanning ? (
               <div className="space-y-4">
-                <div className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed">
-                  <div className="text-center p-4">
-                    <Camera className="h-12 w-12 md:h-16 md:w-16 mx-auto mb-4 text-gray-400" />
-                    <p className="text-gray-600 text-sm md:text-base">Câmera ativa</p>
-                    <p className="text-xs md:text-sm text-gray-500">Posicione o QR Code aqui</p>
-                  </div>
+                <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                  <div id="qr-reader" className="w-full h-full" />
                 </div>
                 
                 <Button 
