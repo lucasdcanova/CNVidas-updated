@@ -148,6 +148,7 @@ router.post("/create-session", isAuthenticated, async (req: Request, res: Respon
       amount: plan.price, // Preço em centavos
       currency: 'brl',
       customer: customerId,
+      setup_future_usage: 'on_session', // Salvar método de pagamento para uso futuro
       metadata: {
         planId: plan.id.toString(),
         planName: plan.name,

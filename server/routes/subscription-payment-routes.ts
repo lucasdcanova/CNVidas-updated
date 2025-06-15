@@ -311,6 +311,50 @@ subscriptionPaymentRouter.get("/payment-methods", requireAuth, async (req: Reque
       type: 'card'
     });
 
+    // Se não há métodos de pagamento mas o usuário tem assinatura ativa, tentar recuperar do histórico
+    if (paymentMethods.data.length === 0 && user.subscriptionStatus === 'active') {
+      console.log(`🔍 Usuário ${user.email} tem assinatura ativa mas sem métodos de pagamento salvos`);
+      
+      // Buscar PaymentIntents recentes para tentar recuperar o método
+      try {
+        const paymentIntents = await stripe.paymentIntents.list({
+          customer: stripeCustomerId,
+          limit: 10
+        });
+        
+        // Procurar por um payment intent bem-sucedido
+        for (const pi of paymentIntents.data) {
+          if (pi.status === 'succeeded' && pi.payment_method) {
+            console.log(`🔧 Encontrado payment method ${pi.payment_method} do payment intent ${pi.id}`);
+            
+            // Tentar anexar o método de pagamento ao cliente
+            try {
+              await stripe.paymentMethods.attach(
+                pi.payment_method as string,
+                { customer: stripeCustomerId }
+              );
+              console.log(`✅ Método de pagamento anexado ao cliente`);
+              
+              // Recarregar lista de métodos
+              const updatedMethods = await stripe.paymentMethods.list({
+                customer: stripeCustomerId,
+                type: 'card'
+              });
+              
+              return res.json({
+                success: true,
+                paymentMethods: updatedMethods.data
+              });
+            } catch (attachError: any) {
+              console.log(`⚠️ Não foi possível anexar método: ${attachError.message}`);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao buscar payment intents:', error);
+      }
+    }
+
     return res.json({
       success: true,
       paymentMethods: paymentMethods.data
