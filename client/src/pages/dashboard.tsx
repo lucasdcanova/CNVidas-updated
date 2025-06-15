@@ -33,6 +33,8 @@ const Dashboard: React.FC = () => {
     gcTime: 0, // Não manter cache (anteriormente cacheTime)
     refetchOnMount: "always", // Sempre buscar dados novos ao montar
     refetchOnWindowFocus: true, // Buscar novos dados quando a janela ganhar foco
+    retry: 3, // Tentar 3 vezes em caso de erro
+    retryDelay: 1000, // Aguardar 1 segundo entre tentativas
   });
   
   // Verificar se é o primeiro login de um paciente e redirecionar para seleção de plano obrigatória
@@ -48,11 +50,24 @@ const Dashboard: React.FC = () => {
       return;
     }
 
-    // Lógica simplificada: só redirecionar se não tem assinatura
-    if (!userSubscription) {
+    // Verificar se acabou de ativar uma assinatura
+    const justActivated = sessionStorage.getItem('subscription-just-activated');
+    if (justActivated) {
+      console.log("✅ Dashboard - Assinatura recém ativada, permanecendo no dashboard");
+      sessionStorage.removeItem('subscription-just-activated');
+      setIsFirstLogin(false);
+      return;
+    }
+    
+    // Lógica simplificada: só redirecionar se não tem assinatura E o status não é ativo
+    if (!userSubscription && user.subscriptionStatus !== 'active') {
       console.log("🆕 Dashboard - Novo usuário sem assinatura, redirecionando para first-subscription");
+      console.log("Status do usuário:", user.subscriptionStatus);
       setLocation('/first-subscription');
     } else {
+      console.log("✅ Dashboard - Usuário tem assinatura ou status ativo");
+      console.log("userSubscription:", userSubscription);
+      console.log("user.subscriptionStatus:", user.subscriptionStatus);
       setIsFirstLogin(false);
     }
   }, [user, userSubscription, subscriptionLoading, isError, setLocation]);

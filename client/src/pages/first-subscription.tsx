@@ -132,13 +132,13 @@ const FirstSubscriptionPage: React.FC = () => {
             description: "Você será redirecionado para o dashboard.",
           });
           
-          // Marcar que estamos vindo de first-subscription para evitar loops
-          sessionStorage.setItem('coming-from-first-subscription', 'true');
+          // Marcar que acabamos de ativar uma assinatura
+          sessionStorage.setItem('subscription-just-activated', 'true');
           
           // Aguardar um momento para mostrar o toast e depois redirecionar
           setTimeout(() => {
             console.log("🔄 Redirecionando para dashboard...");
-            window.location.href = "/dashboard";
+            window.location.replace("/dashboard");
           }, 1000);
         } else {
           throw new Error("Falha ao ativar plano gratuito");
@@ -240,6 +240,9 @@ const FirstSubscriptionPage: React.FC = () => {
           // Invalidar queries para atualizar dados
           await queryClient.invalidateQueries({ queryKey: ["/api/auth/check"] });
           await queryClient.invalidateQueries({ queryKey: ["/api/subscription/current"] });
+          
+          // Definir flag para evitar redirecionamento do dashboard
+          sessionStorage.setItem('subscription-just-activated', 'true');
           
           // Aguardar para mostrar animação completa
           setTimeout(() => {
