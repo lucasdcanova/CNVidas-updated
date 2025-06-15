@@ -315,8 +315,10 @@ export default function TelemedicineConsultation() {
             token={roomInfo?.token}
             onJoinCall={handleJoinCall}
             onLeaveCall={handleLeaveCall}
+            appointmentId={appointmentId}
             userName={user?.fullName || user?.username}
             isDoctor={user?.role === 'doctor'}
+            enableRecording={true}
           />
         </div>
       ) : (

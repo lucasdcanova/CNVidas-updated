@@ -1,111 +1,17 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import DailyIframe from '@daily-co/daily-js';
-import { Mic, MicOff, Video, VideoOff, Phone, X, AlertCircle } from 'lucide-react';
+import DailyIframe, { DailyCall } from '@daily-co/daily-js';
+import { Mic, MicOff, Video, VideoOff, Phone } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { TelemedicineDiagnostics } from '@/utils/telemedicine-diagnostics';
 import RecordingControls from './RecordingControls';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-// Gerenciamento global de instâncias do Daily
+// Global para rastrear instâncias Daily
 declare global {
   interface Window {
-    __dailyInstances?: Set<any>;
-    __dailyCurrentInstance?: any;
-    recordingControlsRef?: any;
+    dailyCallInstance?: DailyCall | null;
   }
 }
-
-// Função para forçar limpeza de todas as instâncias
-const forceCleanupAllDailyInstances = async () => {
-  console.log('🧹 Forçando limpeza completa de todas as instâncias Daily...');
-  
-  // Limpar instâncias registradas
-  if (window.__dailyInstances) {
-    const instances = Array.from(window.__dailyInstances);
-    for (const instance of instances) {
-      try {
-        if (instance && typeof instance.destroy === 'function') {
-          await instance.destroy();
-        }
-      } catch (error) {
-        console.warn('Erro ao limpar instância registrada:', error);
-      }
-    }
-    window.__dailyInstances.clear();
-  }
-  
-  // Tentar limpar instância global do Daily
-  try {
-    if (typeof DailyIframe !== 'undefined' && DailyIframe.getCallInstance) {
-      const globalInstance = DailyIframe.getCallInstance();
-      if (globalInstance) {
-        console.log('🧹 Limpando instância global do Daily...');
-        try {
-          await globalInstance.leave();
-        } catch (e) {
-          // Ignorar erro se já saiu
-        }
-        await globalInstance.destroy();
-      }
-    }
-  } catch (error) {
-    console.warn('Erro ao limpar instância global:', error);
-  }
-  
-  // Limpar referência atual
-  if (window.__dailyCurrentInstance) {
-    try {
-      await window.__dailyCurrentInstance.destroy();
-    } catch (error) {
-      console.warn('Erro ao limpar instância atual:', error);
-    }
-    window.__dailyCurrentInstance = null;
-  }
-  
-  // Aguardar um pouco para garantir limpeza completa
-  await new Promise(resolve => setTimeout(resolve, 1000));
-};
-
-// Função para limpar todas as instâncias globais
-const cleanupAllDailyInstances = async () => {
-  if (!window.__dailyInstances) {
-    window.__dailyInstances = new Set();
-    return;
-  }
-  
-  const instances = Array.from(window.__dailyInstances);
-  for (const instance of instances) {
-    try {
-      if (instance && typeof instance.destroy === 'function') {
-        await instance.destroy();
-      }
-    } catch (error) {
-      console.warn('Erro ao limpar instância:', error);
-    }
-  }
-  window.__dailyInstances.clear();
-};
-
-// Função para registrar uma nova instância
-const registerDailyInstance = (instance: any) => {
-  if (!window.__dailyInstances) {
-    window.__dailyInstances = new Set();
-  }
-  window.__dailyInstances.add(instance);
-  window.__dailyCurrentInstance = instance;
-};
-
-// Função para desregistrar uma instância
-const unregisterDailyInstance = (instance: any) => {
-  if (window.__dailyInstances) {
-    window.__dailyInstances.delete(instance);
-  }
-  if (window.__dailyCurrentInstance === instance) {
-    window.__dailyCurrentInstance = null;
-  }
-};
 
 interface MinimalistVideoCallProps {
   roomUrl?: string;
@@ -120,6 +26,19 @@ interface MinimalistVideoCallProps {
   enableRecording?: boolean;
 }
 
+// Função para limpar instâncias Daily globais
+const cleanupGlobalDailyInstances = async () => {
+  if (typeof window !== 'undefined' && window.dailyCallInstance) {
+    try {
+      console.log('🧹 Limpando instância Daily global existente...');
+      await window.dailyCallInstance.destroy();
+      window.dailyCallInstance = null;
+    } catch (e) {
+      console.error('Erro ao limpar instância global:', e);
+    }
+  }
+};
+
 export default function MinimalistVideoCall({
   roomUrl,
   token,
@@ -132,21 +51,23 @@ export default function MinimalistVideoCall({
   appointmentId,
   enableRecording = true
 }: MinimalistVideoCallProps) {
-  const videoContainerRef = useRef<HTMLDivElement>(null);
-  const callFrameRef = useRef<any>(null);
+  const localVideoRef = useRef<HTMLVideoElement>(null);
+  const remoteVideoRef = useRef<HTMLVideoElement>(null);
+  const callRef = useRef<DailyCall | null>(null);
+  
   const [isCallActive, setIsCallActive] = useState(false);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const [isConnecting, setIsConnecting] = useState(false);
-  const [participants, setParticipants] = useState<any[]>([]);
   const [callDuration, setCallDuration] = useState(0);
+  const [remoteParticipant, setRemoteParticipant] = useState<any>(null);
   const callStartTimeRef = useRef<number>(0);
-  const [isMounted, setIsMounted] = useState(false);
-  const isJoiningRef = useRef(false);
-  const [connectionError, setConnectionError] = useState<string | null>(null);
-  const retryCountRef = useRef(0);
-  const maxRetries = 3;
-  const [doctorSettings, setDoctorSettings] = useState<any>(null);
+  const [hasJoinedCall, setHasJoinedCall] = useState(false);
+  
+  // Limpar instâncias ao montar
+  useEffect(() => {
+    cleanupGlobalDailyInstances();
+  }, []);
 
   // Buscar configurações do paciente quando for médico
   const { data: patientSettings } = useQuery({
@@ -155,11 +76,8 @@ export default function MinimalistVideoCall({
       if (!isDoctor || !appointmentId) return null;
       
       try {
-        // Buscar informações da consulta para obter o ID do paciente
         const appointmentResponse = await axios.get(`/api/appointments/${appointmentId}`);
         const patientId = appointmentResponse.data.user_id;
-        
-        // Buscar configurações do paciente
         const settingsResponse = await axios.get(`/api/users/${patientId}/settings`);
         return settingsResponse.data;
       } catch (error) {
@@ -171,7 +89,7 @@ export default function MinimalistVideoCall({
   });
 
   // Buscar configurações do médico
-  const { data: doctorSettingsData } = useQuery({
+  const { data: doctorSettings } = useQuery({
     queryKey: ['/api/users/settings'],
     queryFn: async () => {
       if (!isDoctor) return null;
@@ -186,114 +104,6 @@ export default function MinimalistVideoCall({
     },
     enabled: isDoctor
   });
-
-  // Marcar como montado e limpar instâncias conflitantes
-  useEffect(() => {
-    setIsMounted(true);
-    
-    // Limpar todas as instâncias existentes do Daily ao montar
-    const initializeComponent = async () => {
-      try {
-        console.log('🧹 Inicializando componente de videochamada...');
-        await forceCleanupAllDailyInstances();
-      } catch (error) {
-        console.log('ℹ️ Erro ao limpar instâncias existentes:', error);
-      }
-    };
-    
-    initializeComponent();
-    
-    // Observador para remover controles do Daily assim que aparecerem
-    const observer = new MutationObserver(() => {
-      // Remover controles do Daily.co
-      const controls = document.querySelectorAll(
-        '[class*="controls"], [class*="button"], [class*="toolbar"], button:not(.cnvidas-control)'
-      );
-      controls.forEach(el => {
-        if (!el.classList.contains('cnvidas-control')) {
-          el.style.display = 'none';
-          el.style.visibility = 'hidden';
-        }
-      });
-    });
-    
-    // Observar mudanças no DOM
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-    
-    // Adicionar estilos globais para esconder TODOS os controles do Daily
-    const style = document.createElement('style');
-    style.textContent = `
-      /* Esconder ABSOLUTAMENTE TODOS os controles do Daily.co */
-      #daily-video-wrapper .controls-button,
-      #daily-video-wrapper .controls-button-container,
-      #daily-video-wrapper .bottom-controls-container,
-      #daily-video-wrapper .top-toolbar-container,
-      #daily-video-wrapper .participant-label,
-      #daily-video-wrapper .network-info-container,
-      #daily-video-wrapper .screenshare-controls-container,
-      #daily-video-wrapper [class*="DailyVideoControlsContainer"],
-      #daily-video-wrapper [class*="ControlsButton"],
-      #daily-video-wrapper [class*="Toolbar"],
-      #daily-video-wrapper [class*="controls"],
-      #daily-video-wrapper [class*="button"],
-      #daily-video-wrapper [class*="Button"],
-      #daily-video-wrapper [aria-label="Mute mic"],
-      #daily-video-wrapper [aria-label="Turn off cam"],
-      #daily-video-wrapper [aria-label="Leave call"],
-      #daily-video-wrapper [aria-label="Settings"],
-      #daily-video-wrapper [aria-label="More options"],
-      .daily-video-chrome,
-      .daily-prejoin-chrome,
-      .controls-menu,
-      .controls-button-container,
-      .bottom-controls-container {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-      }
-      
-      /* Esconder qualquer SVG de controle */
-      #daily-video-wrapper svg[class*="control"],
-      #daily-video-wrapper svg[class*="button"],
-      #daily-video-wrapper button {
-        display: none !important;
-      }
-      
-      /* Forçar vídeo em tela cheia sem bordas */
-      #daily-video-wrapper,
-      #daily-video-wrapper video {
-        object-fit: cover !important;
-        width: 100% !important;
-        height: 100% !important;
-        border: none !important;
-        outline: none !important;
-      }
-      
-      /* Remover qualquer padding ou margem */
-      #daily-video-wrapper > div {
-        padding: 0 !important;
-        margin: 0 !important;
-      }
-    `;
-    document.head.appendChild(style);
-    
-    return () => {
-      setIsMounted(false);
-      observer.disconnect();
-      document.head.removeChild(style);
-    };
-  }, []);
-
-  // Atualizar configurações do médico
-  useEffect(() => {
-    if (doctorSettingsData) {
-      setDoctorSettings(doctorSettingsData);
-    }
-  }, [doctorSettingsData]);
 
   // Determinar se deve gravar automaticamente
   const shouldAutoRecord = () => {
@@ -331,189 +141,64 @@ export default function MinimalistVideoCall({
 
   // Função para entrar na chamada
   const joinCall = useCallback(async () => {
-    if (!roomUrl || !videoContainerRef.current || isJoiningRef.current || isCallActive) {
-      console.log('❌ Condições não atendidas para entrar na chamada:', {
-        roomUrl: !!roomUrl,
-        container: !!videoContainerRef.current,
-        isJoining: isJoiningRef.current,
-        isCallActive: isCallActive
-      });
-      return;
-    }
+    if (!roomUrl || isCallActive || isConnecting || hasJoinedCall) return;
 
-    // Forçar limpeza completa antes de criar nova instância
-    console.log('🧹 Forçando limpeza completa antes de criar nova instância...');
-    try {
-      await forceCleanupAllDailyInstances();
-      if (callFrameRef.current) {
-        unregisterDailyInstance(callFrameRef.current);
-        callFrameRef.current = null;
-      }
-    } catch (error) {
-      console.error('Erro ao limpar instâncias:', error);
-    }
-
-    isJoiningRef.current = true;
     setIsConnecting(true);
-    setConnectionError(null);
+    setHasJoinedCall(true);
 
     try {
-      console.log('🎬 Iniciando videochamada minimalista...');
+      console.log('🎬 Iniciando videochamada headless...');
       
-      // Verificação final antes de criar nova instância
-      try {
-        const existingInstance = DailyIframe.getCallInstance();
-        if (existingInstance) {
-          console.log('⚠️ Ainda existe uma instância ativa, forçando destruição...');
-          await existingInstance.destroy();
-          await new Promise(resolve => setTimeout(resolve, 500));
-        }
-      } catch (error) {
-        console.log('✅ Nenhuma instância ativa encontrada');
-      }
+      // Limpar qualquer instância global existente
+      await cleanupGlobalDailyInstances();
       
-      // Criar call frame com configuração mínima
-      const callFrame = DailyIframe.createFrame(videoContainerRef.current, {
-        iframeStyle: {
-          position: 'absolute',
-          top: '0',
-          left: '0',
-          width: '100%',
-          height: '100%',
-          border: 'none',
-          borderRadius: '0'
-        },
-        showLeaveButton: false,
-        showFullscreenButton: false
+      // Criar call object (sem iframe)
+      const callObject = DailyIframe.createCallObject({
+        subscribeToTracksAutomatically: true
       });
 
-      callFrameRef.current = callFrame;
-      
-      // Registrar a nova instância no sistema global
-      registerDailyInstance(callFrame);
+      callRef.current = callObject;
+      window.dailyCallInstance = callObject;
 
       // Configurar eventos
-      callFrame
-        .on('joined-meeting', (event: any) => {
-          console.log('✅ Conectado à sala de videochamada');
+      callObject
+        .on('joined-meeting', () => {
+          console.log('✅ Conectado à sala');
           setIsCallActive(true);
           setIsConnecting(false);
           callStartTimeRef.current = Date.now();
           onJoinCall?.();
-          
-          // Configurar layout PIP após entrar
-          callFrame.setLocalVideo(isVideoEnabled);
-          callFrame.setLocalAudio(isAudioEnabled);
-          
-          // Configurar interface após conectar e manter ocultos os controles
-          const hideControlsInterval = setInterval(() => {
-            try {
-              const iframe = videoContainerRef.current?.querySelector('iframe');
-              if (iframe && iframe.contentDocument) {
-                // Injetar CSS diretamente no iframe
-                let styleElement = iframe.contentDocument.getElementById('cnvidas-custom-style');
-                if (!styleElement) {
-                  styleElement = iframe.contentDocument.createElement('style');
-                  styleElement.id = 'cnvidas-custom-style';
-                  styleElement.textContent = `
-                    /* Esconder TODOS os controles */
-                    [class*="controls"], [class*="Controls"],
-                    [class*="toolbar"], [class*="Toolbar"],
-                    [class*="button"], [class*="Button"],
-                    [class*="participant-label"],
-                    [class*="network"],
-                    [class*="menu"],
-                    .controls-button,
-                    .controls-button-container,
-                    .bottom-controls-container,
-                    .top-toolbar-container,
-                    button {
-                      display: none !important;
-                      visibility: hidden !important;
-                    }
-                    
-                    /* Vídeo em tela cheia */
-                    video {
-                      width: 100% !important;
-                      height: 100% !important;
-                      object-fit: cover !important;
-                    }
-                  `;
-                  iframe.contentDocument.head.appendChild(styleElement);
-                }
-                
-                // Também ocultar via JavaScript
-                const buttons = iframe.contentDocument.querySelectorAll('button, [class*="control"], [class*="button"]');
-                buttons.forEach(btn => {
-                  btn.style.display = 'none';
-                  btn.style.visibility = 'hidden';
-                });
-              }
-            } catch (error) {
-              // Ignorar erros de cross-origin
-            }
-          }, 500);
-          
-          // Parar o intervalo quando sair da chamada
-          const stopInterval = () => clearInterval(hideControlsInterval);
-          callFrame.on('left-meeting', stopInterval);
         })
         .on('left-meeting', () => {
           console.log('👋 Desconectado da sala');
           setIsCallActive(false);
-          setIsConnecting(false);
-          callStartTimeRef.current = 0;
           setCallDuration(0);
-          setParticipants([]);
           onLeaveCall?.();
         })
-        .on('participant-joined', (event: any) => {
-          console.log('👥 Participante entrou:', event.participant);
-          updateParticipants();
-          onParticipantJoined?.(event.participant);
-        })
-        .on('participant-left', (event: any) => {
-          console.log('👋 Participante saiu:', event.participant);
-          updateParticipants();
-          onParticipantLeft?.(event.participant);
-        })
-        .on('error', (event: any) => {
-          console.error('❌ Erro na videochamada:', event);
-          const errorMessage = event.errorMsg || event.error?.msg || 'Erro de conexão';
-          setConnectionError(errorMessage);
-          setIsConnecting(false);
-          
-          // Tentar reconectar automaticamente
-          if (retryCountRef.current < maxRetries) {
-            retryCountRef.current++;
-            console.log(`🔄 Tentando reconectar (${retryCountRef.current}/${maxRetries})...`);
-            setTimeout(() => {
-              if (callFrameRef.current) {
-                callFrameRef.current.leave();
-                callFrameRef.current.destroy();
-                callFrameRef.current = null;
-              }
-              isJoiningRef.current = false;
-              joinCall();
-            }, 3000);
+        .on('participant-joined', (event) => {
+          if (event?.participant && !event.participant.local) {
+            console.log('👥 Participante entrou:', event.participant);
+            setRemoteParticipant(event.participant);
+            onParticipantJoined?.(event.participant);
           }
         })
-        .on('camera-error', (event: any) => {
-          console.warn('📹 Erro na câmera:', event);
-          setIsVideoEnabled(false);
+        .on('participant-left', (event) => {
+          if (event?.participant && !event.participant.local) {
+            console.log('👋 Participante saiu:', event.participant);
+            setRemoteParticipant(null);
+            onParticipantLeft?.(event.participant);
+          }
         })
-        .on('mic-error', (event: any) => {
-          console.warn('🎤 Erro no microfone:', event);
-          setIsAudioEnabled(false);
+        .on('track-started', (event) => {
+          handleTrackStarted(event);
+        })
+        .on('track-stopped', (event) => {
+          handleTrackStopped(event);
+        })
+        .on('error', (event) => {
+          console.error('❌ Erro na videochamada:', event);
+          setIsConnecting(false);
         });
-
-      const updateParticipants = () => {
-        if (callFrameRef.current) {
-          const participants = callFrameRef.current.participants();
-          const participantList = Object.values(participants || {});
-          setParticipants(participantList);
-        }
-      };
 
       // Entrar na sala
       const joinOptions: any = {
@@ -527,136 +212,162 @@ export default function MinimalistVideoCall({
         joinOptions.token = token;
       }
 
-      await callFrame.join(joinOptions);
+      await callObject.join(joinOptions);
 
     } catch (error: any) {
       console.error('❌ Erro ao entrar na videochamada:', error);
-      setConnectionError(error.message || 'Falha ao conectar');
       setIsConnecting(false);
-      isJoiningRef.current = false;
+      setHasJoinedCall(false);
+      
+      // Cleanup em caso de erro
+      if (callRef.current) {
+        try {
+          await callRef.current.destroy();
+        } catch (e) {
+          console.error('Erro ao destruir call object:', e);
+        }
+        callRef.current = null;
+      }
     }
-  }, [roomUrl, token, userName, isVideoEnabled, isAudioEnabled, onJoinCall, onLeaveCall, onParticipantJoined, onParticipantLeft]);
+  }, [roomUrl, token, userName, isVideoEnabled, isAudioEnabled, onJoinCall, onLeaveCall, onParticipantJoined, onParticipantLeft, isCallActive, isConnecting, hasJoinedCall]);
+
+  // Função para lidar com tracks iniciados
+  const handleTrackStarted = (event: any) => {
+    const { participant, track } = event;
+    
+    if (track && track.readyState === 'live') {
+      const stream = new MediaStream([track]);
+      
+      if (participant.local) {
+        // Vídeo local
+        if (track.kind === 'video' && localVideoRef.current) {
+          localVideoRef.current.srcObject = stream;
+        }
+      } else {
+        // Vídeo remoto
+        if (track.kind === 'video' && remoteVideoRef.current) {
+          remoteVideoRef.current.srcObject = stream;
+        }
+      }
+    }
+  };
+
+  // Função para lidar com tracks parados
+  const handleTrackStopped = (event: any) => {
+    const { participant, track } = event;
+    
+    if (track.kind === 'video') {
+      if (participant.local && localVideoRef.current) {
+        localVideoRef.current.srcObject = null;
+      } else if (!participant.local && remoteVideoRef.current) {
+        remoteVideoRef.current.srcObject = null;
+      }
+    }
+  };
 
   // Função para sair da chamada
   const leaveCall = useCallback(async () => {
     console.log('🔴 Encerrando videochamada...');
-    if (callFrameRef.current) {
+    if (callRef.current) {
       try {
-        // Disparar evento para parar gravação automática
+        // Parar gravação se estiver gravando
         if (window.recordingControlsRef) {
           window.recordingControlsRef.stopRecording();
         }
         
-        // Sair da reunião
-        await callFrameRef.current.leave();
-        
-        // Desregistrar e destruir a instância
-        unregisterDailyInstance(callFrameRef.current);
-        await callFrameRef.current.destroy();
-        callFrameRef.current = null;
-        isJoiningRef.current = false;
+        await callRef.current.leave();
+        await callRef.current.destroy();
+        callRef.current = null;
       } catch (error) {
         console.error('Erro ao sair da chamada:', error);
-        if (callFrameRef.current) {
-          unregisterDailyInstance(callFrameRef.current);
-        }
-        callFrameRef.current = null;
-        isJoiningRef.current = false;
       }
     }
+    setHasJoinedCall(false);
   }, []);
 
   // Alternar áudio
   const toggleAudio = useCallback(() => {
-    if (callFrameRef.current) {
+    if (callRef.current) {
       const newState = !isAudioEnabled;
-      callFrameRef.current.setLocalAudio(newState);
+      callRef.current.setLocalAudio(newState);
       setIsAudioEnabled(newState);
     }
   }, [isAudioEnabled]);
 
   // Alternar vídeo
   const toggleVideo = useCallback(() => {
-    if (callFrameRef.current) {
+    if (callRef.current) {
       const newState = !isVideoEnabled;
-      callFrameRef.current.setLocalVideo(newState);
+      callRef.current.setLocalVideo(newState);
       setIsVideoEnabled(newState);
     }
   }, [isVideoEnabled]);
 
   // Auto-iniciar quando tiver URL
   useEffect(() => {
-    if (roomUrl && !isCallActive && !isConnecting && isMounted && !connectionError && !isJoiningRef.current) {
-      console.log('🚀 Condições atendidas para auto-iniciar videochamada');
-      
-      // Aguardar um tempo maior para garantir que não há conflitos
+    if (roomUrl && !isCallActive && !isConnecting && !hasJoinedCall) {
       const timer = setTimeout(() => {
-        if (!isCallActive && !isConnecting && !isJoiningRef.current) {
-          console.log('🎬 Auto-iniciando videochamada após delay de segurança');
-          joinCall();
-        }
-      }, 5000);
+        joinCall();
+      }, 2000);
       
       return () => clearTimeout(timer);
     }
-  }, [roomUrl, isCallActive, isConnecting, isMounted, connectionError, joinCall]);
+  }, [roomUrl, isCallActive, isConnecting, hasJoinedCall, joinCall]);
 
   // Limpar ao desmontar
   useEffect(() => {
     return () => {
-      if (callFrameRef.current) {
-        try {
-          console.log('🧹 Limpando DailyIframe ao desmontar componente...');
-          // Desregistrar a instância
-          unregisterDailyInstance(callFrameRef.current);
-          // Primeiro sair da reunião
-          if (callFrameRef.current.meetingState() !== 'left-meeting') {
-            callFrameRef.current.leave();
-          }
-          // Depois destruir a instância
-          callFrameRef.current.destroy();
-          callFrameRef.current = null;
-        } catch (error) {
-          console.error('Erro ao limpar DailyIframe:', error);
-          callFrameRef.current = null;
-        }
+      if (callRef.current) {
+        callRef.current.leave().catch(console.error);
+        callRef.current.destroy().catch(console.error);
+        callRef.current = null;
       }
-      // Resetar flags
-      isJoiningRef.current = false;
+      setHasJoinedCall(false);
     };
   }, []);
 
   return (
     <div className="fixed inset-0 w-full h-full bg-black overflow-hidden">
-      {/* Container de vídeo - Tela cheia */}
-      <div
-        ref={videoContainerRef}
-        className="absolute inset-0 bg-black daily-video-container"
-        style={{ 
-          width: '100%', 
-          height: '100%',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          zIndex: 1
-        }}
+      {/* Vídeo remoto em tela cheia */}
+      <video
+        ref={remoteVideoRef}
+        autoPlay
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ transform: 'scaleX(-1)' }}
       />
-      
 
-      {/* Overlay com informações - sempre visível quando em chamada */}
+      {/* Vídeo local PIP */}
+      {isCallActive && (
+        <div className="absolute bottom-24 right-4 w-32 h-48 bg-gray-900 rounded-2xl overflow-hidden shadow-2xl">
+          <video
+            ref={localVideoRef}
+            autoPlay
+            playsInline
+            muted
+            className="w-full h-full object-cover"
+            style={{ transform: 'scaleX(-1)' }}
+          />
+          {!isVideoEnabled && (
+            <div className="absolute inset-0 bg-gray-800 flex items-center justify-center">
+              <VideoOff className="w-8 h-8 text-gray-400" />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Overlay com informações */}
       {isCallActive && (
         <>
-          {/* Header minimalista estilo FaceTime */}
-          <div className="absolute top-0 left-0 right-0 p-6" style={{ zIndex: 9999 }}>
+          {/* Header minimalista */}
+          <div className="absolute top-0 left-0 right-0 p-6" style={{ zIndex: 50 }}>
             <div className="flex justify-between items-center">
-              {/* Nome do participante e tempo */}
               <div className="bg-black/40 backdrop-blur-xl rounded-full px-4 py-2">
                 <p className="text-white text-sm font-medium">
                   {formatDuration(callDuration)}
                 </p>
               </div>
               
-              {/* Indicador de gravação para médicos */}
               {isDoctor && enableRecording && appointmentId && (
                 <div className="bg-black/40 backdrop-blur-xl rounded-full">
                   <RecordingControls
@@ -670,14 +381,13 @@ export default function MinimalistVideoCall({
             </div>
           </div>
 
-          {/* Controles estilo FaceTime - flutuantes na parte inferior */}
-          <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent" style={{ zIndex: 9999 }}>
+          {/* Controles estilo FaceTime */}
+          <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent" style={{ zIndex: 50 }}>
             <div className="flex items-center justify-center gap-4">
               {/* Botão de Mudo */}
               <button
                 onClick={toggleAudio}
                 className={cn(
-                  "cnvidas-control",
                   "relative rounded-full transition-all duration-200",
                   "w-14 h-14 flex items-center justify-center",
                   "backdrop-blur-xl shadow-lg",
@@ -694,11 +404,10 @@ export default function MinimalistVideoCall({
                 )}
               </button>
 
-              {/* Botão de Encerrar - Central e maior */}
+              {/* Botão de Encerrar */}
               <button
                 onClick={leaveCall}
                 className={cn(
-                  "cnvidas-control",
                   "relative rounded-full transition-all duration-200",
                   "w-16 h-16 flex items-center justify-center mx-4",
                   "bg-red-500 hover:bg-red-600 shadow-xl",
@@ -713,7 +422,6 @@ export default function MinimalistVideoCall({
               <button
                 onClick={toggleVideo}
                 className={cn(
-                  "cnvidas-control",
                   "relative rounded-full transition-all duration-200",
                   "w-14 h-14 flex items-center justify-center",
                   "backdrop-blur-xl shadow-lg",
@@ -736,55 +444,10 @@ export default function MinimalistVideoCall({
 
       {/* Estado de conexão */}
       {isConnecting && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black z-40">
-          <div className="text-center p-4">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm" style={{ zIndex: 100 }}>
+          <div className="text-center">
             <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin mb-4 mx-auto" />
-            <p className="text-white text-xl">Conectando...</p>
-            <p className="text-white/60 text-sm mt-2">
-              {connectionError || 'Preparando sua consulta'}
-            </p>
-            {retryCountRef.current > 0 && (
-              <p className="text-white/40 text-xs mt-1">
-                Tentativa {retryCountRef.current} de {maxRetries}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
-      
-      {/* Estado de erro */}
-      {!isConnecting && connectionError && !isCallActive && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black z-40">
-          <div className="text-center p-4 max-w-md">
-            <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
-              <X className="w-8 h-8 text-red-500" />
-            </div>
-            <p className="text-white text-lg mb-2">Erro de Conexão</p>
-            <p className="text-white/60 text-sm mb-4">{connectionError}</p>
-            <div className="flex gap-3 justify-center">
-              <button
-                onClick={() => {
-                  setConnectionError(null);
-                  retryCountRef.current = 0;
-                  joinCall();
-                }}
-                className="px-6 py-2 bg-white/20 hover:bg-white/30 rounded-full text-white transition-all"
-              >
-                Tentar Novamente
-              </button>
-              <button
-                onClick={async () => {
-                  const roomName = roomUrl?.split('/').pop();
-                  const results = await TelemedicineDiagnostics.runFullDiagnostic(roomName);
-                  console.log(TelemedicineDiagnostics.formatResults(results));
-                  alert('Diagnóstico completo no console (F12)');
-                }}
-                className="px-6 py-2 bg-white/10 hover:bg-white/20 rounded-full text-white/80 transition-all flex items-center gap-2"
-              >
-                <AlertCircle className="w-4 h-4" />
-                Diagnóstico
-              </button>
-            </div>
+            <p className="text-white text-lg">Conectando...</p>
           </div>
         </div>
       )}

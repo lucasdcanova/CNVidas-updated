@@ -66,6 +66,7 @@ import ReenviarVerificacao from "@/pages/reenviar-verificacao";
 import EsqueciSenha from "@/pages/esqueci-senha";
 import AdminMedicalRecords from "@/pages/admin/medical-records";
 import DoctorMedicalRecords from "@/pages/doctor/medical-records";
+import TestHeadlessDaily from "@/pages/test-headless-daily";
 
 // Componente de erro boundary
 class ErrorBoundary extends React.Component<
@@ -203,6 +204,9 @@ function Router() {
       <ProtectedRoute path="/admin/seller-stats" component={SellerStats} allowedRoles={["admin"]} />
       <ProtectedRoute path="/admin/checkout-tracking" component={CheckoutTrackingPage} allowedRoles={["admin"]} />
       <ProtectedRoute path="/admin/medical-records" component={AdminMedicalRecords} allowedRoles={["admin"]} />
+      
+      {/* Test routes */}
+      <ProtectedRoute path="/test-headless-daily" component={TestHeadlessDaily} />
       
       {/* Fallback to 404 */}
       <Route component={NotFound} />
