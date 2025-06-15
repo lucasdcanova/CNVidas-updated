@@ -4,7 +4,7 @@ import { useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Check, CreditCard, User, Users, AlertTriangle, Star, Crown, Heart, Shield, Zap } from "lucide-react";
+import { Loader2, Check, CreditCard, User, Users, AlertTriangle, Star, Crown, Heart, Shield, Zap, CheckCircle, CheckCircle2, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import { getSubscriptionPlans, getUserSubscription, updateUserSubscription } from "@/lib/api";
@@ -14,6 +14,7 @@ import { apiRequest } from "@/lib/queryClient";
 import CheckoutModal from "@/components/checkout/checkout-modal-fix";
 import cnvidasLogo from "@/assets/cnvidas-logo-transparent.png";
 import { getPlanName } from "@/components/shared/plan-indicator";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Definição do tipo de plano de assinatura
 interface SubscriptionPlan {
@@ -51,6 +52,8 @@ const FirstSubscriptionPage: React.FC = () => {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<{id: number, name: string, price: string} | null>(null);
   const [hasAttemptedLeave, setHasAttemptedLeave] = useState(false);
+  const [showActivationAnimation, setShowActivationAnimation] = useState(false);
+  const [activationStatus, setActivationStatus] = useState<'checking' | 'activating' | 'activated'>('checking');
 
   console.log("🔍 FirstSubscriptionPage - Location atual:", location);
   console.log("🔧 TESTE: FirstSubscriptionPage carregada às", new Date().toLocaleTimeString());
@@ -214,9 +217,44 @@ const FirstSubscriptionPage: React.FC = () => {
   };
 
   const handlePlanSelected = () => {
-    // O plano foi selecionado com sucesso
-    // NÃO redirecionar aqui - deixar o checkout modal fazer isso após o pagamento
-    console.log("✅ Plano selecionado, aguardando confirmação de pagamento...");
+    // O plano foi selecionado com sucesso - mostrar animação
+    console.log("✅ Plano selecionado, mostrando animação de ativação...");
+    setShowActivationAnimation(true);
+    setActivationStatus('activating');
+    
+    // Verificar o status do pagamento periodicamente
+    checkPaymentStatus();
+  };
+
+  const checkPaymentStatus = async () => {
+    try {
+      const response = await apiRequest('POST', '/api/subscription/check-pending-payment', {});
+      
+      if (response.ok) {
+        const data = await response.json();
+        
+        if (data.status === 'active') {
+          // Pagamento confirmado!
+          setActivationStatus('activated');
+          
+          // Invalidar queries para atualizar dados
+          await queryClient.invalidateQueries({ queryKey: ["/api/auth/check"] });
+          await queryClient.invalidateQueries({ queryKey: ["/api/subscription/current"] });
+          
+          // Aguardar para mostrar animação completa
+          setTimeout(() => {
+            window.location.replace('/dashboard');
+          }, 3000);
+        } else {
+          // Continuar verificando
+          setTimeout(() => checkPaymentStatus(), 2000);
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao verificar pagamento:', error);
+      // Tentar novamente
+      setTimeout(() => checkPaymentStatus(), 3000);
+    }
   };
 
   // Função para lidar com tentativa de sair sem selecionar um plano
@@ -243,8 +281,113 @@ const FirstSubscriptionPage: React.FC = () => {
   }
   
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-background to-muted">
-      <main className="flex-1">
+    <>
+      {/* Animação de Ativação */}
+      <AnimatePresence>
+        {showActivationAnimation && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="relative z-10"
+            >
+              <Card className="p-8 md:p-12 max-w-md mx-auto backdrop-blur-sm bg-white/95 shadow-2xl">
+                <div className="text-center space-y-6">
+                  {/* Logo animado */}
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.05, 1],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    className="flex justify-center mb-8"
+                  >
+                    <img 
+                      src={cnvidasLogo} 
+                      alt="CN Vidas" 
+                      className="h-24 w-auto"
+                    />
+                  </motion.div>
+
+                  {/* Status de ativação */}
+                  {activationStatus !== 'activated' ? (
+                    <>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                        className="inline-block"
+                      >
+                        <Loader2 className="h-16 w-16 text-primary" />
+                      </motion.div>
+
+                      <div className="space-y-2">
+                        <h2 className="text-2xl font-bold text-gray-900">
+                          Ativando seu plano
+                        </h2>
+                        <p className="text-gray-600">
+                          Estamos confirmando seu pagamento e preparando tudo para você...
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Sucesso */}
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 200,
+                          damping: 20,
+                        }}
+                        className="relative"
+                      >
+                        <CheckCircle2 className="h-20 w-20 text-green-500 mx-auto" />
+                      </motion.div>
+
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="space-y-4"
+                      >
+                        <h2 className="text-2xl font-bold text-gray-900">
+                          Plano ativado com sucesso!
+                        </h2>
+                        <p className="text-gray-600">
+                          Bem-vindo ao CN Vidas! Você agora tem acesso a todos os benefícios do seu plano.
+                        </p>
+                        
+                        <motion.p
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 1 }}
+                          className="text-sm text-gray-500 pt-2"
+                        >
+                          Redirecionando para o dashboard...
+                        </motion.p>
+                      </motion.div>
+                    </>
+                  )}
+                </div>
+              </Card>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Conteúdo original da página */}
+      <div className="flex flex-col min-h-screen bg-gradient-to-b from-background to-muted">
+        <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 py-12">
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">
@@ -392,6 +535,7 @@ const FirstSubscriptionPage: React.FC = () => {
         />
       )}
     </div>
+    </>
   );
 };
 
