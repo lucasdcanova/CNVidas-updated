@@ -104,7 +104,7 @@ const Dashboard: React.FC = () => {
       // Só redirecionar se realmente não tiver assinatura ativa
       const currentPath = window.location.pathname;
       const comingFromFirstSubscription = sessionStorage.getItem('coming-from-first-subscription') === 'true';
-      const planActivated = sessionStorage.getItem('plan-activated') === 'true';
+      const planActivatedFlag = sessionStorage.getItem('plan-activated') === 'true';
       
       // Verificar também se o status é explicitamente 'active' ou 'trialing'
       const hasValidSubscription = hasActiveSubscription || 
@@ -113,7 +113,7 @@ const Dashboard: React.FC = () => {
       if (!hasValidSubscription && 
           currentPath !== '/first-subscription' && 
           !comingFromFirstSubscription &&
-          !planActivated) {
+          !planActivatedFlag) {
         console.log("🔄 Dashboard - Redirecionando para first-subscription");
         setLocation('/first-subscription');
       } else if (hasValidSubscription) {
@@ -130,7 +130,7 @@ const Dashboard: React.FC = () => {
             sessionStorage.removeItem('plan-activated-time');
           }
         }
-      } else if (comingFromFirstSubscription || planActivated) {
+      } else if (comingFromFirstSubscription || planActivatedFlag) {
         console.log("⚠️ Dashboard - Usuário vindo de ativação/first-subscription, evitando loop");
         // Não limpar as flags imediatamente para evitar loops
       }
