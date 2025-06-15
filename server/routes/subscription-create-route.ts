@@ -245,6 +245,7 @@ router.post("/confirm-payment", isAuthenticated, async (req: Request, res: Respo
     if (paymentIntent.status === 'succeeded') {
       // Buscar o plano do metadata
       const planName = paymentIntent.metadata.planName;
+      const planId = paymentIntent.metadata.planId;
       
       // Atualizar o status da assinatura
       await db.update(users)
@@ -254,6 +255,49 @@ router.post("/confirm-payment", isAuthenticated, async (req: Request, res: Respo
           emergencyConsultationsLeft: 3 // Número padrão de consultas de emergência
         })
         .where(eq(users.id, user.id));
+
+      // Criar registro na tabela userSubscriptions
+      if (planId) {
+        try {
+          // Verificar se já existe uma assinatura ativa
+          const existingSubscription = await db.select()
+            .from(userSubscriptions)
+            .where(eq(userSubscriptions.userId, user.id))
+            .orderBy(desc(userSubscriptions.createdAt))
+            .limit(1);
+
+          if (existingSubscription.length > 0) {
+            // Atualizar assinatura existente
+            await db.update(userSubscriptions)
+              .set({
+                planId: parseInt(planId),
+                status: 'active',
+                paymentMethod: paymentIntent.payment_method_types[0] || 'card',
+                updatedAt: new Date()
+              })
+              .where(eq(userSubscriptions.id, existingSubscription[0].id));
+          } else {
+            // Criar nova assinatura
+            const startDate = new Date();
+            const endDate = new Date();
+            endDate.setMonth(endDate.getMonth() + 1); // Adicionar 1 mês
+
+            await db.insert(userSubscriptions).values({
+              userId: user.id,
+              planId: parseInt(planId),
+              status: 'active',
+              startDate: startDate,
+              endDate: endDate,
+              paymentMethod: paymentIntent.payment_method_types[0] || 'card',
+              price: paymentIntent.amount
+            });
+          }
+
+          console.log(`✅ Assinatura criada/atualizada para usuário ${user.email}`);
+        } catch (subError) {
+          console.error('Erro ao criar/atualizar assinatura:', subError);
+        }
+      }
 
       return res.json({
         message: "Pagamento confirmado com sucesso",

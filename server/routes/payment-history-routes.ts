@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { requireAuth, AuthenticatedRequest } from '../middleware/auth';
 import { db } from '../db';
-import { subscriptions, consultations, subscriptionPlans, users, doctors } from '../../shared/schema';
+import { userSubscriptions, consultations, subscriptionPlans, users, doctors } from '../../shared/schema';
 import { eq, desc, and, or, sql } from 'drizzle-orm';
 
 const paymentHistoryRouter = Router();
@@ -19,20 +19,20 @@ paymentHistoryRouter.get('/', requireAuth, async (req: AuthenticatedRequest, res
     // Buscar histórico de assinaturas
     const subscriptionHistory = await db
       .select({
-        id: sql`${subscriptions.id}::text`.as('id'),
+        id: sql`${userSubscriptions.id}::text`.as('id'),
         type: sql`'subscription'`.as('type'),
         description: subscriptionPlans.name,
-        amount: subscriptionPlans.price,
-        status: subscriptions.status,
-        date: subscriptions.createdAt,
-        paymentMethod: subscriptions.paymentMethod,
+        amount: userSubscriptions.price,
+        status: userSubscriptions.status,
+        date: userSubscriptions.createdAt,
+        paymentMethod: userSubscriptions.paymentMethod,
         planName: subscriptionPlans.name,
-        planInterval: subscriptionPlans.interval
+        planInterval: sql`'month'`.as('planInterval')
       })
-      .from(subscriptions)
-      .leftJoin(subscriptionPlans, eq(subscriptions.planId, subscriptionPlans.id))
-      .where(eq(subscriptions.userId, req.user.id))
-      .orderBy(desc(subscriptions.createdAt));
+      .from(userSubscriptions)
+      .leftJoin(subscriptionPlans, eq(userSubscriptions.planId, subscriptionPlans.id))
+      .where(eq(userSubscriptions.userId, req.user.id))
+      .orderBy(desc(userSubscriptions.createdAt));
 
     // Buscar histórico de consultas
     const consultationHistory = await db
