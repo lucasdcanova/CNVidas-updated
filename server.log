@@ -45132,3 +45132,7 @@ Logout realizado com sucesso - cookies removidos
 Error: getaddrinfo ENOTFOUND localhost
     at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:120:26)
 === ROTA /api/user INTERCEPTADA ===
+=== ROTA /api/user INTERCEPTADA ===
+=== ROTA /api/user INTERCEPTADA ===
+=== ROTA /api/user INTERCEPTADA ===
+=== ROTA /api/user INTERCEPTADA ===
