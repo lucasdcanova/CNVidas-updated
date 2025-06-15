@@ -48,6 +48,13 @@ const PaymentsPage: React.FC = () => {
   });
 
   const transactionData = transactionHistoryQuery.data;
+  
+  // Debug: Log transaction data
+  React.useEffect(() => {
+    if (transactionData) {
+      console.log('💰 Transaction History Data:', transactionData);
+    }
+  }, [transactionData]);
 
   return (
     <DashboardLayout>

@@ -16,6 +16,8 @@ paymentHistoryRouter.get('/', requireAuth, async (req: AuthenticatedRequest, res
       return res.status(401).json({ error: 'Usuário não autenticado' });
     }
 
+    console.log(`📊 Buscando histórico de pagamentos para usuário ${req.user.id} - ${req.user.email}`);
+    
     // Buscar histórico de assinaturas
     const subscriptionHistory = await db
       .select({
@@ -33,6 +35,8 @@ paymentHistoryRouter.get('/', requireAuth, async (req: AuthenticatedRequest, res
       .leftJoin(subscriptionPlans, eq(userSubscriptions.planId, subscriptionPlans.id))
       .where(eq(userSubscriptions.userId, req.user.id))
       .orderBy(desc(userSubscriptions.createdAt));
+    
+    console.log(`✅ Encontradas ${subscriptionHistory.length} assinaturas`);
 
     // Buscar histórico de consultas
     const consultationHistory = await db
@@ -103,6 +107,9 @@ paymentHistoryRouter.get('/', requireAuth, async (req: AuthenticatedRequest, res
       return sum;
     }, 0);
 
+    console.log(`📈 Total de transações: ${allTransactions.length}`);
+    console.log(`💵 Total gasto: R$ ${(totalSpent / 100).toFixed(2)}`);
+    
     res.json({
       transactions: allTransactions,
       summary: {
