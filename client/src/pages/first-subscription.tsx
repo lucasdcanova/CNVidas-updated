@@ -55,6 +55,19 @@ const FirstSubscriptionPage: React.FC = () => {
   console.log("🔍 FirstSubscriptionPage - Location atual:", location);
   console.log("🔧 TESTE: FirstSubscriptionPage carregada às", new Date().toLocaleTimeString());
 
+  // Buscar planos de assinatura disponíveis
+  const { data: plans, isLoading: plansLoading } = useQuery({
+    queryKey: ["/api/subscription/plans"],
+    queryFn: getSubscriptionPlans,
+  });
+
+  // Buscar assinatura atual do usuário
+  const { data: userSubscription, isLoading: subscriptionLoading } = useQuery({
+    queryKey: ["/api/subscription/current"],
+    queryFn: getUserSubscription,
+    enabled: !!user?.id,
+  });
+
   // Verificar se o usuário tem perfil de paciente e se já tem plano ativo
   useEffect(() => {
     if (user && user.role !== 'patient') {
@@ -75,19 +88,6 @@ const FirstSubscriptionPage: React.FC = () => {
       }, 1000);
     }
   }, [user, userSubscription, setLocation, toast]);
-
-  // Buscar planos de assinatura disponíveis
-  const { data: plans, isLoading: plansLoading } = useQuery({
-    queryKey: ["/api/subscription/plans"],
-    queryFn: getSubscriptionPlans,
-  });
-
-  // Buscar assinatura atual do usuário
-  const { data: userSubscription, isLoading: subscriptionLoading } = useQuery({
-    queryKey: ["/api/subscription/current"],
-    queryFn: getUserSubscription,
-    enabled: !!user?.id,
-  });
 
   // REMOVIDO: Redirecionamento automático que estava causando loop infinito
   // O dashboard é quem deve gerenciar os redirecionamentos de assinatura
