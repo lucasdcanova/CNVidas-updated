@@ -238,6 +238,28 @@ authRouter.post('/register', async (req: Request, res: Response) => {
       // Não falhar o registro se a criação das configurações falhar
     }
 
+    // Enviar email de verificação
+    try {
+      const verificationToken = randomBytes(32).toString('hex');
+      const expiresAt = new Date();
+      expiresAt.setHours(expiresAt.getHours() + 24); // Expira em 24 horas
+
+      // Salvar token de verificação no banco de dados
+      await db.insert(emailVerifications).values({
+        token: verificationToken,
+        userId: newUser.id,
+        expiresAt,
+        createdAt: new Date(),
+      });
+
+      // Enviar email
+      await sendVerificationEmail(newUser.email, verificationToken);
+      console.log(`Email de verificação enviado para ${newUser.email}`);
+    } catch (emailError) {
+      console.error('Erro ao enviar email de verificação:', emailError);
+      // Não falhar o registro se o email falhar
+    }
+
     // Fazer login automático após registro bem-sucedido
     const jwtSecret = process.env.JWT_SECRET || 'cnvidas-secret-key-2024';
     const token = jwt.sign(

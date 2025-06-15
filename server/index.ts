@@ -289,6 +289,15 @@ import { setupCronJobs } from "./cron-setup";
     index: false // Não servir index.html automaticamente
   }));
   console.log(`✅ Arquivos estáticos servidos de: ${publicPath}`);
+  
+  // Servir também os assets do client para emails
+  const clientAssetsPath = path.join(process.cwd(), 'client/public');
+  app.use('/assets', express.static(path.join(clientAssetsPath, 'assets'), {
+    maxAge: '7d', // Cache de 7 dias para assets
+    etag: true,
+    lastModified: true
+  }));
+  console.log(`✅ Assets do cliente servidos de: ${clientAssetsPath}/assets`);
 
   // Middleware para garantir respostas JSON (APENAS para rotas da API)
   app.use('/api', ensureJsonResponse);
