@@ -67,6 +67,7 @@ import ReenviarVerificacao from "@/pages/reenviar-verificacao";
 import EsqueciSenha from "@/pages/esqueci-senha";
 import AdminMedicalRecords from "@/pages/admin/medical-records";
 import DoctorMedicalRecords from "@/pages/doctor/medical-records";
+import DoctorMedicalRecordEdit from "@/pages/doctor/medical-record-edit";
 import TestHeadlessDaily from "@/pages/test-headless-daily";
 
 // Componente de erro boundary
@@ -162,6 +163,7 @@ function Router() {
       <ProtectedRoute path="/doctor/financeiro" component={DoctorFinanceiro} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor/consultation-history" component={DoctorConsultationHistory} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor/medical-records" component={DoctorMedicalRecords} allowedRoles={["doctor"]} />
+      <ProtectedRoute path="/doctor/medical-records/edit" component={DoctorMedicalRecordEdit} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor-onboarding" component={DoctorOnboarding} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor-telemedicine" component={DoctorTelemedicine} allowedRoles={["doctor"]} />
       <ProtectedRoute path="/doctor-availability" component={DoctorAvailability} allowedRoles={["doctor"]} />

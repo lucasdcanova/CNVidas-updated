@@ -206,10 +206,14 @@ export default function DoctorEmergencyRoom() {
       } catch (error) {
         console.error('Erro ao marcar consulta como concluída:', error);
       }
+      
+      // Redirecionar para a página de edição de prontuário
+      console.log('🏥 Redirecionando para edição de prontuário');
+      navigate(`/doctor/medical-records/edit?appointmentId=${consultation.appointmentId}`);
+    } else {
+      // Se não houver appointmentId, volta para a tela anterior
+      navigate('/doctor-telemedicine');
     }
-    
-    // Navegar de volta
-    navigate('/doctor-telemedicine');
   };
 
   if (loading) {
@@ -263,8 +267,22 @@ export default function DoctorEmergencyRoom() {
             console.log('Médico entrou na consulta de emergência');
           }}
           onLeaveCall={handleLeaveCall}
+          onParticipantLeft={(participant) => {
+            console.log('🚪 Participante saiu da consulta:', participant);
+            // Quando o paciente sair, encerrar automaticamente a consulta
+            toast({
+              title: 'Consulta finalizada',
+              description: 'O paciente saiu da consulta. Redirecionando para o prontuário...',
+            });
+            // Aguardar um momento antes de encerrar para mostrar a mensagem
+            setTimeout(() => {
+              handleLeaveCall();
+            }, 2000);
+          }}
           userName={`Dr. ${user?.fullName || user?.username}`}
           isDoctor={true}
+          appointmentId={consultation.appointmentId || undefined}
+          enableRecording={true}
         />
         
         {/* Overlay com informações do paciente */}
