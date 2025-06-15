@@ -226,7 +226,55 @@ router.get('/current', isAuthenticated, async (req: Request, res: Response) => {
         }
       });
     } else {
-      console.log(`⚠️ Nenhuma assinatura encontrada para ${user.email}. Retornando null para forçar onboarding.`);
+      console.log(`⚠️ Nenhuma assinatura encontrada para ${user.email}.`);
+      
+      // Verificar se o usuário tem plano ativo mas não tem registro em userSubscriptions
+      if (user.subscriptionPlan && user.subscriptionPlan !== 'free' && user.subscriptionStatus === 'active') {
+        console.log(`🔧 Usuário tem plano ${user.subscriptionPlan} ativo mas sem registro. Criando...`);
+        
+        try {
+          // Buscar o ID do plano
+          const plan = await db.select()
+            .from(subscriptionPlans)
+            .where(eq(subscriptionPlans.name, user.subscriptionPlan))
+            .limit(1);
+          
+          if (plan.length > 0) {
+            const startDate = new Date();
+            const endDate = new Date();
+            endDate.setMonth(endDate.getMonth() + 1);
+            
+            // Criar registro retroativo
+            const newSubscription = await db.insert(userSubscriptions).values({
+              userId: user.id,
+              planId: plan[0].id,
+              status: 'active',
+              startDate: startDate,
+              endDate: endDate,
+              paymentMethod: 'card',
+              price: plan[0].price,
+              createdAt: new Date(),
+              updatedAt: new Date()
+            }).returning();
+            
+            console.log(`✅ Registro de assinatura criado retroativamente para ${user.email}`);
+            
+            return res.json({
+              subscription: {
+                id: newSubscription[0].id,
+                userId: newSubscription[0].userId,
+                planId: newSubscription[0].planId,
+                status: newSubscription[0].status,
+                startDate: newSubscription[0].startDate,
+                endDate: newSubscription[0].endDate,
+                plan: plan[0]
+              }
+            });
+          }
+        } catch (error) {
+          console.error('Erro ao criar registro retroativo:', error);
+        }
+      }
       
       // Se não há assinatura, retornar null para que o dashboard redirecione para first-subscription
       return res.json({
