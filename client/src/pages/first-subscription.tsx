@@ -55,13 +55,26 @@ const FirstSubscriptionPage: React.FC = () => {
   console.log("🔍 FirstSubscriptionPage - Location atual:", location);
   console.log("🔧 TESTE: FirstSubscriptionPage carregada às", new Date().toLocaleTimeString());
 
-  // Verificar se o usuário tem perfil de paciente
+  // Verificar se o usuário tem perfil de paciente e se já tem plano ativo
   useEffect(() => {
     if (user && user.role !== 'patient') {
       // Se não for paciente, redirecionar para o dashboard
       setLocation('/dashboard');
+      return;
     }
-  }, [user, setLocation]);
+    
+    // Se já tem assinatura ativa, redirecionar para o dashboard
+    if (userSubscription && userSubscription.status === 'active') {
+      console.log("🔄 FirstSubscription - Usuário já tem plano ativo, redirecionando para dashboard");
+      toast({
+        title: "Você já possui um plano ativo",
+        description: "Redirecionando para o dashboard...",
+      });
+      setTimeout(() => {
+        setLocation('/dashboard');
+      }, 1000);
+    }
+  }, [user, userSubscription, setLocation, toast]);
 
   // Buscar planos de assinatura disponíveis
   const { data: plans, isLoading: plansLoading } = useQuery({

@@ -29,7 +29,7 @@ import Address from "@/pages/address";
 import Checkout from "@/pages/checkout";
 import Subscribe from "@/pages/subscribe";
 import Subscription from "@/pages/subscription";
-import FirstSubscription from "@/pages/first-subscription";
+import FirstSubscriptionGuard from "@/components/subscription/first-subscription-guard";
 import PaymentSuccess from "@/pages/payment-success";
 import SubscriptionSuccess from "@/pages/subscription-success";
 import HelpPage from "@/pages/help";
@@ -153,7 +153,7 @@ function Router() {
       <ProtectedRoute path="/checkout" component={Checkout} />
       <ProtectedRoute path="/subscribe" component={Subscribe} />
       <ProtectedRoute path="/subscription" component={Subscription} />
-      <ProtectedRoute path="/first-subscription" component={FirstSubscription} allowedRoles={["patient"]} />
+      <ProtectedRoute path="/first-subscription" component={FirstSubscriptionGuard} allowedRoles={["patient"]} />
       <ProtectedRoute path="/payment-success" component={PaymentSuccess} />
       <ProtectedRoute path="/subscription-success" component={SubscriptionSuccess} />
 

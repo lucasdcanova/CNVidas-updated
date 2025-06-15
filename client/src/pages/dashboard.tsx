@@ -86,13 +86,17 @@ const Dashboard: React.FC = () => {
       const currentPath = window.location.pathname;
       const comingFromFirstSubscription = sessionStorage.getItem('coming-from-first-subscription') === 'true';
       
-      if (!hasActiveSubscription && 
+      // Verificar também se o status é explicitamente 'active' ou 'trialing'
+      const hasValidSubscription = hasActiveSubscription || 
+        (userSubscription && ['active', 'trialing', 'past_due'].includes(userSubscription.status));
+      
+      if (!hasValidSubscription && 
           currentPath !== '/first-subscription' && 
           !comingFromFirstSubscription) {
         console.log("🔄 Dashboard - Redirecionando para first-subscription");
         setLocation('/first-subscription');
-      } else if (hasActiveSubscription) {
-        console.log("✅ Dashboard - Usuário tem assinatura ativa, permanecendo no dashboard");
+      } else if (hasValidSubscription) {
+        console.log("✅ Dashboard - Usuário tem assinatura válida, permanecendo no dashboard");
         // Limpar flag se tinha
         sessionStorage.removeItem('coming-from-first-subscription');
       } else if (comingFromFirstSubscription) {
