@@ -37,8 +37,6 @@ import { useAuth } from "@/hooks/use-auth";
 import { Loader2 } from "lucide-react";
 import AuthLayout from "@/components/layouts/auth-layout";
 import { useLocation } from "wouter";
-import { Html5QrcodeScanner } from "html5-qrcode";
-import { QrCode } from "lucide-react";
 
 // Login form schema
 const loginSchema = z.object({
@@ -215,232 +213,6 @@ const estadosBrasileiros = [
   { value: "TO", label: "TO" }
 ];
 
-// QR Login Tab Component
-const QRLoginTab: React.FC = () => {
-  const { loginWithQRCodeMutation } = useAuth();
-  const { toast } = useToast();
-  const [isScanning, setIsScanning] = useState(false);
-  const [manualCode, setManualCode] = useState("");
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const scannerRef = React.useRef<Html5QrcodeScanner | null>(null);
-
-  // Start QR Scanner
-  const startScanning = React.useCallback(() => {
-    setIsScanning(true);
-    
-    // Initialize scanner after component renders
-    setTimeout(() => {
-      if (!scannerRef.current) {
-        scannerRef.current = new Html5QrcodeScanner(
-          "qr-reader",
-          {
-            fps: 10,
-            qrbox: { width: 250, height: 250 },
-            aspectRatio: 1.0,
-            showTorchButtonIfSupported: true,
-            showZoomSliderIfSupported: true,
-            defaultZoomValueIfSupported: 1.5,
-          },
-          false
-        );
-
-        scannerRef.current.render(
-          async (decodedText) => {
-            // Success callback
-            await handleQRCodeScanned(decodedText);
-          },
-          (error) => {
-            // Error callback - we can ignore most errors as they're just "no QR code found"
-            console.log("QR scan error:", error);
-          }
-        );
-      }
-    }, 100);
-  }, []);
-
-  // Stop QR Scanner
-  const stopScanning = React.useCallback(() => {
-    if (scannerRef.current) {
-      scannerRef.current.clear().catch(error => {
-        console.error("Failed to clear scanner", error);
-      });
-      scannerRef.current = null;
-    }
-    setIsScanning(false);
-  }, []);
-
-  // Handle QR Code scanned or manual input
-  const handleQRCodeScanned = async (code: string) => {
-    setIsLoggingIn(true);
-    stopScanning();
-    
-    try {
-      // First verify the QR token
-      const verifyResponse = await fetch('/api/auth/verify-qr', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ token: code })
-      });
-
-      if (!verifyResponse.ok) {
-        const error = await verifyResponse.json();
-        throw new Error(error.error || 'QR Code inválido');
-      }
-
-      // If verification successful, proceed with login
-      await loginWithQRCodeMutation.mutateAsync({ token: code });
-      
-      toast({
-        title: "Login realizado com sucesso!",
-        description: "Você será redirecionado em instantes...",
-      });
-    } catch (error) {
-      console.error("QR login error:", error);
-      toast({
-        title: "Erro no login",
-        description: error instanceof Error ? error.message : "QR Code inválido ou expirado",
-        variant: "destructive",
-      });
-      // Restart scanning after error
-      if (isScanning) {
-        startScanning();
-      }
-    } finally {
-      setIsLoggingIn(false);
-    }
-  };
-
-  // Handle manual code submission
-  const handleManualSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (manualCode.trim()) {
-      handleQRCodeScanned(manualCode.trim());
-    }
-  };
-
-  // Cleanup on unmount
-  React.useEffect(() => {
-    return () => {
-      if (scannerRef.current) {
-        scannerRef.current.clear().catch(error => {
-          console.error("Failed to clear scanner on unmount", error);
-        });
-      }
-    };
-  }, []);
-
-  return (
-    <div className="p-6">
-      <div className="mb-6 text-center">
-        <h1 className="text-2xl font-semibold text-gray-800">Login com QR Code</h1>
-        <p className="text-gray-500 mt-2 text-sm">
-          Escaneie o QR Code do seu cartão virtual CN Vidas
-        </p>
-      </div>
-
-      <div className="space-y-6">
-        {/* Scanner Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <QrCode className="h-5 w-5" />
-              Scanner de QR Code
-            </CardTitle>
-            <CardDescription>
-              Use a câmera para escanear o QR Code
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {isScanning ? (
-              <div className="space-y-4">
-                <div id="qr-reader" className="w-full" />
-                <Button 
-                  variant="outline" 
-                  onClick={stopScanning}
-                  className="w-full"
-                  disabled={isLoggingIn}
-                >
-                  Parar Scanner
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="aspect-square bg-gray-50 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300">
-                  <div className="text-center">
-                    <QrCode className="h-16 w-16 mx-auto mb-4 text-gray-400" />
-                    <p className="text-gray-600">Scanner Inativo</p>
-                  </div>
-                </div>
-                <Button 
-                  onClick={startScanning}
-                  className="w-full"
-                  disabled={isLoggingIn}
-                >
-                  Iniciar Scanner
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Divider */}
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-2 text-muted-foreground">
-              Ou digite o código
-            </span>
-          </div>
-        </div>
-
-        {/* Manual Input Section */}
-        <form onSubmit={handleManualSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="manual-qr-code">Código QR</Label>
-            <Input
-              id="manual-qr-code"
-              placeholder="Digite o código do QR aqui..."
-              value={manualCode}
-              onChange={(e) => setManualCode(e.target.value)}
-              disabled={isLoggingIn || isScanning}
-              className="mt-1"
-            />
-          </div>
-          <Button 
-            type="submit"
-            className="w-full"
-            disabled={isLoggingIn || !manualCode.trim() || isScanning}
-          >
-            {isLoggingIn ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Fazendo login...
-              </>
-            ) : (
-              "Fazer Login"
-            )}
-          </Button>
-        </form>
-
-        {/* Help text */}
-        <Alert>
-          <AlertDescription>
-            <strong>Como usar:</strong>
-            <ol className="list-decimal list-inside mt-2 space-y-1 text-sm">
-              <li>Abra o app CN Vidas em seu celular</li>
-              <li>Acesse "Meu Cartão Virtual"</li>
-              <li>Escaneie o QR Code exibido</li>
-              <li>Ou digite o código manualmente</li>
-            </ol>
-          </AlertDescription>
-        </Alert>
-      </div>
-    </div>
-  );
-};
 
 const AuthPage: React.FC = () => {
   const { user, loginMutation, registerMutation } = useAuth();
@@ -593,7 +365,7 @@ const AuthPage: React.FC = () => {
   return (
     <AuthLayout>
       <Tabs defaultValue="register" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 mb-6 p-1 bg-gray-100/60 backdrop-blur-sm rounded-xl">
+        <TabsList className="grid w-full grid-cols-2 mb-6 p-1 bg-gray-100/60 backdrop-blur-sm rounded-xl">
           <TabsTrigger value="login" className="rounded-lg py-3 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-blue-600">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
@@ -605,10 +377,6 @@ const AuthPage: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
             </svg>
             Cadastro
-          </TabsTrigger>
-          <TabsTrigger value="qr-login" className="rounded-lg py-3 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-blue-600">
-            <QrCode className="h-4 w-4 mr-2" />
-            QR Login
           </TabsTrigger>
         </TabsList>
         
@@ -1283,9 +1051,6 @@ const AuthPage: React.FC = () => {
           </div>
         </TabsContent>
         
-        <TabsContent value="qr-login">
-          <QRLoginTab />
-        </TabsContent>
       </Tabs>
     </AuthLayout>
   );
