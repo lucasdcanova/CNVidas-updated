@@ -51,22 +51,25 @@ const Dashboard: React.FC = () => {
     // Se chegou aqui, temos os dados da assinatura
     if (userSubscription !== undefined) {
       console.log("🔍 Dashboard - userSubscription:", userSubscription);
+      console.log("🔍 Dashboard - User status:", user.subscriptionStatus);
       console.log("🔍 Dashboard - Verificando no momento:", new Date().toISOString());
       
-      // Se o status é pendente, redirecionar para página de ativação
-      if (user.subscriptionStatus === 'pending') {
+      // IMPORTANTE: Se o status do usuário é 'active', não fazer nenhum redirecionamento
+      if (user.subscriptionStatus === 'active') {
+        console.log("✅ Dashboard - Usuário tem status ativo, permanecendo no dashboard");
+        setIsFirstLogin(false);
+        return;
+      }
+      
+      // Se o status é pendente E não veio recentemente da página de ativação
+      const planActivated = sessionStorage.getItem('plan-activated') === 'true';
+      if (user.subscriptionStatus === 'pending' && !planActivated) {
         console.log('⏳ Dashboard - Status pendente detectado, redirecionando para ativação...');
         setLocation('/plan-activation');
         return;
       }
       
-      // Se tem flag de pagamento confirmado, redirecionar para ativação
-      const paymentConfirmed = sessionStorage.getItem('payment-confirmed') === 'true';
-      if (paymentConfirmed) {
-        console.log('💳 Dashboard - Pagamento confirmado detectado, redirecionando para ativação...');
-        setLocation('/plan-activation');
-        return;
-      }
+      // Não redirecionar baseado em flag de pagamento - deixar a página de ativação gerenciar isso
       
       // Verificar se tem assinatura e se está ativa
       // userSubscription pode ser null se o usuário não tem assinatura
@@ -115,14 +118,21 @@ const Dashboard: React.FC = () => {
         setLocation('/first-subscription');
       } else if (hasValidSubscription) {
         console.log("✅ Dashboard - Usuário tem assinatura válida, permanecendo no dashboard");
-        // Limpar flags se tinha
+        // Limpar flags antigas se existirem
         sessionStorage.removeItem('coming-from-first-subscription');
-        sessionStorage.removeItem('plan-activated');
+        // Manter plan-activated por um tempo para evitar loops
+        const planActivatedTime = sessionStorage.getItem('plan-activated-time');
+        if (planActivatedTime) {
+          const activatedAt = parseInt(planActivatedTime);
+          const tenMinutes = 10 * 60 * 1000;
+          if (Date.now() - activatedAt > tenMinutes) {
+            sessionStorage.removeItem('plan-activated');
+            sessionStorage.removeItem('plan-activated-time');
+          }
+        }
       } else if (comingFromFirstSubscription || planActivated) {
         console.log("⚠️ Dashboard - Usuário vindo de ativação/first-subscription, evitando loop");
-        // Limpar as flags após usar
-        sessionStorage.removeItem('coming-from-first-subscription');
-        sessionStorage.removeItem('plan-activated');
+        // Não limpar as flags imediatamente para evitar loops
       }
     }
   }, [user, userSubscription, subscriptionLoading, isError, setLocation]);

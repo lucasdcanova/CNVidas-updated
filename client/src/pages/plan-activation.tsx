@@ -32,7 +32,9 @@ export default function PlanActivation() {
     if (user.subscriptionStatus === 'active') {
       console.log('🔄 Plano já está ativo, redirecionando...');
       sessionStorage.setItem('plan-activated', 'true');
-      window.location.href = '/dashboard';
+      sessionStorage.setItem('plan-activated-time', Date.now().toString());
+      // Usar replace para evitar loop de navegação
+      window.location.replace('/dashboard');
       return;
     }
     
@@ -96,11 +98,12 @@ export default function PlanActivation() {
     
     // Marcar que o plano foi ativado para evitar loops
     sessionStorage.setItem('plan-activated', 'true');
+    sessionStorage.setItem('plan-activated-time', Date.now().toString());
     
     // Aguardar mais tempo para ver a animação completa
     setTimeout(() => {
-      // Forçar redirecionamento completo para garantir que o dashboard recarregue
-      window.location.href = '/dashboard';
+      // Usar replace para evitar loop de navegação
+      window.location.replace('/dashboard');
     }, 5000); // 5 segundos para apreciar a animação
   };
 
