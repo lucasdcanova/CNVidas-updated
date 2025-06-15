@@ -771,31 +771,11 @@ export class DatabaseStorage implements IStorage {
 
   async getPartnerServicesByPartnerId(partnerId: number): Promise<PartnerService[]> {
     const results = await this.db
-      .select({
-        service: partnerServices,
-        partner: partners,
-        user: users
-      })
+      .select()
       .from(partnerServices)
-      .leftJoin(partners, eq(partnerServices.partnerId, partners.id))
-      .leftJoin(users, eq(partners.userId, users.id))
       .where(eq(partnerServices.partnerId, partnerId));
     
-    return results.map(result => {
-      // Ensure serviceImage URL is properly formatted
-      const serviceImage = result.service.serviceImage || null;
-      
-      return {
-        ...result.service,
-        serviceImage,
-        partner: result.partner ? {
-          ...result.partner,
-          profileImage: result.user?.profileImage || null,
-          phone: result.partner.phone || null,
-          name: result.partner.businessName || result.partner.tradingName || null
-        } : null
-      };
-    }) as any[];
+    return results as PartnerService[];
   }
 
   async createPartnerService(serviceData: InsertPartnerService): Promise<PartnerService> {
