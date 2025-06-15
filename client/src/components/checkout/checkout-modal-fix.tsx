@@ -83,6 +83,9 @@ const CheckoutForm: React.FC<{
             queryClient.invalidateQueries({ queryKey: ["/api/subscription/current"] });
             queryClient.invalidateQueries({ queryKey: ["/api/auth/check"] });
             
+            // Marcar que o pagamento foi confirmado para evitar loops
+            sessionStorage.setItem('payment-confirmed', 'true');
+            
             // Redirecionar para página de ativação
             window.location.href = '/plan-activation';
             
@@ -105,6 +108,12 @@ const CheckoutForm: React.FC<{
           title: "Processando pagamento",
           description: "Seu pagamento está sendo processado. Você receberá uma confirmação em breve.",
         });
+        
+        // Marcar que o pagamento está sendo processado
+        sessionStorage.setItem('payment-processing', 'true');
+        
+        // Redirecionar para página de ativação para aguardar confirmação
+        window.location.href = '/plan-activation';
       }
     } catch (err: any) {
       console.error('Erro ao confirmar pagamento:', err);

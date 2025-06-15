@@ -169,13 +169,8 @@ router.post("/create-session", isAuthenticated, async (req: Request, res: Respon
           description: `Assinatura plano ${plan.name} (tentativa PIX)`
         });
         
-        // Atualizar o status de assinatura como pendente
-        await db.update(users)
-          .set({
-            subscriptionPlan: plan.name,
-            subscriptionStatus: 'pending'
-          })
-          .where(eq(users.id, user.id));
+        // NÃO atualizar o status aqui - apenas após o pagamento ser confirmado
+        // Isso evita que o usuário seja redirecionado prematuramente
         
         console.log("Usando cartão como método alternativo ao PIX devido a limitações do Stripe");
         
@@ -195,13 +190,7 @@ router.post("/create-session", isAuthenticated, async (req: Request, res: Respon
           description: `Assinatura plano ${plan.name} (fallback de PIX)`
         });
         
-        // Atualizar status no banco
-        await db.update(users)
-          .set({
-            subscriptionPlan: plan.name,
-            subscriptionStatus: 'pending'
-          })
-          .where(eq(users.id, user.id));
+        // NÃO atualizar o status aqui - apenas após o pagamento ser confirmado
         
         return res.json({
           clientSecret: paymentIntent.client_secret,
@@ -217,13 +206,7 @@ router.post("/create-session", isAuthenticated, async (req: Request, res: Respon
         description: `Assinatura plano ${plan.name}`
       });
       
-      // Atualizar status no banco
-      await db.update(users)
-        .set({
-          subscriptionPlan: plan.name,
-          subscriptionStatus: 'pending'
-        })
-        .where(eq(users.id, user.id));
+      // NÃO atualizar o status aqui - apenas após o pagamento ser confirmado
       
       return res.json({
         clientSecret: paymentIntent.client_secret,
@@ -260,9 +243,13 @@ router.post("/confirm-payment", isAuthenticated, async (req: Request, res: Respo
 
     // Verificar se o pagamento foi bem sucedido
     if (paymentIntent.status === 'succeeded') {
+      // Buscar o plano do metadata
+      const planName = paymentIntent.metadata.planName;
+      
       // Atualizar o status da assinatura
       await db.update(users)
         .set({
+          subscriptionPlan: planName || 'basic', // Usar o plano do metadata ou 'basic' como padrão
           subscriptionStatus: 'active',
           emergencyConsultationsLeft: 3 // Número padrão de consultas de emergência
         })

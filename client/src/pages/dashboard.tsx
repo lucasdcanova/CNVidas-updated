@@ -60,6 +60,14 @@ const Dashboard: React.FC = () => {
         return;
       }
       
+      // Se tem flag de pagamento confirmado, redirecionar para ativação
+      const paymentConfirmed = sessionStorage.getItem('payment-confirmed') === 'true';
+      if (paymentConfirmed) {
+        console.log('💳 Dashboard - Pagamento confirmado detectado, redirecionando para ativação...');
+        setLocation('/plan-activation');
+        return;
+      }
+      
       // Verificar se tem assinatura e se está ativa
       // userSubscription pode ser null se o usuário não tem assinatura
       const hasActiveSubscription = userSubscription !== null && 

@@ -214,16 +214,9 @@ const FirstSubscriptionPage: React.FC = () => {
   };
 
   const handlePlanSelected = () => {
-    // O plano foi selecionado com sucesso, redirecionar para página de ativação
-    toast({
-      title: "Processando pagamento...",
-      description: "Você será redirecionado em instantes.",
-    });
-    
-    // Redirecionar para página de ativação
-    setTimeout(() => {
-      setLocation('/plan-activation');
-    }, 500);
+    // O plano foi selecionado com sucesso
+    // NÃO redirecionar aqui - deixar o checkout modal fazer isso após o pagamento
+    console.log("✅ Plano selecionado, aguardando confirmação de pagamento...");
   };
 
   // Função para lidar com tentativa de sair sem selecionar um plano

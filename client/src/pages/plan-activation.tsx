@@ -26,17 +26,35 @@ export default function PlanActivation() {
 
   // Verificar pagamento pendente
   useEffect(() => {
+    if (!user) return; // Aguardar usuário carregar
+    
     // Se já está ativo, redirecionar direto
-    if (user?.subscriptionStatus === 'active') {
+    if (user.subscriptionStatus === 'active') {
       console.log('🔄 Plano já está ativo, redirecionando...');
+      sessionStorage.setItem('plan-activated', 'true');
       window.location.href = '/dashboard';
       return;
     }
     
-    if (user?.subscriptionStatus === 'pending' || activationStatus === 'checking') {
+    // Verificar se veio do checkout com pagamento confirmado ou em processamento
+    const paymentConfirmed = sessionStorage.getItem('payment-confirmed') === 'true';
+    const paymentProcessing = sessionStorage.getItem('payment-processing') === 'true';
+    
+    // Se não tem status pendente E não veio de um pagamento, voltar para first-subscription
+    if (user.subscriptionStatus !== 'pending' && !paymentConfirmed && !paymentProcessing) {
+      console.log('⚠️ Status não é pendente e não há pagamento em andamento:', user.subscriptionStatus);
+      setLocation('/first-subscription');
+      return;
+    }
+    
+    // Se está pendente ou tem pagamento confirmado/processando, verificar pagamento
+    if (user.subscriptionStatus === 'pending' || paymentConfirmed || paymentProcessing) {
+      // Limpar flags de pagamento
+      sessionStorage.removeItem('payment-confirmed');
+      sessionStorage.removeItem('payment-processing');
       checkPendingPayment();
     }
-  }, [user]);
+  }, [user, setLocation]);
 
   // Monitorar mudanças no status
   useEffect(() => {
