@@ -3,7 +3,7 @@ import { useLocation } from 'wouter';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
-import { CheckCircle2, Loader2, Sparkles, Heart, Shield, Zap } from 'lucide-react';
+import { CheckCircle, CheckCircle2, Loader2, Sparkles, Heart, Shield, Zap } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { getUserSubscription } from '@/lib/api';
 import { apiRequest } from '@/lib/queryClient';
@@ -26,6 +26,13 @@ export default function PlanActivation() {
 
   // Verificar pagamento pendente
   useEffect(() => {
+    // Se já está ativo, redirecionar direto
+    if (user?.subscriptionStatus === 'active') {
+      console.log('🔄 Plano já está ativo, redirecionando...');
+      window.location.href = '/dashboard';
+      return;
+    }
+    
     if (user?.subscriptionStatus === 'pending' || activationStatus === 'checking') {
       checkPendingPayment();
     }
@@ -33,10 +40,12 @@ export default function PlanActivation() {
 
   // Monitorar mudanças no status
   useEffect(() => {
-    if (userSubscription?.status === 'active') {
+    // Só ativar se estava realmente pendente e agora está ativo
+    if (userSubscription?.status === 'active' && activationStatus === 'activating') {
+      console.log('✅ Plano ativado com sucesso!');
       handleActivationSuccess();
     }
-  }, [userSubscription]);
+  }, [userSubscription, activationStatus]);
 
   const checkPendingPayment = async () => {
     try {
@@ -67,10 +76,14 @@ export default function PlanActivation() {
     setActivationStatus('activated');
     setShowSuccess(true);
     
-    // Aguardar animação e redirecionar
+    // Marcar que o plano foi ativado para evitar loops
+    sessionStorage.setItem('plan-activated', 'true');
+    
+    // Aguardar mais tempo para ver a animação completa
     setTimeout(() => {
-      setLocation('/dashboard');
-    }, 3000);
+      // Forçar redirecionamento completo para garantir que o dashboard recarregue
+      window.location.href = '/dashboard';
+    }, 5000); // 5 segundos para apreciar a animação
   };
 
   return (
@@ -237,14 +250,44 @@ export default function PlanActivation() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="space-y-2"
+                  className="space-y-4"
                 >
                   <h2 className="text-2xl font-bold text-gray-900">
                     Plano ativado com sucesso!
                   </h2>
                   <p className="text-gray-600">
-                    Bem-vindo ao CN Vidas! Você será redirecionado em instantes...
+                    Bem-vindo ao CN Vidas! Você agora tem acesso a todos os benefícios do seu plano.
                   </p>
+                  
+                  {/* Benefícios ativados */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.6 }}
+                    className="pt-4 space-y-2"
+                  >
+                    <div className="flex items-center justify-center gap-2 text-green-600">
+                      <CheckCircle className="h-5 w-5" />
+                      <span className="text-sm">Telemedicina 24/7 ativada</span>
+                    </div>
+                    <div className="flex items-center justify-center gap-2 text-green-600">
+                      <CheckCircle className="h-5 w-5" />
+                      <span className="text-sm">Consultas de emergência disponíveis</span>
+                    </div>
+                    <div className="flex items-center justify-center gap-2 text-green-600">
+                      <CheckCircle className="h-5 w-5" />
+                      <span className="text-sm">Acesso completo liberado</span>
+                    </div>
+                  </motion.div>
+                  
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1 }}
+                    className="text-sm text-gray-500 pt-2"
+                  >
+                    Redirecionando para o dashboard...
+                  </motion.p>
                 </motion.div>
 
                 {/* Confetes */}
