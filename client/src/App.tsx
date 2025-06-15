@@ -32,6 +32,7 @@ import Subscription from "@/pages/subscription";
 import FirstSubscriptionGuard from "@/components/subscription/first-subscription-guard";
 import PaymentSuccess from "@/pages/payment-success";
 import SubscriptionSuccess from "@/pages/subscription-success";
+import PlanActivation from "@/pages/plan-activation";
 import HelpPage from "@/pages/help";
 import AdminDashboard from "@/pages/admin/dashboard";
 import AdminUsers from "@/pages/admin/users";
@@ -156,6 +157,7 @@ function Router() {
       <ProtectedRoute path="/first-subscription" component={FirstSubscriptionGuard} allowedRoles={["patient"]} />
       <ProtectedRoute path="/payment-success" component={PaymentSuccess} />
       <ProtectedRoute path="/subscription-success" component={SubscriptionSuccess} />
+      <ProtectedRoute path="/plan-activation" component={PlanActivation} allowedRoles={["patient"]} />
 
       {/* Doctor Routes */}
       <ProtectedRoute path="/doctor" component={DoctorTelemedicine} allowedRoles={["doctor"]} />

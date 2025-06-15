@@ -214,18 +214,16 @@ const FirstSubscriptionPage: React.FC = () => {
   };
 
   const handlePlanSelected = () => {
-    // O plano foi selecionado com sucesso, redirecionar para o dashboard
+    // O plano foi selecionado com sucesso, redirecionar para página de ativação
     toast({
-      title: "Plano selecionado com sucesso!",
-      description: "Você será redirecionado para o dashboard.",
+      title: "Processando pagamento...",
+      description: "Você será redirecionado em instantes.",
     });
     
-    // Marcar que estamos vindo de first-subscription para evitar loops
-    sessionStorage.setItem('coming-from-first-subscription', 'true');
-    
+    // Redirecionar para página de ativação
     setTimeout(() => {
-      setLocation('/dashboard');
-    }, 1500);
+      setLocation('/plan-activation');
+    }, 500);
   };
 
   // Função para lidar com tentativa de sair sem selecionar um plano

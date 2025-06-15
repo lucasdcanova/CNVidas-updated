@@ -53,29 +53,11 @@ const Dashboard: React.FC = () => {
       console.log("🔍 Dashboard - userSubscription:", userSubscription);
       console.log("🔍 Dashboard - Verificando no momento:", new Date().toISOString());
       
-      // Se o status é pendente, verificar se o pagamento foi confirmado
+      // Se o status é pendente, redirecionar para página de ativação
       if (user.subscriptionStatus === 'pending') {
-        console.log('⏳ Dashboard - Status pendente detectado, verificando pagamento...');
-        
-        apiRequest('POST', '/api/subscription/check-pending-payment', {})
-          .then(async (response) => {
-            if (response.ok) {
-              const data = await response.json();
-              console.log('📋 Resultado da verificação de pagamento:', data);
-              
-              if (data.status === 'active') {
-                console.log('✅ Pagamento confirmado! Recarregando dados...');
-                // Recarregar dados do usuário e assinatura
-                queryClient.invalidateQueries({ queryKey: ["/api/auth/check"] });
-                queryClient.invalidateQueries({ queryKey: ["/api/subscription/current"] });
-                // Não continuar com o fluxo normal
-                return;
-              }
-            }
-          })
-          .catch((error) => {
-            console.error('Erro ao verificar pagamento pendente:', error);
-          });
+        console.log('⏳ Dashboard - Status pendente detectado, redirecionando para ativação...');
+        setLocation('/plan-activation');
+        return;
       }
       
       // Verificar se tem assinatura e se está ativa

@@ -83,10 +83,8 @@ const CheckoutForm: React.FC<{
             queryClient.invalidateQueries({ queryKey: ["/api/subscription/current"] });
             queryClient.invalidateQueries({ queryKey: ["/api/auth/check"] });
             
-            // Chamar callback de sucesso se existir
-            if (onSuccess) {
-              onSuccess();
-            }
+            // Redirecionar para página de ativação
+            window.location.href = '/plan-activation';
             
             // Fechar o modal
             onClose();
