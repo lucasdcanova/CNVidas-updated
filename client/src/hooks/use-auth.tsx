@@ -149,7 +149,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       return responseData;
     },
-    onSuccess: (userData: UserData & { sessionId?: string, authToken?: string }) => {
+    onSuccess: async (userData: UserData & { sessionId?: string, authToken?: string }) => {
       console.log("Login bem-sucedido:", userData);
       
       // Salvar os dados do usuário na cache
@@ -160,7 +160,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.log("Usuário é administrador, redirecionando para /admin/users");
         window.location.href = "/admin/users";
       } else if (userData.role === "doctor") {
-        console.log("Usuário é médico, redirecionando para /doctor-telemedicine");
+        // Verificar se o médico completou o onboarding
+        console.log("Usuário é médico, verificando status de onboarding...");
+        try {
+          const profileResponse = await fetch('/api/doctors/profile', {
+            credentials: 'include',
+            headers: {
+              'Authorization': `Bearer ${userData.authToken || localStorage.getItem('authToken')}`
+            }
+          });
+          
+          if (profileResponse.ok) {
+            const doctorProfile = await profileResponse.json();
+            if (!doctorProfile.onboardingCompleted) {
+              console.log("Médico não completou onboarding, redirecionando para /onboarding/doctor");
+              window.location.href = "/onboarding/doctor";
+              return;
+            }
+          }
+        } catch (error) {
+          console.error("Erro ao verificar perfil do médico:", error);
+        }
+        
+        console.log("Médico com onboarding completo, redirecionando para /doctor-telemedicine");
         window.location.href = "/doctor-telemedicine";
       } else if (userData.role === "partner") {
         console.log("Usuário é parceiro, redirecionando para /partner/dashboard");
@@ -226,7 +248,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       return responseData;
     },
-    onSuccess: (userData: UserData & { sessionId?: string, authToken?: string }) => {
+    onSuccess: async (userData: UserData & { sessionId?: string, authToken?: string }) => {
       console.log("Login com QR Code bem-sucedido:", userData);
       
       // Salvar os dados do usuário na cache
@@ -237,7 +259,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.log("Usuário é administrador, redirecionando para /admin/users");
         window.location.href = "/admin/users";
       } else if (userData.role === "doctor") {
-        console.log("Usuário é médico, redirecionando para /doctor-telemedicine");
+        // Verificar se o médico completou o onboarding
+        console.log("Usuário é médico, verificando status de onboarding...");
+        try {
+          const profileResponse = await fetch('/api/doctors/profile', {
+            credentials: 'include',
+            headers: {
+              'Authorization': `Bearer ${userData.authToken || localStorage.getItem('authToken')}`
+            }
+          });
+          
+          if (profileResponse.ok) {
+            const doctorProfile = await profileResponse.json();
+            if (!doctorProfile.onboardingCompleted) {
+              console.log("Médico não completou onboarding, redirecionando para /onboarding/doctor");
+              window.location.href = "/onboarding/doctor";
+              return;
+            }
+          }
+        } catch (error) {
+          console.error("Erro ao verificar perfil do médico:", error);
+        }
+        
+        console.log("Médico com onboarding completo, redirecionando para /doctor-telemedicine");
         window.location.href = "/doctor-telemedicine";
       } else if (userData.role === "partner") {
         console.log("Usuário é parceiro, redirecionando para /partner/dashboard");
@@ -393,7 +437,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       return userData;
     },
-    onSuccess: (userData: UserData & { sessionId?: string, authToken?: string }) => {
+    onSuccess: async (userData: UserData & { sessionId?: string, authToken?: string }) => {
       console.log("Registro bem-sucedido:", userData);
       
       // Salvar os dados do usuário na cache (login automático)

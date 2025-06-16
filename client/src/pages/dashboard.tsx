@@ -76,6 +76,17 @@ const Dashboard: React.FC = () => {
   const renderDashboard = () => {
     if (!user) return null;
     
+    // Redirecionar médicos para sua página específica
+    if (user.role === "doctor") {
+      setLocation("/doctor-telemedicine");
+      return (
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <span className="ml-2 text-muted-foreground">Redirecionando...</span>
+        </div>
+      );
+    }
+    
     // Mostrar carregamento enquanto verifica o status da assinatura para pacientes
     if (user.role === "patient" && (isFirstLogin === null || subscriptionLoading)) {
       return (
