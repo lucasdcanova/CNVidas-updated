@@ -4,11 +4,11 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/use-auth';
 import { Loader2 } from 'lucide-react';
 
-interface DoctorOnboardingGuardProps {
+interface EnhancedDoctorOnboardingGuardProps {
   children: React.ReactNode;
 }
 
-export function DoctorOnboardingGuard({ children }: DoctorOnboardingGuardProps) {
+export function EnhancedDoctorOnboardingGuard({ children }: EnhancedDoctorOnboardingGuardProps) {
   const { user } = useAuth();
   const [location, navigate] = useLocation();
   
@@ -31,11 +31,11 @@ export function DoctorOnboardingGuard({ children }: DoctorOnboardingGuardProps) 
     // Skip if not a doctor or still loading
     if (!user || user.role !== 'doctor' || isLoading) return;
     
-    // Skip if already on onboarding page
-    if (location === '/doctor-onboarding') return;
+    // Skip if already on onboarding pages
+    if (location === '/onboarding/doctor' || location === '/doctor-onboarding') return;
     
-    // Check if onboarding is complete
-    if (doctorProfile && !doctorProfile.welcomeCompleted) {
+    // Check if onboarding is complete with the new field
+    if (doctorProfile && !doctorProfile.onboardingCompleted) {
       // Check if essential fields are filled
       const isProfileIncomplete = !doctorProfile.specialization || 
                                  !doctorProfile.licenseNumber || 
@@ -53,8 +53,11 @@ export function DoctorOnboardingGuard({ children }: DoctorOnboardingGuardProps) 
   // Show loading while checking profile
   if (user && user.role === 'doctor' && isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600">Verificando seu perfil...</p>
+        </div>
       </div>
     );
   }

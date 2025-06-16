@@ -6,8 +6,8 @@ import { Card } from '../ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { useQueryClient } from '@tanstack/react-query';
-import { api } from '@/lib/api';
-import ImageCropper from './ImageCropper';
+import { apiRequest } from '@/lib/queryClient';
+import { ImageCropper } from './ImageCropper';
 
 interface ProfileImageUploaderProps {
   currentImage?: string | null;
@@ -66,13 +66,10 @@ export default function ProfileImageUploader({
       const formData = new FormData();
       formData.append('profileImage', croppedImageBlob, 'profile.jpg');
 
-      const response = await api.post('/api/profile/upload-image', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await apiRequest('POST', '/api/profile/upload-image', formData);
+      const data = await response.json();
 
-      if (response.data.imageUrl) {
+      if (data.imageUrl) {
         // Atualizar cache do React Query
         queryClient.invalidateQueries({ queryKey: ['user'] });
         queryClient.invalidateQueries({ queryKey: ['currentUser'] });
@@ -80,7 +77,7 @@ export default function ProfileImageUploader({
         
         // Callback para atualizar imagem no componente pai
         if (onImageUpdate) {
-          onImageUpdate(response.data.imageUrl);
+          onImageUpdate(data.imageUrl);
         }
 
         // Mostrar indicador de sucesso
@@ -96,7 +93,7 @@ export default function ProfileImageUploader({
       console.error('Erro ao fazer upload:', error);
       toast({
         title: 'Erro ao fazer upload',
-        description: error.response?.data?.message || 'Ocorreu um erro ao atualizar sua foto.',
+        description: error.message || 'Ocorreu um erro ao atualizar sua foto.',
         variant: 'destructive',
       });
     } finally {

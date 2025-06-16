@@ -104,6 +104,13 @@ doctorRouter.put('/profile', requireAuth, requireDoctorRole, async (req: Authent
       pixKey,
       bankName,
       accountType,
+      // New onboarding fields
+      onboardingCompleted,
+      consultationPriceDescription,
+      fullBio,
+      areasOfExpertise,
+      languagesSpoken,
+      achievements,
       // Campos alternativos para compatibilidade
       specialty, 
       crm, 
@@ -161,6 +168,25 @@ doctorRouter.put('/profile', requireAuth, requireDoctorRole, async (req: Authent
     }
     if (accountType !== undefined) {
       updateData.accountType = accountType;
+    }
+    // New onboarding fields
+    if (onboardingCompleted !== undefined) {
+      updateData.onboardingCompleted = Boolean(onboardingCompleted);
+    }
+    if (consultationPriceDescription !== undefined) {
+      updateData.consultationPriceDescription = consultationPriceDescription;
+    }
+    if (fullBio !== undefined) {
+      updateData.fullBio = fullBio;
+    }
+    if (areasOfExpertise !== undefined) {
+      updateData.areasOfExpertise = areasOfExpertise;
+    }
+    if (languagesSpoken !== undefined) {
+      updateData.languagesSpoken = languagesSpoken;
+    }
+    if (achievements !== undefined) {
+      updateData.achievements = achievements;
     }
     
     console.log('🔍 Doctor PUT /profile - Dados para atualização:', updateData);

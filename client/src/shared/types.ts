@@ -149,6 +149,18 @@ export const doctorSchema = z.object({
   status: z.string(),
   welcomeCompleted: z.boolean(),
   fullName: z.string(),
+  // New onboarding fields
+  onboardingCompleted: z.boolean().optional(),
+  consultationPriceDescription: z.string().optional(),
+  fullBio: z.string().optional(),
+  areasOfExpertise: z.array(z.string()).optional(),
+  languagesSpoken: z.array(z.string()).optional(),
+  achievements: z.string().optional(),
+  // Payment fields
+  pixKeyType: z.string().optional(),
+  pixKey: z.string().optional(),
+  bankName: z.string().optional(),
+  accountType: z.string().optional(),
 });
 
 export type Doctor = z.infer<typeof doctorSchema>;

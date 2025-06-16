@@ -409,8 +409,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.log("Usuário é administrador, redirecionando para /admin/users");
         window.location.href = "/admin/users";
       } else if (userData.role === "doctor") {
-        console.log("Usuário é médico, redirecionando para /doctor-onboarding");
-        window.location.href = "/doctor-onboarding";
+        console.log("Usuário é médico, redirecionando para /onboarding/doctor");
+        window.location.href = "/onboarding/doctor";
       } else if (userData.role === "partner") {
         console.log("Usuário é parceiro, redirecionando para /partner-onboarding");
         window.location.href = "/partner-onboarding";
